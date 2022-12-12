@@ -7,6 +7,7 @@ if (!is_user_logged_in()) {
 }
 
 $current_user = wp_get_current_user();
+$logo = get_field('logo', 'option');
 ?>
 <!doctype html>
 <html class="no-js" <?php language_attributes(); ?>>
@@ -58,8 +59,7 @@ $current_user = wp_get_current_user();
                     <!-- Header Logo (Header Left) Start -->
                     <div class="header-logo col-auto">
                         <a href="<?php echo get_bloginfo('url'); ?>">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo/asl_logo.png" alt="">
-                            <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo/logo-light.png" class="logo-light" alt=""> -->
+                            <img src="<?php echo $logo; ?>" alt="">
                         </a>
                     </div><!-- Header Logo (Header Left) End -->
 

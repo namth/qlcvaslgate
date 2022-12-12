@@ -1,5 +1,4 @@
 <?php
-# custom fields
 if( function_exists('acf_add_local_field_group') ):
 
     acf_add_local_field_group(array(
@@ -11,7 +10,7 @@ if( function_exists('acf_add_local_field_group') ):
                 'label' => 'API URL',
                 'name' => 'api_url',
                 'type' => 'text',
-                'instructions' => 'Đường dẫn tới trang web cần kết nối.',
+                'instructions' => 'Đường dẫn tới trang web cần kết nối',
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
@@ -83,7 +82,7 @@ if( function_exists('acf_add_local_field_group') ):
     
     acf_add_local_field_group(array(
         'key' => 'group_60af6bc3e0ff9',
-        'title' => 'Cài đặt thông báo',
+        'title' => 'Cài đặt chung',
         'fields' => array(
             array(
                 'key' => 'field_60afcd9abd81b',
@@ -103,6 +102,105 @@ if( function_exists('acf_add_local_field_group') ):
                 'prepend' => '',
                 'append' => '',
                 'maxlength' => '',
+            ),
+            array(
+                'key' => 'field_639754cce3c32',
+                'label' => 'Logo',
+                'name' => 'logo',
+                'type' => 'image',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'return_format' => 'url',
+                'preview_size' => 'medium',
+                'library' => 'all',
+                'min_width' => '',
+                'min_height' => '',
+                'min_size' => '',
+                'max_width' => '',
+                'max_height' => '',
+                'max_size' => '',
+                'mime_types' => '',
+            ),
+            array(
+                'key' => 'field_639745fa401f4',
+                'label' => 'Sidebar background',
+                'name' => 'sidebar_background',
+                'type' => 'color_picker',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+            ),
+            array(
+                'key' => 'field_63974628401f6',
+                'label' => 'Home line 1 background',
+                'name' => 'home_line_1_background',
+                'type' => 'color_picker',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+            ),
+            array(
+                'key' => 'field_6397465d401f7',
+                'label' => 'Home line 2 background',
+                'name' => 'home_line_2_background',
+                'type' => 'color_picker',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+            ),
+            array(
+                'key' => 'field_63974667401f8',
+                'label' => 'Home line 3 background',
+                'name' => 'home_line_3_background',
+                'type' => 'color_picker',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+            ),
+            array(
+                'key' => 'field_63974678401f9',
+                'label' => 'Text color',
+                'name' => 'text_color',
+                'type' => 'color_picker',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
             ),
         ),
         'location' => array(

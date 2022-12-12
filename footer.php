@@ -52,6 +52,64 @@
     <script src="<?php echo get_template_directory_uri(); ?>/assets/js/plugins/vmap/vmap.active.js"></script>
 
     <?php wp_footer(); ?>
+    <style type="text/css">
+        <?php 
+            $sidebar_background = get_field('sidebar_background', 'option');
+            $text_color         = get_field('text_color', 'option');
+            $home_line_1_background = get_field('home_line_1_background', 'option');
+            $home_line_2_background = get_field('home_line_2_background', 'option');
+            $home_line_3_background = get_field('home_line_3_background', 'option');
+
+            if ($sidebar_background) {
+                echo ".side-header {
+                    background-color: $sidebar_background;
+                }"; 
+            }
+
+            if ($text_color) {
+                echo   ".sub-menu li a:hover,
+                        .sub-menu li a{
+                            color: $text_color;
+                        }
+                        .sub-menu li a::before,
+                        .side-header-menu > ul > li > a::before{
+                            background-color: $text_color;
+                        }";
+            }
+
+            if ($home_line_1_background) {
+                echo ".button-steam,
+                .button-steam:hover{
+                    background-color: $home_line_1_background;
+                    border-color: $home_line_1_background;
+                    color: $text_color;
+                }";
+            }
+            if ($home_line_2_background) {
+                echo ".button-css3,
+                .button-css3:hover{
+                    background-color: $home_line_2_background;
+                    border-color: $home_line_2_background;
+                    color: $text_color;
+                }";
+            }
+            if ($home_line_3_background) {
+                echo ".button-skype,
+                .button-skype:hover{
+                    background-color: $home_line_3_background;
+                    border-color: $home_line_3_background;
+                    color: $text_color;
+                }";
+            }
+            echo ".button-steam:hover,
+            .button-css3:hover,
+            .button-skype:hover{
+                opacity: 0.8;
+            }";
+        ?>
+        
+
+    </style>
   </body>
 
 </html>
