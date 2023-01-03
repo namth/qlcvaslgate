@@ -27,11 +27,11 @@ get_sidebar();
     <div class="row">
         <div class="col-12 col-lg-12 mb-20">
             <form action="" method="post" enctype="multipart/form-data" class="row">
-                <div class="col-lg-3 form_title lh45 text-left text-lg-right">Phân loại</div>
+                <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Phân loại', 'qlcv'); ?></div>
                 <div class="col-lg-5 col-12 mb-20">
                     <select name="role" class="form-control select2-tags mb-20">
-                        <option value="partner">Đối tác gửi việc</option>
-                        <option value="foreign_partner">Đối tác nhận việc</option>
+                        <option value="partner"><?php _e('Đối tác gửi việc', 'qlcv'); ?></option>
+                        <option value="foreign_partner"><?php _e('Đối tác nhận việc', 'qlcv'); ?></option>
                     </select>
                 </div>
                 <div class="col-lg-4 col-12"></div>
@@ -80,7 +80,7 @@ get_sidebar();
 
                             $new_partner_id = wp_update_user($args);
 
-                            echo "<br>Đã cập nhật $new_partner_id thành công: " . $display_name . " - " . $new_partner[4];
+                            echo "<br>" . __('Đã cập nhật', 'qlcv') . ' ' . $new_partner_id . __('thành công', 'qlcv') . ": " . $display_name . " - " . $new_partner[4];
                         } else {
                             # Create new user
                             $args = array(
@@ -96,7 +96,7 @@ get_sidebar();
 
                             $new_partner_id = wp_insert_user($args);
 
-                            echo "<br>Đã tạo đối tác mới $new_partner_id thành công: " . $display_name . " - " . $new_partner[4];
+                            echo "<br>" . __('Đã tạo đối tác mới', 'qlcv') . ' ' .$new_partner_id . __('thành công', 'qlcv') . ": " . $display_name . " - " . $new_partner[4];
                         }
                         if ($new_partner_id) {
                             # update custom fields
@@ -120,7 +120,7 @@ get_sidebar();
         </div>
 
         <div class="col-12 col-lg-12 mb-20">
-            <h3>Mẫu file excel</h3>
+            <h3><?php _e('Mẫu file excel', 'qlcv'); ?></h3>
             <style>
                 .excel_form {
                     text-align: center;
@@ -153,19 +153,19 @@ get_sidebar();
                 <tr>
                     <th>1</th>
                     <td>STT</td>
-                    <td>Mã đối tác</td>
-                    <td>Họ</td>
-                    <td>Tên</td>
-                    <td>Tên đối tác</td>
+                    <td><?php _e('Mã đối tác', 'qlcv'); ?></td>
+                    <td><?php _e('Họ', 'qlcv'); ?></td>
+                    <td><?php _e('Tên', 'qlcv'); ?></td>
+                    <td><?php _e('Tên đối tác', 'qlcv'); ?></td>
                     <td>Email</td>
-                    <td>Số điện thoại</td>
-                    <td>Địa chỉ</td>
-                    <td>Quốc gia</td>
+                    <td><?php _e('Số điện thoại', 'qlcv'); ?></td>
+                    <td><?php _e('Địa chỉ', 'qlcv'); ?></td>
+                    <td><?php _e('Quốc gia', 'qlcv'); ?></td>
                     <td>Email CC</td>
                     <td>Email BCC</td>
-                    <td>Phân loại</td>
-                    <td>Link hồ sơ</td>
-                    <td>Ghi chú</td>
+                    <td><?php _e('Phân loại', 'qlcv'); ?></td>
+                    <td><?php _e('Link hồ sơ', 'qlcv'); ?></td>
+                    <td><?php _e('Ghi chú', 'qlcv'); ?></td>
                 </tr>
                 <tr>
                     <th>2</th>
@@ -204,12 +204,12 @@ get_sidebar();
             </table>
 
             <br>
-            <h3>Hướng dẫn cập nhật qua file excel</h3>
+            <h3><?php _e('Hướng dẫn cập nhật qua file excel', 'qlcv'); ?></h3>
             <ol>
-                <li>Tạo file excel đúng theo mẫu trên</li>
-                <li>Trường Mã đối tác và email là bắt buộc phải có, các trường khác có thể để trống</li>
-                <li>Chọn đúng loại vai trò cho đối tác và tải file excel lên và bấm Import</li>
-                <li>Dữ liệu nào chưa có sẽ được tạo mới, dữ liệu đã có sẽ được cập nhật.</li>
+                <li><?php _e('Tạo file excel đúng theo mẫu trên', 'qlcv'); ?></li>
+                <li><?php _e('Trường Mã đối tác và email là bắt buộc phải có, các trường khác có thể để trống', 'qlcv'); ?></li>
+                <li><?php _e('Chọn đúng loại vai trò cho đối tác và tải file excel lên và bấm Import', 'qlcv'); ?></li>
+                <li><?php _e('Dữ liệu nào chưa có sẽ được tạo mới, dữ liệu đã có sẽ được cập nhật.', 'qlcv'); ?></li>
             </ol>
         </div>
     </div>

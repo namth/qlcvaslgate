@@ -30,23 +30,23 @@ if (isset($_GET['uid']) && ($_GET['uid'] != '')) {
             'email_cc'  => $email_bcc,
             'additional_field' => array(
                 array(
-                    'data_name' => 'Người đại diện',
+                    'data_name' => __('Người đại diện', 'qlcv'),
                     'data_value' => $current_user->display_name,
                 ),
                 array(
-                    'data_name' => 'Mã đối tác',
+                    'data_name' =>  __('Mã đối tác', 'qlcv'),
                     'data_value' => $partner_code,
                 ),
                 array(
-                    'data_name' => 'Số điện thoại',
+                    'data_name' =>  __('Số điện thoại', 'qlcv'),
                     'data_value' => $so_dien_thoai,
                 ),
                 array(
-                    'data_name' => 'Địa chỉ',
+                    'data_name' =>  __('Địa chỉ', 'qlcv'),
                     'data_value' => $dia_chi,
                 ),
                 array(
-                    'data_name' => 'Quốc gia',
+                    'data_name' =>  __('Quốc gia', 'qlcv'),
                     'data_value' => $quoc_gia,
                 ),
             )
@@ -81,7 +81,7 @@ if (isset($_GET['uid']) && ($_GET['uid'] != '')) {
                         $token = get_token();
                         $send_api = send_customer_api($token, $customer, $custom_fields, $api_id, $uid);
 
-                        echo '<a href="' . $history_link . '" class="button button-primary">Quay lại</a>';
+                        echo '<a href="' . $history_link . '" class="button button-primary">' . __('Quay lại', 'qlcv') . '</a>';
 
                         ?>
                     </div>

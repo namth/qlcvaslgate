@@ -36,7 +36,7 @@ if ( isset($_POST['post_nonce_field']) &&
                         ?>
                             <div class="col-md-3">
                                 <select class="form-control select2-tags mb-20" name="partner">
-                                    <option value="">-- Chọn đối tác gửi việc --</option>
+                                    <option value="">-- <?php _e('Chọn đối tác gửi việc', 'qlcv'); ?> --</option>
                                     <?php
                                     $args   = array(
                                         'role'      => 'partner', /*subscriber, contributor, author*/
@@ -61,7 +61,7 @@ if ( isset($_POST['post_nonce_field']) &&
                         ?>
                         <div class="col-md-3">
                             <select name="type" class="form-control select2-tags mb-20">
-                                <option value="">Tất cả danh mục</option>
+                                <option value=""><?php _e('Tất cả danh mục', 'qlcv'); ?></option>
                                 <?php
                                 $terms = get_terms(array(
                                     'taxonomy' => 'group',
@@ -81,7 +81,7 @@ if ( isset($_POST['post_nonce_field']) &&
                             <select name="f_worked" class="form-control select2-tags mb-20">
                                 <?php 
                                     $arr = array(
-                                        '0'   => 'Tất cả các loại',
+                                        '0'   => __('Tất cả các loại', 'qlcv'),
                                         '1'     => 'Đã chốt',
                                         '2'     => 'Tiềm năng',
                                     );
@@ -100,7 +100,7 @@ if ( isset($_POST['post_nonce_field']) &&
                         wp_nonce_field('post_nonce', 'post_nonce_field');
                         ?>
                         <div class="col-md-2">
-                            <input type="submit" class="button button-primary mt-20" value="Lọc" style="padding: 9px 20px;">
+                            <input type="submit" class="button button-primary mt-20" value="<?php _e('Lọc', 'qlcv'); ?>" style="padding: 9px 20px;">
                         </div>
                     </form>
                 </div>
@@ -125,17 +125,17 @@ if ( isset($_POST['post_nonce_field']) &&
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Mã đối tác</th>
-                                    <th>Tên đối tác</th>
+                                    <th><?php _e('Mã đối tác', 'qlcv'); ?></th>
+                                    <th><?php _e('Tên đối tác', 'qlcv'); ?></th>
                                     <?php
                                     if ($detail) {
-                                        echo "<th>Chi tiết công việc</th>";
+                                        echo "<th>" . __("Chi tiết công việc", 'qlcv') . "</th>";
                                     }
                                     ?>
-                                    <th>Số đầu việc</th>
-                                    <th>Tổng giá trị</th>
-                                    <th>Đã thu</th>
-                                    <th>Cần thu</th>
+                                    <th><?php _e('Số đầu việc', 'qlcv'); ?></th>
+                                    <th><?php _e('Tổng giá trị', 'qlcv'); ?></th>
+                                    <th><?php _e('Đã thu', 'qlcv'); ?></th>
+                                    <th><?php _e('Cần thu', 'qlcv'); ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -274,7 +274,7 @@ if ( isset($_POST['post_nonce_field']) &&
                                 ?>
                             </tbody>
                         </table>
-                        <h4>Tổng</h4>
+                        <h4><?php _e('Tổng', 'qlcv'); ?></h4>
                         <?php 
                             echo "<table class='table'>
                                     <tr>

@@ -36,7 +36,7 @@ if ( isset($_POST['post_nonce_field']) &&
                                     <select name="f_worked" id="" class="form-control select2-tags mb-20">
                                         <?php 
                                             $arr = array(
-                                                '0'   => 'Tất cả các loại',
+                                                '0'   => __('Tất cả các loại', 'qlcv'),
                                                 '1'     => 'Đã chốt',
                                                 '2'     => 'Tiềm năng'
                                             );
@@ -50,7 +50,7 @@ if ( isset($_POST['post_nonce_field']) &&
                                 </div>
                                 <div class="col-md-3 mb-20">
                                     <select class="form-control select2-tags mb-20" name="type">
-                                        <option value="">Tất cả danh mục</option>
+                                        <option value=""><?php _e('Tất cả danh mục', 'qlcv'); ?></option>
                                         <?php
                                         $terms = get_terms(array(
                                             'taxonomy' => 'group',
@@ -74,7 +74,7 @@ if ( isset($_POST['post_nonce_field']) &&
                                 wp_nonce_field('post_nonce', 'post_nonce_field');
                                 ?>
                                 <div class="col-md-3 mb-20">
-                                    <input type="submit" class="button button-primary" value="Lọc" style="padding: 9px 20px;">
+                                    <input type="submit" class="button button-primary" value="<?php _e('Lọc', 'qlcv'); ?>" style="padding: 9px 20px;">
                                 </div>
                             </div>
                         </form>
@@ -84,14 +84,14 @@ if ( isset($_POST['post_nonce_field']) &&
                 <!-- Page Heading Start -->
                 <div class="col-12 col-lg-12 mb-20">
                     <div class="col-12 mb-30">
-                        <a href="<?php echo get_bloginfo('home') . '/tao-phieu-thu-chi/' . $get_var; ?>" class="button button-primary"><span><i class="fa fa-plus"></i>Tạo phiếu thu chi mới</span></a>
+                        <a href="<?php echo get_bloginfo('home') . '/tao-phieu-thu-chi/' . $get_var; ?>" class="button button-primary"><span><i class="fa fa-plus"></i><?php _e('Tạo phiếu thu chi mới', 'qlcv'); ?></span></a>
                     </div>
                     <!--Basic Start-->
                     <div class="col-12 mb-30">
 
                         <div class="row justify-content-between">
                             <div class="col-lg-auto mb-10">
-                                <h2>Danh sách công việc</h2>
+                                <h2><?php _e('Danh sách công việc', 'qlcv'); ?></h2>
                             </div>
                             <?php 
                                 $current_user = wp_get_current_user();
@@ -162,16 +162,16 @@ if ( isset($_POST['post_nonce_field']) &&
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Ngày tháng</th>
-                                            <th>Công việc</th>
-                                            <th>Khách hàng</th>
-                                            <th>Đối tác</th>
-                                            <th>Tổng thu</th>
-                                            <th>Đã thu</th>
-                                            <th>Cần thu</th>
-                                            <th>Tổng chi</th>
-                                            <th>Đã chi</th>
-                                            <th>Còn nợ lại</th>
+                                            <th><?php _e('Ngày tháng', 'qlcv'); ?></th>
+                                            <th><?php _e('Công việc', 'qlcv'); ?></th>
+                                            <th><?php _e('Khách hàng', 'qlcv'); ?></th>
+                                            <th><?php _e('Đối tác', 'qlcv'); ?></th>
+                                            <th><?php _e('Tổng thu', 'qlcv'); ?></th>
+                                            <th><?php _e('Đã thu', 'qlcv'); ?></th>
+                                            <th><?php _e('Cần thu', 'qlcv'); ?></th>
+                                            <th><?php _e('Tổng chi', 'qlcv'); ?></th>
+                                            <th><?php _e('Đã chi', 'qlcv'); ?></th>
+                                            <th><?php _e('Còn nợ lại', 'qlcv'); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -230,7 +230,7 @@ if ( isset($_POST['post_nonce_field']) &&
                                                     echo "</tr>";
                                                 } wp_reset_postdata();
                                             } else {
-                                                echo "<tr><td colspan=6 class='text-center'>Không có dữ liệu.</td></tr>";
+                                                echo "<tr><td colspan=6 class='text-center'>" . __("Không có dữ liệu.", 'qlcv') . "</td></tr>";
                                             }
                                         ?>
                                     </tbody>

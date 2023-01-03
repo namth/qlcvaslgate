@@ -138,7 +138,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         <!-- Page Heading Start -->
         <div class="col-12 col-lg-12 mb-20">
             <div class="page-heading">
-                <h3 class="title">Tạo phiếu thu/chi</h3>
+                <h3 class="title"><?php _e('Tạo phiếu thu/chi', 'qlcv'); ?></h3>
             </div>
         </div><!-- Page Heading End -->
 
@@ -151,39 +151,39 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                     if ($update) {
                         # nếu thành công thì thông báo thành công, 3 giây sau thì chuyển trang
                         echo '<div class="alert alert-success" role="alert">
-                                            <i class="fa fa-check"></i> Bài viết đã được cập nhật.
+                                            <i class="fa fa-check"></i> ' . __('Bài viết đã được cập nhật.', 'qlcv') . '
                                           </div>';
                     } else {
                         echo '<div class="alert alert-danger" role="alert">
-                                            <i class="zmdi zmdi-info"></i> Xảy ra lỗi, không thể cập nhật.
+                                            <i class="zmdi zmdi-info"></i> ' . __('Xảy ra lỗi, không thể cập nhật.', 'qlcv') . '
                                           </div>';
                     }
                 } else {
                     if ($error) {
-                        echo "Có lỗi xảy ra " . $error_detail;
+                        echo __("Có lỗi xảy ra ", 'qlcv') . $error_detail;
                     }
 
                 ?>
                     <div class="row mbn-20">
-                        <div class="col-lg-3 form_title lh45">Ngày thu/chi <span class="text-danger">*</span></div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Ngày thu/chi', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-3 col-12 mb-20">
                             <input type="text" class="form-control input-date-single" value="" name="finance_date" data-mask="99/99/9999">
                             <span class="form-help-text">"dd/mm/yyyy"</span>
                         </div>
                         <div class="col-lg-6"></div>
 
-                        <div class="col-lg-3 form_title lh45">Phân loại <span class="text-danger">*</span></div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Phân loại', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <div class="form-group">
                                 <label class="inline lh45">
-                                    <input type="radio" name="finance_type" value="Thu" checked>Thu</label>
+                                    <input type="radio" name="finance_type" value="Thu" checked><?php _e('Thu', 'qlcv'); ?></label>
                                 <label class="inline lh45">
-                                    <input type="radio" name="finance_type" value="Chi">Chi</label>
+                                    <input type="radio" name="finance_type" value="Chi"><?php _e('Chi', 'qlcv'); ?></label>
                             </div>
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Công việc</div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Công việc', 'qlcv'); ?></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <select class="form-control select2-tags mb-20" name="finance_job">
                                 <?php
@@ -196,7 +196,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                                     }
                                     echo "</option>";
                                 } else {
-                                    echo '<option value="">-- Chọn công việc liên quan --</option>';
+                                    echo '<option value="">-- ' . __('Chọn công việc liên quan', 'qlcv') . ' --</option>';
                                 }
 
                                 $args   = array(
@@ -223,7 +223,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Người nhận phiếu <span class="text-danger">*</span></div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Người nhận phiếu', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <select class="form-control select2-tags mb-20" name="finance_user">
                                 <?php
@@ -267,7 +267,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Loại tiền <span class="text-danger">*</span></div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Loại tiền', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <div class="form-group">
                                 <?php
@@ -285,19 +285,19 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Số tiền <span class="text-danger">*</span></div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Số tiền', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <input type="number" placeholder="0" class="form-control" name="finance_value">
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Lý do <span class="text-danger">*</span></div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Lý do', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <input type="text" class="form-control" name="finance_title">
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Ghi chú</div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Ghi chú', 'qlcv'); ?></div>
                         <div class="col-lg-8 col-12 mb-20">
                             <textarea class="summernote" name="finance_content"></textarea>
                         </div>
@@ -309,7 +309,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                         ?>
 
                         <div class="col-lg-3"></div>
-                        <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Cập nhật"> <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a></div>
+                        <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Cập nhật', 'qlcv'); ?>"> <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a></div>
                     </div>
                 <?php
                 }

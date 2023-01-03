@@ -23,7 +23,7 @@ if (
 
         #nếu update thành công thì update history
         if ($update) {
-            $noi_dung = "đã cập nhật thông tin nhiệm vụ.";
+            $noi_dung = __("đã cập nhật thông tin nhiệm vụ.", 'qlcv');
             $row_update = array(
                 'nguoi_thuc_hien'   => $current_user,
                 'noi_dung'          => $noi_dung,
@@ -86,11 +86,11 @@ get_sidebar();
                     if ($update) {
                         # nếu thành công thì thông báo thành công, 3 giây sau thì chuyển trang
                         echo '<div class="alert alert-success" role="alert">
-                                            <i class="fa fa-check"></i> Bài viết đã được cập nhật.
+                                            <i class="fa fa-check"></i> ' . __('Bài viết đã được cập nhật.', 'qlcv') . '
                                           </div>';
                     } else {
                         echo '<div class="alert alert-danger" role="alert">
-                                            <i class="zmdi zmdi-info"></i> Xảy ra lỗi, không thể cập nhật.
+                                            <i class="zmdi zmdi-info"></i> ' . __('Xảy ra lỗi, không thể cập nhật.', 'qlcv') . '
                                           </div>';
                     }
                 } else {
@@ -98,7 +98,7 @@ get_sidebar();
 
                     echo '<textarea class="summernote" name="content">' . $content_post->post_content . '</textarea>';
                     echo '<input type="hidden" name="history_link" value="' . $history_link . '">';
-                    echo '<div class="" style="margin-top: 20px; display:block;"><input type="submit" class="button button-primary" value="Cập nhật"> <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a></div>';
+                    echo '<div class="" style="margin-top: 20px; display:block;"><input type="submit" class="button button-primary" value="' . __('Cập nhật', 'qlcv') . '"> <a href="javascript:history.go(-1)" class="button button-wikipedia">' . __('Huỷ bỏ', 'qlcv') . '</a></div>';
                 }
                 ?>
             </div>

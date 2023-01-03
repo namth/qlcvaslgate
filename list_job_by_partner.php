@@ -30,7 +30,7 @@ if ($type) {
                         ?>
                             <div class="col-md-3">
                                 <select class="form-control select2-tags mb-20" name="partner">
-                                    <option value="">-- Chọn đối tác gửi việc --</option>
+                                    <option value="">-- <?php _e('Chọn đối tác gửi việc', 'qlcv'); ?> --</option>
                                     <?php
                                     $args   = array(
                                         'role'      => 'partner', /*subscriber, contributor, author*/
@@ -58,7 +58,7 @@ if ($type) {
                         </div>
                         <div class="col-md-3">
                             <select name="type" class="form-control select1-tags mb-20">
-                                <option value="">Tất cả danh mục</option>
+                                <option value=""><?php _e('Tất cả danh mục', 'qlcv'); ?></option>
                                 <?php
                                 $terms = get_terms(array(
                                     'taxonomy' => 'group',
@@ -78,7 +78,7 @@ if ($type) {
                             <select name="type" class="form-control select1-tags mb-20">
                                 <?php 
                                     $arr = array(
-                                        '0'   => 'Tất cả các loại',
+                                        '0'   => __('Tất cả các loại', 'qlcv'),
                                         '1'     => 'Đã chốt',
                                         '2'     => 'Tiềm năng',
                                     );
@@ -94,7 +94,7 @@ if ($type) {
                         wp_nonce_field('post_nonce', 'post_nonce_field');
                         ?>
                         <div class="col-md-3">
-                            <input type="submit" class="button button-primary" value="Lọc" style="padding: 9px 20px;">
+                            <input type="submit" class="button button-primary" value="<?php _e('Lọc', 'qlcv'); ?>" style="padding: 9px 20px;">
                         </div>
                     </form>
                 </div>
@@ -109,7 +109,7 @@ if ($type) {
 
                 <div class="row justify-content-between">
                     <div class="col-lg-auto mb-10">
-                        <h3>Thống kê <?php 
+                        <h3><?php _e('Thống kê', 'qlcv'); ?> <?php 
                         echo get_field('ten_cong_ty', 'user_' . $_POST['partner']) . " ";
                         echo $_POST['filter_date']; 
                         ?></h3>
@@ -119,15 +119,15 @@ if ($type) {
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Mã đối tác</th>
-                                    <th>Tên đối tác</th>
+                                    <th><?php _e('Mã đối tác', 'qlcv'); ?></th>
+                                    <th><?php _e('Tên đối tác', 'qlcv'); ?></th>
                                     <?php
                                     if ($detail) {
-                                        echo "<th>Chi tiết công việc</th>";
+                                        echo "<th>" . __("Chi tiết công việc", 'qlcv') . "</th>";
                                     }
                                     ?>
-                                    <th>Số đầu việc</th>
-                                    <th>Tổng giá trị</th>
+                                    <th><?php _e('Số đầu việc', 'qlcv'); ?></th>
+                                    <th><?php _e('Tổng giá trị', 'qlcv'); ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -182,16 +182,7 @@ if ($type) {
                                                     'terms'     => $_POST['type'],
                                                 ),
                                             );
-                                        } /* else {
-                                            $args['tax_query'] = array(
-                                                array(
-                                                    'taxonomy'  => 'group',
-                                                    'field'     => 'slug',
-                                                    'terms'     => $_POST['type'],
-                                                    'operator'  => 'NOT IN'
-                                                ),
-                                            );
-                                        } */
+                                        }
                                         
                                     }
 
@@ -238,7 +229,7 @@ if ($type) {
                                 ?>
                             </tbody>
                         </table>
-                        <h4>Tổng</h4>
+                        <h4><?php _e('Tổng', 'qlcv'); ?></h4>
                         <?php 
                             if ($total_value) {
                                 foreach ($total_value as $crcy => $value) {

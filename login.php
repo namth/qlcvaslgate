@@ -67,7 +67,7 @@ if(is_user_logged_in()) {
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Adomx - Responsive Bootstrap 4 Admin Template</title>
+    <title>ERP for business</title>
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -112,7 +112,7 @@ if(is_user_logged_in()) {
                     <div class="d-flex align-self-center justify-content-center order-2 order-lg-1 col-lg-5 col-12">
                         <div class="login-register-form-wrap">
                             <div class="content">
-                                <h1>Đăng nhập</h1>
+                                <h1><?php _e('Đăng nhập', 'qlcv'); ?></h1>
                             </div>
 
                             <div class="alert alert-secondary" role="alert">
@@ -136,9 +136,9 @@ if(is_user_logged_in()) {
                                         <?php 
                                             wp_nonce_field( 'post_nonce', 'post_nonce_field' );
                                         ?>
-                                        <div class="col-12 mb-20"><label for="remember" class="adomx-checkbox-2"><input id="remember" type="checkbox" checked name="remember"><i class="icon"></i>Ghi nhớ.</label></div>
+                                        <div class="col-12 mb-20"><label for="remember" class="adomx-checkbox-2"><input id="remember" type="checkbox" checked name="remember"><i class="icon"></i><?php _e('Ghi nhớ.', 'qlcv'); ?></label></div>
                                         
-                                        <div class="col-12 mt-10"><button class="button button-primary button-outline">Đăng nhập</button></div>
+                                        <div class="col-12 mt-10"><button class="button button-primary button-outline"><?php _e('Đăng nhập', 'qlcv'); ?></button></div>
                                     </div>
                                 </form>
                             </div>

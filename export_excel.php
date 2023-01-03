@@ -332,7 +332,7 @@ get_sidebar();
                 <div class="box-body">
                     <div>
                         <form action="#" method="POST" class="row">
-                            <div class="col-lg-3 form_title lh45">Loại dữ liệu</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Loại dữ liệu', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control select2-tags mb-20" name="data_type">
                                     <?php
@@ -354,10 +354,10 @@ get_sidebar();
                             </div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Nhóm công việc</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Nhóm công việc', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control mb-20" name="group">
-                                    <option value="">Tất cả</option>
+                                    <option value=""><?php _e('Tất cả', 'qlcv'); ?></option>
                                     <?php
                                         $terms = get_terms(array(
                                             'taxonomy' => 'group',
@@ -372,14 +372,14 @@ get_sidebar();
                             </div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Khoảng thời gian: </div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Khoảng thời gian: ', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <div class="lh45">
                                     <label for="" class="inline">
-                                        <input type="radio" name="time_option" value="0" checked> Toàn thời gian
+                                        <input type="radio" name="time_option" value="0" checked> <?php _e('Toàn thời gian', 'qlcv'); ?>
                                     </label>
                                     <label for="" class="inline">
-                                        <input type="radio" name="time_option" value="1"> Thời gian tuỳ chỉnh
+                                        <input type="radio" name="time_option" value="1"> <?php _e('Thời gian tuỳ chỉnh', 'qlcv'); ?>
                                     </label>
                                 </div>
                                 <div id="timestamp" style="display: none;">

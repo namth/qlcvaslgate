@@ -81,8 +81,8 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
                 # nếu có mẫu mail thì cập nhật
                 $update_email = wp_update_post(array(
                     'ID'            => $email,
-                    'post_title'    => $email_content,
-                    'post_content'  => $email_title,
+                    'post_title'    => $email_title,
+                    'post_content'  => $email_content,
                 ));
 
                 update_field('field_60f8d97d1b0f8', $to, $update_email); # email_to
@@ -247,7 +247,8 @@ if ($id_email) {
 
                     <div class="col-lg-2 form_title">Nội dung: </div>
                     <div class="col-lg-9 col-12 mb-20">
-                        <?php wp_editor($email_content, 'email_content');  ?>
+                        <?php //wp_editor($email_content, 'email_content');  ?>
+                        <textarea class="summernote" name="email_content"><?php echo $email_content; ?></textarea>
                     </div>
                     <div class="col-lg-1 mb-20"></div>
 

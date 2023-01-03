@@ -53,7 +53,7 @@ if (isset($_SESSION['list_task'])) {
                         ?>
                             <div class="col-md-3">
                                 <select class="form-control select2-tags mb-20" name="member">
-                                    <option value="">-- Chọn người thực hiện --</option>
+                                    <option value="">-- <?php _e('Chọn người thực hiện', 'qlcv'); ?> --</option>
                                     <?php
                                     $args   = array(
                                         'role__in'      => array('member', 'contributor'), /*subscriber, contributor, author*/
@@ -77,7 +77,7 @@ if (isset($_SESSION['list_task'])) {
                         ?>
                         <div class="col-md-3">
                             <select name="status" id="" class="form-control select2-tags mb-20">
-                                <option value="">-- Trạng thái nhiệm vụ --</option>
+                                <option value="">-- <?php _e('Trạng thái nhiệm vụ', 'qlcv'); ?> --</option>
                                 <?php
                                 $status_arr = array('Mới', 'Đang thực hiện', 'Hoàn thành', 'Chờ phê duyệt', 'Quản lý đã phê duyệt', 'Huỷ', 'Quá hạn');
                                 foreach ($status_arr as $value) {
@@ -94,7 +94,7 @@ if (isset($_SESSION['list_task'])) {
                         wp_nonce_field('post_nonce', 'post_nonce_field');
                         ?>
                         <div class="col-md-3">
-                            <input type="submit" class="button button-primary" value="Lọc" style="padding: 9px 20px;">
+                            <input type="submit" class="button button-primary" value="<?php _e('Lọc', 'qlcv'); ?>" style="padding: 9px 20px;">
                         </div>
                     </form>
                 </div>
@@ -168,25 +168,20 @@ if (isset($_SESSION['list_task'])) {
                 
                 <div class="row justify-content-between">
                     <div class="col-lg-auto mb-10">
-                        <p>Có tổng cộng <?php echo $total_query->post_count; ?> nhiệm vụ tìm thấy</p>
-                        <h2>Danh sách nhiệm vụ</h2>
-                    </div>
-                    <div class="col-lg-auto mb-10">
-                        <!-- <div class="page-date-range">
-                                    <span>Lọc theo deadline: </span><input type="text" class="form-control input-date-predefined" id="list_task_by_date">
-                                </div> -->
+                        <p><?php _e('Có tổng cộng', 'qlcv'); ?> <?php echo $total_query->post_count; ?> <?php _e('nhiệm vụ tìm thấy', 'qlcv'); ?></p>
+                        <h2><?php _e('Danh sách nhiệm vụ', 'qlcv'); ?></h2>
                     </div>
                     <div class="col-12 box mb-20">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Nhiệm vụ</th>
-                                    <th>Công việc lớn</th>
-                                    <th>Người thực hiện</th>
-                                    <th>Người quản lý</th>
-                                    <th>Deadline</th>
-                                    <th>Trạng thái</th>
+                                    <th><?php _e('Nhiệm vụ', 'qlcv'); ?></th>
+                                    <th><?php _e('Công việc lớn', 'qlcv'); ?></th>
+                                    <th><?php _e('Người thực hiện', 'qlcv'); ?></th>
+                                    <th><?php _e('Người quản lý', 'qlcv'); ?></th>
+                                    <th><?php _e('Deadline', 'qlcv'); ?></th>
+                                    <th><?php _e('Trạng thái', 'qlcv'); ?></th>
                                 </tr>
                             </thead>
                             <tbody>

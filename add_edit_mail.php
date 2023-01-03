@@ -68,7 +68,7 @@ get_sidebar();
         <div class="col-12 col-lg-12 mb-20">
             <div class="page-heading">
                 <?php
-                echo '<h3 class="title">Sửa email</h3>';
+                echo '<h3 class="title">' . __('Sửa email', 'qlcv') . '</h3>';
                 ?>
             </div>
         </div><!-- Page Heading End -->
@@ -79,14 +79,14 @@ get_sidebar();
             <div class="col-12 col-lg-12 mb-20">
                 <div class="row mbn-20">
 
-                    <div class="col-lg-2 form_title">Tiêu đề: </div>
+                    <div class="col-lg-2 form_title"><?php _e('Tiêu đề: ', 'qlcv'); ?></div>
                     <div class="col-lg-7 col-12 mb-20">
                         <?php echo $email_title; ?>
                         <input type="hidden" name="email_title" value="<?php echo $email_title; ?>">
                     </div>
                     <div class="col-lg-3"></div>
 
-                    <div class="col-lg-2 form_title">Nội dung: </div>
+                    <div class="col-lg-2 form_title"><?php _e('Nội dung: ', 'qlcv'); ?></div>
                     <div class="col-lg-9 col-12 mb-20">
                         <textarea class="summernote" name="email_content"><?php echo $email_content;  ?></textarea>
                     </div>
@@ -102,8 +102,8 @@ get_sidebar();
 
                     <div class="col-lg-2"></div>
                     <div class="col-lg-7 col-12 mb-20">
-                        <input type="submit" class="button button-primary" value="Hoàn thành">
-                        <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a>
+                        <input type="submit" class="button button-primary" value="<?php _e('Hoàn thành', 'qlcv'); ?>">
+                        <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a>
                     </div>
                 </div>
             </div>
@@ -112,23 +112,23 @@ get_sidebar();
 
     <div class="row justify-content-between align-items-center mb-10">
         <div class="col-12 col-lg-12 mb-20">
-            <h4>Hướng dẫn mã code</h4>
-            <p>Sử dụng mã code dưới đây để </p>
+            <h4><?php _e('Hướng dẫn mã code', 'qlcv'); ?></h4>
+            <p><?php _e('Sử dụng mã code dưới đây để soạn nội dung email', 'qlcv'); ?></p>
             <div class="order-details-customer-info">
                 <ul>
-                    <li><span>{code}</span> <span>Mã code để truy cập đầu việc</span></li>
-                    <li><span>{link}</span> <span>Đường link truy cập đầu việc</span></li>
-                    <li><span>{partner_company_name}</span> <span>Tên đối tác gửi việc</span></li>
-                    <li><span>{partner_email}</span> <span>Email đối tác</span></li>
-                    <li><span>{partner_name}</span> <span>Tên người liên hệ</span></li>
-                    <li><span>{partner_ref}</span> <span>Số REF của đối tác</span></li>
-                    <li><span>{our_ref}</span> <span>Số REF của mình</span></li>
-                    <li><span>{customer_name}</span> <span>Tên khách hàng</span></li>
-                    <li><span>{customer_address}</span> <span>Địa chỉ khách hàng</span></li>
-                    <li><span>{application_number}</span> <span>Số đơn</span></li>
-                    <li><span>{application_date}</span> <span>Ngày nộp đơn</span></li>
-                    <li><span>{certificate_number}</span> <span>Số bằng</span></li>
-                    <li><span>{certificate_date}</span> <span>Ngày cấp bằng</span></li>
+                    <li><span>{code}</span> <span><?php _e('Mã code để truy cập đầu việc', 'qlcv'); ?></span></li>
+                    <li><span>{link}</span> <span><?php _e('Đường link truy cập đầu việc', 'qlcv'); ?></span></li>
+                    <li><span>{partner_company_name}</span> <span><?php _e('Tên đối tác gửi việc', 'qlcv'); ?></span></li>
+                    <li><span>{partner_email}</span> <span><?php _e('Email đối tác', 'qlcv'); ?></span></li>
+                    <li><span>{partner_name}</span> <span><?php _e('Tên người liên hệ', 'qlcv'); ?></span></li>
+                    <li><span>{partner_ref}</span> <span><?php _e('Số REF của đối tác', 'qlcv'); ?></span></li>
+                    <li><span>{our_ref}</span> <span><?php _e('Số REF của mình', 'qlcv'); ?></span></li>
+                    <li><span>{customer_name}</span> <span><?php _e('Tên khách hàng', 'qlcv'); ?></span></li>
+                    <li><span>{customer_address}</span> <span><?php _e('Địa chỉ khách hàng', 'qlcv'); ?></span></li>
+                    <li><span>{application_number}</span> <span><?php _e('Số đơn', 'qlcv'); ?></span></li>
+                    <li><span>{application_date}</span> <span><?php _e('Ngày nộp đơn', 'qlcv'); ?></span></li>
+                    <li><span>{certificate_number}</span> <span><?php _e('Số bằng', 'qlcv'); ?></span></li>
+                    <li><span>{certificate_date}</span> <span><?php _e('Ngày cấp bằng', 'qlcv'); ?></span></li>
 
                 </ul>
             </div>

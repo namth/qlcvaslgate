@@ -45,14 +45,14 @@ if (is_user_logged_in()) {
             update_field('field_6010f85bfcf55', $link_onedrive, $new_partner); # link_onedrive
 
             $thongbao = '<div class="alert alert-success" role="alert">
-                                <i class="fa fa-check"></i> Đã sửa thông tin thành công
+                                <i class="fa fa-check"></i> ' . __('Đã sửa thông tin thành công', 'qlcv') . '
                             </div>';
 
             wp_redirect($history_link);
             exit;
         } else {
             $thongbao = '<div class="alert alert-danger" role="alert">
-                                <i class="zmdi zmdi-info"></i> Có lỗi xảy ra, xin vui lòng kiểm tra lại.
+                                <i class="zmdi zmdi-info"></i> ' . __('Có lỗi xảy ra, xin vui lòng kiểm tra lại.', 'qlcv') . '
                             </div>';
         }
     }
@@ -100,28 +100,28 @@ get_sidebar();
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_email" value="<?php echo $user_email; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Họ và tên</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Họ và tên', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="customer_name" value="<?php echo $customer_name; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Công ty</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Công ty', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="customer_company" value="<?php echo $customer_company; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Số điện thoại</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Số điện thoại', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="phone_number" value="<?php echo $so_dien_thoai; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Địa chỉ</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Địa chỉ', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="address" value="<?php echo $dia_chi; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Quốc gia</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Quốc gia', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="country" value="<?php echo $quoc_gia; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Ghi chú</div>
-                            <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="Thông tin bổ sung" name="note"><?php the_content(); ?></textarea></div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Ghi chú', 'qlcv'); ?></div>
+                            <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"><?php the_content(); ?></textarea></div>
                             <div class="col-lg-3"></div>
 
                             <?php
@@ -130,7 +130,7 @@ get_sidebar();
                             ?>
 
                             <div class="col-lg-3"></div>
-                            <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Cập nhật"> <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a></div>
+                            <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Cập nhật', 'qlcv'); ?>"> <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a></div>
 
                         </form>
                     </div>

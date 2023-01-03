@@ -32,18 +32,18 @@ if (isset($_GET['jobid']) && ($_GET['jobid'] != '')) {
                     <div class="box-body">
                         <form action="" method="POST" class="row">
                             <div class="col-12">
-                                <h4>Chuyển đầu việc "<?php echo get_the_title($jobid); ?>" sang hệ thống gia hạn</h4>
+                                <h4><?php _e('Chuyển đầu việc', 'qlcv'); ?> "<?php echo get_the_title($jobid); ?>" <?php _e('sang hệ thống gia hạn', 'qlcv'); ?></h4>
                                 <br>
                             </div>
 
-                            <div class="col-lg-2 form_title lh45">Năm gia hạn</div>
+                            <div class="col-lg-2 form_title lh45"><?php _e('Năm gia hạn', 'qlcv'); ?></div>
                             <div class="col-lg-5 col-12 mb-20">
                                 <select class="form-control select2-tags mb-20" name="renewal_year">
-                                    <option value="">-- Chọn số năm hết hạn --</option>
-                                    <option value="1">1 năm</option>
-                                    <option value="3">3 năm</option>
-                                    <option value="5">5 năm</option>
-                                    <option value="10">10 năm</option>
+                                    <option value="">-- <?php _e('Chọn số năm hết hạn', 'qlcv'); ?> --</option>
+                                    <option value="1"><?php _e('1 năm', 'qlcv'); ?></option>
+                                    <option value="3"><?php _e('3 năm', 'qlcv'); ?></option>
+                                    <option value="5"><?php _e('5 năm', 'qlcv'); ?></option>
+                                    <option value="10"><?php _e('10 năm', 'qlcv'); ?></option>
                                 </select>
                             </div>
                             <input type="hidden" name="jobid" value="<?php echo $_GET['jobid']; ?>">
@@ -54,7 +54,7 @@ if (isset($_GET['jobid']) && ($_GET['jobid'] != '')) {
                             ?>
 
                             <div class="col-lg-5"></div>
-                            <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Chuyển tới trang gia hạn"></div>
+                            <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Chuyển tới trang gia hạn', 'qlcv'); ?>"></div>
 
                         </form>
                         <?php
@@ -102,11 +102,11 @@ if (isset($_GET['jobid']) && ($_GET['jobid'] != '')) {
                                             'email_cc'  => $email_bcc,
                                         ),
                                     );
-                                    $customer_custom_fields = additional_field($customer_custom_fields, 'Người đại diện', $partner_user->display_name);
-                                    $customer_custom_fields = additional_field($customer_custom_fields, 'Mã đối tác', $partner_code);
-                                    $customer_custom_fields = additional_field($customer_custom_fields, 'Số điện thoại', $so_dien_thoai);
-                                    $customer_custom_fields = additional_field($customer_custom_fields, 'Địa chỉ', $dia_chi);
-                                    $customer_custom_fields = additional_field($customer_custom_fields, 'Quốc gia', $quoc_gia);
+                                    $customer_custom_fields = additional_field($customer_custom_fields, __('Người đại diện', 'qlcv'), $partner_user->display_name);
+                                    $customer_custom_fields = additional_field($customer_custom_fields, __('Mã đối tác', 'qlcv'), $partner_code);
+                                    $customer_custom_fields = additional_field($customer_custom_fields, __('Số điện thoại', 'qlcv'), $so_dien_thoai);
+                                    $customer_custom_fields = additional_field($customer_custom_fields, __('Địa chỉ', 'qlcv'), $dia_chi);
+                                    $customer_custom_fields = additional_field($customer_custom_fields, __('Quốc gia', 'qlcv'), $quoc_gia);
 
                                     $partner_api_id = send_customer_api($token, $customer, $customer_custom_fields, $api_id, $uid);
                                 }
@@ -152,15 +152,15 @@ if (isset($_GET['jobid']) && ($_GET['jobid'] != '')) {
                                             'status'            => 'Active',
                                         ),
                                     );
-                                    $renewal_custom_fields = additional_field($renewal_custom_fields, 'Phân loại', $phan_loai);
-                                    $renewal_custom_fields = additional_field($renewal_custom_fields, 'Số đơn', $so_don);
-                                    $renewal_custom_fields = additional_field($renewal_custom_fields, 'Ngày nộp đơn', $ngay_nop_don);
-                                    $renewal_custom_fields = additional_field($renewal_custom_fields, 'Số bằng', $so_bang);
-                                    $renewal_custom_fields = additional_field($renewal_custom_fields, 'Ngày cấp bằng', $ngay_cap_bang);
-                                    $renewal_custom_fields = additional_field($renewal_custom_fields, 'Số REF của đối tác', $partner_ref);
-                                    $renewal_custom_fields = additional_field($renewal_custom_fields, 'Số REF của mình', $our_ref);
-                                    $renewal_custom_fields = additional_field($renewal_custom_fields, 'Quốc gia nộp', $country);
-                                    $renewal_custom_fields = additional_field($renewal_custom_fields, 'Link tài liệu', $link_onedrive);
+                                    $renewal_custom_fields = additional_field($renewal_custom_fields, __('Phân loại', 'qlcv'), $phan_loai);
+                                    $renewal_custom_fields = additional_field($renewal_custom_fields, __('Số đơn', 'qlcv'), $so_don);
+                                    $renewal_custom_fields = additional_field($renewal_custom_fields, __('Ngày nộp đơn', 'qlcv'), $ngay_nop_don);
+                                    $renewal_custom_fields = additional_field($renewal_custom_fields, __('Số bằng', 'qlcv'), $so_bang);
+                                    $renewal_custom_fields = additional_field($renewal_custom_fields, __('Ngày cấp bằng', 'qlcv'), $ngay_cap_bang);
+                                    $renewal_custom_fields = additional_field($renewal_custom_fields, __('Số REF của đối tác', 'qlcv'), $partner_ref);
+                                    $renewal_custom_fields = additional_field($renewal_custom_fields, __('Số REF của mình', 'qlcv'), $our_ref);
+                                    $renewal_custom_fields = additional_field($renewal_custom_fields, __('Quốc gia nộp', 'qlcv'), $country);
+                                    $renewal_custom_fields = additional_field($renewal_custom_fields, __('Link tài liệu', 'qlcv'), $link_onedrive);
 
                                     switch ($phan_loai) {
                                         case 'Nhãn hiệu':
@@ -168,28 +168,28 @@ if (isset($_GET['jobid']) && ($_GET['jobid'] != '')) {
                                             $ten_nhan_hieu  = get_field('ten_nhan_hieu', $jobid);
                                             $nhom  = get_field('nhom', $jobid);
                                             $so_luong_nhom  = get_field('so_luong_nhom', $jobid);
-                                            $renewal_custom_fields = additional_field($renewal_custom_fields, 'Logo', $logo);
-                                            $renewal_custom_fields = additional_field($renewal_custom_fields, 'Tên nhãn hiệu', $ten_nhan_hieu);
-                                            $renewal_custom_fields = additional_field($renewal_custom_fields, 'Nhóm', $nhom);
-                                            $renewal_custom_fields = additional_field($renewal_custom_fields, 'Số lượng nhóm', $so_luong_nhom);
+                                            $renewal_custom_fields = additional_field($renewal_custom_fields, __('Logo', 'qlcv'), $logo);
+                                            $renewal_custom_fields = additional_field($renewal_custom_fields, __('Tên nhãn hiệu', 'qlcv'), $ten_nhan_hieu);
+                                            $renewal_custom_fields = additional_field($renewal_custom_fields, __('Nhóm', 'qlcv'), $nhom);
+                                            $renewal_custom_fields = additional_field($renewal_custom_fields, __('Số lượng nhóm', 'qlcv'), $so_luong_nhom);
                                             break;
 
                                         case 'Sáng chế':
                                             $ban_mo_ta_sang_che  = get_field('ban_mo_ta_sang_che', $jobid);
                                             $so_luong_yeu_cau_bao_ho  = get_field('so_luong_yeu_cau_bao_ho', $jobid);
                                             $so_luong_yeu_cau_bao_ho_doc_lap  = get_field('so_luong_yeu_cau_bao_ho_doc_lap', $jobid);
-                                            $renewal_custom_fields = additional_field($renewal_custom_fields, 'Bản mô tả sáng chế', $ban_mo_ta_sang_che);
-                                            $renewal_custom_fields = additional_field($renewal_custom_fields, 'Số lượng yêu cầu bảo hộ', $so_luong_yeu_cau_bao_ho);
-                                            $renewal_custom_fields = additional_field($renewal_custom_fields, 'Số lượng yêu cầu bảo hộ độc lập', $so_luong_yeu_cau_bao_ho_doc_lap);
+                                            $renewal_custom_fields = additional_field($renewal_custom_fields, __('Bản mô tả sáng chế', 'qlcv'), $ban_mo_ta_sang_che);
+                                            $renewal_custom_fields = additional_field($renewal_custom_fields, __('Số lượng yêu cầu bảo hộ', 'qlcv'), $so_luong_yeu_cau_bao_ho);
+                                            $renewal_custom_fields = additional_field($renewal_custom_fields, __('Số lượng yêu cầu bảo hộ độc lập', 'qlcv'), $so_luong_yeu_cau_bao_ho_doc_lap);
                                             break;
 
                                         case 'Kiểu dáng':
                                             $bo_anh  = get_field('bo_anh', $jobid);
                                             $ban_mo_ta_cua_bo_anh  = get_field('ban_mo_ta_cua_bo_anh', $jobid);
                                             $so_luong_phuong_an  = get_field('so_luong_phuong_an', $jobid);
-                                            $renewal_custom_fields = additional_field($renewal_custom_fields, 'Bộ ảnh', $bo_anh);
-                                            $renewal_custom_fields = additional_field($renewal_custom_fields, 'Bản mô tả của bộ ảnh', $ban_mo_ta_cua_bo_anh);
-                                            $renewal_custom_fields = additional_field($renewal_custom_fields, 'Số lượng phương án', $so_luong_phuong_an);
+                                            $renewal_custom_fields = additional_field($renewal_custom_fields, __('Bộ ảnh', 'qlcv'), $bo_anh);
+                                            $renewal_custom_fields = additional_field($renewal_custom_fields, __('Bản mô tả của bộ ảnh', 'qlcv'), $ban_mo_ta_cua_bo_anh);
+                                            $renewal_custom_fields = additional_field($renewal_custom_fields, __('Số lượng phương án', 'qlcv'), $so_luong_phuong_an);
                                             break;
 
                                         default:
@@ -220,7 +220,7 @@ if (isset($_GET['jobid']) && ($_GET['jobid'] != '')) {
 
                                     $response_body = json_decode(wp_remote_retrieve_body($response));
                                     if (!$response_body->id) {
-                                        echo "Không tạo mới/cập nhật được bài viết.<br>";
+                                        _e("Không tạo mới/cập nhật được bài viết.<br>", 'qlcv');
                                         // print_r($response);
                                     } else {
 
@@ -229,7 +229,7 @@ if (isset($_GET['jobid']) && ($_GET['jobid'] != '')) {
 
                                             # update api id 
                                             update_field('field_614319e51e117', $api_id, $jobid);
-                                            $result = "<p>Đã tạo đơn gia hạn mới trên hệ thống gia hạn.</p>";
+                                            $result = __("<p>Đã tạo đơn gia hạn mới trên hệ thống gia hạn.</p>", 'qlcv');
                                             $new_partner = true;
                                         }
 
@@ -253,16 +253,16 @@ if (isset($_GET['jobid']) && ($_GET['jobid'] != '')) {
                                             );
 
                                             if (!$new_partner) {
-                                                $result = "<p>Đã cập nhật thành công đơn gia hạn này trên hệ thống gia hạn.</p>";
+                                                $result = __("<p>Đã cập nhật thành công đơn gia hạn này trên hệ thống gia hạn.</p>", 'qlcv');
                                             }
                                         }
                                     }
                                     echo $result;
                                 }
                             } else {
-                                echo "Không thể kết nối tới server.";
+                                _e("Không thể kết nối tới server.", 'qlcv');
                             }
-                            echo '<br><a href="' . $history_link . '" class="button button-primary">Quay lại</a>';
+                            echo '<br><a href="' . $history_link . '" class="button button-primary">' . __('Quay lại', 'qlcv') . '</a>';
                         }
                         ?>
                     </div>

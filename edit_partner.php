@@ -41,7 +41,7 @@ if (is_user_logged_in()) {
         $current_partner_code = get_field('partner_code' , 'user_' . $this_user->ID);
         if ( ($current_partner_code != $partner_code) && search_partner($partner_code) ) {
             $error_partner_code = true;
-            $error_message = "<b>Trùng mã đối tác</b>";
+            $error_message = __("<b>Trùng mã đối tác</b>", 'qlcv');
         }
 
         # edit user
@@ -87,14 +87,14 @@ if (is_user_logged_in()) {
             update_field('field_61cd79bf1653f', $worked, 'user_' . $new_partner); # đã chốt hoặc tiềm năng
 
             $thongbao = '<div class="alert alert-success" role="alert">
-                                <i class="fa fa-check"></i> Đã sửa thông tin thành công
+                                <i class="fa fa-check"></i> ' . __('Đã sửa thông tin thành công', 'qlcv') . '
                             </div>';
             
             wp_redirect( $history_link );
             exit;
         } else {
             $thongbao = '<div class="alert alert-danger" role="alert">
-                                <i class="zmdi zmdi-info"></i> Có lỗi xảy ra, xin vui lòng kiểm tra lại. '. $error_message .'
+                                <i class="zmdi zmdi-info"></i> ' . __('Có lỗi xảy ra, xin vui lòng kiểm tra lại.','qlcv') . ' '. $error_message .'
                             </div>';
         }
     }
@@ -153,15 +153,15 @@ get_sidebar();
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_email" value="<?php echo $this_user->user_email; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Tên công ty/tổ chức <span class="text-danger">*</span></div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Tên công ty/tổ chức', 'qlcv'); ?> <span class="text-danger">*</span></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_company" value="<?php echo $ten_cong_ty; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Mã đối tác <span class="text-danger">*</span></div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Mã đối tác', 'qlcv'); ?> <span class="text-danger">*</span></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="partner_code" value="<?php echo $partner_code; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Vai trò <span class="text-danger">*</span></div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Vai trò', 'qlcv'); ?> <span class="text-danger">*</span></div>
                             <div class="col-lg-9 col-12 mb-20">
                                 <?php
                                 foreach ($role_list as $key => $value) {
@@ -177,28 +177,28 @@ get_sidebar();
 
                             </div>
 
-                            <div class="col-lg-3 form_title lh45">Họ và tên <span class="text-danger">*</span></div>
-                            <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="first_name" placeholder="Họ" value="<?php echo $this_user->user_firstname; ?>"></div>
-                            <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="last_name" placeholder="Tên" value="<?php echo $this_user->user_lastname; ?>"></div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Họ và tên', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                            <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="first_name" placeholder="<?php _e('Họ', 'qlcv'); ?>" value="<?php echo $this_user->user_firstname; ?>"></div>
+                            <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="last_name" placeholder="<?php _e('Tên', 'qlcv'); ?>" value="<?php echo $this_user->user_lastname; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title mb-10 mt-10">Trạng thái</div>
+                            <div class="col-lg-3 form_title mb-10 mt-10"><?php _e('Trạng thái', 'qlcv'); ?></div>
                             <div class="col-lg-3 col-12 mb-20 mt-10">
                                 <div class="adomx-checkbox-radio-group inline">
-                                    <label class="adomx-radio-2"><input type="radio" name="worked" value="1" <?php if ($worked) echo "checked"; ?>> <i class="icon"></i> Đã chốt</label>
-                                    <label class="adomx-radio-2"><input type="radio" name="worked" value="0" <?php if (!$worked) echo "checked"; ?>> <i class="icon"></i> Tiềm năng</label>
+                                    <label class="adomx-radio-2"><input type="radio" name="worked" value="1" <?php if ($worked) echo "checked"; ?>> <i class="icon"></i> <?php _e('Đã chốt', 'qlcv'); ?></label>
+                                    <label class="adomx-radio-2"><input type="radio" name="worked" value="0" <?php if (!$worked) echo "checked"; ?>> <i class="icon"></i> <?php _e('Tiềm năng', 'qlcv'); ?></label>
                                 </div>
                             </div>
                             <div class="col-lg-6"></div>
 
-                            <div class="col-lg-3 form_title lh45">Phân loại</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Phân loại', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control mb-20" name="type_of_client">
                                     <?php
                                     if ($type_of_client) {
                                         echo '<option value="' . $type_of_client . '">' . $type_of_client . '</option>';
                                     } else {
-                                        echo '<option value="">-- Phân loại --</option>';
+                                        echo '<option value="">-- ' . __('Phân loại', 'qlcv') . ' --</option>';
                                     }
 
                                     $partner_list_type = explode(PHP_EOL, get_field('partner_list_type', 'option'));
@@ -216,14 +216,14 @@ get_sidebar();
                             </div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Cấp độ</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Cấp độ', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control mb-20" name="partner_vip">
                                     <?php
                                     if ($partner_vip) {
                                         echo '<option value="' . $partner_vip . '">' . $partner_vip . '</option>';
                                     } else {
-                                        echo '<option value="">-- Phân loại VIP --</option>';
+                                        echo '<option value="">-- ' . __('Phân loại VIP', 'qlcv') . ' --</option>';
                                     }
 
                                     $partner_vip_type = explode(PHP_EOL, get_field('partner_vip_type', 'option'));
@@ -241,15 +241,15 @@ get_sidebar();
                             </div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Số điện thoại</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Số điện thoại', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="phone_number" value="<?php echo $so_dien_thoai; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Địa chỉ</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Địa chỉ', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="address" value="<?php echo $dia_chi; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Quốc gia</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Quốc gia', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="country" value="<?php echo $quoc_gia; ?>"></div>
                             <div class="col-lg-3"></div>
 
@@ -260,12 +260,12 @@ get_sidebar();
                             <div class="col-lg-3 form_title lh45">Email BCC</div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <input type="text" class="form-control" name="email_bcc" value="<?php echo $email_bcc; ?>">
-                                <span class="form-help-text">Mỗi email cách nhau dấu ","</span>
+                                <span class="form-help-text"><?php _e('Mỗi email cách nhau dấu ","', 'qlcv'); ?></span>
                             </div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Ghi chú</div>
-                            <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="Thông tin bổ sung" name="note"><?php echo get_user_meta($this_user->ID, 'description', true); ?></textarea></div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Ghi chú', 'qlcv'); ?></div>
+                            <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"><?php echo get_user_meta($this_user->ID, 'description', true); ?></textarea></div>
                             <div class="col-lg-3"></div>
 
                             <?php
@@ -274,7 +274,7 @@ get_sidebar();
                             ?>
 
                             <div class="col-lg-3"></div>
-                            <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Cập nhật"> <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a></div>
+                            <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Cập nhật', 'qlcv'); ?>"> <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a></div>
 
                         </form>
                     </div>

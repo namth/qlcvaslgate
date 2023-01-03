@@ -32,18 +32,18 @@
                 # add more info throught custom fields
                 if ( !is_wp_error( $new_partner ) ) {
                     $thongbao = '<div class="alert alert-success" role="alert">
-                                    <i class="fa fa-check"></i> Đã đổi mật khẩu thành công
+                                    <i class="fa fa-check"></i> ' . __('Đã đổi mật khẩu thành công', 'qlcv') . '
                                 </div>';
                     $success = true;
                 } else {
                     $thongbao = '<div class="alert alert-danger" role="alert">
-                                    <i class="zmdi zmdi-info"></i> Có lỗi xảy ra, xin vui lòng thông báo với admin để khắc phục.
+                                    <i class="zmdi zmdi-info"></i> ' . __('Có lỗi xảy ra, xin vui lòng thông báo với admin để khắc phục.', 'qlcv') . '
                                 </div>';
                 }
                 
             } else {
                     $thongbao = '<div class="alert alert-danger" role="alert">
-                        <i class="zmdi zmdi-info"></i> Mật khẩu cũ không đúng hoặc mật khẩu xác nhận không khớp.
+                        <i class="zmdi zmdi-info"></i> ' . __('Mật khẩu cũ không đúng hoặc mật khẩu xác nhận không khớp.', 'qlcv') . '
                     </div>';
 
             }
@@ -85,15 +85,15 @@
                             ?>
                             <div>
                                 <form action="#" method="POST" class="row">
-                                    <div class="col-lg-3 form_title lh45">Mật khẩu cũ</div>
+                                    <div class="col-lg-3 form_title lh45"><?php _e('Mật khẩu cũ', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="password" class="form-control" name="old_password" ></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45">Mật khẩu mới</div>
+                                    <div class="col-lg-3 form_title lh45"><?php _e('Mật khẩu mới', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="password" class="form-control" name="new_password" ></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45">Nhập lại mật khẩu mới</div>
+                                    <div class="col-lg-3 form_title lh45"><?php _e('Nhập lại mật khẩu mới', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="password" class="form-control" name="confirm_password"></div>
                                     <div class="col-lg-3"></div>
 
@@ -102,7 +102,7 @@
                                     ?>
 
                                     <div class="col-lg-3"></div>
-                                    <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Đổi mật khẩu"> <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a></div>
+                                    <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Đổi mật khẩu"> <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a></div>
 
                                 </form>
                             </div>

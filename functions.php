@@ -36,13 +36,13 @@ function time_elapsed_string($datetime, $full = false)
     $diff->d -= $diff->w * 7;
 
     $string = array(
-        'y' => 'năm',
-        'm' => 'tháng',
-        'w' => 'tuần',
-        'd' => 'ngày',
-        'h' => 'giờ',
-        'i' => 'phút',
-        's' => 'giây',
+        'y' => __('năm', 'qlcv'),
+        'm' => __('tháng', 'qlcv'),
+        'w' => __('tuần', 'qlcv'),
+        'd' => __('ngày', 'qlcv'),
+        'h' => __('giờ', 'qlcv'),
+        'i' => __('phút', 'qlcv'),
+        's' => __('giây', 'qlcv'),
     );
     foreach ($string as $k => &$v) {
         if ($diff->$k) {
@@ -53,7 +53,7 @@ function time_elapsed_string($datetime, $full = false)
     }
 
     if (!$full) $string = array_slice($string, 0, 1);
-    return $string ? implode(', ', $string) . ' trước' : 'vừa xong';
+    return $string ? implode(', ', $string) . ' ' . __('trước', 'qlcv') : __('vừa xong', 'qlcv');
 }
 
 add_action('wp_ajax_add_user', 'add_new_user');
@@ -79,7 +79,7 @@ function add_new_user()
 
     if (search_partner($user_code)) {
         $error_partner_code = true;
-        $error_message = "<b>Trùng mã đối tác</b>";
+        $error_message = __("<b>Trùng mã đối tác</b>", 'qlcv');
     }
 
     # add new user
@@ -111,12 +111,12 @@ function add_new_user()
         $data['status'] = 'success';
         $data['content'] = "<option value='" . $new_partner . "' selected>" . $display_name . " (" . $user_email . ")</option>";
         $data['notification'] = '<div class="alert alert-success" role="alert">
-                                    <i class="fa fa-check"></i> Đã tạo tài khoản thành công
+                                    <i class="fa fa-check"></i> ' . __('Đã tạo tài khoản thành công', 'qlcv') . '
                                   </div>';
     } else {
         $data['status'] = 'error';
         $data['notification'] = '<div class="alert alert-danger" role="alert">
-                                    <i class="zmdi zmdi-info"></i> Có lỗi xảy ra, xin vui lòng kiểm tra lại. ' . $error_message . '
+                                    <i class="zmdi zmdi-info"></i> ' . __('Có lỗi xảy ra, xin vui lòng kiểm tra lại.', 'qlcv') . ' ' . $error_message . '
                                   </div>';
     }
 
@@ -248,12 +248,12 @@ function add_new_customer()
         }
         $data['content'] = "<option value='" . $inserted . "' selected>" . $customer_name . $email_output . "</option>";
         $data['notification'] = '<div class="alert alert-success" role="alert">
-                                    <i class="fa fa-check"></i> Đã tạo khách hàng thành công
+                                    <i class="fa fa-check"></i> ' . __('Đã tạo khách hàng thành công', 'qlcv') . '
                                   </div>';
     } else {
         $data['status'] = 'error';
         $data['notification'] = '<div class="alert alert-danger" role="alert">
-                                    <i class="zmdi zmdi-info"></i> Có lỗi xảy ra, xin vui lòng kiểm tra lại.
+                                    <i class="zmdi zmdi-info"></i> ' . __('Có lỗi xảy ra, xin vui lòng kiểm tra lại.', 'qlcv') . '
                                   </div>';
     }
 
@@ -297,7 +297,7 @@ function copy_customer_from_partner()
     if ($query->have_posts()) {
         $data['status'] = 'error';
         $data['notification'] = '<div class="alert alert-danger" role="alert">
-                                    <i class="zmdi zmdi-info"></i> Khách hàng đã tồn tại trong hệ thống.
+                                    <i class="zmdi zmdi-info"></i> ' . __('Khách hàng đã tồn tại trong hệ thống.', 'qlcv') . '
                                   </div>';
     } else {
         # add new customer
@@ -328,12 +328,12 @@ function copy_customer_from_partner()
             }
             $data['content'] = "<option value='" . $inserted . "' selected>" . $customer_name . $text_output . "</option>";
             $data['notification'] = '<div class="alert alert-success" role="alert">
-                                        <i class="fa fa-check"></i> Đã tạo khách hàng thành công
+                                        <i class="fa fa-check"></i> ' . __('Đã tạo khách hàng thành công', 'qlcv') . '
                                       </div>';
         } else {
             $data['status'] = 'error';
             $data['notification'] = '<div class="alert alert-danger" role="alert">
-                                        <i class="zmdi zmdi-info"></i> Có lỗi xảy ra, xin vui lòng kiểm tra lại.
+                                        <i class="zmdi zmdi-info"></i> ' . __('Có lỗi xảy ra, xin vui lòng kiểm tra lại.', 'qlcv') . '
                                       </div>';
         }
     }
@@ -526,9 +526,9 @@ function add_new_job()
             $manager_arr = get_user_by('ID', $data_manager);
             $to = $user_arr->user_email;
 
-            $email_title = "Công việc mới: <b>" . $job_name . "</b>";
-            $email_content = $user_arr->display_name . ' hãy kiểm tra để thực hiện.';
-            $email_content .= "<br>Link tới công việc: " . get_the_permalink($inserted);
+            $email_title = __("Công việc mới:", 'qlcv') . " <b>" . $job_name . "</b>";
+            $email_content = $user_arr->display_name . ' ' . __('hãy kiểm tra để thực hiện.', 'qlcv');
+            $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink($inserted);
             $email_content = auto_url($email_content);
 
             $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
@@ -542,12 +542,12 @@ function add_new_job()
         }
         $data['status'] = 'success';
         $data['notification'] = '<div class="alert alert-success" role="alert">
-                                    <i class="fa fa-check"></i> Đã tạo công việc mới thành công
+                                    <i class="fa fa-check"></i> ' . __('Đã tạo công việc mới thành công', 'qlcv') . '
                                   </div>';
     } else {
         $data['status'] = 'error';
         $data['notification'] = '<div class="alert alert-danger" role="alert">
-                                    <i class="zmdi zmdi-info"></i> Có lỗi xảy ra, xin vui lòng kiểm tra lại.
+                                    <i class="zmdi zmdi-info"></i> ' . __('Có lỗi xảy ra, xin vui lòng kiểm tra lại.', 'qlcv') . '
                                   </div>';
     }
 
@@ -739,14 +739,14 @@ function sendmail_deadline_notification()
                     # send mail notification
                     $lan_nhac = (date('d/m/Y', $current_time) == date('d/m/Y', $quater_time)) ? '2' : '1';
 
-                    $email_title = 'Lưu ý công việc ' . get_the_title() . $joblb . ' chưa trả lời.';
+                    $email_title = __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' ' . __('chưa trả lời.', 'qlcv');
                     $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
-                    $email_content .= "Số REF: " . $our_ref . "; Người quản lý: " . $manager_arr['display_name'] . "<br>";
-                    $email_content .= "Lần nhắc thứ " . $lan_nhac . " đối với đầu việc: " . get_the_title() . "<br>";
-                    $email_content .= 'Thời hạn để xử lý công việc này là ' . $deadline . '. Như vậy, bạn còn ' . $day_remaining . ' ngày để trả lời.';
-                    $email_content .= "<br>Link tới công việc: " . get_the_permalink();
+                    $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
+                    $email_content .= __("Lần nhắc thứ ", 'qlcv') . "" . $lan_nhac . " đối với đầu việc: " . get_the_title() . "<br>";
+                    $email_content .= __('Thời hạn để xử lý công việc này là', 'qlcv') . ' ' . $deadline . '. ' . __('Như vậy, bạn còn', 'qlcv') . ' ' . $day_remaining . ' ' . __('ngày để trả lời.', 'qlcv');
+                    $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink();
                     $email_content = auto_url($email_content);
-                    $email_content .= "<br><br>Trân trọng, ";
+                    $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
                     $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
                     $headers[] = 'Cc: ' . $email_admin;
@@ -755,15 +755,15 @@ function sendmail_deadline_notification()
                     $sent = wp_mail($to, $email_title, $email_content, $headers);
                 } else if (date('d/m/Y', $current_time) == date('d/m/Y', $end_time)) {
                     # send mail notification
-                    $email_title = 'Lưu ý công việc đến hạn ';
+                    $email_title = __('Lưu ý công việc đến hạn ', 'qlcv');
                     $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
-                    $email_content .= "Số REF: " . $our_ref . "; Người quản lý: " . $manager_arr['display_name'] . "<br>";
+                    $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
                     $email_content .= "Lần nhắc thứ 3 đối với đầu việc: " . get_the_title() . "<br>";
-                    $email_content .= 'Lưu ý công việc ' . get_the_title() . $joblb . ' đến hạn trả lời hôm nay và ' . $user_arr['display_name'] . ' chưa trả lời. <br>';
-                    $email_content .= $user_arr['display_name'] . ' cần trả lời ngay.';
-                    $email_content .= "<br>Link tới công việc: " . get_the_permalink();
+                    $email_content .= __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' ' . __('đến hạn trả lời hôm nay và', 'qlcv') . ' ' . $user_arr['display_name'] . ' ' . __('chưa trả lời.', 'qlcv') . ' <br>';
+                    $email_content .= $user_arr['display_name'] . ' ' . __('cần trả lời ngay.', 'qlcv');
+                    $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink();
                     $email_content = auto_url($email_content);
-                    $email_content .= "<br><br>Trân trọng, ";
+                    $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
                     $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
                     $headers[] = 'Cc: ' . $email_admin;
@@ -772,14 +772,14 @@ function sendmail_deadline_notification()
                     $sent = wp_mail($to, $email_title, $email_content, $headers);
                 } else if ($day_remaining == '-1') {
                     # miss deadline
-                    $email_title = 'Lưu ý công việc ' . get_the_title() . $joblb . ' đã quá hạn trả lời.';
+                    $email_title = __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' đã quá hạn trả lời.';
                     $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
-                    $email_content .= "Số REF: " . $our_ref . "; Người quản lý: " . $manager_arr['display_name'] . "<br>";
-                    $email_content .= "Lần nhắc thứ 4 đối với đầu việc: " . get_the_title() . "<br>";
-                    $email_content .= $user_arr['display_name'] . ' cần gửi báo cáo cho người quản lý về lý do chưa trả lời này.';
-                    $email_content .= "<br>Link tới công việc: " . get_the_permalink();
+                    $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
+                    $email_content .= __("Lần nhắc thứ 4 đối với đầu việc:", 'qlcv') . " " . get_the_title() . "<br>";
+                    $email_content .= $user_arr['display_name'] . ' ' . __('cần gửi báo cáo cho người quản lý về lý do chưa trả lời này.', 'qlcv');
+                    $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink();
                     $email_content = auto_url($email_content);
-                    $email_content .= "<br><br>Trân trọng, ";
+                    $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
                     $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
                     $headers[] = 'Cc: ' . $email_admin;
@@ -826,15 +826,15 @@ function sendmail_deadline_notification()
 if (function_exists('acf_add_options_page')) {
     acf_add_options_page(array(
         'page_title'    => 'Theme options', // Title hiển thị khi truy cập vào Options page
-        'menu_title'    => 'Tùy biến chung', // Tên menu hiển thị ở khu vực admin
+        'menu_title'    => __('Tùy biến chung', 'qlcv'), // Tên menu hiển thị ở khu vực admin
         'menu_slug'     => 'theme-settings', // Url hiển thị trên đường dẫn của options page
         'capability'    => 'edit_posts',
         'redirect'      => false
     ));
 
     acf_add_options_page(array(
-        'page_title'    => 'Cấu hình khác phần mềm QLCV', // Title hiển thị khi truy cập vào Options page
-        'menu_title'    => 'Cấu hình khác', // Tên menu hiển thị ở khu vực admin
+        'page_title'    => __('Cấu hình khác phần mềm QLCV', 'qlcv'), // Title hiển thị khi truy cập vào Options page
+        'menu_title'    => __('Cấu hình khác', 'qlcv'), // Tên menu hiển thị ở khu vực admin
         'menu_slug'     => 'other-acf-settings', // Url hiển thị trên đường dẫn của options page
         'capability'    => 'edit_posts',
         'parent_slug'   => 'theme-settings',
@@ -947,7 +947,7 @@ function send_customer_api($token, $customer, $custom_fields, $api_id, $uid)
 
         $response_body = json_decode(wp_remote_retrieve_body($response));
         if (!$response_body->id) {
-            echo "Không tạo mới/cập nhật được bài viết.<br>";
+            echo __("Không tạo mới/cập nhật được bài viết.<br>", 'qlcv');
             print_r($response);
         } else {
 
@@ -956,7 +956,7 @@ function send_customer_api($token, $customer, $custom_fields, $api_id, $uid)
 
                 # update api id 
                 update_field('field_614319e51e117', $api_id, 'user_' . $uid);
-                $result = "<p>Đã tạo khách hàng mới trên hệ thống gia hạn.</p>";
+                $result = __("<p>Đã tạo khách hàng mới trên hệ thống gia hạn.</p>", 'qlcv');
                 $new_partner = true;
             }
 
@@ -982,7 +982,7 @@ function send_customer_api($token, $customer, $custom_fields, $api_id, $uid)
                 );
                 // print_r($custom_fields_api);
                 if (!$new_partner) {
-                    $result = "<p>Đã cập nhật thành công khách hàng này trên hệ thống gia hạn.</p>";
+                    $result = __("<p>Đã cập nhật thành công khách hàng này trên hệ thống gia hạn.</p>", 'qlcv');
                 }
             }
         }

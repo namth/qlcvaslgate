@@ -61,7 +61,7 @@ if (isset($_GET['delete'])  && ($_GET['delete'] != "")) {
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Mẫu mail</th>
+                                    <th><?php _e('Mẫu mail', 'qlcv'); ?></th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -88,7 +88,7 @@ if (isset($_GET['delete'])  && ($_GET['delete'] != "")) {
                                     }
                                     wp_reset_postdata();
                                 } else {
-                                    echo "<tr><td colspan=6 class='text-center'>Không có dữ liệu.</td></tr>";
+                                    echo "<tr><td colspan=6 class='text-center'>" . __("Không có dữ liệu.", 'qlcv') . "</td></tr>";
                                 }
                                 if ($type) {
                                     $term       = get_term_by('name', $type, 'group');

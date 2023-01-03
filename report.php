@@ -16,7 +16,7 @@ get_sidebar();
         <!-- Page Heading Start -->
         <div class="col-12 col-lg-auto mb-20">
             <div class="page-heading">
-                <h3>Báo cáo <span>/ Kết quả công việc</span></h3>
+                <h3><?php _e('Báo cáo', 'qlcv'); ?> <span>/ <?php _e('Kết quả công việc', 'qlcv'); ?></span></h3>
             </div>
         </div><!-- Page Heading End -->
 
@@ -25,7 +25,7 @@ get_sidebar();
             <div class="page-date-range">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <input type="text" class="form-control input-date-predefined" name="filter_date">
-                    <input type="submit" class="button button-primary" value="Lọc">
+                    <input type="submit" class="button button-primary" value="<?php _e('Lọc', 'qlcv'); ?>">
                 </form>
             </div>
         </div><!-- Page Button Group End -->
@@ -167,7 +167,7 @@ get_sidebar();
             <div class="top-report">
                 <!-- Head -->
                 <div class="head">
-                    <h4>Tổng số khách</h4>
+                    <h4><?php _e('Tổng số khách', 'qlcv'); ?></h4>
                     <a href="<?php echo get_bloginfo('url'); ?>/danh-sach-khach-hang/" class="view"><i class="zmdi zmdi-eye"></i></a>
                 </div>
 
@@ -197,7 +197,7 @@ get_sidebar();
 
                 <!-- Head -->
                 <div class="head">
-                    <h4>Tổng số đối tác</h4>
+                    <h4><?php _e('Tổng số đối tác', 'qlcv'); ?></h4>
                     <a href="<?php echo get_bloginfo('url'); ?>/danh-sach-nhan-su/?role=partner" class="view"><i class="zmdi zmdi-eye"></i></a>
                 </div>
 
@@ -227,7 +227,7 @@ get_sidebar();
 
                 <!-- Head -->
                 <div class="head">
-                    <h4>Tổng số công việc</h4>
+                    <h4><?php _e('Tổng số công việc', 'qlcv'); ?></h4>
                     <a href="#" class="view"><i class="zmdi zmdi-eye"></i></a>
                 </div>
 
@@ -255,7 +255,7 @@ get_sidebar();
 
                 <!-- Head -->
                 <div class="head">
-                    <h4>Tổng số nhiệm vụ</h4>
+                    <h4><?php _e('Tổng số nhiệm vụ', 'qlcv'); ?></h4>
                     <a href="#" class="view"><i class="zmdi zmdi-eye"></i></a>
                 </div>
 
@@ -278,7 +278,7 @@ get_sidebar();
                         ?>
                         <div class="progess-bar" style="width: <?php echo $process; ?>%;"></div>
                     </div>
-                    <p><?php echo $process; ?>% đã hoàn thành</p>
+                    <p><?php echo $process; ?><?php _e('% đã hoàn thành', 'qlcv'); ?></p>
                 </div>
 
             </div>
@@ -291,7 +291,7 @@ get_sidebar();
         <div class="col-md-6 mb-30">
             <div class="box">
                 <div class="box-head">
-                    <h4 class="title">Biểu đồ nhiệm vụ</h4>
+                    <h4 class="title"><?php _e('Biểu đồ nhiệm vụ', 'qlcv'); ?></h4>
                 </div>
                 <div class="box-body">
                     <div class="chartjs-market-trends-chart">
@@ -373,7 +373,7 @@ get_sidebar();
         <div class="col-md-6 mb-30">
             <div class="box">
                 <div class="box-head">
-                    <h4 class="title">Tỷ lệ các công việc đã chốt</h4>
+                    <h4 class="title"><?php _e('Tỷ lệ các công việc đã chốt', 'qlcv'); ?></h4>
                 </div>
                 <div class="box-body">
                     <div class="chartjs-market-trends-chart">
@@ -457,7 +457,7 @@ get_sidebar();
         <div class="col-md-6 mb-30">
             <div class="box">
                 <div class="box-head">
-                    <h4 class="title">Nguồn việc</h4>
+                    <h4 class="title"><?php _e('Nguồn việc', 'qlcv'); ?></h4>
                 </div>
                 <div class="box-body">
                     <div class="chartjs-market-trends-chart">
@@ -539,7 +539,7 @@ get_sidebar();
         <div class="col-md-6 mb-30">
             <div class="box">
                 <div class="box-head">
-                    <h4 class="title">Tỷ lệ công việc tiềm năng</h4>
+                    <h4 class="title"><?php _e('Tỷ lệ công việc tiềm năng', 'qlcv'); ?></h4>
                 </div>
                 <div class="box-body">
                     <div class="chartjs-market-trends-chart">
@@ -623,7 +623,7 @@ get_sidebar();
         <div class="col-md-6 mb-30">
             <div class="box">
                 <div class="box-head">
-                    <h4 class="title">Thu chi VND</h4>
+                    <h4 class="title"><?php _e('Thu chi VND', 'qlcv'); ?></h4>
                 </div>
                 <div class="box-body">
                     <div class="chartjs-market-trends-chart">
@@ -779,7 +779,7 @@ get_sidebar();
         <div class="col-md-6 mb-30">
             <div class="box">
                 <div class="box-head">
-                    <h4 class="title">Thu chi USD</h4>
+                    <h4 class="title"><?php _e('Thu chi USD', 'qlcv'); ?></h4>
                 </div>
                 <div class="box-body">
                     <div class="chartjs-market-trends-chart">

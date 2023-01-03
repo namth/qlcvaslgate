@@ -16,7 +16,7 @@ $current_user = wp_get_current_user();
         <!-- Page Heading Start -->
         <div class="col-12 col-lg-auto mb-20">
             <div class="page-heading">
-                <h3>Kết quả tìm kiếm cho: "<?php echo $s; ?>"</h3>
+                <h3><?php _e('Kết quả tìm kiếm cho:', 'qlcv'); ?> "<?php echo $s; ?>"</h3>
             </div>
         </div><!-- Page Heading End -->
 
@@ -37,18 +37,18 @@ $current_user = wp_get_current_user();
             <div class="col-12 mb-30">
                 <div class="box">
                     <div class="box-head">
-                        <h4 class="title">Các nhiệm vụ tìm được</h4>
+                        <h4 class="title"><?php _e('Các nhiệm vụ tìm được', 'qlcv'); ?></h4>
                     </div>
                     <div class="box-body">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Nhiệm vụ</th>
-                                    <th>Công việc lớn</th>
-                                    <th>Người thực hiện</th>
-                                    <th>Deadline</th>
-                                    <th>Trạng thái</th>
+                                    <th><?php _e('Nhiệm vụ', 'qlcv'); ?></th>
+                                    <th><?php _e('Công việc lớn', 'qlcv'); ?></th>
+                                    <th><?php _e('Người thực hiện', 'qlcv'); ?></th>
+                                    <th><?php _e('Deadline', 'qlcv'); ?></th>
+                                    <th><?php _e('Trạng thái', 'qlcv'); ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -161,20 +161,20 @@ $current_user = wp_get_current_user();
             <div class="col-12 mb-30">
                 <div class="box">
                     <div class="box-head">
-                        <h4 class="title"><?php echo $query->post_count;  ?> công việc tìm được</h4>
+                        <h4 class="title"><?php echo $query->post_count;  ?> <?php _e('công việc tìm được', 'qlcv'); ?></h4>
                     </div>
                     <div class="box-body">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>STT</th>
+                                    <th><?php _e('STT', 'qlcv'); ?></th>
                                     <th>#</th>
-                                    <th>Ngày tháng</th>
-                                    <th>Công việc lớn</th>
-                                    <th>Khách hàng</th>
-                                    <th>Đối tác</th>
-                                    <th>Người thực hiện</th>
-                                    <th>Người quản lý</th>
+                                    <th><?php _e('Ngày tháng', 'qlcv'); ?></th>
+                                    <th><?php _e('Công việc lớn', 'qlcv'); ?></th>
+                                    <th><?php _e('Khách hàng', 'qlcv'); ?></th>
+                                    <th><?php _e('Đối tác', 'qlcv'); ?></th>
+                                    <th><?php _e('Người thực hiện', 'qlcv'); ?></th>
+                                    <th><?php _e('Người quản lý', 'qlcv'); ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -201,7 +201,7 @@ $current_user = wp_get_current_user();
                                     echo "<td><a href='" . get_author_posts_url($partner_2['ID']) . "'>" . $partner_2['display_name'] . "</a></td>";
                                     if ($member) {
                                         echo "<td><a href='" . get_author_posts_url($member['ID']) . "'>" . $member['display_name'] . "</a></td>";
-                                    } else echo "<td>Chưa có</td>";
+                                    } else echo "<td>" . __("Chưa có", 'qlcv') . "</td>";
                                     echo "<td><a href='" . get_author_posts_url($manager['ID']) . "'>" . $manager['display_name'] . "</a></td>";
                                     echo "</tr>";
                                 }
@@ -216,7 +216,7 @@ $current_user = wp_get_current_user();
 
         <?php
         } else {
-            echo '<div class="col-12 mb-30">Không tìm thấy dữ liệu.</div>';
+            echo '<div class="col-12 mb-30">' . __('Không tìm thấy dữ liệu.', 'qlcv') . '</div>';
         }
         # end search job
 
@@ -235,10 +235,10 @@ $current_user = wp_get_current_user();
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Tên nhân sự</th>
-                            <th>Số điện thoại</th>
+                            <th><?php _e('Tên nhân sự', 'qlcv'); ?></th>
+                            <th><?php _e('Số điện thoại', 'qlcv'); ?></th>
                             <th>Email</th>
-                            <th>Vai trò</th>
+                            <th><?php _e('Vai trò', 'qlcv'); ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -299,11 +299,11 @@ $current_user = wp_get_current_user();
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Mã code</th>
-                                <th>Tên đối tác / cty</th>
-                                <th>Số điện thoại</th>
+                                <th><?php _e('Mã code', 'qlcv'); ?></th>
+                                <th><?php _e('Tên đối tác / cty', 'qlcv'); ?></th>
+                                <th><?php _e('Số điện thoại', 'qlcv'); ?></th>
                                 <th>Email</th>
-                                <th>Vai trò</th>
+                                <th><?php _e('Vai trò', 'qlcv'); ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -339,9 +339,7 @@ $current_user = wp_get_current_user();
                     </table>
                 </div>
         <?php
-            } /* else {
-                echo '<div class="col-12 mb-30">Không tìm thấy dữ liệu.</div>';
-            } */
+            } 
         }
         ?>
     </div>

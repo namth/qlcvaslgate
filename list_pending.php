@@ -16,7 +16,7 @@
                 <!-- Page Heading Start -->
                 <div class="col-12 col-lg-12 mb-20">
                     <div class="col-12 mb-30">
-                        <a href="<?php echo get_bloginfo('url'); ?>/tao-dau-viec-moi/" class="button button-primary"><span><i class="fa fa-plus"></i>Tạo công việc mới</span></a>
+                        <a href="<?php echo get_bloginfo('url'); ?>/tao-dau-viec-moi/" class="button button-primary"><span><i class="fa fa-plus"></i><?php _e('Tạo công việc mới', 'qlcv'); ?></span></a>
                     </div>
                     <!--Basic Start-->
                     <div class="col-12 mb-30">
@@ -50,12 +50,12 @@
                         ?>
                         <div class="row justify-content-between">
                             <div class="col-lg-auto mb-10">
-                                <p>Có tổng cộng <?php echo $total_query->post_count; ?> công việc tìm thấy</p>
-                                <h2>Danh sách công việc chờ phê duyệt</h2>
+                                <p><?php _e('Có tổng cộng', 'qlcv'); ?> <?php echo $total_query->post_count; ?> <?php _e('công việc tìm thấy', 'qlcv'); ?></p>
+                                <h2><?php _e('Danh sách công việc chờ phê duyệt', 'qlcv'); ?></h2>
                             </div>
                             <div class="col-lg-auto mb-10">
                                 <div class="page-date-range">
-                                    <span>Lọc theo deadline: </span><input type="text" class="form-control input-date-predefined" id="list_task_by_date">
+                                    <span><?php _e('Lọc theo deadline:', 'qlcv'); ?> </span><input type="text" class="form-control input-date-predefined" id="list_task_by_date">
                                 </div>
                             </div>
                             <div class="col-12 box mb-20">
@@ -63,11 +63,11 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Nhiệm vụ</th>
-                                            <th>Công việc lớn</th>
-                                            <th>Người thực hiện</th>
-                                            <th>Deadline</th>
-                                            <th>Trạng thái</th>
+                                            <th><?php _e('Nhiệm vụ', 'qlcv'); ?></th>
+                                            <th><?php _e('Công việc lớn', 'qlcv'); ?></th>
+                                            <th><?php _e('Người thực hiện', 'qlcv'); ?></th>
+                                            <th><?php _e('Deadline', 'qlcv'); ?></th>
+                                            <th><?php _e('Trạng thái', 'qlcv'); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>

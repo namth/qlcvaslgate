@@ -14,8 +14,8 @@
                 <!-- Page Heading Start -->
                 <div class="col-12 col-lg-auto mb-20">
                     <div class="page-heading">
-                        <a class="mb-10" href="<?php echo get_bloginfo('url'); ?>/danh-sach-nhan-su/?role=<?php echo $this_user->roles[0]; ?>">← Danh sách đối tác</a>
-                        <h3 class="title">Hồ sơ nhân sự</h3>
+                        <a class="mb-10" href="<?php echo get_bloginfo('url'); ?>/danh-sach-nhan-su/?role=<?php echo $this_user->roles[0]; ?>">← <?php _e('Danh sách đối tác', 'qlcv'); ?></a>
+                        <h3 class="title"><?php _e('Hồ sơ nhân sự', 'qlcv'); ?></h3>
                     </div>
                 </div><!-- Page Heading End -->
 
@@ -63,7 +63,7 @@
                         <div class="col-xlg-6 col-lg-6 col-12 mb-30">
                             <div class="box">
                                 <div class="box-head">
-                                    <h3 class="title">Thông tin cá nhân</h3>
+                                    <h3 class="title"><?php _e('Thông tin cá nhân', 'qlcv'); ?></h3>
                                 </div>
                                 <?php 
                                     $so_dien_thoai  = get_field('so_dien_thoai' , 'user_' . $this_user->ID);
@@ -77,22 +77,22 @@
                                 <div class="box-body">
                                     <div class="order-details-customer-info">
                                         <ul class="mb-30">
-                                            <li><span><i class="ti-user"></i> Mã đối tác</span><span> <?php echo $partner_code; ?></span></li>
-                                            <li><span><i class="ti-layout-column4"></i> Tên công ty</span><span> <?php echo $ten_cong_ty; ?></span></li>
+                                            <li><span><i class="ti-user"></i> <?php _e('Mã đối tác', 'qlcv'); ?></span><span> <?php echo $partner_code; ?></span></li>
+                                            <li><span><i class="ti-layout-column4"></i> <?php _e('Tên công ty', 'qlcv'); ?></span><span> <?php echo $ten_cong_ty; ?></span></li>
                                             <li><span><i class="ti-email"></i> Email</span><span> <?php echo $this_user->user_email; ?></span></li>
                                             <li><span><i class="ti-email"></i> Email CC</span><span> <?php echo $email_cc; ?></span></li>
                                             <li><span><i class="ti-email"></i> Email BCC</span><span> <?php echo $email_bcc; ?></span></li>
-                                            <li><span><i class="ti-mobile"></i> Số điện thoại</span><span> <?php echo $so_dien_thoai; ?></span></li>
+                                            <li><span><i class="ti-mobile"></i> <?php _e('Số điện thoại', 'qlcv'); ?></span><span> <?php echo $so_dien_thoai; ?></span></li>
                                             <li>
-                                                <span><i class="ti-map-alt"></i> Địa chỉ</span>
+                                                <span><i class="ti-map-alt"></i> <?php _e('Địa chỉ', 'qlcv'); ?></span>
                                                 <span> <?php echo $dia_chi; ?></span>
                                             </li>
                                             <li>
-                                                <span><i class="ti-world"></i> Quốc gia</span>
+                                                <span><i class="ti-world"></i> <?php _e('Quốc gia', 'qlcv'); ?></span>
                                                 <span> <?php echo $quoc_gia; ?></span>
                                             </li>
                                             <li>
-                                                <span><i class="ti-direction"></i> Ghi chú</span>
+                                                <span><i class="ti-direction"></i> <?php _e('Ghi chú', 'qlcv'); ?></span>
                                                 <span> <?php echo $this_user->description; ?></span>
                                             </li>
                                         </ul>
@@ -100,7 +100,7 @@
                                         <!-- if current user isn't this user, don't show edit button -->
                                         <?php 
                                             if (($current_user->ID == $this_user->ID) || in_array('contributor', $current_user->roles) ) {
-                                                echo '<a href="' . get_bloginfo('url') . '/sua-thong-tin-doi-tac/?uid=' . $this_user->ID . '" class="button button-primary"><span><i class="fa fa-edit"></i>Chỉnh sửa</span></a>';
+                                                echo '<a href="' . get_bloginfo('url') . '/sua-thong-tin-doi-tac/?uid=' . $this_user->ID . '" class="button button-primary"><span><i class="fa fa-edit"></i>' . __('Chỉnh sửa', 'qlcv') . '</span></a>';
                                             }
                                         ?>
                                         
@@ -116,7 +116,7 @@
                             <div class="box">
 
                                 <div class="box-head">
-                                    <h3 class="title">Danh sách công việc</h3>
+                                    <h3 class="title"><?php _e('Danh sách công việc', 'qlcv'); ?></h3>
                                 </div>
 
                                 <div class="box-body p-0">

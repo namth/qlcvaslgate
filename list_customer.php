@@ -43,11 +43,11 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Tên người liên hệ</th>
-                                            <th>Tên khách hàng</th>
-                                            <th>Số điện thoại</th>
-                                            <th>Email</th>
-                                            <th>Quốc gia</th>
+                                            <th><?php _e('Tên người liên hệ', 'qlcv'); ?></th>
+                                            <th><?php _e('Tên khách hàng', 'qlcv'); ?></th>
+                                            <th><?php _e('Số điện thoại', 'qlcv'); ?></th>
+                                            <th><?php _e('Email', 'qlcv'); ?></th>
+                                            <th><?php _e('Quốc gia', 'qlcv'); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>

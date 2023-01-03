@@ -204,11 +204,11 @@ print_r($agency);
                 if (isset($update)) {
                     if ($update) {
                         echo '<div class="alert alert-success" role="alert">
-                                            <i class="fa fa-check"></i> Bài viết đã được cập nhật.
+                                            <i class="fa fa-check"></i> ' . __('Bài viết đã được cập nhật.', 'qlcv') . '
                                           </div>';
                     } else {
                         echo '<div class="alert alert-danger" role="alert">
-                                            <i class="zmdi zmdi-info"></i> Xảy ra lỗi, không thể cập nhật.
+                                            <i class="zmdi zmdi-info"></i> ' . __('Xảy ra lỗi, không thể cập nhật.', 'qlcv') . '
                                           </div>';
                     }
                 } else {
@@ -223,24 +223,24 @@ print_r($agency);
                 ?>
                     <div class="box">
                         <div class="box-head">
-                            <h3 class="title">Nhân sự tham gia</h3>
+                            <h3 class="title"><?php _e('Nhân sự tham gia', 'qlcv'); ?></h3>
                         </div>
                         <div class="box-body">
                             <div class="row mbn-20">
                                 <div class="col-6 mb-20">
                                     <div class="mb-20">
-                                        <label for=""><b>Công việc</b></label>
+                                        <label for=""><b><?php _e('Công việc', 'qlcv'); ?></b></label>
                                         <input type="text" value="<?php echo $content_post->post_title; ?>" name="jobname" class="form-control">
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Đối tác gửi việc</b></label>
+                                        <label for=""><b><?php _e('Đối tác gửi việc', 'qlcv'); ?></b></label>
                                         <select class="form-control select2-tags mb-20" name="partner">
                                             <?php
                                             if ($partner["ID"]) {
                                                 echo "<option value='" . $partner['ID'] . "'>" . $partner['display_name'] . " (" . $partner['user_email'] . ")</option>";
                                             } else {
-                                                echo '<option value="">-- Chọn đối tác gửi việc --</option>';
+                                                echo '<option value="">-- ' . __('Chọn đối tác gửi việc', 'qlcv') . ' --</option>';
                                             }
                                             $args   = array(
                                                 'role'    => 'partner', /*subscriber, contributor, author*/
@@ -257,13 +257,13 @@ print_r($agency);
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Đối tác nhận việc</b></label>
+                                        <label for=""><b><?php _e('Đối tác nhận việc', 'qlcv'); ?></b></label>
                                         <select class="form-control select2-tags mb-20" name="foreign_partner">
                                             <?php
                                             if ($foreign_partner["ID"]) {
                                                 echo "<option value='" . $foreign_partner['ID'] . "'>" . $foreign_partner['display_name'] . " (" . $foreign_partner['user_email'] . ")</option>";
                                             } else {
-                                                echo '<option value="">-- Chọn đối tác nhận việc --</option>';
+                                                echo '<option value="">-- ' . __('Chọn đối tác nhận việc', 'qlcv') . ' --</option>';
                                             }
                                             $args   = array(
                                                 'role'    => 'foreign_partner', /*subscriber, contributor, author*/
@@ -282,13 +282,13 @@ print_r($agency);
 
                                 <div class="col-6 mb-20">
                                     <div class="mb-20">
-                                        <label for=""><b>Người quản lý</b></label>
+                                        <label for=""><b><?php _e('Người quản lý', 'qlcv'); ?></b></label>
                                         <select class="form-control select2-tags mb-20" name="manager">
                                             <?php
                                             if ($manager["ID"]) {
                                                 echo "<option value='" . $manager['ID'] . "'>" . $manager['display_name'] . " (" . $manager['user_email'] . ")</option>";
                                             } else {
-                                                echo '<option value="">-- Chọn người quản lý --</option>';
+                                                echo '<option value="">-- ' . __('Chọn người quản lý', 'qlcv') . ' --</option>';
                                             }
                                             $args   = array(
                                                 'role'    => 'contributor', /*subscriber, contributor, author*/
@@ -305,13 +305,13 @@ print_r($agency);
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Người thực hiện</b></label>
+                                        <label for=""><b><?php _e('Người thực hiện', 'qlcv'); ?></b></label>
                                         <select class="form-control select2-tags mb-20" name='member'>
                                             <?php
                                             if ($member["ID"]) {
                                                 echo "<option value='" . $member['ID'] . "'>" . $member['display_name'] . " (" . $member['user_email'] . ")</option>";
                                             } else {
-                                                echo '<option value="">-- Chọn người thực hiện --</option>';
+                                                echo '<option value="">-- ' . __('Chọn người thực hiện', 'qlcv') . ' --</option>';
                                             }
                                             $args   = array(
                                                 'role__in'      => array('member', 'contributor'),
@@ -328,9 +328,9 @@ print_r($agency);
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Chi nhánh</b></label>
+                                        <label for=""><b><?php _e('Chi nhánh', 'qlcv'); ?></b></label>
                                         <select class="form-control select2-tags mb-20" name='agency'>
-                                            <option value="">-- Chi nhánh --</option>
+                                            <option value="">-- <?php _e('Chi nhánh', 'qlcv'); ?> --</option>
                                             <?php
                                             $terms = get_terms(array(
                                                 'taxonomy' => 'agency',
@@ -359,30 +359,30 @@ print_r($agency);
                             $logo           = get_field('logo', $postid);
                         ?>
                         <div class="box-head">
-                            <h2 class="title">Thông tin nhãn hiệu</h2>
+                            <h2 class="title"><?php _e('Thông tin nhãn hiệu', 'qlcv'); ?></h2>
                         </div>
                         <div class="box-body">
                             <div class="row mbn-20">
                                 <div class="col-lg-6 col-12 mb-20">
                                     <div class="mb-20">
-                                        <label for=""><b>Tên nhãn hiệu </b></label>
-                                        <input type="text" placeholder="Tên nhãn hiệu" class="form-control mb-10" name="ten_nhan_hieu" value="<?php echo $ten_nhan_hieu; ?>">
+                                        <label for=""><b><?php _e('Tên nhãn hiệu', 'qlcv'); ?> </b></label>
+                                        <input type="text" placeholder="<?php _e('Tên nhãn hiệu', 'qlcv'); ?>" class="form-control mb-10" name="ten_nhan_hieu" value="<?php echo $ten_nhan_hieu; ?>">
                                     </div>
                                     
                                     <div class="mb-20">
-                                        <label for=""><b>Nhóm</b></label>
-                                        <input type="text" placeholder="Nhóm" class="form-control mb-10" name="nhom" value="<?php echo $nhom; ?>">
+                                        <label for=""><b><?php _e('Nhóm', 'qlcv'); ?></b></label>
+                                        <input type="text" placeholder="<?php _e('Nhóm', 'qlcv'); ?>" class="form-control mb-10" name="nhom" value="<?php echo $nhom; ?>">
                                     </div>
                                     
                                     <div class="mb-20">
-                                        <label for=""><b>Số lượng nhóm</b></label>
-                                        <input type="text" placeholder="Số lượng nhóm" class="form-control mb-10" name="so_luong_nhom" value="<?php echo $so_luong_nhom; ?>">
+                                        <label for=""><b><?php _e('Số lượng nhóm', 'qlcv'); ?></b></label>
+                                        <input type="text" placeholder="<?php _e('Số lượng nhóm', 'qlcv'); ?>" class="form-control mb-10" name="so_luong_nhom" value="<?php echo $so_luong_nhom; ?>">
                                     </div>
                                     
                                 </div>
                                 <div class="col-lg-6 col-12 mb-20">
                                     <div class="mb-20">
-                                        <label for=""><b>File ảnh</b></label>
+                                        <label for=""><b><?php _e('File ảnh', 'qlcv'); ?></b></label>
                                         <input class="dropify" type="file" name="file_upload">
                                         <img src="<?php echo $logo; ?>" alt="">
                                     </div>
@@ -396,24 +396,24 @@ print_r($agency);
                             $so_luong_phuong_an     = get_field('so_luong_phuong_an', $postid);
                         ?>
                         <div class="box-head">
-                            <h2 class="title">Thông tin kiểu dáng</h2>
+                            <h2 class="title"><?php _e('Thông tin kiểu dáng', 'qlcv'); ?></h2>
                         </div>
                         <div class="box-body">
                             <div class="row mbn-20">
                                 <div class="col-lg-8 col-12 mb-20">
                                     <div class="mb-20">
-                                        <label for=""><b>Link tới bộ ảnh </b></label>
-                                        <input type="text" placeholder="Link tới bộ ảnh" class="form-control mb-10" name="bo_anh" value="<?php echo $ten_nhan_hieu; ?>">
+                                        <label for=""><b><?php _e('Link tới bộ ảnh', 'qlcv'); ?> </b></label>
+                                        <input type="text" placeholder="<?php _e('Link tới bộ ảnh', 'qlcv'); ?>" class="form-control mb-10" name="bo_anh" value="<?php echo $ten_nhan_hieu; ?>">
                                     </div>
                                     
                                     <div class="mb-20">
-                                        <label for=""><b>Link tới bản mô tả bộ ảnh</b></label>
-                                        <input type="text" placeholder="Bản mô tả bộ ảnh" class="form-control mb-10" name="ban_mo_ta_bo_anh" value="<?php echo $nhom; ?>">
+                                        <label for=""><b><?php _e('Link tới bản mô tả bộ ảnh', 'qlcv'); ?></b></label>
+                                        <input type="text" placeholder="<?php _e('Bản mô tả bộ ảnh', 'qlcv'); ?>" class="form-control mb-10" name="ban_mo_ta_bo_anh" value="<?php echo $nhom; ?>">
                                     </div>
                                     
                                     <div class="mb-20">
-                                        <label for=""><b>Số lượng phương án</b></label>
-                                        <input type="text" placeholder="Số lượng phương án" class="form-control mb-10" name="so_luong_phuong_an" value="<?php echo $so_luong_nhom; ?>">
+                                        <label for=""><b><?php _e('Số lượng phương án', 'qlcv'); ?></b></label>
+                                        <input type="text" placeholder="<?php _e('Số lượng phương án', 'qlcv'); ?>" class="form-control mb-10" name="so_luong_phuong_an" value="<?php echo $so_luong_nhom; ?>">
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-12 mb-20">
@@ -428,24 +428,24 @@ print_r($agency);
                             $so_luong_yeu_cau_bao_ho_doc_lap = get_field('so_luong_yeu_cau_bao_ho_doc_lap', $postid);
                         ?>
                         <div class="box-head">
-                            <h2 class="title">Thông tin kiểu dáng</h2>
+                            <h2 class="title"><?php _e('Thông tin kiểu dáng', 'qlcv'); ?></h2>
                         </div>
                         <div class="box-body">
                             <div class="row mbn-20">
                                 <div class="col-lg-8 col-12 mb-20">
                                     <div class="mb-20">
-                                        <label for=""><b>Bản mô tả sáng chế </b></label>
-                                        <input type="text" placeholder="Bản mô tả sáng chế" class="form-control mb-10" name="ban_mota_sangche" value="<?php echo $ban_mo_ta_sang_che; ?>">
+                                        <label for=""><b><?php _e('Bản mô tả sáng chế', 'qlcv'); ?> </b></label>
+                                        <input type="text" placeholder="<?php _e('Bản mô tả sáng chế', 'qlcv'); ?>" class="form-control mb-10" name="ban_mota_sangche" value="<?php echo $ban_mo_ta_sang_che; ?>">
                                     </div>
                                     
                                     <div class="mb-20">
-                                        <label for=""><b>Số lượng yêu cầu bảo hộ</b></label>
-                                        <input type="text" placeholder="Số lượng yêu cầu bảo hộ" class="form-control mb-10" name="slyc_baoho" value="<?php echo $so_luong_yeu_cau_bao_ho; ?>">
+                                        <label for=""><b><?php _e('Số lượng yêu cầu bảo hộ', 'qlcv'); ?></b></label>
+                                        <input type="text" placeholder="<?php _e('Số lượng yêu cầu bảo hộ', 'qlcv'); ?>" class="form-control mb-10" name="slyc_baoho" value="<?php echo $so_luong_yeu_cau_bao_ho; ?>">
                                     </div>
                                     
                                     <div class="mb-20">
-                                        <label for=""><b>Số lượng yêu cầu bảo hộ độc lập</b></label>
-                                        <input type="text" placeholder="Số lượng yêu cầu bảo hộ độc lập" class="form-control mb-10" name="slyc_baoho_doclap" value="<?php echo $so_luong_yeu_cau_bao_ho_doc_lap; ?>">
+                                        <label for=""><b><?php _e('Số lượng yêu cầu bảo hộ độc lập', 'qlcv'); ?></b></label>
+                                        <input type="text" placeholder="<?php _e('Số lượng yêu cầu bảo hộ độc lập', 'qlcv'); ?>" class="form-control mb-10" name="slyc_baoho_doclap" value="<?php echo $so_luong_yeu_cau_bao_ho_doc_lap; ?>">
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-12 mb-20">
@@ -472,45 +472,45 @@ print_r($agency);
                     ?>
                     <div class="box">
                         <div class="box-head">
-                            <h2 class="title">Nội dung công việc</h2>
+                            <h2 class="title"><?php _e('Nội dung công việc', 'qlcv'); ?></h2>
                         </div>
                         <div class="box-body">
                             <div class="row mbn-20">
                                 <div class="col-lg-6 col-12 mb-20">
                                     <div class="mb-20">
-                                        <label for=""><b>Số đơn</b></label>
+                                        <label for=""><b><?php _e('Số đơn', 'qlcv'); ?></b></label>
                                         <input type="text" value="<?php echo $so_don; ?>" name="so_don" class="form-control">
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Ngày nộp đơn</b></label>
+                                        <label for=""><b><?php _e('Ngày nộp đơn', 'qlcv'); ?></b></label>
                                         <input type="text" value="<?php echo $ngay_nop_don; ?>" name="ngay_nop_don" class="form-control" data-mask="99/99/9999">
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Số bằng</b></label>
+                                        <label for=""><b><?php _e('Số bằng', 'qlcv'); ?></b></label>
                                         <input type="text" value="<?php echo $so_bang; ?>" name="so_bang" class="form-control">
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Ngày cấp bằng</b></label>
+                                        <label for=""><b><?php _e('Ngày cấp bằng', 'qlcv'); ?></b></label>
                                         <input type="text" value="<?php echo $ngay_cap_bang; ?>" name="ngay_cap_bang" class="form-control" data-mask="99/99/9999">
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Tài liệu đi kèm</b></label>
-                                        <textarea class="form-control summernote" placeholder="Link tới tài liệu" name="link_onedrive"><?php echo $link_onedrive; ?></textarea>
+                                        <label for=""><b><?php _e('Tài liệu đi kèm', 'qlcv'); ?></b></label>
+                                        <textarea class="form-control summernote" placeholder="<?php _e('Link tới tài liệu', 'qlcv'); ?>" name="link_onedrive"><?php echo $link_onedrive; ?></textarea>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-12 mb-20">
                                     <div class="mb-20">
-                                        <label for=""><b>Nội dung chi tiết</b></label>
-                                        <textarea class="form-control summernote" placeholder="Thông tin bổ sung" name="note"><?php echo $content_post->post_content; ?></textarea>
+                                        <label for=""><b><?php _e('Nội dung chi tiết', 'qlcv'); ?></b></label>
+                                        <textarea class="form-control summernote" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"><?php echo $content_post->post_content; ?></textarea>
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Lưu ý công việc</b></label>
-                                        <textarea class="form-control summernote" placeholder="Lưu ý" name="mindful"><?php echo $mindful; ?></textarea>
+                                        <label for=""><b><?php _e('Lưu ý công việc', 'qlcv'); ?></b></label>
+                                        <textarea class="form-control summernote" placeholder="<?php _e('Lưu ý', 'qlcv'); ?>" name="mindful"><?php echo $mindful; ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -522,7 +522,7 @@ print_r($agency);
 
                     <div class="box">
                         <div class="box-head">
-                            <h2 class="title">Lịch sử thực hiện</h2>
+                            <h2 class="title"><?php _e('Lịch sử thực hiện', 'qlcv'); ?></h2>
                         </div>
                         <div class="box-body">
                             <div class="row mbn-20">
@@ -573,8 +573,8 @@ print_r($agency);
                                                 }
                                             }
                                             echo "<tr>";
-                                            echo '<td>Nội dung khác <input type="text" value="" name="other_work_process" class="form-control"></td>';
-                                            echo '<td>Ngày cập nhật <input type="text" value="" name="other_work_date" class="form-control" data-mask="99/99/9999"></td>';
+                                            echo '<td>' . __('Nội dung khác', 'qlcv') . ' <input type="text" value="" name="other_work_process" class="form-control"></td>';
+                                            echo '<td>' . __('Ngày cập nhật', 'qlcv') . ' <input type="text" value="" name="other_work_date" class="form-control" data-mask="99/99/9999"></td>';
                                             echo "</tr>";
 
                                             echo "</table>";
@@ -600,28 +600,28 @@ print_r($agency);
                     ?>
                     <div class="box">
                         <div class="box-head">
-                            <h2 class="title">Tài chính công việc</h2>
+                            <h2 class="title"><?php _e('Tài chính công việc', 'qlcv'); ?></h2>
                         </div>
                         <div class="box-body">
                             <div class="row mbn-20">
                                 <div class="col-lg-6 col-12 mb-20">
                                     <div class="mb-20">
-                                        <label for=""><b>Tổng tiền cần thanh toán</b></label>
+                                        <label for=""><b><?php _e('Tổng tiền cần thanh toán', 'qlcv'); ?></b></label>
                                         <input type="text" value="<?php echo $total_value; ?>" name="total_value" class="form-control">
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Đã thanh toán</b></label>
+                                        <label for=""><b><?php _e('Đã thanh toán', 'qlcv'); ?></b></label>
                                         <input type="text" value="<?php echo $paid; ?>" name="paid" class="form-control">
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Số tiền còn lại</b></label>
+                                        <label for=""><b><?php _e('Số tiền còn lại', 'qlcv'); ?></b></label>
                                         <input type="text" value="<?php echo $remainning; ?>" name="remainning" class="form-control">
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Loại tiền tệ</b></label>
+                                        <label for=""><b><?php _e('Loại tiền tệ', 'qlcv'); ?></b></label>
                                         <div class="form-group">
                                             <?php
                                             foreach ($currency_list as $crcy) {
@@ -636,22 +636,22 @@ print_r($agency);
 
                                 <div class="col-lg-6 col-12 mb-20">
                                     <div class="mb-20">
-                                        <label for=""><b>Chi phí cho đối tác nước ngoài</b></label>
+                                        <label for=""><b><?php _e('Chi phí cho đối tác nước ngoài', 'qlcv'); ?></b></label>
                                         <input type="text" value="<?php echo $total_cost; ?>" name="total_cost" class="form-control">
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Đã tạm ứng cho đối tác nước ngoài</b></label>
+                                        <label for=""><b><?php _e('Đã tạm ứng cho đối tác nước ngoài', 'qlcv'); ?></b></label>
                                         <input type="text" value="<?php echo $advance_money; ?>" name="advance_money" class="form-control">
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Tiền còn nợ</b></label>
+                                        <label for=""><b><?php _e('Tiền còn nợ', 'qlcv'); ?></b></label>
                                         <input type="text" value="<?php echo $debt; ?>" name="debt" class="form-control">
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b>Loại tiền tệ</b></label>
+                                        <label for=""><b><?php _e('Loại tiền tệ', 'qlcv'); ?></b></label>
                                         <div class="form-group">
                                             <?php
                                             foreach ($currency_list as $crcy) {
@@ -677,7 +677,7 @@ print_r($agency);
                                 ?>
 
                                 <div class="col-lg-3"></div>
-                                <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Cập nhật"> <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a></div>
+                                <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Cập nhật', 'qlcv'); ?>"> <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a></div>
                             </div>
                         </div>
                     </div>

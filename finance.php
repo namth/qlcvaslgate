@@ -47,7 +47,7 @@
 
                         <div class="row justify-content-between">
                             <div class="col-lg-auto mb-10">
-                                <h2>Chi tiết thu chi</h2>
+                                <h2><?php _e('Chi tiết thu chi', 'qlcv'); ?></h2>
                             </div>
                             <?php 
                                 $current_user = wp_get_current_user();
@@ -68,12 +68,12 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Ngày tháng</th>
-                                            <th>Nội dung</th>
-                                            <th>Loại</th>
-                                            <th>Công việc</th>
-                                            <th>Đối tác</th>
-                                            <th>Số tiền</th>
+                                            <th><?php _e('Ngày tháng', 'qlcv'); ?></th>
+                                            <th><?php _e('Nội dung', 'qlcv'); ?></th>
+                                            <th><?php _e('Loại', 'qlcv'); ?></th>
+                                            <th><?php _e('Công việc', 'qlcv'); ?></th>
+                                            <th><?php _e('Đối tác', 'qlcv'); ?></th>
+                                            <th><?php _e('Số tiền', 'qlcv'); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -104,7 +104,7 @@
                                                     echo "</tr>";
                                                 } wp_reset_postdata();
                                             } else {
-                                                echo "<tr><td colspan=6 class='text-center'>Không có dữ liệu.</td></tr>";
+                                                echo "<tr><td colspan=6 class='text-center'>" . __("Không có dữ liệu.", 'qlcv') . "</td></tr>";
                                             }
                                         ?>
                                     </tbody>

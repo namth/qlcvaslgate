@@ -1,0 +1,1885 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Quản lý công việc\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-03 03:29+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.3; wp-6.1.1\n"
+"X-Domain: qlcv"
+
+#: report.php:281
+msgid "% đã hoàn thành"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:43
+msgid "1 năm"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:46
+msgid "10 năm"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:44
+msgid "3 năm"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:45
+msgid "5 năm"
+msgstr ""
+
+#: functions.php:82 edit_partner.php:44
+msgid "<b>Trùng mã đối tác</b>"
+msgstr ""
+
+#: functions.php:985
+msgid "<p>Đã cập nhật thành công khách hàng này trên hệ thống gia hạn.</p>"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:256
+msgid "<p>Đã cập nhật thành công đơn gia hạn này trên hệ thống gia hạn.</p>"
+msgstr ""
+
+#: functions.php:959
+msgid "<p>Đã tạo khách hàng mới trên hệ thống gia hạn.</p>"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:232
+msgid "<p>Đã tạo đơn gia hạn mới trên hệ thống gia hạn.</p>"
+msgstr ""
+
+#: list_jobs.php:386
+msgid "<th>Phân loại</th>"
+msgstr ""
+
+#: report.php:294
+msgid "Biểu đồ nhiệm vụ"
+msgstr ""
+
+#: update_customfield_task.php:231 update_job.php:207 create_task.php:142
+#: finance_addnew.php:154 update_task.php:89 finish_task.php:117
+msgid "Bài viết đã được cập nhật."
+msgstr ""
+
+#. Name of the template
+#: index.php:91 report_partner.php:19 report.php:19
+msgid "Báo cáo"
+msgstr ""
+
+#. Name of the template
+msgid "Báo cáo đối tác"
+msgstr ""
+
+#: single-job.php:273 single-job.php:438 single-task.php:189
+msgid "Bạn chắc chắn muốn hủy công việc này chứ?"
+msgstr ""
+
+#: update_job.php:411
+msgid "Bản mô tả bộ ảnh"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:191
+msgid "Bản mô tả của bộ ảnh"
+msgstr ""
+
+#: single-job.php:144 single-task.php:309
+msgid "Bản mô tả của bộ ảnh: "
+msgstr ""
+
+#: update_job.php:437 update_job.php:438 post_renew_to_api_renewal.php:181
+msgid "Bản mô tả sáng chế"
+msgstr ""
+
+#: single-job.php:131 single-task.php:298
+msgid "Bản mô tả sáng chế: "
+msgstr ""
+
+#: create_job.php:107
+msgid "Bản quyền"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:190
+msgid "Bộ ảnh"
+msgstr ""
+
+#: single-job.php:143 single-task.php:308
+msgid "Bộ ảnh: "
+msgstr ""
+
+#: finance_addnew.php:181
+msgid "Chi"
+msgstr ""
+
+#: update_job.php:331 update_job.php:333 custom_posts.php:271
+#: custom_posts.php:272 custom_posts.php:277 list_jobs.php:152
+#: list_jobs.php:394
+msgid "Chi nhánh"
+msgstr ""
+
+#: update_job.php:639
+msgid "Chi phí cho đối tác nước ngoài"
+msgstr ""
+
+#: single-job.php:106 list_job_by_user.php:132 list_job_by_partner.php:126
+msgid "Chi tiết công việc"
+msgstr ""
+
+#: finance.php:50
+msgid "Chi tiết thu chi"
+msgstr ""
+
+#: update_customfield_task.php:187 single-task.php:67
+msgid "cho"
+msgstr ""
+
+#: single-job.php:358
+msgid "Chuyển dữ liệu sang renewal"
+msgstr ""
+
+#: single-job.php:208
+msgid "Chuyển thành công việc chính thức"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:57
+msgid "Chuyển tới trang gia hạn"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:35
+msgid "Chuyển đầu việc"
+msgstr ""
+
+#: search.php:204 list_user.php:144
+msgid "Chưa có"
+msgstr ""
+
+#: functions.php:742 functions.php:762
+msgid "chưa trả lời."
+msgstr ""
+
+#: author-member.php:78 single-customer.php:93 authorpage.php:93
+#: author-foreign_partner.php:103 author-administrator.php:76
+#: author-contributor.php:87 author.php:92 author-partner.php:111
+msgid "Chỉnh sửa"
+msgstr ""
+
+#: create_job.php:756
+msgid "Chọn chi nhánh thực hiện"
+msgstr ""
+
+#: finance_addnew.php:199
+msgid "Chọn công việc liên quan"
+msgstr ""
+
+#: create_job.php:617
+msgid "Chọn khách hàng"
+msgstr ""
+
+#: create_job.php:615
+msgid "Chọn khách hàng từ trong danh sách"
+msgstr ""
+
+#: update_customfield_task.php:259 update_job.php:291 create_task.php:288
+#: create_job.php:717
+msgid "Chọn người quản lý"
+msgstr ""
+
+#: update_customfield_task.php:284 update_job.php:314 list_task.php:56
+#: create_job.php:733
+msgid "Chọn người thực hiện"
+msgstr ""
+
+#: create_task.php:262
+msgid "Chọn nhân sự thực hiện"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:42
+msgid "Chọn số năm hết hạn"
+msgstr ""
+
+#: excel_process.php:211
+msgid "Chọn đúng loại vai trò cho đối tác và tải file excel lên và bấm Import"
+msgstr ""
+
+#: create_job.php:55
+msgid "Chọn đối tác giới thiệu"
+msgstr ""
+
+#: update_job.php:243 list_job_by_user.php:39 list_job_by_partner.php:33
+#: create_job.php:436
+msgid "Chọn đối tác gửi việc"
+msgstr ""
+
+#: create_job.php:434
+msgid "Chọn đối tác gửi việc từ trong danh sách"
+msgstr ""
+
+#: update_customfield_task.php:305 update_job.php:266 create_task.php:310
+#: create_job.php:527
+msgid "Chọn đối tác nhận việc"
+msgstr ""
+
+#: create_job.php:525
+msgid "Chọn đối tác nhận việc từ trong danh sách"
+msgstr ""
+
+#: addnew_partner.php:166
+msgid "Chức năng"
+msgstr ""
+
+#: addnew_member.php:118
+msgid "Chức vụ"
+msgstr ""
+
+#: create_job.php:645
+msgid "Copy dữ liệu đối tác"
+msgstr ""
+
+#: custom_posts.php:85
+msgid "Customer"
+msgstr ""
+
+#: custom_posts.php:84 custom_posts.php:89
+msgid "Customers"
+msgstr ""
+
+#: disapproval.php:113
+msgid "Các email cách nhau bởi dấu \",\"."
+msgstr ""
+
+#: search.php:40
+msgid "Các nhiệm vụ tìm được"
+msgstr ""
+
+#: finance_list_job.php:174
+msgid "Còn nợ lại"
+msgstr ""
+
+#: finance_addnew.php:163
+msgid "Có lỗi xảy ra "
+msgstr ""
+
+#: functions.php:119 functions.php:256 functions.php:336 functions.php:550
+#: edit_customer.php:55 addnew_member.php:61 edit_user.php:53
+#: addnew_customer.php:45 edit_partner.php:97
+msgid "Có lỗi xảy ra, xin vui lòng kiểm tra lại."
+msgstr ""
+
+#: change_password.php:40
+msgid "Có lỗi xảy ra, xin vui lòng thông báo với admin để khắc phục."
+msgstr ""
+
+#: list_jobs.php:370 list_user.php:88 list_task.php:171 list_pending.php:53
+msgid "Có tổng cộng"
+msgstr ""
+
+#: 404.php:16
+msgid ""
+"Có vẻ như bạn đang không tìm thấy dữ liệu, xin quay lại trang chủ và thử lại."
+msgstr ""
+
+#: search_advance.php:655 edit_customer.php:107 single-customer.php:72
+#: addnew_customer.php:91
+msgid "Công ty"
+msgstr ""
+
+#: update_job.php:232 create_task.php:153 finance_addnew.php:186
+#: finance_list_job.php:166 single-finance.php:41 header.php:246 finance.php:74
+msgid "Công việc"
+msgstr ""
+
+#: update_customfield_task.php:242 search_advance.php:342
+#: search_advance.php:432 search.php:48 search.php:173 list_jobs.php:382
+#: list_task.php:180 list_pending.php:67 finish_task.php:132
+msgid "Công việc lớn"
+msgstr ""
+
+#: functions.php:529
+msgid "Công việc mới:"
+msgstr ""
+
+#: list_jobs.php:370 list_pending.php:53
+msgid "công việc tìm thấy"
+msgstr ""
+
+#: search.php:164
+msgid "công việc tìm được"
+msgstr ""
+
+#: addnew_member.php:122
+msgid "Cấp quản lý"
+msgstr ""
+
+#: edit_partner.php:219 addnew_partner.php:149 author-partner.php:89
+msgid "Cấp độ"
+msgstr ""
+
+#: functions.php:837
+msgid "Cấu hình khác"
+msgstr ""
+
+#: functions.php:836
+msgid "Cấu hình khác phần mềm QLCV"
+msgstr ""
+
+#: functions.php:779
+msgid "cần gửi báo cáo cho người quản lý về lý do chưa trả lời này."
+msgstr ""
+
+#: finish_task.php:191
+msgid "Cần phê duyệt"
+msgstr ""
+
+#: finance_list_job.php:171 list_job_by_user.php:138
+msgid "Cần thu"
+msgstr ""
+
+#: functions.php:763
+msgid "cần trả lời ngay."
+msgstr ""
+
+#: update_customfield_task.php:356 update_job.php:680 edit_customer.php:133
+#: create_task.php:346 edit_user.php:120 finance_addnew.php:312
+#: update_task.php:101 edit_partner.php:277
+msgid "Cập nhật"
+msgstr ""
+
+#. Name of the template
+msgid "Cập nhật các trường tuỳ biến của nhiệm vụ"
+msgstr ""
+
+#: single-job.php:227 single-job.php:356 single-task.php:147
+msgid "Cập nhật nội dung"
+msgstr ""
+
+#. Name of the template
+msgid "Cập nhật nội dung nhiệm vụ"
+msgstr ""
+
+#: single-job.php:230 single-task.php:149
+msgid "Cập nhật trạng thái"
+msgstr ""
+
+#. Name of the template
+msgid "Cập nhật trạng thái hoàn thành nhiệm vụ"
+msgstr ""
+
+#: list_user.php:90
+msgid "Danh sách"
+msgstr ""
+
+#: index.php:18
+msgid "Danh sách các chức năng"
+msgstr ""
+
+#: author-member.php:91 index.php:36 single-customer.php:106 authorpage.php:106
+#: author-foreign_partner.php:119 author-administrator.php:89 list_jobs.php:371
+#: finance_list_job.php:94 author-contributor.php:102 author.php:107
+#: author-partner.php:127
+msgid "Danh sách công việc"
+msgstr ""
+
+#. Name of the template
+msgid "Danh sách công việc (Job)"
+msgstr ""
+
+#: list_pending.php:54
+msgid "Danh sách công việc chờ phê duyệt"
+msgstr ""
+
+#: index.php:45
+msgid "Danh sách khách hàng"
+msgstr ""
+
+#. Name of the template
+msgid "Danh sách khách hàng (Customer)"
+msgstr ""
+
+#. Name of the template
+msgid "Danh sách mẫu email"
+msgstr ""
+
+#: single-job.php:352 index.php:31 list_task.php:172
+msgid "Danh sách nhiệm vụ"
+msgstr ""
+
+#. Name of the template
+msgid "Danh sách nhiệm vụ (task)"
+msgstr ""
+
+#. Name of the template
+msgid "Danh sách nhiệm vụ chờ phê duyệt (task)"
+msgstr ""
+
+#: author-contributor.php:18
+msgid "Danh sách nhân sự"
+msgstr ""
+
+#. Name of the template
+msgid "Danh sách nhân sự (user)"
+msgstr ""
+
+#: index.php:58
+msgid "Danh sách nhân viên"
+msgstr ""
+
+#. Name of the template
+msgid "Danh sách thông báo (Notification)"
+msgstr ""
+
+#. Name of the template
+msgid "Danh sách tài chính của công việc"
+msgstr ""
+
+#: index.php:50 author-foreign_partner.php:17 author-partner.php:17
+msgid "Danh sách đối tác"
+msgstr ""
+
+#: search_advance.php:434 search.php:50 list_task.php:183 list_pending.php:69
+msgid "Deadline"
+msgstr ""
+
+#: update_customfield_task.php:343
+msgid "Deadline chờ phản hồi"
+msgstr ""
+
+#: update_customfield_task.php:154
+msgid "deadline chờ phản hồi"
+msgstr ""
+
+#: excel_process.php:212
+msgid "Dữ liệu nào chưa có sẽ được tạo mới, dữ liệu đã có sẽ được cập nhật."
+msgstr ""
+
+#: addnew_member.php:131 custom_posts.php:122 addnew_customer.php:95
+#: list_customer.php:49
+msgid "Email"
+msgstr ""
+
+#: add_edit_mail.php:122
+msgid "Email đối tác"
+msgstr ""
+
+#: custom_posts.php:121 custom_posts.php:126
+msgid "Emails"
+msgstr ""
+
+#. Name of the template
+msgid "Export Excel"
+msgstr ""
+
+#: update_job.php:385
+msgid "File ảnh"
+msgstr ""
+
+#: edit_customer.php:123 addnew_member.php:147 edit_user.php:111
+#: addnew_customer.php:111 finance_addnew.php:300 author-foreign_partner.php:95
+#: edit_partner.php:267 addnew_partner.php:191 create_job.php:503
+#: create_job.php:594 create_job.php:672 author-partner.php:103
+#: excel_process.php:168
+msgid "Ghi chú"
+msgstr ""
+
+#: login.php:139
+msgid "Ghi nhớ."
+msgstr ""
+
+#: list_jobs.php:395
+msgid "Giá trị"
+msgstr ""
+
+#: functions.php:45
+msgid "giây"
+msgstr ""
+
+#: functions.php:43
+msgid "giờ"
+msgstr ""
+
+#: custom_posts.php:239
+msgid "Group"
+msgstr ""
+
+#: custom_posts.php:238 custom_posts.php:244
+msgid "Groups"
+msgstr ""
+
+#: disapproval.php:142
+msgid "Gửi"
+msgstr ""
+
+#: confirm_finish_task.php:67
+msgid "Gửi email thông báo cho khách"
+msgstr ""
+
+#: single-job.php:238 single-job.php:260 confirm_finish_task.php:76
+#: add_edit_mail.php:105 single-task.php:157 single-task.php:176
+#: finish_task.php:205
+msgid "Hoàn thành"
+msgstr ""
+
+#: confirm_finish_task.php:66
+msgid "Hoàn thành luôn"
+msgstr ""
+
+#: create_job.php:768
+msgid "Hoàn tất"
+msgstr ""
+
+#. URI of the theme
+#. Author URI of the theme
+msgid "https://9outfit.com/"
+msgstr ""
+
+#: single-job.php:273 single-task.php:189
+msgid "Huỷ"
+msgstr ""
+
+#: update_customfield_task.php:356 update_job.php:680
+#: confirm_finish_task.php:77 disapproval.php:143 finance_addnew.php:312
+#: update_task.php:101 edit_partner.php:277 add_edit_mail.php:106
+#: change_password.php:105 finish_task.php:206
+msgid "Huỷ bỏ"
+msgstr ""
+
+#: confirm_finish_task.php:64
+msgid "Hành động"
+msgstr ""
+
+#: create_task.php:86
+msgid "hãy kiểm tra để thực hiện nhiệm vụ mới."
+msgstr ""
+
+#: functions.php:530
+msgid "hãy kiểm tra để thực hiện."
+msgstr ""
+
+#: excel_process.php:207
+msgid "Hướng dẫn cập nhật qua file excel"
+msgstr ""
+
+#: add_edit_mail.php:115
+msgid "Hướng dẫn mã code"
+msgstr ""
+
+#: edit_user.php:95 edit_partner.php:181 addnew_partner.php:116
+#: create_job.php:469 create_job.php:560 excel_process.php:157
+msgid "Họ"
+msgstr ""
+
+#: search_advance.php:654 edit_customer.php:103 addnew_member.php:102
+#: edit_user.php:94 addnew_customer.php:87 edit_partner.php:180
+#: addnew_partner.php:114 create_job.php:468 create_job.php:559
+msgid "Họ và tên"
+msgstr ""
+
+#: index.php:101 header.php:245
+msgid "Hồ sơ của bạn"
+msgstr ""
+
+#: author-member.php:16 single-customer.php:19 authorpage.php:26
+#: author-foreign_partner.php:18 author-administrator.php:16
+#: author-contributor.php:19 author.php:16 author-partner.php:18
+msgid "Hồ sơ nhân sự"
+msgstr ""
+
+#. Name of the template
+msgid "Import partner to system from excel files"
+msgstr ""
+
+#: custom_posts.php:10
+msgid "Job"
+msgstr ""
+
+#: custom_posts.php:9 custom_posts.php:14
+msgid "Jobs"
+msgstr ""
+
+#: export_excel.php:375
+msgid "Khoảng thời gian: "
+msgstr ""
+
+#: search_advance.php:146 search_advance.php:345 single-job.php:465
+#: search.php:174 list_jobs.php:122 list_jobs.php:389 finance_list_job.php:167
+msgid "Khách hàng"
+msgstr ""
+
+#: report_partner.php:219
+msgid "Khách hàng trên mỗi quốc gia"
+msgstr ""
+
+#: functions.php:300
+msgid "Khách hàng đã tồn tại trong hệ thống."
+msgstr ""
+
+#: update_customfield_task.php:95
+msgid "không còn là người quản lý việc"
+msgstr ""
+
+#: update_customfield_task.php:49
+msgid "không còn là người xử lý việc"
+msgstr ""
+
+#: finance_list_job.php:233 list_user.php:161 list_email.php:91 finance.php:107
+msgid "Không có dữ liệu."
+msgstr ""
+
+#: single-job.php:237 single-task.php:156
+msgid "Không phê duyệt"
+msgstr ""
+
+#. Name of the template
+msgid "Không phê duyệt nhiệm vụ (task)"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:263
+msgid "Không thể kết nối tới server."
+msgstr ""
+
+#: search.php:219
+msgid "Không tìm thấy dữ liệu."
+msgstr ""
+
+#: functions.php:950 post_renew_to_api_renewal.php:223
+msgid "Không tạo mới/cập nhật được bài viết.<br>"
+msgstr ""
+
+#: create_job.php:105
+msgid "Kiểu dáng"
+msgstr ""
+
+#: report.php:19
+msgid "Kết quả công việc"
+msgstr ""
+
+#: search_advance.php:221
+msgid "Kết quả tìm kiếm"
+msgstr ""
+
+#: search.php:19
+msgid "Kết quả tìm kiếm cho:"
+msgstr ""
+
+#: create_job.php:177 create_job.php:507 create_job.php:598 create_job.php:676
+msgid "Link file hồ sơ"
+msgstr ""
+
+#: excel_process.php:167
+msgid "Link hồ sơ"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:163 single-job.php:187
+msgid "Link tài liệu"
+msgstr ""
+
+#: update_job.php:410
+msgid "Link tới bản mô tả bộ ảnh"
+msgstr ""
+
+#: create_job.php:151
+msgid "Link tới bản mô tả của bộ ảnh"
+msgstr ""
+
+#: create_job.php:155
+msgid "Link tới bản mô tả sáng chế"
+msgstr ""
+
+#: update_job.php:405 update_job.php:406 create_job.php:150
+msgid "Link tới bộ ảnh"
+msgstr ""
+
+#: functions.php:531 functions.php:747 functions.php:764 functions.php:780
+#: update_customfield_task.php:53 update_customfield_task.php:69
+#: update_customfield_task.php:99 update_customfield_task.php:115
+#: create_task.php:87
+msgid "Link tới công việc:"
+msgstr ""
+
+#: update_job.php:502
+msgid "Link tới tài liệu"
+msgstr ""
+
+#: single-job.php:78
+msgid "List công việc"
+msgstr ""
+
+#. Name of the template
+msgid "Login"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:171
+msgid "Logo"
+msgstr ""
+
+#: finance.php:73
+msgid "Loại"
+msgstr ""
+
+#: search_advance.php:69 export_excel.php:335
+msgid "Loại dữ liệu"
+msgstr ""
+
+#: finance_addnew.php:270 create_job.php:695
+msgid "Loại tiền"
+msgstr ""
+
+#: update_job.php:624 update_job.php:654
+msgid "Loại tiền tệ"
+msgstr ""
+
+#: finance_addnew.php:294
+msgid "Lý do"
+msgstr ""
+
+#: update_job.php:513
+msgid "Lưu ý"
+msgstr ""
+
+#: functions.php:742 functions.php:762 functions.php:775 update_job.php:512
+#: single-job.php:193 create_job.php:173
+msgid "Lưu ý công việc"
+msgstr ""
+
+#: functions.php:758
+msgid "Lưu ý công việc đến hạn "
+msgstr ""
+
+#: create_job.php:162
+msgid ""
+"Lưu ý: nếu là đầu việc lớn có nhiều nhiệm vụ con thì bỏ qua trường thông tin "
+"này."
+msgstr ""
+
+#: functions.php:745
+msgid "Lần nhắc thứ "
+msgstr ""
+
+#: functions.php:778
+msgid "Lần nhắc thứ 4 đối với đầu việc:"
+msgstr ""
+
+#: single-job.php:216 single-task.php:135
+msgid "Lịch sử"
+msgstr ""
+
+#: list_jobs.php:383
+msgid "Lịch sử CV"
+msgstr ""
+
+#: single-job.php:577
+msgid "Lịch sử công việc"
+msgstr ""
+
+#: update_job.php:525 create_task.php:197
+msgid "Lịch sử thực hiện"
+msgstr ""
+
+#: list_jobs.php:169 finance_list_job.php:77 list_task.php:97
+#: list_job_by_user.php:103 list_job_by_partner.php:97 report.php:28
+msgid "Lọc"
+msgstr ""
+
+#: list_pending.php:58
+msgid "Lọc theo deadline:"
+msgstr ""
+
+#: search_advance.php:100
+msgid "Lọc theo:"
+msgstr ""
+
+#: search.php:302
+msgid "Mã code"
+msgstr ""
+
+#: add_edit_mail.php:119
+msgid "Mã code để truy cập đầu việc"
+msgstr ""
+
+#: search_advance.php:653 post_renew_to_api_renewal.php:106
+#: author-foreign_partner.php:80 edit_partner.php:160
+#: post_to_api_renewal.php:37 list_user.php:103 addnew_partner.php:110
+#: list_job_by_user.php:128 list_job_by_partner.php:122 create_job.php:464
+#: create_job.php:555 author.php:75 author-partner.php:85 excel_process.php:156
+msgid "Mã đối tác"
+msgstr ""
+
+#: excel_process.php:123
+msgid "Mẫu file excel"
+msgstr ""
+
+#: list_email.php:64
+msgid "Mẫu mail"
+msgstr ""
+
+#: addnew_member.php:111
+msgid "Mật khẩu"
+msgstr ""
+
+#: change_password.php:88
+msgid "Mật khẩu cũ"
+msgstr ""
+
+#: change_password.php:46
+msgid "Mật khẩu cũ không đúng hoặc mật khẩu xác nhận không khớp."
+msgstr ""
+
+#: change_password.php:92
+msgid "Mật khẩu mới"
+msgstr ""
+
+#: edit_partner.php:263
+msgid "Mỗi email cách nhau dấu \",\""
+msgstr ""
+
+#: login.php:29
+msgid "Mời bạn nhập mật khẩu."
+msgstr ""
+
+#: login.php:22
+msgid "Mời bạn nhập User ID / Email."
+msgstr ""
+
+#. Author of the theme
+msgid "Nam Tran"
+msgstr ""
+
+#: single-job.php:57
+msgid "Nguồn không xác định"
+msgstr ""
+
+#: list_jobs.php:393 report.php:460
+msgid "Nguồn việc"
+msgstr ""
+
+#: create_job.php:41
+msgid "Nguồn đầu việc"
+msgstr ""
+
+#: functions.php:42
+msgid "ngày"
+msgstr ""
+
+#: update_job.php:496 post_renew_to_api_renewal.php:159 add_edit_mail.php:131
+msgid "Ngày cấp bằng"
+msgstr ""
+
+#: single-job.php:176
+msgid "Ngày cấp bằng: "
+msgstr ""
+
+#: update_job.php:577 create_task.php:246
+msgid "Ngày cập nhật"
+msgstr ""
+
+#: update_job.php:486 post_renew_to_api_renewal.php:157 add_edit_mail.php:129
+msgid "Ngày nộp đơn"
+msgstr ""
+
+#: single-job.php:170
+msgid "Ngày nộp đơn: "
+msgstr ""
+
+#: create_task.php:190
+msgid "Ngày phát sinh nhiệm vụ"
+msgstr ""
+
+#: finance_addnew.php:168
+msgid "Ngày thu/chi"
+msgstr ""
+
+#: search.php:172 list_jobs.php:381 finance_list_job.php:165
+#: single-finance.php:37 finance.php:71
+msgid "Ngày tháng"
+msgstr ""
+
+#: functions.php:746
+msgid "ngày để trả lời."
+msgstr ""
+
+#: finance_addnew.php:226
+msgid "Người nhận phiếu"
+msgstr ""
+
+#: disapproval.php:100
+msgid "Người nhận:"
+msgstr ""
+
+#: update_customfield_task.php:252 update_job.php:285 search_advance.php:348
+#: create_task.php:281 single-job.php:283 search.php:177 list_jobs.php:78
+#: list_jobs.php:392 list_task.php:182 single-task.php:199
+msgid "Người quản lý"
+msgstr ""
+
+#: update_customfield_task.php:88
+msgid "người quản lý từ"
+msgstr ""
+
+#: functions.php:744 functions.php:760 functions.php:777
+msgid "Người quản lý:"
+msgstr ""
+
+#: update_customfield_task.php:277 update_job.php:308 search_advance.php:347
+#: search_advance.php:433 create_task.php:255 single-job.php:293 search.php:49
+#: search.php:176 list_jobs.php:59 list_jobs.php:391 list_task.php:181
+#: single-task.php:209 list_pending.php:68
+msgid "Người thực hiện"
+msgstr ""
+
+#: update_customfield_task.php:42
+msgid "người thực hiện từ"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:105 post_to_api_renewal.php:33
+msgid "Người đại diện"
+msgstr ""
+
+#: search_advance.php:431 single-job.php:369 search.php:47 list_task.php:179
+#: list_pending.php:66
+msgid "Nhiệm vụ"
+msgstr ""
+
+#: disapproval.php:48
+msgid "nhiệm vụ không được phê duyệt."
+msgstr ""
+
+#: list_task.php:171
+msgid "nhiệm vụ tìm thấy"
+msgstr ""
+
+#: search_advance.php:180
+msgid "Nhân sự"
+msgstr ""
+
+#: update_job.php:226
+msgid "Nhân sự tham gia"
+msgstr ""
+
+#: create_job.php:30
+msgid "Nhân sự thực hiện"
+msgstr ""
+
+#: addnew_member.php:121
+msgid "Nhân viên"
+msgstr ""
+
+#: create_job.php:104
+msgid "Nhãn hiệu"
+msgstr ""
+
+#: update_job.php:373 update_job.php:374 post_renew_to_api_renewal.php:173
+#: create_job.php:145
+msgid "Nhóm"
+msgstr ""
+
+#: export_excel.php:357
+msgid "Nhóm công việc"
+msgstr ""
+
+#: single-job.php:120 single-task.php:288
+msgid "Nhóm: "
+msgstr ""
+
+#: create_job.php:178 create_job.php:508 create_job.php:599 create_job.php:677
+msgid "Nhúng link từ one drive"
+msgstr ""
+
+#: functions.php:746
+msgid "Như vậy, bạn còn"
+msgstr ""
+
+#: create_job.php:160
+msgid "Nhập deadline cho công việc này"
+msgstr ""
+
+#: change_password.php:96
+msgid "Nhập lại mật khẩu mới"
+msgstr ""
+
+#: create_job.php:37
+msgid "Nhập thông tin công việc"
+msgstr ""
+
+#: create_job.php:650
+msgid "Nhập thông tin khách hàng mới"
+msgstr ""
+
+#: create_job.php:549
+msgid "Nhập thông tin đối tác"
+msgstr ""
+
+#: create_job.php:458
+msgid "Nhập thông tin đối tác mới"
+msgstr ""
+
+#: custom_posts.php:159
+msgid "Notification"
+msgstr ""
+
+#: custom_posts.php:158 custom_posts.php:163
+msgid "Notifications"
+msgstr ""
+
+#: functions.php:39
+msgid "năm"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:39
+msgid "Năm gia hạn"
+msgstr ""
+
+#: single-finance.php:39 finance.php:72
+msgid "Nội dung"
+msgstr ""
+
+#: update_job.php:507 create_job.php:169
+msgid "Nội dung chi tiết"
+msgstr ""
+
+#: update_job.php:475
+msgid "Nội dung công việc"
+msgstr ""
+
+#: update_job.php:576 create_task.php:245
+msgid "Nội dung khác"
+msgstr ""
+
+#: create_task.php:334
+msgid "Nội dung nhiệm vụ"
+msgstr ""
+
+#: disapproval.php:123
+msgid "Nội dung:"
+msgstr ""
+
+#: add_edit_mail.php:89
+msgid "Nội dung: "
+msgstr ""
+
+#: post_renew_to_api_renewal.php:155 finance_addnew.php:175
+#: single-finance.php:38 edit_partner.php:194 edit_partner.php:201
+#: addnew_partner.php:132 create_job.php:75 create_job.php:477
+#: create_job.php:568 author-partner.php:88 excel_process.php:30
+#: excel_process.php:166
+msgid "Phân loại"
+msgstr ""
+
+#: edit_partner.php:226
+msgid "Phân loại VIP"
+msgstr ""
+
+#: search_advance.php:51
+msgid "Phân loại:"
+msgstr ""
+
+#. Name of the template
+msgid "Phê duyệt nhiệm vụ (task)"
+msgstr ""
+
+#: functions.php:44
+msgid "phút"
+msgstr ""
+
+#. Name of the template
+msgid "POST renewal to renewal system by API"
+msgstr ""
+
+#. Name of the template
+msgid "POST user to renewal system by API"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:265 single-finance.php:45
+#: post_to_api_renewal.php:84
+msgid "Quay lại"
+msgstr ""
+
+#. Name of the theme
+msgid "Quản lý công việc"
+msgstr ""
+
+#: author-member.php:75 search_advance.php:537 edit_customer.php:119
+#: post_renew_to_api_renewal.php:109 addnew_member.php:143
+#: single-customer.php:88 edit_user.php:107 authorpage.php:88
+#: addnew_customer.php:107 author-foreign_partner.php:91
+#: author-administrator.php:73 edit_partner.php:252 post_to_api_renewal.php:49
+#: author-contributor.php:80 addnew_partner.php:187 list_customer.php:50
+#: create_job.php:499 create_job.php:590 create_job.php:668 author.php:85
+#: author-partner.php:99 excel_process.php:163
+msgid "Quốc gia"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:162 create_job.php:181
+msgid "Quốc gia nộp"
+msgstr ""
+
+#: update_customfield_task.php:42 update_customfield_task.php:88
+msgid "sang"
+msgstr ""
+
+#: post_renew_to_api_renewal.php:35
+msgid "sang hệ thống gia hạn"
+msgstr ""
+
+#. Name of the template
+msgid "Search nâng cao"
+msgstr ""
+
+#: search.php:170
+msgid "STT"
+msgstr ""
+
+#: create_job.php:106
+msgid "Sáng chế"
+msgstr ""
+
+#: update_job.php:491 search_advance.php:344 post_renew_to_api_renewal.php:158
+#: add_edit_mail.php:130 finish_task.php:174
+msgid "Số bằng"
+msgstr ""
+
+#: single-job.php:173
+msgid "Số bằng: "
+msgstr ""
+
+#: update_job.php:378 update_job.php:379 post_renew_to_api_renewal.php:174
+#: create_job.php:146
+msgid "Số lượng nhóm"
+msgstr ""
+
+#: single-job.php:121 single-task.php:289
+msgid "Số lượng nhóm: "
+msgstr ""
+
+#: update_job.php:415 update_job.php:416 post_renew_to_api_renewal.php:192
+#: create_job.php:152
+msgid "Số lượng phương án"
+msgstr ""
+
+#: single-job.php:145 single-task.php:310
+msgid "Số lượng phương án: "
+msgstr ""
+
+#: update_job.php:442 update_job.php:443 post_renew_to_api_renewal.php:182
+#: create_job.php:156
+msgid "Số lượng yêu cầu bảo hộ"
+msgstr ""
+
+#: update_job.php:447 update_job.php:448 post_renew_to_api_renewal.php:183
+#: create_job.php:157
+msgid "Số lượng yêu cầu bảo hộ độc lập"
+msgstr ""
+
+#: single-job.php:133 single-task.php:300
+msgid "Số lượng yêu cầu bảo hộ độc lập: "
+msgstr ""
+
+#: single-job.php:132 single-task.php:299
+msgid "Số lượng yêu cầu bảo hộ: "
+msgstr ""
+
+#: post_renew_to_api_renewal.php:161 add_edit_mail.php:125 create_job.php:92
+msgid "Số REF của mình"
+msgstr ""
+
+#: single-job.php:164
+msgid "Số REF của mình: "
+msgstr ""
+
+#: post_renew_to_api_renewal.php:160 add_edit_mail.php:124 create_job.php:88
+#: create_job.php:89
+msgid "Số REF của đối tác"
+msgstr ""
+
+#: single-job.php:161
+msgid "Số REF của đối tác: "
+msgstr ""
+
+#: functions.php:744 functions.php:760 functions.php:777
+msgid "Số REF:"
+msgstr ""
+
+#: disapproval.php:75
+msgid "Số REF: "
+msgstr ""
+
+#: finance_addnew.php:288 single-finance.php:40 finance.php:76
+msgid "Số tiền"
+msgstr ""
+
+#: update_job.php:619
+msgid "Số tiền còn lại"
+msgstr ""
+
+#: author-member.php:73 search_advance.php:535 search_advance.php:656
+#: edit_customer.php:111 post_renew_to_api_renewal.php:107
+#: addnew_member.php:135 single-customer.php:80 edit_user.php:99
+#: authorpage.php:82 addnew_customer.php:99 author-foreign_partner.php:85
+#: author-administrator.php:71 search.php:239 search.php:304
+#: edit_partner.php:244 post_to_api_renewal.php:41 list_user.php:110
+#: author-contributor.php:74 addnew_partner.php:179 list_customer.php:48
+#: create_job.php:491 create_job.php:582 create_job.php:656 author.php:79
+#: author-partner.php:93 excel_process.php:161
+msgid "Số điện thoại"
+msgstr ""
+
+#: update_job.php:481 search_advance.php:343 post_renew_to_api_renewal.php:156
+#: add_edit_mail.php:128 finish_task.php:158
+msgid "Số đơn"
+msgstr ""
+
+#: single-job.php:167
+msgid "Số đơn: "
+msgstr ""
+
+#: list_job_by_user.php:135 list_job_by_partner.php:129
+msgid "Số đầu việc"
+msgstr ""
+
+#. Name of the template
+msgid "Sổ cái tài chính"
+msgstr ""
+
+#: add_edit_mail.php:116
+msgid "Sử dụng mã code dưới đây để soạn nội dung email"
+msgstr ""
+
+#: single-job.php:492 single-job.php:531 single-job.php:570 list_user.php:114
+#: single-task.php:353
+msgid "Sửa"
+msgstr ""
+
+#. Name of the template
+msgid "Sửa công việc"
+msgstr ""
+
+#: single-job.php:232 single-job.php:240 single-job.php:243 single-task.php:150
+msgid "Sửa deadline"
+msgstr ""
+
+#: single-job.php:437
+msgid "Sửa deadline và người xử lý"
+msgstr ""
+
+#: add_edit_mail.php:71
+msgid "Sửa email"
+msgstr ""
+
+#: single-job.php:436
+msgid "Sửa nội dung nhiệm vụ"
+msgstr ""
+
+#. Name of the template
+msgid "Sửa thông tin khách hàng"
+msgstr ""
+
+#. Name of the template
+msgid "Sửa thông tin nhân viên"
+msgstr ""
+
+#. Name of the template
+msgid "Sửa thông tin đối tác"
+msgstr ""
+
+#: custom_posts.php:47 custom_posts.php:48
+msgid "Task"
+msgstr ""
+
+#: custom_posts.php:52
+msgid "Tasks"
+msgstr ""
+
+#: finance_addnew.php:179
+msgid "Thu"
+msgstr ""
+
+#: report.php:782
+msgid "Thu chi USD"
+msgstr ""
+
+#: report.php:626
+msgid "Thu chi VND"
+msgstr ""
+
+#: excel_process.php:83 excel_process.php:99
+msgid "thành công"
+msgstr ""
+
+#: functions.php:40
+msgid "tháng"
+msgstr ""
+
+#. Name of the template
+msgid "Thêm mới khách hàng"
+msgstr ""
+
+#. Name of the template
+msgid "Thêm mới nhân viên"
+msgstr ""
+
+#. Name of the template
+msgid "Thêm mới partner (đối tác)"
+msgstr ""
+
+#. Name of the template
+msgid "Thêm mới thu chi"
+msgstr ""
+
+#: single-job.php:355
+msgid "Thêm nhiệm vụ"
+msgstr ""
+
+#. Name of the template
+msgid "Thêm nhiệm vụ mới"
+msgstr ""
+
+#: finish_task.php:183
+msgid "Thông báo cho khách hàng"
+msgstr ""
+
+#: header.php:179
+msgid "Thông báo mới"
+msgstr ""
+
+#: update_customfield_task.php:46 update_customfield_task.php:92
+msgid "Thông báo về việc thay đổi nhân sự"
+msgstr ""
+
+#: create_job.php:96
+msgid "Thông tin"
+msgstr ""
+
+#: update_job.php:508 edit_customer.php:124 addnew_member.php:148
+#: edit_user.php:112 addnew_customer.php:112 edit_partner.php:268
+#: create_job.php:170 create_job.php:504 create_job.php:595 create_job.php:673
+msgid "Thông tin bổ sung"
+msgstr ""
+
+#: author-member.php:64 single-customer.php:58 authorpage.php:71
+#: author-foreign_partner.php:66 author-administrator.php:62
+#: author-contributor.php:63 author.php:62 author-partner.php:66
+msgid "Thông tin cá nhân"
+msgstr ""
+
+#: single-task.php:265 create_job.php:27
+msgid "Thông tin công việc"
+msgstr ""
+
+#: update_job.php:399 update_job.php:431
+msgid "Thông tin kiểu dáng"
+msgstr ""
+
+#: update_job.php:362
+msgid "Thông tin nhãn hiệu"
+msgstr ""
+
+#: single-task.php:327
+msgid "Thông tin đối tác"
+msgstr ""
+
+#: single-job.php:459
+msgid "Thông tin đối tác/khách hàng"
+msgstr ""
+
+#: list_job_by_partner.php:112
+msgid "Thống kê"
+msgstr ""
+
+#. Name of the template
+msgid "Thống kê giá trị công việc theo partner"
+msgstr ""
+
+#. Name of the template
+msgid "Thống kê số lượng công việc theo user"
+msgstr ""
+
+#: export_excel.php:382
+msgid "Thời gian tuỳ chỉnh"
+msgstr ""
+
+#: search_advance.php:94
+msgid "Thời gian:"
+msgstr ""
+
+#: functions.php:746
+msgid "Thời hạn để xử lý công việc này là"
+msgstr ""
+
+#: disapproval.php:117
+msgid "Tiêu đề:"
+msgstr ""
+
+#: add_edit_mail.php:82
+msgid "Tiêu đề: "
+msgstr ""
+
+#: edit_partner.php:189 addnew_partner.php:127 create_job.php:79
+msgid "Tiềm năng"
+msgstr ""
+
+#: update_job.php:649
+msgid "Tiền còn nợ"
+msgstr ""
+
+#: export_excel.php:379
+msgid "Toàn thời gian"
+msgstr ""
+
+#. Name of the template
+msgid "Trang job dành cho đối tác"
+msgstr ""
+
+#. Name of the template
+msgid "Trang thành viên"
+msgstr ""
+
+#: functions.php:749 functions.php:766 functions.php:782
+#: update_customfield_task.php:55 update_customfield_task.php:71
+#: update_customfield_task.php:101 update_customfield_task.php:117
+msgid "Trân trọng, "
+msgstr ""
+
+#: functions.php:56
+msgid "trước"
+msgstr ""
+
+#: excel_process.php:210
+msgid ""
+"Trường Mã đối tác và email là bắt buộc phải có, các trường khác có thể để "
+"trống"
+msgstr ""
+
+#: search_advance.php:435 single-job.php:370 search.php:51 edit_partner.php:185
+#: addnew_partner.php:123 list_task.php:184 list_pending.php:70
+msgid "Trạng thái"
+msgstr ""
+
+#: list_task.php:80
+msgid "Trạng thái nhiệm vụ"
+msgstr ""
+
+#: functions.php:41
+msgid "tuần"
+msgstr ""
+
+#: custom_posts.php:195 custom_posts.php:196 custom_posts.php:200
+#: create_job.php:29
+msgid "Tài chính"
+msgstr ""
+
+#: update_job.php:603
+msgid "Tài chính công việc"
+msgstr ""
+
+#: update_job.php:501
+msgid "Tài liệu đi kèm"
+msgstr ""
+
+#: edit_user.php:96 edit_partner.php:182 addnew_partner.php:119
+#: create_job.php:470 create_job.php:561 excel_process.php:158
+msgid "Tên"
+msgstr ""
+
+#: author-foreign_partner.php:81 author-partner.php:86
+msgid "Tên công ty"
+msgstr ""
+
+#: search_advance.php:534
+msgid "Tên công ty "
+msgstr ""
+
+#: create_job.php:652
+msgid "Tên công ty/Tên khách"
+msgstr ""
+
+#: edit_partner.php:156 addnew_partner.php:106 create_job.php:460
+#: create_job.php:551
+msgid "Tên công ty/tổ chức"
+msgstr ""
+
+#: create_job.php:84
+msgid "Tên công việc"
+msgstr ""
+
+#: search_advance.php:533 add_edit_mail.php:126 list_customer.php:47
+msgid "Tên khách hàng"
+msgstr ""
+
+#: add_edit_mail.php:123 list_user.php:104 list_customer.php:46
+msgid "Tên người liên hệ"
+msgstr ""
+
+#: update_customfield_task.php:248 create_task.php:159 finish_task.php:141
+msgid "Tên nhiệm vụ"
+msgstr ""
+
+#: update_customfield_task.php:165
+msgid "tên nhiệm vụ"
+msgstr ""
+
+#: search.php:238 list_user.php:107
+msgid "Tên nhân sự"
+msgstr ""
+
+#: update_job.php:368 update_job.php:369 post_renew_to_api_renewal.php:172
+#: create_job.php:144
+msgid "Tên nhãn hiệu"
+msgstr ""
+
+#: single-job.php:119 single-task.php:287
+msgid "Tên nhãn hiệu: "
+msgstr ""
+
+#: addnew_member.php:107
+msgid "Tên đăng nhập"
+msgstr ""
+
+#: list_user.php:105 list_job_by_user.php:129 list_job_by_partner.php:123
+#: excel_process.php:159
+msgid "Tên đối tác"
+msgstr ""
+
+#: search.php:303
+msgid "Tên đối tác / cty"
+msgstr ""
+
+#: add_edit_mail.php:121
+msgid "Tên đối tác gửi việc"
+msgstr ""
+
+#: search_advance.php:209
+msgid "Tìm kiếm"
+msgstr ""
+
+#: list_user.php:88
+msgid "tìm thấy"
+msgstr ""
+
+#: author-partner.php:87
+msgid "Tình trạng"
+msgstr ""
+
+#: functions.php:829
+msgid "Tùy biến chung"
+msgstr ""
+
+#: list_jobs.php:374 list_pending.php:19
+msgid "Tạo công việc mới"
+msgstr ""
+
+#: excel_process.php:209
+msgid "Tạo file excel đúng theo mẫu trên"
+msgstr ""
+
+#. Name of the template
+msgid "Tạo job mới"
+msgstr ""
+
+#: index.php:70 create_job.php:644
+msgid "Tạo khách hàng mới"
+msgstr ""
+
+#: addnew_member.php:157 addnew_customer.php:120 list_user.php:94
+#: addnew_partner.php:201 create_job.php:517 create_job.php:608
+#: create_job.php:685
+msgid "Tạo mới"
+msgstr ""
+
+#. Name of the template
+msgid "Tạo mới và sửa mẫu mail"
+msgstr ""
+
+#: index.php:84
+msgid "Tạo nhân sự mới"
+msgstr ""
+
+#: single-job.php:357
+msgid "Tạo phiếu thu chi"
+msgstr ""
+
+#: finance_list_job.php:87
+msgid "Tạo phiếu thu chi mới"
+msgstr ""
+
+#: finance_addnew.php:141
+msgid "Tạo phiếu thu/chi"
+msgstr ""
+
+#: index.php:65
+msgid "Tạo đầu công việc mới"
+msgstr ""
+
+#: index.php:75 create_job.php:454
+msgid "Tạo đối tác mới"
+msgstr ""
+
+#: create_job.php:545
+msgid "Tạo đối tác nước ngoài mới"
+msgstr ""
+
+#: export_excel.php:360
+msgid "Tất cả"
+msgstr ""
+
+#: finance_list_job.php:39 list_job_by_user.php:84 list_job_by_partner.php:81
+msgid "Tất cả các loại"
+msgstr ""
+
+#: finance_list_job.php:53 list_job_by_user.php:64 list_job_by_partner.php:61
+msgid "Tất cả danh mục"
+msgstr ""
+
+#: list_job_by_user.php:277 list_job_by_partner.php:232
+msgid "Tổng"
+msgstr ""
+
+#: finance_list_job.php:172
+msgid "Tổng chi"
+msgstr ""
+
+#: list_job_by_user.php:136 list_job_by_partner.php:130
+msgid "Tổng giá trị"
+msgstr ""
+
+#: report.php:230
+msgid "Tổng số công việc"
+msgstr ""
+
+#: report.php:170
+msgid "Tổng số khách"
+msgstr ""
+
+#: report.php:258
+msgid "Tổng số nhiệm vụ"
+msgstr ""
+
+#: create_job.php:704
+msgid "Tổng số tiền"
+msgstr ""
+
+#: report.php:200
+msgid "Tổng số đối tác"
+msgstr ""
+
+#: finance_list_job.php:169
+msgid "Tổng thu"
+msgstr ""
+
+#: update_job.php:609
+msgid "Tổng tiền cần thanh toán"
+msgstr ""
+
+#: disapproval.php:90
+msgid "Từ chối phê duyệt nhiệm vụ"
+msgstr ""
+
+#: disapproval.php:75
+msgid "Từ chối phê duyệt đầu việc: "
+msgstr ""
+
+#: search_advance.php:90
+msgid "Từ khóa:"
+msgstr ""
+
+#: report.php:376
+msgid "Tỷ lệ các công việc đã chốt"
+msgstr ""
+
+#: report.php:542
+msgid "Tỷ lệ công việc tiềm năng"
+msgstr ""
+
+#: report_partner.php:305
+msgid "Tỷ lệ đối tác"
+msgstr ""
+
+#: report_partner.php:466
+msgid "Tỷ lệ đối tác tiềm năng"
+msgstr ""
+
+#: report_partner.php:382
+msgid "Tỷ lệ đối tác đã chốt"
+msgstr ""
+
+#: search.php:241 search.php:306 edit_partner.php:164
+msgid "Vai trò"
+msgstr ""
+
+#: create_job.php:85
+msgid "VD: Nhãn hiệu 9OUTFIT"
+msgstr ""
+
+#: create_job.php:109
+msgid "Việc khác"
+msgstr ""
+
+#: functions.php:56
+msgid "vừa xong"
+msgstr ""
+
+#: update_customfield_task.php:49 update_customfield_task.php:65
+#: update_customfield_task.php:95 update_customfield_task.php:111
+msgid "Xem chi tiết việc"
+msgstr ""
+
+#: header.php:219
+msgid "Xem tất cả"
+msgstr ""
+
+#. Name of the template
+msgid "Xoá bài viết theo thời gian"
+msgstr ""
+
+#. Name of the template
+msgid "Xác nhận trạng thái hoàn thành nhiệm vụ"
+msgstr ""
+
+#: update_customfield_task.php:235 update_job.php:211 create_task.php:146
+#: finance_addnew.php:158 update_task.php:93 finish_task.php:121
+msgid "Xảy ra lỗi, không thể cập nhật."
+msgstr ""
+
+#: finance_list_job.php:173
+msgid "Đã chi"
+msgstr ""
+
+#: edit_partner.php:188 addnew_partner.php:126 create_job.php:78
+msgid "Đã chốt"
+msgstr ""
+
+#: excel_process.php:83
+msgid "Đã cập nhật"
+msgstr ""
+
+#: edit_customer.php:48 edit_user.php:49 edit_partner.php:90
+msgid "Đã sửa thông tin thành công"
+msgstr ""
+
+#: update_job.php:614 create_job.php:708
+msgid "Đã thanh toán"
+msgstr ""
+
+#: finance_list_job.php:170 list_job_by_user.php:137
+msgid "Đã thu"
+msgstr ""
+
+#: update_job.php:644
+msgid "Đã tạm ứng cho đối tác nước ngoài"
+msgstr ""
+
+#: functions.php:545
+msgid "Đã tạo công việc mới thành công"
+msgstr ""
+
+#: functions.php:251 functions.php:331
+msgid "Đã tạo khách hàng thành công"
+msgstr ""
+
+#: functions.php:114 addnew_member.php:54 addnew_customer.php:39
+#: addnew_partner.php:61
+msgid "Đã tạo tài khoản thành công"
+msgstr ""
+
+#: excel_process.php:99
+msgid "Đã tạo đối tác mới"
+msgstr ""
+
+#: change_password.php:35
+msgid "Đã đổi mật khẩu thành công"
+msgstr ""
+
+#: login.php:115 login.php:141
+msgid "Đăng nhập"
+msgstr ""
+
+#: header.php:249
+msgid "Đăng xuất"
+msgstr ""
+
+#: add_edit_mail.php:120
+msgid "Đường link truy cập đầu việc"
+msgstr ""
+
+#: create_job.php:93
+msgid "Để trống sẽ tự sinh số REF"
+msgstr ""
+
+#: author-member.php:74 search_advance.php:658 edit_customer.php:115
+#: post_renew_to_api_renewal.php:108 addnew_member.php:139
+#: single-customer.php:84 edit_user.php:103 authorpage.php:84
+#: addnew_customer.php:103 author-foreign_partner.php:87
+#: author-administrator.php:72 edit_partner.php:248 post_to_api_renewal.php:45
+#: author-contributor.php:76 addnew_partner.php:183 create_job.php:495
+#: create_job.php:586 create_job.php:664 author.php:81 author-partner.php:95
+#: excel_process.php:162
+msgid "Địa chỉ"
+msgstr ""
+
+#: add_edit_mail.php:127
+msgid "Địa chỉ khách hàng"
+msgstr ""
+
+#: search_advance.php:103 search_advance.php:346 search.php:175
+#: list_jobs.php:102 list_jobs.php:390 finance_list_job.php:168
+#: single-finance.php:42 finance.php:75
+msgid "Đối tác"
+msgstr ""
+
+#: update_job.php:237 single-job.php:501 addnew_partner.php:169
+#: excel_process.php:33
+msgid "Đối tác gửi việc"
+msgstr ""
+
+#: update_customfield_task.php:302 update_job.php:260 create_task.php:307
+#: single-job.php:539 addnew_partner.php:170 excel_process.php:34
+msgid "Đối tác nhận việc"
+msgstr ""
+
+#: search_advance.php:123
+msgid "Đối tác nước ngoài"
+msgstr ""
+
+#: report_partner.php:122
+msgid "Đối tác trên mỗi quốc gia"
+msgstr ""
+
+#: create_job.php:28 report_partner.php:19
+msgid "Đối tác, khách hàng"
+msgstr ""
+
+#: single-customer.php:37
+msgid "Đổi hình"
+msgstr ""
+
+#. Name of the template
+msgid "Đổi mật khẩu"
+msgstr ""
+
+#: update_customfield_task.php:170
+msgid "đã cập nhật"
+msgstr ""
+
+#: update_task.php:26
+msgid "đã cập nhật thông tin nhiệm vụ."
+msgstr ""
+
+#: single-task.php:46
+msgid "đã thay đổi trạng thái thành"
+msgstr ""
+
+#: update_customfield_task.php:111
+msgid "đã được giao là người quản lý việc"
+msgstr ""
+
+#: update_customfield_task.php:65
+msgid "đã được giao là người xử lý việc"
+msgstr ""
+
+#: functions.php:762
+msgid "đến hạn trả lời hôm nay và"
+msgstr ""

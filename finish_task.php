@@ -114,11 +114,11 @@ get_sidebar();
                     if ($update) {
                         # nếu thành công thì thông báo thành công, 3 giây sau thì chuyển trang
                         echo '<div class="alert alert-success" role="alert">
-                                            <i class="fa fa-check"></i> Bài viết đã được cập nhật.
+                                            <i class="fa fa-check"></i> ' . __('Bài viết đã được cập nhật.', 'qlcv') . '
                                           </div>';
                     } else {
                         echo '<div class="alert alert-danger" role="alert">
-                                            <i class="zmdi zmdi-info"></i> Xảy ra lỗi, không thể cập nhật.
+                                            <i class="zmdi zmdi-info"></i> ' . __('Xảy ra lỗi, không thể cập nhật.', 'qlcv') . '
                                           </div>';
                     }
                 } else {
@@ -129,7 +129,7 @@ get_sidebar();
                         <?php
                         if ($job) {
                         ?>
-                            <div class="col-lg-3 form_title lh45" style="color: lightgray;">Công việc lớn</div>
+                            <div class="col-lg-3 form_title lh45" style="color: lightgray;"><?php _e('Công việc lớn', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <input type="text" value="<?php echo get_the_title($job); ?>" disabled class="form-control">
                             </div>
@@ -138,7 +138,7 @@ get_sidebar();
                         }
                         ?>
 
-                        <div class="col-lg-3 form_title lh45" style="color: lightgray;">Tên nhiệm vụ</div>
+                        <div class="col-lg-3 form_title lh45" style="color: lightgray;"><?php _e('Tên nhiệm vụ', 'qlcv'); ?></div>
                         <div class="col-lg-6 col-12 mb-20"><input type="text" value="<?php echo $post_title; ?>" disabled class="form-control"></div>
                         <div class="col-lg-3"></div>
 
@@ -155,7 +155,7 @@ get_sidebar();
                                         </div>
                                         <div class="col-lg-6"></div>
 
-                                        <div class="col-lg-3 form_title lh45">Số đơn</div>
+                                        <div class="col-lg-3 form_title lh45">' . __('Số đơn', 'qlcv') . '</div>
                                         <div class="col-lg-3 col-12 mb-20">
                                             <input type="text" class="form-control" name="so_don">
                                         </div>
@@ -171,7 +171,7 @@ get_sidebar();
                                         </div>
                                         <div class="col-lg-6"></div>
                                         
-                                        <div class="col-lg-3 form_title lh45">Số bằng</div>
+                                        <div class="col-lg-3 form_title lh45">' . __('Số bằng', 'qlcv') . '</div>
                                         <div class="col-lg-3 col-12 mb-20">
                                             <input type="text" class="form-control" name="so_bang">
                                         </div>
@@ -180,7 +180,7 @@ get_sidebar();
                         }
                         ?>
 
-                        <div class="col-lg-3 form_title lh45">Thông báo cho khách hàng</div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Thông báo cho khách hàng', 'qlcv'); ?></div>
                         <div class="col-lg-3 col-12 mb-20">
                             <label class="adomx-checkbox" style="margin-top: 14px;">
                                 <input type="checkbox" name="thong_bao"> <i class="icon"></i>
@@ -188,7 +188,7 @@ get_sidebar();
                         </div>
                         <div class="col-lg-6"></div>
 
-                        <div class="col-lg-3 form_title lh45">Cần phê duyệt</div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Cần phê duyệt', 'qlcv'); ?></div>
                         <div class="col-lg-3 col-12 mb-20">
                             <label class="adomx-checkbox" style="margin-top: 14px;">
                                 <input type="checkbox" name="phe_duyet"> <i class="icon"></i>
@@ -202,8 +202,8 @@ get_sidebar();
 
                         <div class="col-lg-3"></div>
                         <div class="col-lg-6 col-12 mb-20">
-                            <input type="submit" class="button button-primary" value="Hoàn thành">
-                            <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a>
+                            <input type="submit" class="button button-primary" value="<?php _e('Hoàn thành', 'qlcv'); ?>">
+                            <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a>
                         </div>
                     </div>
                 <?php

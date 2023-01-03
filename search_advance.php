@@ -48,7 +48,7 @@ get_sidebar();
                 <div class="box-body">
                     <div>
                         <form action="#" method="POST" class="row">
-                            <div class="col-lg-3 form_title lh45">Phân loại: </div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Phân loại:', 'qlcv'); ?> </div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control select2-tags mb-20" name="jtype">
                                     <?php
@@ -66,7 +66,7 @@ get_sidebar();
                             </div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Loại dữ liệu</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Loại dữ liệu', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control select2-tags mb-20" name="data_type">
                                     <?php
@@ -87,20 +87,20 @@ get_sidebar();
                             </div>    
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Từ khóa: </div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Từ khóa:', 'qlcv'); ?> </div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="keyword" value="<?php echo $search; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Thời gian: </div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Thời gian:', 'qlcv'); ?> </div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <input name="filter_date" type="text" class="form-control input-date-predefined" value="<?php echo $_POST['filter_date']; ?>">
                             </div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Lọc theo:</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Lọc theo:', 'qlcv'); ?></div>
                             <div class="col-lg-4 col-12 mb-20">
                                 <select class="form-control select2-tags mb-20" name="partner">
-                                    <option value="">-- Đối tác --</option>
+                                    <option value="">-- <?php _e('Đối tác', 'qlcv'); ?> --</option>
                                     <?php
                                     $args   = array(
                                         'role'      => 'partner', /*subscriber, contributor, author*/
@@ -120,7 +120,7 @@ get_sidebar();
                             </div>
                             <div class="col-lg-4 col-12 mb-20">
                                 <select class="form-control select2-tags mb-20" name="foreign_partner">
-                                    <option value="">-- Đối tác nước ngoài --</option>
+                                    <option value="">-- <?php _e('Đối tác nước ngoài', 'qlcv'); ?> --</option>
                                     <?php
                                     $args   = array(
                                         'role'      => 'foreign_partner', /*subscriber, contributor, author*/
@@ -143,7 +143,7 @@ get_sidebar();
                             <div class="col-lg-3 form_title lh45"></div>
                             <div class="col-lg-4 col-12 mb-20">
                                 <select class="form-control select2-tags mb-20" name="_customer">
-                                    <option value="">-- Khách hàng --</option>
+                                    <option value="">-- <?php _e('Khách hàng', 'qlcv'); ?> --</option>
                                     <?php
                                     $args   = array(
                                         'post_type'     => 'customer',
@@ -177,7 +177,7 @@ get_sidebar();
 
                                 ?>
                                     <select class="form-control select2-tags mb-20" name="member">
-                                        <option value="">-- Nhân sự --</option>
+                                        <option value="">-- <?php _e('Nhân sự', 'qlcv'); ?> --</option>
                                         <?php
                                         $args   = array(
                                             'role__in'      => array('member', 'contributor'), /*subscriber, contributor, author*/
@@ -206,7 +206,7 @@ get_sidebar();
                             ?>
 
                             <div class="col-lg-3"></div>
-                            <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Tìm kiếm"></div>
+                            <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Tìm kiếm', 'qlcv'); ?>"></div>
 
                         </form>
                     </div>
@@ -218,7 +218,7 @@ get_sidebar();
             <div class="page-heading">
                 <?php
                 if ($data_type) {
-                    echo "<h3>Kết quả tìm kiếm</h3>";
+                    echo "<h3>" . __("Kết quả tìm kiếm", 'qlcv') . "</h3>";
                     // echo $data_type;
                     switch ($data_type) {
                         case 'job':
@@ -339,13 +339,13 @@ get_sidebar();
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Công việc lớn</th>
-                                            <th>Số đơn</th>
-                                            <th>Số bằng</th>
-                                            <th>Khách hàng</th>
-                                            <th>Đối tác</th>
-                                            <th>Người thực hiện</th>
-                                            <th>Người quản lý</th>
+                                            <th><?php _e('Công việc lớn', 'qlcv'); ?></th>
+                                            <th><?php _e('Số đơn', 'qlcv'); ?></th>
+                                            <th><?php _e('Số bằng', 'qlcv'); ?></th>
+                                            <th><?php _e('Khách hàng', 'qlcv'); ?></th>
+                                            <th><?php _e('Đối tác', 'qlcv'); ?></th>
+                                            <th><?php _e('Người thực hiện', 'qlcv'); ?></th>
+                                            <th><?php _e('Người quản lý', 'qlcv'); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -428,11 +428,11 @@ get_sidebar();
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Nhiệm vụ</th>
-                                            <th>Công việc lớn</th>
-                                            <th>Người thực hiện</th>
-                                            <th>Deadline</th>
-                                            <th>Trạng thái</th>
+                                            <th><?php _e('Nhiệm vụ', 'qlcv'); ?></th>
+                                            <th><?php _e('Công việc lớn', 'qlcv'); ?></th>
+                                            <th><?php _e('Người thực hiện', 'qlcv'); ?></th>
+                                            <th><?php _e('Deadline', 'qlcv'); ?></th>
+                                            <th><?php _e('Trạng thái', 'qlcv'); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -530,11 +530,11 @@ get_sidebar();
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Tên khách hàng</th>
-                                            <th>Tên công ty </th>
-                                            <th>Số điện thoại</th>
+                                            <th><?php _e('Tên khách hàng', 'qlcv'); ?></th>
+                                            <th><?php _e('Tên công ty ', 'qlcv'); ?></th>
+                                            <th><?php _e('Số điện thoại', 'qlcv'); ?></th>
                                             <th>Email</th>
-                                            <th>Quốc gia</th>
+                                            <th><?php _e('Quốc gia', 'qlcv'); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -650,12 +650,12 @@ get_sidebar();
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Mã đối tác</th>
-                                            <th>Họ và tên</th>
-                                            <th>Công ty</th>
-                                            <th>Số điện thoại</th>
+                                            <th><?php _e('Mã đối tác', 'qlcv'); ?></th>
+                                            <th><?php _e('Họ và tên', 'qlcv'); ?></th>
+                                            <th><?php _e('Công ty', 'qlcv'); ?></th>
+                                            <th><?php _e('Số điện thoại', 'qlcv'); ?></th>
                                             <th>Email</th>
-                                            <th>Địa chỉ</th>
+                                            <th><?php _e('Địa chỉ', 'qlcv'); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>

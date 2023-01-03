@@ -24,21 +24,21 @@ $type = $_GET['type'];
 
                     <div class="smart-wizard" id="create_new_job">
                         <ul>
-                            <li><a href="#step-0">1. Thông tin công việc</a></li>
-                            <li><a href="#step-1">2. Đối tác, khách hàng</a></li>
-                            <li><a href="#step-2">3. Tài chính</a></li>
-                            <li><a href="#step-3">4. Nhân sự thực hiện</a></li>
+                            <li><a href="#step-0">1. <?php _e('Thông tin công việc', 'qlcv'); ?></a></li>
+                            <li><a href="#step-1">2. <?php _e('Đối tác, khách hàng', 'qlcv'); ?></a></li>
+                            <li><a href="#step-2">3. <?php _e('Tài chính', 'qlcv'); ?></a></li>
+                            <li><a href="#step-3">4. <?php _e('Nhân sự thực hiện', 'qlcv'); ?></a></li>
                         </ul>
 
                         <div>
                             <div id="step-0">
                                 <div class="row mbn-20">
                                     <div class="col-12 mb-20">
-                                        <h4>Nhập thông tin công việc</h4>
+                                        <h4><?php _e('Nhập thông tin công việc', 'qlcv'); ?></h4>
                                     </div>
                                     <div class="col-12">
                                         <form action="" method="POST" id="new_job" class="row">
-                                            <div class="col-lg-3 form_title text-left text-lg-right">Nguồn đầu việc</div>
+                                            <div class="col-lg-3 form_title text-left text-lg-right"><?php _e('Nguồn đầu việc', 'qlcv'); ?></div>
                                             <div class="col-lg-6 col-12 mb-20">
                                                 <div class="form-group">
                                                     <?php
@@ -52,7 +52,7 @@ $type = $_GET['type'];
                                                     ?>
                                                     <div id="select_partner_1" style="display: none;">
                                                         <select class="form-control select2-tags mb-20" name="partner_1">
-                                                            <option value="">-- Chọn đối tác giới thiệu --</option>
+                                                            <option value="">-- <?php _e('Chọn đối tác giới thiệu', 'qlcv'); ?> --</option>
                                                             <?php
                                                             $args   = array(
                                                                 'role'      => 'partner', /*subscriber, contributor, author*/
@@ -72,28 +72,28 @@ $type = $_GET['type'];
                                             </div>
                                             <div class="col-lg-3"></div>
 
-                                            <div class="col-lg-3 form_title text-left text-lg-right">Phân loại</div>
+                                            <div class="col-lg-3 form_title text-left text-lg-right"><?php _e('Phân loại', 'qlcv'); ?></div>
                                             <div class="col-lg-6 col-12 mb-20">
                                                 <div class="form-group">
-                                                    <label class="inline"><input type="radio" name="tiem_nang" value="0" checked="">Đã chốt</label>
-                                                    <label class="inline"><input type="radio" name="tiem_nang" value="1">Tiềm năng</label>
+                                                    <label class="inline"><input type="radio" name="tiem_nang" value="0" checked=""><?php _e('Đã chốt', 'qlcv'); ?></label>
+                                                    <label class="inline"><input type="radio" name="tiem_nang" value="1"><?php _e('Tiềm năng', 'qlcv'); ?></label>
                                                 </div>
                                             </div>
                                             <div class="col-lg-3"></div>
 
-                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right">Tên công việc</div>
-                                            <div class="col-lg-6 col-12 mb-20"><input type="text" placeholder="VD: Nhãn hiệu 9OUTFIT" class="form-control" name="job_name"></div>
+                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Tên công việc', 'qlcv'); ?></div>
+                                            <div class="col-lg-6 col-12 mb-20"><input type="text" placeholder="<?php _e('VD: Nhãn hiệu 9OUTFIT', 'qlcv'); ?>" class="form-control" name="job_name"></div>
                                             <div class="col-lg-3"></div>
 
-                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right">Số REF của đối tác</div>
-                                            <div class="col-lg-6 col-12 mb-20"><input type="text" placeholder="Số REF của đối tác" class="form-control" name="partner_ref"></div>
+                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Số REF của đối tác', 'qlcv'); ?></div>
+                                            <div class="col-lg-6 col-12 mb-20"><input type="text" placeholder="<?php _e('Số REF của đối tác', 'qlcv'); ?>" class="form-control" name="partner_ref"></div>
                                             <div class="col-lg-3"></div>
 
-                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right">Số REF của mình</div>
-                                            <div class="col-lg-6 col-12 mb-20"><input type="text" placeholder="Để trống sẽ tự sinh số REF" class="form-control" name="our_ref"></div>
+                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Số REF của mình', 'qlcv'); ?></div>
+                                            <div class="col-lg-6 col-12 mb-20"><input type="text" placeholder="<?php _e('Để trống sẽ tự sinh số REF', 'qlcv'); ?>" class="form-control" name="our_ref"></div>
                                             <div class="col-lg-3"></div>
 
-                                            <div class="col-lg-3 form_title text-left text-lg-right">Thông tin</div>
+                                            <div class="col-lg-3 form_title text-left text-lg-right"><?php _e('Thông tin', 'qlcv'); ?></div>
                                             <div class="col-lg-8 col-12 mb-20">
                                                 <div class="form-group">
                                                     <?php
@@ -101,12 +101,12 @@ $type = $_GET['type'];
                                                         $type = "Nhãn hiệu";
                                                     ?>
                                                         <ul class="nav nav-pills mb-15" id="choose_group">
-                                                            <li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#nhanhieu" data-group="Nhãn hiệu">Nhãn hiệu</a></li>
-                                                            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#kieudang" data-group="Kiểu dáng">Kiểu dáng</a></li>
-                                                            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#sangche" data-group="Sáng chế">Sáng chế</a></li>
-                                                            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#vieckhac" data-group="Bản quyền">Bản quyền</a></li>
+                                                            <li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#nhanhieu" data-group="Nhãn hiệu"><?php _e('Nhãn hiệu', 'qlcv'); ?></a></li>
+                                                            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#kieudang" data-group="Kiểu dáng"><?php _e('Kiểu dáng', 'qlcv'); ?></a></li>
+                                                            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#sangche" data-group="Sáng chế"><?php _e('Sáng chế', 'qlcv'); ?></a></li>
+                                                            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#vieckhac" data-group="Bản quyền"><?php _e('Bản quyền', 'qlcv'); ?></a></li>
                                                             <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#vieckhac" data-group="Franchise">Franchise</a></li>
-                                                            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#vieckhac" data-group="Việc khác">Việc khác</a></li>
+                                                            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#vieckhac" data-group="Việc khác"><?php _e('Việc khác', 'qlcv'); ?></a></li>
                                                         </ul>
                                                     <?php
                                                     }
@@ -141,44 +141,44 @@ $type = $_GET['type'];
                                                     <input type="hidden" name="danh_muc" value="<?php echo $type; ?>">
                                                     <div class="tab-content">
                                                         <div class="tab-pane fade <?php echo $class_nhan_hieu; ?>" id="nhanhieu">
-                                                            <input type="text" placeholder="Tên nhãn hiệu" class="form-control mb-10" name="brand_name">
-                                                            <input type="text" placeholder="Nhóm" class="form-control mb-10" name="brand_group">
-                                                            <input type="text" placeholder="Số lượng nhóm" class="form-control mb-10" name="brand_number_group">
+                                                            <input type="text" placeholder="<?php _e('Tên nhãn hiệu', 'qlcv'); ?>" class="form-control mb-10" name="brand_name">
+                                                            <input type="text" placeholder="<?php _e('Nhóm', 'qlcv'); ?>" class="form-control mb-10" name="brand_group">
+                                                            <input type="text" placeholder="<?php _e('Số lượng nhóm', 'qlcv'); ?>" class="form-control mb-10" name="brand_number_group">
                                                             <input class="dropify" type="file" name="file_upload">
                                                         </div>
                                                         <div class="tab-pane fade <?php echo $class_kieu_dang; ?>" id="kieudang">
-                                                            <input type="text" placeholder="Link tới bộ ảnh" class="form-control mb-10" name="kdang_pic">
-                                                            <input type="text" placeholder="Link tới bản mô tả của bộ ảnh" class="form-control mb-10" name="kdang_info">
-                                                            <input type="text" placeholder="Số lượng phương án" class="form-control mb-10" name="kdang_phuongan">
+                                                            <input type="text" placeholder="<?php _e('Link tới bộ ảnh', 'qlcv'); ?>" class="form-control mb-10" name="kdang_pic">
+                                                            <input type="text" placeholder="<?php _e('Link tới bản mô tả của bộ ảnh', 'qlcv'); ?>" class="form-control mb-10" name="kdang_info">
+                                                            <input type="text" placeholder="<?php _e('Số lượng phương án', 'qlcv'); ?>" class="form-control mb-10" name="kdang_phuongan">
                                                         </div>
                                                         <div class="tab-pane fade <?php echo $class_sang_che; ?>" id="sangche">
-                                                            <input type="text" placeholder="Link tới bản mô tả sáng chế" class="form-control mb-10" name="sche_info">
-                                                            <input type="text" placeholder="Số lượng yêu cầu bảo hộ" class="form-control mb-10" name="sche_request_1">
-                                                            <input type="text" placeholder="Số lượng yêu cầu bảo hộ độc lập" class="form-control mb-10" name="sche_request_2">
+                                                            <input type="text" placeholder="<?php _e('Link tới bản mô tả sáng chế', 'qlcv'); ?>" class="form-control mb-10" name="sche_info">
+                                                            <input type="text" placeholder="<?php _e('Số lượng yêu cầu bảo hộ', 'qlcv'); ?>" class="form-control mb-10" name="sche_request_1">
+                                                            <input type="text" placeholder="<?php _e('Số lượng yêu cầu bảo hộ độc lập', 'qlcv'); ?>" class="form-control mb-10" name="sche_request_2">
                                                         </div>
                                                         <div class="tab-pane fade <?php echo $class_viec_khac; ?>" id="vieckhac">
-                                                            <span class="form-help-text">Nhập deadline cho công việc này</span>
+                                                            <span class="form-help-text"><?php _e('Nhập deadline cho công việc này', 'qlcv'); ?></span>
                                                             <input type="text" class="form-control" value="" name="deadline" placeholder="Deadline: dd/mm/yyyy" data-mask="99/99/9999">
-                                                            <span class="form-help-text text-danger">Lưu ý: nếu là đầu việc lớn có nhiều nhiệm vụ con thì bỏ qua trường thông tin này.</span>
+                                                            <span class="form-help-text text-danger"><?php _e('Lưu ý: nếu là đầu việc lớn có nhiều nhiệm vụ con thì bỏ qua trường thông tin này.', 'qlcv'); ?></span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-1"></div>
 
-                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right">Nội dung chi tiết</div>
-                                            <div class="col-lg-8 col-12 mb-20"><textarea class="form-control summernote" placeholder="Thông tin bổ sung" name="note"></textarea></div>
+                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Nội dung chi tiết', 'qlcv'); ?></div>
+                                            <div class="col-lg-8 col-12 mb-20"><textarea class="form-control summernote" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"></textarea></div>
                                             <div class="col-lg-1"></div>
 
-                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right">Lưu ý công việc</div>
+                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Lưu ý công việc', 'qlcv'); ?></div>
                                             <div class="col-lg-8 col-12 mb-20"><textarea class="form-control summernote" placeholder="Lưu ý" name="mindful"></textarea></div>
                                             <div class="col-lg-1"></div>
 
-                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right">Link file hồ sơ</div>
-                                            <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="Nhúng link từ one drive" name="link_onedrive"></textarea></div>
+                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Link file hồ sơ', 'qlcv'); ?></div>
+                                            <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Nhúng link từ one drive', 'qlcv'); ?>" name="link_onedrive"></textarea></div>
                                             <div class="col-lg-3"></div>
 
-                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right">Quốc gia nộp</div>
+                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Quốc gia nộp', 'qlcv'); ?></div>
                                             <div class="col-lg-6 col-12 mb-20">
                                                 <select class="form-control select2-tags mb-20" multiple="" name="country">
                                                     <option value="Afghanistan">Afghanistan</option>
@@ -431,9 +431,9 @@ $type = $_GET['type'];
                             <div id="step-1">
                                 <div class="row mbn-20">
                                     <div class="col-12 mb-20">
-                                        <h4>Chọn đối tác gửi việc từ trong danh sách</h4>
+                                        <h4><?php _e('Chọn đối tác gửi việc từ trong danh sách', 'qlcv'); ?></h4>
                                         <select class="form-control select2-tags mb-20" name="partner">
-                                            <option value="">-- Chọn đối tác gửi việc --</option>
+                                            <option value="">-- <?php _e('Chọn đối tác gửi việc', 'qlcv'); ?> --</option>
                                             <?php
                                             $args   = array(
                                                 'role'      => 'partner', /*subscriber, contributor, author*/
@@ -451,30 +451,30 @@ $type = $_GET['type'];
                                         </select>
                                     </div>
                                     <div class="col-12 mb-20">
-                                        <button class="button button-primary create_new_button" data-div="#create_partner"><span><i class="fa fa-user-plus"></i>Tạo đối tác mới</span></button>
+                                        <button class="button button-primary create_new_button" data-div="#create_partner"><span><i class="fa fa-user-plus"></i><?php _e('Tạo đối tác mới', 'qlcv'); ?></span></button>
                                         <div id="create_partner" style="display: none;">
                                             <form action="#" method="POST" class="row">
                                                 <div class="col-12 mb-20 notification">
-                                                    <h4>Nhập thông tin đối tác mới</h4>
+                                                    <h4><?php _e('Nhập thông tin đối tác mới', 'qlcv'); ?></h4>
                                                 </div>
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Tên công ty/tổ chức</div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Tên công ty/tổ chức', 'qlcv'); ?></div>
                                                 <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="company_name"></div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Mã đối tác <span class="text-danger">*</span></div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Mã đối tác', 'qlcv'); ?> <span class="text-danger">*</span></div>
                                                 <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_code"></div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Họ và tên</div>
-                                                <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="first_name" placeholder="Họ"></div>
-                                                <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="last_name" placeholder="Tên"></div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Họ và tên', 'qlcv'); ?></div>
+                                                <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="first_name" placeholder="<?php _e('Họ', 'qlcv'); ?>"></div>
+                                                <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="last_name" placeholder="<?php _e('Tên', 'qlcv'); ?>"></div>
                                                 <div class="col-lg-3"></div>
 
                                                 <div class="col-lg-3 form_title text-left text-lg-right lh45">Email <span class="text-danger">*</span></div>
                                                 <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_email"></div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Phân loại</div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Phân loại', 'qlcv'); ?></div>
                                                 <div class="col-lg-6 col-12 mb-20">
                                                     <select class="form-control mb-20" name="type_of_client">
                                                         <option value="Private Firm">Private Firm</option>
@@ -488,24 +488,24 @@ $type = $_GET['type'];
                                                 </div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Số điện thoại</div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Số điện thoại', 'qlcv'); ?></div>
                                                 <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="phone_number"></div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Địa chỉ</div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Địa chỉ', 'qlcv'); ?></div>
                                                 <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="address"></div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Quốc gia</div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Quốc gia', 'qlcv'); ?></div>
                                                 <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="country"></div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Ghi chú</div>
-                                                <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="Thông tin bổ sung" name="note"></textarea></div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Ghi chú', 'qlcv'); ?></div>
+                                                <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"></textarea></div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Link file hồ sơ</div>
-                                                <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="Nhúng link từ one drive" name="link_onedrive"></textarea></div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Link file hồ sơ', 'qlcv'); ?></div>
+                                                <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Nhúng link từ one drive', 'qlcv'); ?>" name="link_onedrive"></textarea></div>
                                                 <div class="col-lg-3"></div>
 
                                                 <?php
@@ -514,7 +514,7 @@ $type = $_GET['type'];
                                                 <input type="hidden" name="role" value="partner">
 
                                                 <div class="col-lg-3"></div>
-                                                <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Tạo mới"></div>
+                                                <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Tạo mới', 'qlcv'); ?>"></div>
 
 
                                             </form>
@@ -522,9 +522,9 @@ $type = $_GET['type'];
                                     </div>
                                     <div class="foreign_partner">
                                         <div class="col-12 mb-20">
-                                            <h4>Chọn đối tác nhận việc từ trong danh sách</h4>
+                                            <h4><?php _e('Chọn đối tác nhận việc từ trong danh sách', 'qlcv'); ?></h4>
                                             <select class="form-control select2-tags mb-20" name="foreign_partner">
-                                                <option value="">-- Chọn đối tác nhận việc --</option>
+                                                <option value="">-- <?php _e('Chọn đối tác nhận việc', 'qlcv'); ?> --</option>
                                                 <?php
                                                 $args   = array(
                                                     'role'      => 'foreign_partner', /*subscriber, contributor, author*/
@@ -542,30 +542,30 @@ $type = $_GET['type'];
                                             </select>
                                         </div>
                                         <div class="col-12 mb-20">
-                                            <button class="button button-primary create_new_button" data-div="#create_foreign_partner"><span><i class="fa fa-user-plus"></i>Tạo đối tác nước ngoài mới</span></button>
+                                            <button class="button button-primary create_new_button" data-div="#create_foreign_partner"><span><i class="fa fa-user-plus"></i><?php _e('Tạo đối tác nước ngoài mới', 'qlcv'); ?></span></button>
                                             <div id="create_foreign_partner" style="display: none;">
                                                 <form action="#" method="POST" class="row">
                                                     <div class="col-12 mb-20 notification">
-                                                        <h4>Nhập thông tin đối tác</h4>
+                                                        <h4><?php _e('Nhập thông tin đối tác', 'qlcv'); ?></h4>
                                                     </div>
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45">Tên công ty/tổ chức</div>
+                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Tên công ty/tổ chức', 'qlcv'); ?></div>
                                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="company_name"></div>
                                                     <div class="col-lg-3"></div>
 
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45">Mã đối tác</div>
+                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Mã đối tác', 'qlcv'); ?></div>
                                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_code"></div>
                                                     <div class="col-lg-3"></div>
 
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45">Họ và tên</div>
-                                                    <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="first_name" placeholder="Họ"></div>
-                                                    <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="last_name" placeholder="Tên"></div>
+                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Họ và tên', 'qlcv'); ?></div>
+                                                    <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="first_name" placeholder="<?php _e('Họ', 'qlcv'); ?>"></div>
+                                                    <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="last_name" placeholder="<?php _e('Tên', 'qlcv'); ?>"></div>
                                                     <div class="col-lg-3"></div>
 
                                                     <div class="col-lg-3 form_title text-left text-lg-right lh45">Email</div>
                                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_email"></div>
                                                     <div class="col-lg-3"></div>
 
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45">Phân loại</div>
+                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Phân loại', 'qlcv'); ?></div>
                                                     <div class="col-lg-6 col-12 mb-20">
                                                         <select class="form-control mb-20" name="type_of_client">
                                                             <option value="Private Firm">Private Firm</option>
@@ -579,24 +579,24 @@ $type = $_GET['type'];
                                                     </div>
                                                     <div class="col-lg-3"></div>
 
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45">Số điện thoại</div>
+                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Số điện thoại', 'qlcv'); ?></div>
                                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="phone_number"></div>
                                                     <div class="col-lg-3"></div>
 
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45">Địa chỉ</div>
+                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Địa chỉ', 'qlcv'); ?></div>
                                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="address"></div>
                                                     <div class="col-lg-3"></div>
 
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45">Quốc gia</div>
+                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Quốc gia', 'qlcv'); ?></div>
                                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="country"></div>
                                                     <div class="col-lg-3"></div>
 
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45">Ghi chú</div>
-                                                    <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="Thông tin bổ sung" name="note"></textarea></div>
+                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Ghi chú', 'qlcv'); ?></div>
+                                                    <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"></textarea></div>
                                                     <div class="col-lg-3"></div>
 
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45">Link file hồ sơ</div>
-                                                    <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="Nhúng link từ one drive" name="link_onedrive"></textarea></div>
+                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Link file hồ sơ', 'qlcv'); ?></div>
+                                                    <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Nhúng link từ one drive', 'qlcv'); ?>" name="link_onedrive"></textarea></div>
                                                     <div class="col-lg-3"></div>
 
                                                     <?php
@@ -605,16 +605,16 @@ $type = $_GET['type'];
                                                     <input type="hidden" name="role" value="foreign_partner">
 
                                                     <div class="col-lg-3"></div>
-                                                    <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Tạo mới"></div>
+                                                    <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Tạo mới', 'qlcv'); ?>"></div>
 
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 mb-20">
-                                        <h4>Chọn khách hàng từ trong danh sách</h4>
+                                        <h4><?php _e('Chọn khách hàng từ trong danh sách', 'qlcv'); ?></h4>
                                         <select class="form-control select2-tags mb-20" name="customer">
-                                            <option value="">-- Chọn khách hàng --</option>
+                                            <option value="">-- <?php _e('Chọn khách hàng', 'qlcv'); ?> --</option>
                                             <?php
                                             $args   = array(
                                                 'post_type'     => 'customer',
@@ -641,19 +641,19 @@ $type = $_GET['type'];
                                     </div>
                                     <div class="col-12 mb-20">
                                         <div id="customer_function">
-                                            <button class="button button-primary create_customer"><span><i class="fa fa-user-plus"></i>Tạo khách hàng mới</span></button>
-                                            <button class="button button-primary copy_customer"><span><i class="fa fa-user-plus"></i>Copy dữ liệu đối tác</span></button>
+                                            <button class="button button-primary create_customer"><span><i class="fa fa-user-plus"></i><?php _e('Tạo khách hàng mới', 'qlcv'); ?></span></button>
+                                            <button class="button button-primary copy_customer"><span><i class="fa fa-user-plus"></i><?php _e('Copy dữ liệu đối tác', 'qlcv'); ?></span></button>
                                         </div>
                                         <div id="create_customer" style="display: none;">
                                             <form action="#" method="POST" class="row">
                                                 <div class="col-12 mb-20 notification">
-                                                    <h4>Nhập thông tin khách hàng mới</h4>
+                                                    <h4><?php _e('Nhập thông tin khách hàng mới', 'qlcv'); ?></h4>
                                                 </div>
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Tên công ty/Tên khách</div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Tên công ty/Tên khách', 'qlcv'); ?></div>
                                                 <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="customer_name"></div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Số điện thoại</div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Số điện thoại', 'qlcv'); ?></div>
                                                 <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="phone_number"></div>
                                                 <div class="col-lg-3"></div>
 
@@ -661,20 +661,20 @@ $type = $_GET['type'];
                                                 <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_email"></div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Địa chỉ</div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Địa chỉ', 'qlcv'); ?></div>
                                                 <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="address"></div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Quốc gia</div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Quốc gia', 'qlcv'); ?></div>
                                                 <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="country"></div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Ghi chú</div>
-                                                <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="Thông tin bổ sung" name="note"></textarea></div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Ghi chú', 'qlcv'); ?></div>
+                                                <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"></textarea></div>
                                                 <div class="col-lg-3"></div>
 
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Link file hồ sơ</div>
-                                                <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="Nhúng link từ one driveg" name="link_onedrive"></textarea></div>
+                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Link file hồ sơ', 'qlcv'); ?></div>
+                                                <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Nhúng link từ one drive', 'qlcv'); ?>" name="link_onedrive"></textarea></div>
                                                 <div class="col-lg-3"></div>
 
                                                 <?php
@@ -682,7 +682,7 @@ $type = $_GET['type'];
                                                 ?>
 
                                                 <div class="col-lg-3"></div>
-                                                <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Tạo mới"></div>
+                                                <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Tạo mới', 'qlcv'); ?>"></div>
 
                                             </form>
                                         </div>
@@ -692,7 +692,7 @@ $type = $_GET['type'];
                             <div id="step-2">
                                 <div class="row mbn-20">
                                     <form action="" method="POST" id="finance" class="row">
-                                        <div class="col-lg-3 form_title text-left text-lg-right">Loại tiền</div>
+                                        <div class="col-lg-3 form_title text-left text-lg-right"><?php _e('Loại tiền', 'qlcv'); ?></div>
                                         <div class="col-lg-6 col-12 mb-20">
                                             <div class="form-group">
                                                 <label class="inline"><input type="radio" name="currency" value="USD" checked>USD</label>
@@ -701,11 +701,11 @@ $type = $_GET['type'];
                                         </div>
                                         <div class="col-lg-3"></div>
 
-                                        <div class="col-lg-3 form_title lh45 text-left text-lg-right">Tổng số tiền</div>
+                                        <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Tổng số tiền', 'qlcv'); ?></div>
                                         <div class="col-lg-6 col-12 mb-20"><input type="number" placeholder="0" class="form-control" name="total_value"></div>
                                         <div class="col-lg-3"></div>
 
-                                        <div class="col-lg-3 form_title lh45 text-left text-lg-right">Đã thanh toán</div>
+                                        <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Đã thanh toán', 'qlcv'); ?></div>
                                         <div class="col-lg-6 col-12 mb-20"><input type="number" placeholder="0" class="form-control" name="paid"></div>
                                         <div class="col-lg-3"></div>
                                     </form>
@@ -714,7 +714,7 @@ $type = $_GET['type'];
                             <div id="step-3">
                                 <div class="row mbn-20">
                                     <div class="col-12 mb-20">
-                                        <h4>Chọn người quản lý</h4>
+                                        <h4><?php _e('Chọn người quản lý', 'qlcv'); ?></h4>
                                         <select class="form-control select2-tags mb-20" name="manager">
                                             <?php
                                             $args   = array(
@@ -730,7 +730,7 @@ $type = $_GET['type'];
                                             ?>
                                         </select>
 
-                                        <h4 style="margin-top: 20px;">Chọn người thực hiện</h4>
+                                        <h4 style="margin-top: 20px;"><?php _e('Chọn người thực hiện', 'qlcv'); ?></h4>
                                         <select class="form-control select2-tags mb-20" name="member">
                                             <?php
                                             $args   = array(
@@ -753,7 +753,7 @@ $type = $_GET['type'];
                                                 'hide_empty' => false,
                                             ));
                                             if($terms){
-                                                echo '<h4 style="margin-top: 20px;">Chọn chi nhánh thực hiện</h4>
+                                                echo '<h4 style="margin-top: 20px;">' . __('Chọn chi nhánh thực hiện', 'qlcv') . '?></h4>
                                                       <select class="form-control select2-tags mb-20" name="agency">';
                                                       
                                                 foreach ($terms as $value) {
@@ -765,7 +765,7 @@ $type = $_GET['type'];
                                         
                                     </div>
                                     <div class="col-12 mb-20">
-                                        <button class="button button-primary finish_newjob"><span><i class="fa fa-user-plus"></i>Hoàn tất</span></button>
+                                        <button class="button button-primary finish_newjob"><span><i class="fa fa-user-plus"></i><?php _e('Hoàn tất', 'qlcv'); ?></span></button>
                                     </div>
                                 </div>
                             </div>

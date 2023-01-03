@@ -61,10 +61,10 @@ get_sidebar();
                     $phan_loai = get_field('phan_loai', $job);
                     ?>
 
-                    <div class="col-lg-3 form_title text-left text-lg-right">Hành động</div>
+                    <div class="col-lg-3 form_title text-left text-lg-right"><?php _e('Hành động', 'qlcv'); ?></div>
                     <div class="col-lg-9 col-12 mb-20">
-                        <label class="inline"><input type="radio" name="action" value="0" checked="">Hoàn thành luôn</label>
-                        <label class="inline"><input type="radio" name="action" value="1">Gửi email thông báo cho khách</label>
+                        <label class="inline"><input type="radio" name="action" value="0" checked=""><?php _e('Hoàn thành luôn', 'qlcv'); ?></label>
+                        <label class="inline"><input type="radio" name="action" value="1"><?php _e('Gửi email thông báo cho khách', 'qlcv'); ?></label>
                     </div>
 
                     <?php
@@ -73,8 +73,8 @@ get_sidebar();
 
                     <div class="col-lg-3"></div>
                     <div class="col-lg-6 col-12 mb-20">
-                        <input type="submit" class="button button-primary" value="Hoàn thành">
-                        <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a>
+                        <input type="submit" class="button button-primary" value="<?php _e('Hoàn thành', 'qlcv'); ?>">
+                        <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a>
                     </div>
                 </div>
             </div>

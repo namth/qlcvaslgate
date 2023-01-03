@@ -43,7 +43,7 @@ while (have_posts()) {
         if (is_user_logged_in()) {
 
             $new_stt = $_GET['stt'];
-            $noi_dung = "đã thay đổi trạng thái thành " . $new_stt;
+            $noi_dung = __("đã thay đổi trạng thái thành", 'qlcv') . " " . $new_stt;
 
             $current_time = current_time('timestamp', 7);
 
@@ -64,7 +64,7 @@ while (have_posts()) {
 
             # push notification
             $id_job = get_field('job');
-            $content_notif = $current_user->display_name . " " . $noi_dung . " <b>" . get_the_title() . "</b> cho " . get_the_title($id_job);
+            $content_notif = $current_user->display_name . " " . $noi_dung . " <b>" . get_the_title() . "</b> " . __("cho", 'qlcv') . " " . get_the_title($id_job);
             $user = get_field('user');
             $manager = get_field('manager');
             create_notification(get_the_ID(), $content_notif, $manager['ID'], $user['ID']);
@@ -132,7 +132,7 @@ while (have_posts()) {
                     <div class="box-head">
                         <div class="row justify-content-between">
                             <div class="col-lg-auto">
-                                <h4 class="title">Lịch sử</h4>
+                                <h4 class="title"><?php _e('Lịch sử', 'qlcv'); ?></h4>
                             </div>
                             <div class="col-lg-auto">
                                 <?php
@@ -144,17 +144,17 @@ while (have_posts()) {
                                 ) {
 
                                 ?>
-                                    <a href="<?php echo get_bloginfo('url'); ?>/sua-noi-dung-nhiem-vu/?taskid=<?php echo get_the_ID(); ?>" class="button button-box button-vk"><i class="fa fa-pencil-square-o"></i><span>Cập nhật nội dung</span></a>
+                                    <a href="<?php echo get_bloginfo('url'); ?>/sua-noi-dung-nhiem-vu/?taskid=<?php echo get_the_ID(); ?>" class="button button-box button-vk"><i class="fa fa-pencil-square-o"></i><span><?php _e('Cập nhật nội dung', 'qlcv'); ?></span></a>
                                 <?php
-                                    echo '<button class="button button-box button-android" id="quick_update"><i class="fa fa-sort"></i><span>Cập nhật trạng thái</span></button>';
-                                    echo '<a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-box button-rss" id="quick_update"><i class="zmdi zmdi-assignment"></i><span>Sửa deadline</span></a>';
+                                    echo '<button class="button button-box button-android" id="quick_update"><i class="fa fa-sort"></i><span>' . __('Cập nhật trạng thái', 'qlcv') . '</span></button>';
+                                    echo '<a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-box button-rss" id="quick_update"><i class="zmdi zmdi-assignment"></i><span>' . __('Sửa deadline', 'qlcv') . '</span></a>';
                                 } else {
                                     if ((($trang_thai == "Chờ phê duyệt")
                                         && (in_array('administrator', $current_user->roles) || in_array('contributor', $current_user->roles)))
                                         || (($trang_thai == "Quản lý đã phê duyệt") && in_array('administrator', $current_user->roles))
                                     ) {
-                                        echo '<a href="' . get_bloginfo('url') . '/disapproval/?taskid=' . get_the_ID() . '" class="button button-wikipedia" id="quick_update"><i class="fa fa-times"></i><span>Không phê duyệt</span></a>';
-                                        echo '<a href="' . get_bloginfo('url') . '/confirm/?taskid=' . get_the_ID() . '" class="button button-android" id="quick_update"><i class="fa fa-sort"></i><span>Hoàn thành</span></a>';
+                                        echo '<a href="' . get_bloginfo('url') . '/disapproval/?taskid=' . get_the_ID() . '" class="button button-wikipedia" id="quick_update"><i class="fa fa-times"></i><span>' . __('Không phê duyệt', 'qlcv') . '</span></a>';
+                                        echo '<a href="' . get_bloginfo('url') . '/confirm/?taskid=' . get_the_ID() . '" class="button button-android" id="quick_update"><i class="fa fa-sort"></i><span>' . __('Hoàn thành', 'qlcv') . '</span></a>';
                                     }
                                 }
                                 ?>
@@ -173,7 +173,7 @@ while (have_posts()) {
                         ?>
                             <div class="row">
                                 <div class="col-lg-12 quick_update">
-                                    <a href="<?php echo get_bloginfo('url'); ?>/finish_task/?taskid=<?php echo get_the_ID(); ?>" class="button button-sm button-android"><span><i class="zmdi zmdi-label-heart"></i>Hoàn thành</a>
+                                    <a href="<?php echo get_bloginfo('url'); ?>/finish_task/?taskid=<?php echo get_the_ID(); ?>" class="button button-sm button-android"><span><i class="zmdi zmdi-label-heart"></i><?php _e('Hoàn thành', 'qlcv'); ?></a>
                                     <?php
                                     $print_status = false;
                                     $status_arr = explode(PHP_EOL, $list_status);
@@ -186,7 +186,7 @@ while (have_posts()) {
                                         }
                                     }
                                     ?>
-                                    <a href="?stt=Huỷ" class="button button-sm button-vk"><span><i class="fa fa-trash" onclick="return confirm('Bạn chắc chắn muốn hủy công việc này chứ?')"></i>Huỷ</a>
+                                    <a href="?stt=Huỷ" class="button button-sm button-vk"><span><i class="fa fa-trash" onclick="return confirm('<?php _e('Bạn chắc chắn muốn hủy công việc này chứ?', 'qlcv'); ?>')"></i><?php _e('Huỷ', 'qlcv'); ?></a>
                                 </div>
                             </div>
                         <?php
@@ -196,7 +196,7 @@ while (have_posts()) {
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-6 col-12">
-                                <h5>Người quản lý</h5>
+                                <h5><?php _e('Người quản lý', 'qlcv'); ?></h5>
                                 <?php 
                                     $manager = get_field('manager');
 
@@ -206,7 +206,7 @@ while (have_posts()) {
                                 ?>
                             </div>
                             <div class="col-md-6 col-12">
-                                <h5>Người thực hiện</h5>
+                                <h5><?php _e('Người thực hiện', 'qlcv'); ?></h5>
                                 <?php 
                                     $member = get_field('user');
 
@@ -262,7 +262,7 @@ while (have_posts()) {
             <div class="col-4 col-lg-4">
                 <div class="box mb-20">
                     <div class="page-heading box-head">
-                        <h3 class="mb-10">Thông tin công việc</h3>
+                        <h3 class="mb-10"><?php _e('Thông tin công việc', 'qlcv'); ?></h3>
                         <span class="badge badge-primary"><?php echo $phan_loai; ?></span>
                     </div>
                     <div class="box-body">
@@ -284,9 +284,9 @@ while (have_posts()) {
                                         if (substr($logo, -1) != '/') {
                                             echo "<img src='" . $logo . "' width='160' class='mb-10'/><br>";
                                         }
-                                        echo "Tên nhãn hiệu: " . $ten_nhan_hieu . "<br>";
-                                        echo "Nhóm: " . $nhom . "<br>";
-                                        echo "Số lượng nhóm: " . $so_luong_nhom . "<br>";
+                                        echo __("Tên nhãn hiệu: ", 'qlcv') . $ten_nhan_hieu . "<br>";
+                                        echo __("Nhóm: ", 'qlcv') . $nhom . "<br>";
+                                        echo __("Số lượng nhóm: ", 'qlcv') . $so_luong_nhom . "<br>";
                                         break;
 
                                     case 'Sáng chế':
@@ -295,9 +295,9 @@ while (have_posts()) {
 
                                         $ban_mo_ta_sang_che                 = auto_url(get_field('ban_mo_ta_sang_che', $id_job));
 
-                                        echo "Bản mô tả sáng chế: " . $ban_mo_ta_sang_che . "<br>";
-                                        echo "Số lượng yêu cầu bảo hộ: " . $so_luong_yeu_cau_bao_ho . "<br>";
-                                        echo "Số lượng yêu cầu bảo hộ độc lập: " . $so_luong_yeu_cau_bao_ho_doc_lap . "<br>";
+                                        echo __("Bản mô tả sáng chế: ", 'qlcv') . $ban_mo_ta_sang_che . "<br>";
+                                        echo __("Số lượng yêu cầu bảo hộ: ", 'qlcv') . $so_luong_yeu_cau_bao_ho . "<br>";
+                                        echo __("Số lượng yêu cầu bảo hộ độc lập: ", 'qlcv') . $so_luong_yeu_cau_bao_ho_doc_lap . "<br>";
                                         break;
 
                                     case 'Kiểu dáng':
@@ -305,9 +305,9 @@ while (have_posts()) {
                                         $ban_mo_ta_cua_bo_anh   = auto_url(get_field('ban_mo_ta_cua_bo_anh', $id_job));
                                         $so_luong_phuong_an     = get_field('so_luong_phuong_an', $id_job);
 
-                                        echo "Bộ ảnh: " . $bo_anh . "<br>";
-                                        echo "Bản mô tả của bộ ảnh: " . $ban_mo_ta_cua_bo_anh . "<br>";
-                                        echo "Số lượng phương án: " . $so_luong_phuong_an . "<br>";
+                                        echo __("Bộ ảnh: ", 'qlcv') . $bo_anh . "<br>";
+                                        echo __("Bản mô tả của bộ ảnh: ", 'qlcv') . $ban_mo_ta_cua_bo_anh . "<br>";
+                                        echo __("Số lượng phương án: ", 'qlcv') . $so_luong_phuong_an . "<br>";
                                         break;
                                 }
 
@@ -324,7 +324,7 @@ while (have_posts()) {
                 ?>
                     <div class="box mb-20">
                         <div class="page-heading box-head">
-                            <h3 class="mb-10">Thông tin đối tác</h3>
+                            <h3 class="mb-10"><?php _e('Thông tin đối tác', 'qlcv'); ?></h3>
                         </div>
                         <div class="box-body">
                             <div class="d-flex justify-content-between row mb-20">
@@ -350,7 +350,7 @@ while (have_posts()) {
                                 </div>
                             </div>
                             <?php
-                            echo '<a href="' . get_bloginfo('url') . '/sua-thong-tin-doi-tac/?uid=' . $partner['ID'] . '" class="button button-primary"><span><i class="fa fa-edit"></i>Sửa</span></a>';
+                            echo '<a href="' . get_bloginfo('url') . '/sua-thong-tin-doi-tac/?uid=' . $partner['ID'] . '" class="button button-primary"><span><i class="fa fa-edit"></i>' . __('Sửa', 'qlcv') . '</span></a>';
                             ?>
                         </div>
                     </div>

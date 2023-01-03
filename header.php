@@ -176,7 +176,7 @@ $logo = get_field('logo', 'option');
                                         <!-- Dropdown -->
                                         <div class="adomx-dropdown-menu dropdown-menu-mail">
                                             <div class="head">
-                                                <h4 class="title">Thông báo mới</h4>
+                                                <h4 class="title"><?php _e('Thông báo mới', 'qlcv'); ?></h4>
                                             </div>
                                             <div class="body custom-scroll">
                                                 <ul>
@@ -216,7 +216,7 @@ $logo = get_field('logo', 'option');
                                                 </ul>
                                             </div>
                                             <div class="footer">
-                                                <a href="<?php echo get_bloginfo('url'); ?>/list-notification" class="view-all">Xem tất cả</a>
+                                                <a href="<?php echo get_bloginfo('url'); ?>/list-notification" class="view-all"><?php _e('Xem tất cả', 'qlcv'); ?></a>
                                             </div>
                                         </div>
 
@@ -242,18 +242,13 @@ $logo = get_field('logo', 'option');
                                             </div>
                                             <div class="body">
                                                 <ul>
-                                                    <li><a href="<?php echo $link_user; ?>"><i class="zmdi zmdi-account"></i>Hồ sơ của bạn</a></li>
-                                                    <!-- <li><a href="<?php echo get_template_directory_uri(); ?>/#"><i class="zmdi zmdi-email-open"></i>Inbox</a></li> -->
-                                                    <li><a href="<?php echo get_template_directory_uri(); ?>/#"><i class="zmdi zmdi-wallpaper"></i>Công việc</a></li>
+                                                    <li><a href="<?php echo $link_user; ?>"><i class="zmdi zmdi-account"></i><?php _e('Hồ sơ của bạn', 'qlcv'); ?></a></li>
+                                                    <li><a href="<?php echo get_template_directory_uri(); ?>/#"><i class="zmdi zmdi-wallpaper"></i><?php _e('Công việc', 'qlcv'); ?></a></li>
                                                 </ul>
                                                 <ul>
-                                                    <!-- <li><a href="<?php echo get_template_directory_uri(); ?>/#"><i class="zmdi zmdi-settings"></i>Setting</a></li> -->
-                                                    <li><a href="<?php echo wp_logout_url(); ?>"><i class="zmdi zmdi-lock-open"></i>Đăng xuất</a></li>
+                                                    <li><a href="<?php echo wp_logout_url(); ?>"><i class="zmdi zmdi-lock-open"></i><?php _e('Đăng xuất', 'qlcv'); ?></a></li>
                                                 </ul>
-                                                <!-- <ul>
-                                                    <li><a href="<?php echo get_template_directory_uri(); ?>/#"><i class="zmdi zmdi-paypal"></i>Payment</a></li>
-                                                    <li><a href="<?php echo get_template_directory_uri(); ?>/#"><i class="zmdi zmdi-google-pages"></i>Invoice</a></li>
-                                                </ul> -->
+                                                
                                             </div>
                                         </div>
 

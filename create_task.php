@@ -83,8 +83,8 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 $to = $user_arr->user_email;
                 if ($to) {
                     $email_title = $noi_dung . ": " . $taskname;
-                    $email_content = $user_arr->display_name . ' hãy kiểm tra để thực hiện nhiệm vụ mới.';
-                    $email_content .= "<br>Link tới công việc: " . get_the_permalink($inserted);
+                    $email_content = $user_arr->display_name . ' ' . __('hãy kiểm tra để thực hiện nhiệm vụ mới.', 'qlcv');
+                    $email_content .= "<br>". __('Link tới công việc:', 'qlcv') . get_the_permalink($inserted);
                     $email_content = auto_url($email_content);
     
                     $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
@@ -139,24 +139,24 @@ $phan_loai  = get_field('phan_loai', $job);
                     if ($update) {
                         # nếu thành công thì thông báo thành công, 3 giây sau thì chuyển trang
                         echo '<div class="alert alert-success" role="alert">
-                                            <i class="fa fa-check"></i> Bài viết đã được cập nhật.
+                                            <i class="fa fa-check"></i> ' . __('Bài viết đã được cập nhật.', 'qlcv') . '
                                           </div>';
                     } else {
                         echo '<div class="alert alert-danger" role="alert">
-                                            <i class="zmdi zmdi-info"></i> Xảy ra lỗi, không thể cập nhật.
+                                            <i class="zmdi zmdi-info"></i> ' . __('Xảy ra lỗi, không thể cập nhật.', 'qlcv') . '
                                           </div>';
                     }
                 } else {
 
                 ?>
                     <div class="row mbn-20">
-                        <div class="col-lg-3 form_title lh45" style="color: lightgray;">Công việc</div>
+                        <div class="col-lg-3 form_title lh45" style="color: lightgray;"><?php _e('Công việc', 'qlcv'); ?></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <input type="text" value="<?php echo get_the_title($job); ?>" disabled class="form-control">
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Tên nhiệm vụ <span class="text-danger">*</span></div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Tên nhiệm vụ', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <!--  -->
                             <?php
@@ -187,14 +187,14 @@ $phan_loai  = get_field('phan_loai', $job);
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Ngày phát sinh nhiệm vụ</div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Ngày phát sinh nhiệm vụ', 'qlcv'); ?></div>
                         <div class="col-lg-3 col-12 mb-20">
                             <input type="text" class="form-control" name="date_history" data-mask="99/99/9999">
                             <span class="form-help-text">"dd/mm/yyyy"</span>
                         </div>
                         <div class="col-lg-6"></div>
 
-                        <div class="col-lg-3 form_title lh45">Lịch sử thực hiện</div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Lịch sử thực hiện', 'qlcv'); ?></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <div class="adomx-checkbox-radio-group">
                                 <?php 
@@ -242,8 +242,8 @@ $phan_loai  = get_field('phan_loai', $job);
                                         }
                                     }
                                     echo "<tr>";
-                                    echo '<td>Nội dung khác <input type="text" value="" name="other_work_process" class="form-control"></td>';
-                                    echo '<td>Ngày cập nhật <input type="text" value="" name="other_work_date" class="form-control" data-mask="99/99/9999"></td>';
+                                    echo '<td>' . __('Nội dung khác', 'qlcv') . ' <input type="text" value="" name="other_work_process" class="form-control"></td>';
+                                    echo '<td>' . __('Ngày cập nhật', 'qlcv') . ' <input type="text" value="" name="other_work_date" class="form-control" data-mask="99/99/9999"></td>';
                                     echo "</tr>";
 
                                     echo "</table>";
@@ -252,14 +252,14 @@ $phan_loai  = get_field('phan_loai', $job);
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Người thực hiện <span class="text-danger">*</span></div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Người thực hiện', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <select class="form-control select2-tags mb-20" name="member">
                                 <?php
                                 if ($member) {
                                     echo "<option value='" . $member['ID'] . "'>" . $member['display_name'] . " (" . $member['user_email'] . ")</option>";
                                 } else {
-                                    echo "<option>-- Chọn nhân sự thực hiện --</option>";
+                                    echo "<option>-- " . __('Chọn nhân sự thực hiện','qlcv') . " --</option>";
                                 }
 
                                 $args   = array(
@@ -278,14 +278,14 @@ $phan_loai  = get_field('phan_loai', $job);
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Người quản lý <span class="text-danger">*</span></div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Người quản lý', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <select class="form-control select2-tags mb-20" name="manager">
                                 <?php
                                 if ($manager) {
                                     echo "<option value='" . $manager['ID'] . "'>" . $manager['display_name'] . " (" . $manager['user_email'] . ")</option>";
                                 } else {
-                                    echo "<option>-- Chọn người quản lý --</option>";
+                                    echo "<option>-- " . __('Chọn người quản lý','qlcv') . " --</option>";
                                 }
 
                                 $args   = array(
@@ -304,10 +304,10 @@ $phan_loai  = get_field('phan_loai', $job);
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Đối tác nhận việc</div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Đối tác nhận việc', 'qlcv'); ?></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <select class="form-control select2-tags mb-20" name="foreign_partner">
-                                <option value="">-- Chọn đối tác nhận việc --</option>
+                                <option value="">-- <?php _e('Chọn đối tác nhận việc', 'qlcv'); ?> --</option>
                                 <?php
                                 $args   = array(
                                     'role'      => 'foreign_partner', /*subscriber, contributor, author*/
@@ -331,7 +331,7 @@ $phan_loai  = get_field('phan_loai', $job);
                         </div>
                         <div class="col-lg-6"></div>
 
-                        <div class="col-lg-3 form_title lh45">Nội dung nhiệm vụ</div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Nội dung nhiệm vụ', 'qlcv'); ?></div>
                         <div class="col-lg-8 col-12 mb-20">
                             <textarea class="summernote" name="content"></textarea>
                         </div>
@@ -343,7 +343,7 @@ $phan_loai  = get_field('phan_loai', $job);
                         ?>
 
                         <div class="col-lg-3"></div>
-                        <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Cập nhật"> <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a></div>
+                        <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Cập nhật', 'qlcv'); ?>"> <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a></div>
                     </div>
                 <?php
                 }

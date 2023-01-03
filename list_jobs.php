@@ -35,18 +35,6 @@ if (
     );
 }
 
-/* if ((time() - $_SESSION['list_job']['registered']) > (60 * 30)) {
-    unset($_SESSION['list_job']);
-} */
-// if (isset($_SESSION['list_job'])) {
-//     $member     = $_SESSION['list_job']['member'];
-//     $manager    = $_SESSION['list_job']['manager'];
-//     $partner    = $_SESSION['list_job']['partner'];
-//     $_customer  = $_SESSION['list_job']['_customer'];
-//     $date_1     = $_SESSION['list_job']['date_1'];
-//     $date_2     = $_SESSION['list_job']['date_2'];
-// }
-
 $current_user = wp_get_current_user();
 
 ?>
@@ -68,7 +56,7 @@ $current_user = wp_get_current_user();
                         ?>
                             <div class="col-md-4 mb-20">
                                 <select class="form-control select2-tags mb-20" name="member">
-                                    <option value="">-- Người thực hiện --</option>
+                                    <option value="">-- <?php _e('Người thực hiện', 'qlcv'); ?> --</option>
                                     <?php
                                     $args   = array(
                                         'role__in'      => array('member', 'contributor'), /*subscriber, contributor, author*/
@@ -87,7 +75,7 @@ $current_user = wp_get_current_user();
                             </div>
                             <div class="col-md-4 mb-20">
                                 <select class="form-control select2-tags mb-20" name="manager">
-                                    <option value="">-- Người quản lý --</option>
+                                    <option value="">-- <?php _e('Người quản lý', 'qlcv'); ?> --</option>
                                     <?php
                                     $args   = array(
                                         'role__in'      => array('member', 'contributor'), /*subscriber, contributor, author*/
@@ -111,7 +99,7 @@ $current_user = wp_get_current_user();
                         ?>
                             <div class="col-md-4 mb-20">
                                 <select name="partner" id="" class="form-control select2-tags mb-20">
-                                    <option value="">-- Đối tác --</option>
+                                    <option value="">-- <?php _e('Đối tác', 'qlcv'); ?> --</option>
                                     <?php
                                         $args   = array(
                                             'role'      => 'partner', /*subscriber, contributor, author*/
@@ -131,7 +119,7 @@ $current_user = wp_get_current_user();
                             </div>
                             <div class="col-md-4 mb-20">
                                 <select name="_customer" id="" class="form-control select2-tags mb-20">
-                                    <option value="">-- Khách hàng --</option>
+                                    <option value="">-- <?php _e('Khách hàng', 'qlcv'); ?> --</option>
                                     <?php
                                         $args   = array(
                                             'post_type'     => 'customer',
@@ -161,7 +149,7 @@ $current_user = wp_get_current_user();
                             </div>
                             <div class="col-md-4 mb-20">
                                 <select name="agency" id="" class="form-control select2-tags mb-20">
-                                    <option value="">-- Chi nhánh --</option>
+                                    <option value="">-- <?php _e('Chi nhánh', 'qlcv'); ?> --</option>
                                     <?php
                                         $terms = get_terms(array(
                                             'taxonomy' => 'agency',
@@ -178,7 +166,7 @@ $current_user = wp_get_current_user();
                             wp_nonce_field('post_nonce', 'post_nonce_field');
                             ?>
                             <div class="col-md-4 mb-20">
-                                <input type="submit" class="button button-primary" value="Lọc" style="padding: 9px 20px;">
+                                <input type="submit" class="button button-primary" value="<?php _e('Lọc', 'qlcv'); ?>" style="padding: 9px 20px;">
                             </div>
                         </div>
                     </form>
@@ -379,32 +367,32 @@ $current_user = wp_get_current_user();
                     ?>
                 <div class="row justify-content-between">
                     <div class="col-lg-auto mb-10">
-                        <p>Có tổng cộng <?php echo $total_query->post_count; ?> công việc tìm thấy</p>
-                        <h2>Danh sách công việc</h2>
+                        <p><?php _e('Có tổng cộng', 'qlcv'); ?> <?php echo $total_query->post_count; ?> <?php _e('công việc tìm thấy', 'qlcv'); ?></p>
+                        <h2><?php _e('Danh sách công việc', 'qlcv'); ?></h2>
                     </div>
                     <div class="col-lg-auto mb-10 right_button">
-                        <a href="<?php echo get_bloginfo('home') . '/tao-dau-viec-moi/' . $get_var; ?>" class="button button-primary"><span><i class="fa fa-plus"></i>Tạo công việc mới</span></a>
+                        <a href="<?php echo get_bloginfo('home') . '/tao-dau-viec-moi/' . $get_var; ?>" class="button button-primary"><span><i class="fa fa-plus"></i><?php _e('Tạo công việc mới', 'qlcv'); ?></span></a>
                     </div>
                     <div class="col-12 box mb-20">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Ngày tháng</th>
-                                    <th>Công việc lớn</th>
-                                    <th>Lịch sử CV</th>
+                                    <th><?php _e('Ngày tháng', 'qlcv'); ?></th>
+                                    <th><?php _e('Công việc lớn', 'qlcv'); ?></th>
+                                    <th><?php _e('Lịch sử CV', 'qlcv'); ?></th>
                                     <?php 
                                     if (!$type || ($type == 'tiem-nang')) {
-                                        echo "<th>Phân loại</th>";
+                                        _e("<th>Phân loại</th>", 'qlcv');
                                     }
                                     ?>
-                                    <th>Khách hàng</th>
-                                    <th>Đối tác</th>
-                                    <th>Người thực hiện</th>
-                                    <th>Người quản lý</th>
-                                    <th>Nguồn việc</th>
-                                    <th>Chi nhánh</th>
-                                    <th>Giá trị</th>
+                                    <th><?php _e('Khách hàng', 'qlcv'); ?></th>
+                                    <th><?php _e('Đối tác', 'qlcv'); ?></th>
+                                    <th><?php _e('Người thực hiện', 'qlcv'); ?></th>
+                                    <th><?php _e('Người quản lý', 'qlcv'); ?></th>
+                                    <th><?php _e('Nguồn việc', 'qlcv'); ?></th>
+                                    <th><?php _e('Chi nhánh', 'qlcv'); ?></th>
+                                    <th><?php _e('Giá trị', 'qlcv'); ?></th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -39,20 +39,20 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
             $tmp_manager = get_user_by('ID', $post_manager);
             #update vào csdl
             update_field('field_600fded7b438f', $post_member, $postid);
-            $notif_item[]   = 'người thực hiện từ <b>' . $tmp_user->display_name . '</b> sang <b>' . $member['display_name'] . '</b>';
+            $notif_item[]   = __('người thực hiện từ', 'qlcv') . ' <b>' . $tmp_user->display_name . '</b> '. __('sang', 'qlcv') . ' <b>' . $member['display_name'] . '</b>';
             $update = true;
             $update_user = true;
 
-            $email_title = "Thông báo về việc thay đổi nhân sự";
+            $email_title = __("Thông báo về việc thay đổi nhân sự", 'qlcv');
 
             # set notification for old member & manager 
-            $content = $tmp_user->display_name . " không còn là người xử lý việc <b>" . get_the_title($postid) . "</b>. Xem chi tiết việc <b>" . get_the_title($job) . "</b>";
+            $content = $tmp_user->display_name . " " . __("không còn là người xử lý việc", 'qlcv') . " <b>" . get_the_title($postid) . "</b>. " . __("Xem chi tiết việc", 'qlcv') . " <b>" . get_the_title($job) . "</b>";
             create_notification($postid, $content, $post_manager, $post_member);
             # send email notif
             $email_content = $content;
-            $email_content .= "<br>Link tới công việc: " . get_the_permalink($postid);
+            $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink($postid);
             $email_content = auto_url($email_content);
-            $email_content .= "<br><br>Trân trọng, ";
+            $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
             $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
             $headers[] = 'Cc: ' . $email_admin;
@@ -62,13 +62,13 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
             $sent = wp_mail($to, $email_title, $email_content, $headers);
 
             # set notification for new member & manager
-            $content = $member['display_name'] . " đã được giao là người xử lý việc <b>" . get_the_title($postid) . "</b>. Xem chi tiết việc <b>" . get_the_title($job) . "</b>";
+            $content = $member['display_name'] . " " . __("đã được giao là người xử lý việc", 'qlcv') . " <b>" . get_the_title($postid) . "</b>. " . __("Xem chi tiết việc", 'qlcv') . " <b>" . get_the_title($job) . "</b>";
             create_notification($postid, $content, $post_manager, $member['ID']);
             # send email notif
             $email_content = $content;
-            $email_content .= "<br>Link tới công việc: " . get_the_permalink($postid);
+            $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink($postid);
             $email_content = auto_url($email_content);
-            $email_content .= "<br><br>Trân trọng, ";
+            $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
             $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
             $headers[] = 'Cc: ' . $email_admin;
@@ -85,20 +85,20 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
             $tmp_manager = get_user_by('ID', $post_manager);
             #update vào csdl
             update_field('field_60fd46973dd42', $post_manager, $postid);
-            $notif_item[]   = 'người quản lý từ <b>' . $tmp_manager->display_name . '</b> sang <b>' . $manager['display_name'] . '</b>';
+            $notif_item[]   = __('người quản lý từ', 'qlcv') . ' <b>' . $tmp_manager->display_name . '</b> '. __('sang', 'qlcv') . ' <b>' . $manager['display_name'] . '</b>';
             $update = true;
             $update_user = true;
 
-            $email_title = "Thông báo về việc thay đổi nhân sự";
+            $email_title = __("Thông báo về việc thay đổi nhân sự", 'qlcv');
 
             # set notification for old member & manager 
-            $content = $tmp_user->display_name . " không còn là người quản lý việc <b>" . get_the_title($postid) . "</b>. Xem chi tiết việc <b>" . get_the_title($job) . "</b>";
+            $content = $tmp_user->display_name . " " . __("không còn là người quản lý việc", 'qlcv') . "  <b>" . get_the_title($postid) . "</b>. " . __("Xem chi tiết việc", 'qlcv') . "  <b>" . get_the_title($job) . "</b>";
             create_notification($postid, $content, $post_manager, $post_member);
             # send email notif
             $email_content = $content;
-            $email_content .= "<br>Link tới công việc: " . get_the_permalink($postid);
+            $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink($postid);
             $email_content = auto_url($email_content);
-            $email_content .= "<br><br>Trân trọng, ";
+            $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
             $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
             $headers[] = 'Cc: ' . $email_admin;
@@ -108,13 +108,13 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
             $sent = wp_mail($to, $email_title, $email_content, $headers);
 
             # set notification for new member & manager
-            $content = $member['display_name'] . " đã được giao là người quản lý việc <b>" . get_the_title($postid) . "</b>. Xem chi tiết việc  <b>" . get_the_title($job) . "</b>";
+            $content = $member['display_name'] . " " . __("đã được giao là người quản lý việc", 'qlcv') . "  <b>" . get_the_title($postid) . "</b>. ". __("Xem chi tiết việc", 'qlcv') . "  <b>" . get_the_title($job) . "</b>";
             create_notification($postid, $content, $post_manager, $member['ID']);
             # send email notif
             $email_content = $content;
-            $email_content .= "<br>Link tới công việc: " . get_the_permalink($postid);
+            $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink($postid);
             $email_content = auto_url($email_content);
-            $email_content .= "<br><br>Trân trọng, ";
+            $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
             $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
             $headers[] = 'Cc: ' . $email_admin;
@@ -151,7 +151,7 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
 
             #update vào csdl
             update_field('field_600fde70f9be8', $new_respone, $postid);
-            $notif_item[]   = 'deadline chờ phản hồi';
+            $notif_item[]   = __('deadline chờ phản hồi','qlcv');
             $update = true;
         }
 
@@ -162,12 +162,12 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
                 'post_title'    => $taskname,
             ));
 
-            $notif_item[]   = 'tên nhiệm vụ';
+            $notif_item[]   = __('tên nhiệm vụ', 'qlcv');
         }
 
         # nếu update thành công thì update history & push notification
         if ($update) {
-            $noi_dung = "đã cập nhật " . implode(', ', $notif_item);
+            $noi_dung = __("đã cập nhật", 'qlcv') . " " . implode(', ', $notif_item);
             $row_update = array(
                 'nguoi_thuc_hien'   => $current_user,
                 'noi_dung'          => $noi_dung,
@@ -184,7 +184,7 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
             $id_job = get_field('job', $postid);
             $content_notif = $current_user->display_name . " " . $noi_dung . " <b>" . get_the_title($postid) . "</b>";
             if ($id_job) {
-                $content_notif .= " cho " . get_the_title($id_job);
+                $content_notif .= " " . __('cho', 'qlcv') . " " . get_the_title($id_job);
             }
 
             $receiver = get_field('receiver', 'user_' . $current_user->ID);
@@ -228,35 +228,35 @@ get_sidebar();
                     if ($update) {
                         # nếu thành công thì thông báo thành công, 3 giây sau thì chuyển trang
                         echo '<div class="alert alert-success" role="alert">
-                                            <i class="fa fa-check"></i> Bài viết đã được cập nhật.
+                                            <i class="fa fa-check"></i> ' . __('Bài viết đã được cập nhật.', 'qlcv') . '
                                           </div>';
                     } else {
                         echo '<div class="alert alert-danger" role="alert">
-                                            <i class="zmdi zmdi-info"></i> Xảy ra lỗi, không thể cập nhật.
+                                            <i class="zmdi zmdi-info"></i> ' . __('Xảy ra lỗi, không thể cập nhật.', 'qlcv') . '
                                           </div>';
                     }
                 } else {
 
                 ?>
                     <div class="row mbn-20">
-                        <div class="col-lg-3 form_title lh45" style="color: lightgray;">Công việc lớn</div>
+                        <div class="col-lg-3 form_title lh45" style="color: lightgray;"><?php _e('Công việc lớn', 'qlcv'); ?></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <input type="text" value="<?php echo get_the_title($job); ?>" disabled class="form-control">
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Tên nhiệm vụ</div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Tên nhiệm vụ', 'qlcv'); ?></div>
                         <div class="col-lg-6 col-12 mb-20"><input type="text" value="<?php echo $current_post->post_title; ?>" name="taskname" class="form-control"></div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Người quản lý</div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Người quản lý', 'qlcv'); ?></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <select class="form-control select2-tags mb-20" name="manager">
                                 <?php
                                 if ($manager["ID"]) {
                                     echo "<option value='" . $manager['ID'] . "'>" . $manager['display_name'] . " (" . $manager['user_email'] . ")</option>";
                                 } else {
-                                    echo "<option value=''>-- Chọn người quản lý --</option>";
+                                    echo "<option value=''>-- " . __("Chọn người quản lý", 'qlcv') . " --</option>";
                                 }
 
                                 $args   = array(
@@ -274,14 +274,14 @@ get_sidebar();
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Người thực hiện</div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Người thực hiện', 'qlcv'); ?></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <select class="form-control select2-tags mb-20" name="user">
                                 <?php
                                 if ($member["ID"]) {
                                     echo "<option value='" . $member['ID'] . "'>" . $member['display_name'] . " (" . $member['user_email'] . ")</option>";
                                 } else {
-                                    echo "<option value=''>-- Chọn người thực hiện --</option>";
+                                    echo "<option value=''>-- " . __("Chọn người thực hiện", 'qlcv') . " --</option>";
                                 }
 
                                 /* $args   = array(
@@ -299,10 +299,10 @@ get_sidebar();
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Đối tác nhận việc</div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Đối tác nhận việc', 'qlcv'); ?></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <select class="form-control select2-tags mb-20" name="foreign_partner">
-                                <option value="">-- Chọn đối tác nhận việc --</option>
+                                <option value="">-- <?php _e('Chọn đối tác nhận việc', 'qlcv'); ?> --</option>
                                 <?php
                                 $partner = get_field('partner', $postid);
                                 if ($partner["ID"]) {
@@ -340,7 +340,7 @@ get_sidebar();
                         } else {
                             # if status is waiting to confirm, it's can be showed
                         ?>
-                            <div class="col-lg-3 form_title lh45">Deadline chờ phản hồi</div>
+                            <div class="col-lg-3 form_title lh45"><?php _e('Deadline chờ phản hồi', 'qlcv'); ?></div>
                             <div class="col-lg-3 col-12 mb-20">
                                 <input type="text" class="form-control input-date-single" value="<?php echo $respone; ?>" name="respone" data-mask="99/99/9999">
                                 <span class="form-help-text">"dd/mm/yyyy"</span>
@@ -353,7 +353,7 @@ get_sidebar();
                         ?>
 
                         <div class="col-lg-3"></div>
-                        <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Cập nhật"> <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a></div>
+                        <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Cập nhật', 'qlcv'); ?>"> <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a></div>
                     </div>
                 <?php
                 }

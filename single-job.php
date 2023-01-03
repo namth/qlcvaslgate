@@ -54,7 +54,7 @@ while (have_posts()) {
         }
         $tagname = implode(', ', $tagname_arr);
     } else {
-        $tagname = "Nguồn không xác định";
+        $tagname = __("Nguồn không xác định", 'qlcv');
     }
 
     if (isset($_GET['update']) && ($_GET['update'] == "Done")) {
@@ -75,7 +75,7 @@ while (have_posts()) {
         <div class="row justify-content-between mb-10">
 
             <div class="col-12 col-lg-12 mb-20">
-                <a href="<?php echo get_bloginfo('url'); ?>/danh-sach-cong-viec/">List công việc</a> > <?php the_title(); ?>
+                <a href="<?php echo get_bloginfo('url'); ?>/danh-sach-cong-viec/"><?php _e('List công việc', 'qlcv'); ?></a> > <?php the_title(); ?>
             </div>
             <!-- Page Heading Start -->
             <div class="col-8 col-lg-8 mb-20">
@@ -103,7 +103,7 @@ while (have_posts()) {
                         <div class="d-flex justify-content-between row mbn-20">
                             <!--Thông tin job-->
                             <div class="text-left col-12 mb-20">
-                                <h4 class="fw-600">Chi tiết công việc</h4>
+                                <h4 class="fw-600"><?php _e('Chi tiết công việc', 'qlcv'); ?></h4>
                                 <?php
                                 switch ($phan_loai) {
                                     case 'Nhãn hiệu':
@@ -116,9 +116,9 @@ while (have_posts()) {
                                         if (substr($logo, -1) != '/') {
                                             echo "<img src='" . $logo . "' width='160' class='mb-10'/><br>";
                                         }
-                                        echo "Tên nhãn hiệu: " . $ten_nhan_hieu . "<br>";
-                                        echo "Nhóm: " . $nhom . "<br>";
-                                        echo "Số lượng nhóm: " . $so_luong_nhom . "<br>";
+                                        echo __("Tên nhãn hiệu: ", 'qlcv') . $ten_nhan_hieu . "<br>";
+                                        echo __("Nhóm: ", 'qlcv') . $nhom . "<br>";
+                                        echo __("Số lượng nhóm: ", 'qlcv') . $so_luong_nhom . "<br>";
                                         echo "</p>";
                                         break;
 
@@ -128,9 +128,9 @@ while (have_posts()) {
                                         $so_luong_yeu_cau_bao_ho_doc_lap    = get_field('so_luong_yeu_cau_bao_ho_doc_lap');
 
                                         echo "<p>";
-                                        echo "Bản mô tả sáng chế: " . $ban_mo_ta_sang_che . "<br>";
-                                        echo "Số lượng yêu cầu bảo hộ: " . $so_luong_yeu_cau_bao_ho . "<br>";
-                                        echo "Số lượng yêu cầu bảo hộ độc lập: " . $so_luong_yeu_cau_bao_ho_doc_lap . "<br>";
+                                        echo __("Bản mô tả sáng chế: ", 'qlcv') . $ban_mo_ta_sang_che . "<br>";
+                                        echo __("Số lượng yêu cầu bảo hộ: ", 'qlcv') . $so_luong_yeu_cau_bao_ho . "<br>";
+                                        echo __("Số lượng yêu cầu bảo hộ độc lập: ", 'qlcv') . $so_luong_yeu_cau_bao_ho_doc_lap . "<br>";
                                         echo "</p>";
                                         break;
 
@@ -140,9 +140,9 @@ while (have_posts()) {
                                         $so_luong_phuong_an    = get_field('so_luong_phuong_an');
 
                                         echo "<p>";
-                                        echo "Bộ ảnh: " . $bo_anh . "<br>";
-                                        echo "Bản mô tả của bộ ảnh: " . $ban_mo_ta_cua_bo_anh . "<br>";
-                                        echo "Số lượng phương án: " . $so_luong_phuong_an . "<br>";
+                                        echo __("Bộ ảnh: ", 'qlcv') . $bo_anh . "<br>";
+                                        echo __("Bản mô tả của bộ ảnh: ", 'qlcv') . $ban_mo_ta_cua_bo_anh . "<br>";
+                                        echo __("Số lượng phương án: ", 'qlcv') . $so_luong_phuong_an . "<br>";
                                         echo "</p>";
                                         break;
                                 }
@@ -158,22 +158,22 @@ while (have_posts()) {
                                 $mindful        = get_field('mindful');
 
                                 if ($partner_ref) {
-                                    echo "Số REF của đối tác: " . $partner_ref . "<br>";
+                                    echo __("Số REF của đối tác: ", 'qlcv') . $partner_ref . "<br>";
                                 }
                                 if ($our_ref) {
-                                    echo "Số REF của mình: " . $our_ref . "<br>";
+                                    echo __("Số REF của mình: ", 'qlcv') . $our_ref . "<br>";
                                 }
                                 if ($so_don) {
-                                    echo "Số đơn: " . $so_don . "<br>";
+                                    echo __("Số đơn: ", 'qlcv') . $so_don . "<br>";
                                 }
                                 if ($ngay_nop_don) {
-                                    echo "Ngày nộp đơn: " . $ngay_nop_don . "<br>";
+                                    echo __("Ngày nộp đơn: ", 'qlcv') . $ngay_nop_don . "<br>";
                                 }
                                 if ($so_bang) {
-                                    echo "Số bằng: " . $so_bang . "<br>";
+                                    echo __("Số bằng: ", 'qlcv') . $so_bang . "<br>";
                                 }
                                 if ($ngay_cap_bang) {
-                                    echo "Ngày cấp bằng: " . $ngay_cap_bang . "<br>";
+                                    echo __("Ngày cấp bằng: ", 'qlcv') . $ngay_cap_bang . "<br>";
                                 }
 
                                 $content = get_the_content();
@@ -184,13 +184,13 @@ while (have_posts()) {
 
                                 if ($link_onedrive) {
                                     echo '<hr class="bs-docs-separator">';
-                                    echo '<h4>Link tài liệu</h4>';
+                                    echo '<h4>' . __('Link tài liệu', 'qlcv') . '</h4>';
                                     echo auto_url($link_onedrive);
                                 }
 
                                 if ($mindful) {
                                     echo '<hr class="bs-docs-separator">';
-                                    echo '<h4 class="fw-600">Lưu ý công việc </h4>';
+                                    echo '<h4 class="fw-600">' . __('Lưu ý công việc', 'qlcv') . '</h4>';
 
                                     echo $mindful;
                                 }
@@ -205,8 +205,7 @@ while (have_posts()) {
                 $term_names = wp_list_pluck($terms, 'name');
 
                 if (in_array("Tiềm năng", $term_names)) {
-                    echo '<a href="' . get_the_permalink() . '?update=Done" class="button button-primary"><span><i class="fa fa-sort"></i>Chuyển thành công việc chính thức</span></a>';
-                    // echo '<a href="' . get_bloginfo('url') . '/sua-cong-viec/?jobid=' . get_the_ID() . '" class="button button-box button-android"><i class="fa fa-pencil-square-o"></i><span>Cập nhật nội dung</span></a>';
+                    echo '<a href="' . get_the_permalink() . '?update=Done" class="button button-primary"><span><i class="fa fa-sort"></i>' . __('Chuyển thành công việc chính thức', 'qlcv') . '</span></a>';
 
                 } else if ($deadline) {
                 ?>
@@ -214,7 +213,7 @@ while (have_posts()) {
                         <div class="box-head">
                             <div class="row justify-content-between">
                                 <div class="col-lg-auto">
-                                    <h4 class="title">Lịch sử</h4>
+                                    <h4 class="title"><?php _e('Lịch sử', 'qlcv'); ?></h4>
                                 </div>
                                 <div class="col-lg-auto">
                                     <?php
@@ -225,23 +224,23 @@ while (have_posts()) {
                                     ) {
 
                                     ?>
-                                        <a href="<?php echo get_bloginfo('url'); ?>/sua-cong-viec/?jobid=<?php echo get_the_ID(); ?>" class="button button-box button-vk"><i class="fa fa-pencil-square-o"></i><span>Cập nhật nội dung</span></a>
+                                        <a href="<?php echo get_bloginfo('url'); ?>/sua-cong-viec/?jobid=<?php echo get_the_ID(); ?>" class="button button-box button-vk"><i class="fa fa-pencil-square-o"></i><span><?php _e('Cập nhật nội dung', 'qlcv'); ?></span></a>
                                     <?php
 
-                                        echo '<button class="button button-box button-android" id="quick_update"><i class="fa fa-sort"></i><span>Cập nhật trạng thái</span></button>';
+                                        echo '<button class="button button-box button-android" id="quick_update"><i class="fa fa-sort"></i><span>' . __('Cập nhật trạng thái', 'qlcv') . '</span></button>';
 
-                                        echo '<a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-box button-rss" id="quick_update"><i class="fa fa-calendar"></i><span>Sửa deadline</span></a>';
+                                        echo '<a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-box button-rss" id="quick_update"><i class="fa fa-calendar"></i><span>' . __('Sửa deadline', 'qlcv') . '</span></a>';
                                     } else {
                                         if (($trang_thai == "Chờ phê duyệt")
                                             && in_array('administrator', $current_user->roles)
                                         ) {
-                                            echo '<a href="' . get_bloginfo('url') . '/disapproval/?taskid=' . get_the_ID() . '" class="button button-wikipedia" id="quick_update"><i class="fa fa-times"></i><span>Không phê duyệt</span></a>';
-                                            echo '<a href="' . get_bloginfo('url') . '/approval/?taskid=' . get_the_ID() . '" class="button button-android" id="quick_update"><i class="fa fa-sort"></i><span>Hoàn thành</span></a>';
+                                            echo '<a href="' . get_bloginfo('url') . '/disapproval/?taskid=' . get_the_ID() . '" class="button button-wikipedia" id="quick_update"><i class="fa fa-times"></i><span>' . __('Không phê duyệt', 'qlcv') . '</span></a>';
+                                            echo '<a href="' . get_bloginfo('url') . '/approval/?taskid=' . get_the_ID() . '" class="button button-android" id="quick_update"><i class="fa fa-sort"></i><span>' . __('Hoàn thành', 'qlcv') . '</span></a>';
 
-                                            echo '<a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-box button-rss" id="quick_update"><i class="fa fa-calendar"></i><span>Sửa deadline</span></a>';
+                                            echo '<a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-box button-rss" id="quick_update"><i class="fa fa-calendar"></i><span>' . __('Sửa deadline', 'qlcv') . '</span></a>';
                                         }
                                     }
-                                    echo '<a href="' . get_bloginfo('url') . '/tao-phieu-thu-chi/?jobid=' . get_the_ID() . '" class="button button-box button-outlook" id="quick_update"><i class="zmdi zmdi-money"></i><span>Sửa deadline</span></a>';
+                                    echo '<a href="' . get_bloginfo('url') . '/tao-phieu-thu-chi/?jobid=' . get_the_ID() . '" class="button button-box button-outlook" id="quick_update"><i class="zmdi zmdi-money"></i><span>' . __('Sửa deadline', 'qlcv') . '</span></a>';
                                     ?>
                                 </div>
                             </div>
@@ -258,7 +257,7 @@ while (have_posts()) {
                             ?>
                                 <div class="row">
                                     <div class="col-lg-12 quick_update">
-                                        <a href="<?php echo get_bloginfo('url'); ?>/finish_task/?taskid=<?php echo get_the_ID(); ?>" class="button button-sm button-android"><span><i class="zmdi zmdi-label-heart"></i>Hoàn thành</a>
+                                        <a href="<?php echo get_bloginfo('url'); ?>/finish_task/?taskid=<?php echo get_the_ID(); ?>" class="button button-sm button-android"><span><i class="zmdi zmdi-label-heart"></i><?php _e('Hoàn thành', 'qlcv'); ?></a>
                                         <?php
                                         $print_status = false;
                                         $status_arr = explode(PHP_EOL, $list_status);
@@ -271,7 +270,7 @@ while (have_posts()) {
                                             }
                                         }
                                         ?>
-                                        <a href="?stt=Huỷ" class="button button-sm button-vk"><span><i class="zmdi zmdi-label-heart" onclick="return confirm('Bạn chắc chắn muốn hủy công việc này chứ?')"></i>Huỷ</a>
+                                        <a href="?stt=Huỷ" class="button button-sm button-vk"><span><i class="zmdi zmdi-label-heart" onclick="return confirm('<?php _e('Bạn chắc chắn muốn hủy công việc này chứ?', 'qlcv'); ?>')"></i><?php _e('Huỷ', 'qlcv'); ?></a>
                                     </div>
                                 </div>
                             <?php
@@ -281,7 +280,7 @@ while (have_posts()) {
                         <div class="box-body">
                         <div class="row">
                             <div class="col-md-6 col-12">
-                                <h5>Người quản lý</h5>
+                                <h5><?php _e('Người quản lý', 'qlcv'); ?></h5>
                                 <?php 
                                     $manager = get_field('manager');
 
@@ -291,7 +290,7 @@ while (have_posts()) {
                                 ?>
                             </div>
                             <div class="col-md-6 col-12">
-                                <h5>Người thực hiện</h5>
+                                <h5><?php _e('Người thực hiện', 'qlcv'); ?></h5>
                                 <?php 
                                     $member = get_field('user');
 
@@ -350,13 +349,13 @@ while (have_posts()) {
                         <div class="box-head">
                             <div class="row justify-content-between">
                                 <div class="col-lg-auto">
-                                    <h4 class="title">Danh sách nhiệm vụ</h4>
+                                    <h4 class="title"><?php _e('Danh sách nhiệm vụ', 'qlcv'); ?></h4>
                                 </div>
                                 <div class="col-lg-auto">
-                                    <a href="<?php echo get_bloginfo('url'); ?>/tao-nhiem-vu-moi/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-primary"><span><i class="fa fa-tasks"></i>Thêm nhiệm vụ</span></a>
-                                    <a href="<?php echo get_bloginfo('url'); ?>/sua-cong-viec/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-android" data-tippy-content="Cập nhật nội dung"><i class="fa fa-pencil-square-o"></i></a>
-                                    <a href="<?php echo get_bloginfo('url'); ?>/tao-phieu-thu-chi/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-outlook" id="quick_update" data-tippy-content="Tạo phiếu thu chi"><i class="zmdi zmdi-money"></i></a>
-                                    <a href="<?php echo get_bloginfo('url'); ?>/renewal_post_api/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-skype" data-tippy-content="Chuyển dữ liệu sang renewal"><i class="fa fa-telegram"></i></a>
+                                    <a href="<?php echo get_bloginfo('url'); ?>/tao-nhiem-vu-moi/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-primary"><span><i class="fa fa-tasks"></i><?php _e('Thêm nhiệm vụ', 'qlcv'); ?></span></a>
+                                    <a href="<?php echo get_bloginfo('url'); ?>/sua-cong-viec/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-android" data-tippy-content="<?php _e('Cập nhật nội dung', 'qlcv'); ?>"><i class="fa fa-pencil-square-o"></i></a>
+                                    <a href="<?php echo get_bloginfo('url'); ?>/tao-phieu-thu-chi/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-outlook" id="quick_update" data-tippy-content="<?php _e('Tạo phiếu thu chi', 'qlcv'); ?>"><i class="zmdi zmdi-money"></i></a>
+                                    <a href="<?php echo get_bloginfo('url'); ?>/renewal_post_api/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-skype" data-tippy-content="<?php _e('Chuyển dữ liệu sang renewal', 'qlcv'); ?>"><i class="fa fa-telegram"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -367,8 +366,8 @@ while (have_posts()) {
                                     <!-- Table Head Start -->
                                     <thead>
                                         <tr>
-                                            <th>Nhiệm vụ</th>
-                                            <th>Trạng thái</th>
+                                            <th><?php _e('Nhiệm vụ', 'qlcv'); ?></th>
+                                            <th><?php _e('Trạng thái', 'qlcv'); ?></th>
                                             <th>Deadline</th>
                                             <th></th>
                                         </tr>
@@ -434,9 +433,9 @@ while (have_posts()) {
                                                                 </div>
                                                               </td>';
                                                 echo '<td>
-                                                                <a href="' . get_bloginfo('url') . '/sua-noi-dung-nhiem-vu/?taskid=' . get_the_ID() . '" class="button button-xs button-box button-android" data-tippy-content="Sửa nội dung nhiệm vụ"><i class="fa fa-pencil-square-o"></i></a>
-                                                                <a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-xs button-box button-rss" id="quick_update" data-tippy-content="Sửa deadline và người xử lý"><i class="zmdi zmdi-assignment"></i></a>
-                                                                <a href="' . get_permalink( ) . '?stt=Huỷ" class="button button-xs button-box button-reddit" data-tippy-content="Huỷ"><i class="fa fa-trash" onclick="return confirm(\'Bạn chắc chắn muốn hủy công việc này chứ?\')"></i></a>
+                                                                <a href="' . get_bloginfo('url') . '/sua-noi-dung-nhiem-vu/?taskid=' . get_the_ID() . '" class="button button-xs button-box button-android" data-tippy-content="' . __('Sửa nội dung nhiệm vụ', 'qlcv') . '"><i class="fa fa-pencil-square-o"></i></a>
+                                                                <a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-xs button-box button-rss" id="quick_update" data-tippy-content="' . __('Sửa deadline và người xử lý', 'qlcv') . '"><i class="zmdi zmdi-assignment"></i></a>
+                                                                <a href="' . get_permalink( ) . '?stt=Huỷ" class="button button-xs button-box button-reddit" data-tippy-content="Huỷ"><i class="fa fa-trash" onclick="return confirm(\'' . __('Bạn chắc chắn muốn hủy công việc này chứ?', 'qlcv') . '\')"></i></a>
                                                               </td>';
                                                 echo "</tr>";
                                             }
@@ -457,13 +456,13 @@ while (have_posts()) {
             <div class="col-4 col-lg-4">
                 <div class="box mb-20">
                     <div class="page-heading box-head">
-                        <h4>Thông tin đối tác/khách hàng</h4>
+                        <h4><?php _e('Thông tin đối tác/khách hàng', 'qlcv'); ?></h4>
                     </div>
                     <div class="box-body">
                         <div class="d-flex justify-content-between row mb-20">
                             <!--Thông tin khách hàng-->
                             <div class="col-12 col-sm-auto mb-20">
-                                <h5>Khách hàng</h5>
+                                <h5><?php _e('Khách hàng', 'qlcv'); ?></h5>
                                 <?php
                                 $customer = get_field('customer');
                                 $id_customer = $customer->ID;
@@ -490,7 +489,7 @@ while (have_posts()) {
                         </div>
                         <?php
                         if ($id_customer) {
-                            echo '<a href="' . get_bloginfo('url') . '/sua-thong-tin-khach-hang/?uid=' . $id_customer . '" class="button button-sm button-primary"><span><i class="fa fa-edit"></i>Sửa</span></a>';
+                            echo '<a href="' . get_bloginfo('url') . '/sua-thong-tin-khach-hang/?uid=' . $id_customer . '" class="button button-sm button-primary"><span><i class="fa fa-edit"></i>' . __('Sửa', 'qlcv') . '</span></a>';
                         }
                         ?>
                     </div>
@@ -499,7 +498,7 @@ while (have_posts()) {
                         <div class="d-flex justify-content-between row mb-20">
                             <!--Thông tin khách hàng-->
                             <div class="col-12 col-sm-auto mb-20">
-                                <h5>Đối tác gửi việc</h5>
+                                <h5><?php _e('Đối tác gửi việc', 'qlcv'); ?></h5>
                                 <?php
                                 // echo $partner['user_avatar'];
 
@@ -529,7 +528,7 @@ while (have_posts()) {
                         </div>
                         <?php
                         if ($partner["ID"]) {
-                            echo '<a href="' . get_bloginfo('url') . '/sua-thong-tin-doi-tac/?uid=' . $partner['ID'] . '" class="button button-sm button-primary"><span><i class="fa fa-edit"></i>Sửa</span></a>';
+                            echo '<a href="' . get_bloginfo('url') . '/sua-thong-tin-doi-tac/?uid=' . $partner['ID'] . '" class="button button-sm button-primary"><span><i class="fa fa-edit"></i>' . __('Sửa', 'qlcv') . '</span></a>';
                         }
                         ?>
                     </div>
@@ -537,7 +536,7 @@ while (have_posts()) {
                         <div class="d-flex justify-content-between row mb-20">
                             <!--Thông tin khách hàng-->
                             <div class="col-12 col-sm-auto mb-20">
-                                <h5>Đối tác nhận việc</h5>
+                                <h5><?php _e('Đối tác nhận việc', 'qlcv'); ?></h5>
                                 <?php
                                 $partner = get_field('foreign_partner');
 
@@ -568,14 +567,14 @@ while (have_posts()) {
                         </div>
                         <?php
                         if ($partner["ID"]) {
-                            echo '<a href="' . get_bloginfo('url') . '/sua-thong-tin-doi-tac/?uid=' . $partner['ID'] . '" class="button button-sm button-primary"><span><i class="fa fa-edit"></i>Sửa</span></a>';
+                            echo '<a href="' . get_bloginfo('url') . '/sua-thong-tin-doi-tac/?uid=' . $partner['ID'] . '" class="button button-sm button-primary"><span><i class="fa fa-edit"></i>' . __('Sửa', 'qlcv') . '</span></a>';
                         }
                         ?>
                     </div>
                 </div>
                 <div class="box mb-20">
                     <div class="page-heading box-head">
-                        <h4 class="mb-10">Lịch sử công việc</h4>
+                        <h4 class="mb-10"><?php _e('Lịch sử công việc', 'qlcv'); ?></h4>
                     </div>
                     <div class="box-body">
                         <div class="d-flex justify-content-between row mb-20">
@@ -621,8 +620,6 @@ while (have_posts()) {
                                         echo '<td class="bg_gray"> </td>
                                             <td colspan="3"><span class="text">' . $process . '</span> </td>';
                                                 
-                                        // echo '<td></td>';
-                                        // echo '<td></td>';
                                         echo "</tr>";
                                     }
                                 }

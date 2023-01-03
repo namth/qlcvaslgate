@@ -34,15 +34,15 @@ if (have_posts()) {
                 $f_value = '-' . number_format($f_val) . $f_cur;
               }
 
-              echo "Ngày tháng: <b>" . $f_date . "</b><br>";
-              echo "Phân loại: <b>" . $f_type. "</b><br>";
-              echo "Nội dung: <code>" . get_the_content(). "</code><br>";
-              echo "Số tiền: <b>" . $f_value. "</b><br>";
-              echo "Công việc: <b><a href='" . get_permalink($f_job) . "'>" . get_the_title($f_job) . "</a></b><br>";
-              echo "Đối tác: <b><a href='" . get_author_posts_url($f_user['ID']) . "'>" . $f_user['display_name'] . "</a></b><br>";
+              echo __("Ngày tháng", 'qlcv') . ": <b>" . $f_date . "</b><br>";
+              echo __("Phân loại", 'qlcv') . ": <b>" . $f_type. "</b><br>";
+              echo __("Nội dung", 'qlcv') . ": <code>" . get_the_content(). "</code><br>";
+              echo __("Số tiền", 'qlcv') . ": <b>" . $f_value. "</b><br>";
+              echo __("Công việc", 'qlcv') . ": <b><a href='" . get_permalink($f_job) . "'>" . get_the_title($f_job) . "</a></b><br>";
+              echo __("Đối tác", 'qlcv') . ": <b><a href='" . get_author_posts_url($f_user['ID']) . "'>" . $f_user['display_name'] . "</a></b><br>";
               ?>
         </div>
-        <a href="javascript:history.go(-1)" class="button button-primary">Quay lại</a>
+        <a href="javascript:history.go(-1)" class="button button-primary"><?php _e('Quay lại', 'qlcv'); ?></a>
       </div>
     </div>
 <?php

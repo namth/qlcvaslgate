@@ -16,7 +16,7 @@ get_sidebar();
         <!-- Page Heading Start -->
         <div class="col-12 col-lg-auto mb-20">
             <div class="page-heading">
-                <h3>Báo cáo <span>/ Đối tác, khách hàng</span></h3>
+                <h3><?php _e('Báo cáo', 'qlcv'); ?> <span>/ <?php _e('Đối tác, khách hàng', 'qlcv'); ?></span></h3>
             </div>
         </div><!-- Page Heading End -->
 
@@ -25,7 +25,7 @@ get_sidebar();
             <div class="page-date-range">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <input type="text" class="form-control input-date-predefined" name="filter_date">
-                    <input type="submit" class="button button-primary" value="Lọc">
+                    <input type="submit" class="button button-primary" value="Lọc', 'qlcv'); ?>">
                 </form>
             </div>
         </div><!-- Page Button Group End -->
@@ -119,7 +119,7 @@ get_sidebar();
         <div class="col-md-12 mb-30">
             <div class="box">
                 <div class="box-head">
-                    <h4 class="title">Đối tác trên mỗi quốc gia</h4>
+                    <h4 class="title"><?php _e('Đối tác trên mỗi quốc gia', 'qlcv'); ?></h4>
                 </div>
                 <div class="box-body">
                     <div class="chartjs-market-trends-chart">
@@ -216,7 +216,7 @@ get_sidebar();
         <div class="col-md-12 mb-30">
             <div class="box">
                 <div class="box-head">
-                    <h4 class="title">Khách hàng trên mỗi quốc gia</h4>
+                    <h4 class="title"><?php _e('Khách hàng trên mỗi quốc gia', 'qlcv'); ?></h4>
                 </div>
                 <div class="box-body">
                     <div class="chartjs-market-trends-chart">
@@ -302,7 +302,7 @@ get_sidebar();
         <div class="col-md-4 mb-30">
             <div class="box">
                 <div class="box-head">
-                    <h4 class="title">Tỷ lệ đối tác</h4>
+                    <h4 class="title"><?php _e('Tỷ lệ đối tác', 'qlcv'); ?></h4>
                 </div>
                 <div class="box-body">
                     <div class="chartjs-market-trends-chart">
@@ -379,7 +379,7 @@ get_sidebar();
         <div class="col-md-4 mb-30">
             <div class="box">
                 <div class="box-head">
-                    <h4 class="title">Tỷ lệ đối tác đã chốt</h4>
+                    <h4 class="title"><?php _e('Tỷ lệ đối tác đã chốt', 'qlcv'); ?></h4>
                 </div>
                 <div class="box-body">
                     <div class="chartjs-market-trends-chart">
@@ -463,7 +463,7 @@ get_sidebar();
         <div class="col-md-4 mb-30">
             <div class="box">
                 <div class="box-head">
-                    <h4 class="title">Tỷ lệ đối tác tiềm năng</h4>
+                    <h4 class="title"><?php _e('Tỷ lệ đối tác tiềm năng', 'qlcv'); ?></h4>
                 </div>
                 <div class="box-body">
                     <div class="chartjs-market-trends-chart">
@@ -542,53 +542,6 @@ get_sidebar();
                 </div>
             </div>
         </div><!-- Market Trends Chart End -->
-
-        <!-- Tỷ lệ công việc tiềm năng -->
-        <!-- <div class="col-md-12 mb-30">
-            <div class="box">
-                <div class="box-head">
-                    <h4 class="title">Tỷ lệ công việc tiềm năng</h4>
-                </div>
-                <div class="box-body">
-                    <div class="chartjs-market-trends-chart">
-                        <?php
-                        // $label = array('Tiềm năng','Đã chốt');
-                        // $data_value = array( $data['group']['Tiềm năng'], $data['sign_date'] );
-
-                        
-                        echo "<script defer>";
-                        echo "jQuery(document).ready(function($) {";
-                        echo    "alert('alo');
-                        if( $('#chartjs-potential-chart').length ) {
-                                    $('#chartjs-potential-chart').vectorMap({
-                                        map: 'world_en',
-                                        backgroundColor: 'transparent',
-                                        color: '#f4f4f4',
-                                        hoverColor: '#136ef8',
-                                        borderColor: '#ffffff',
-                                        enableZoom: false,
-                                        values: {
-                                            'pk' : '2',
-                                            'us' : '12',
-                                            'ru' : '1',
-                                            'au' : '3',
-                                            'ca' : '2',
-                                            'ci' : '2',
-                                            'bd' : '2',
-                                            'vn' : '10',
-                                        },
-                                        scaleColors: ['#136ef8', '#428bfa'],
-                                        
-                                    });
-                                }";
-                        echo "});</script>";
-                        ?>
-                        <div id="chartjs-potential-chart" class="vmap vmap-world"></div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
     </div>
 
 </div><!-- Content Body End -->

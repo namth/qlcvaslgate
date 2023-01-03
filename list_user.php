@@ -85,13 +85,13 @@ $current_user = wp_get_current_user();
                                     break;
                             }
                         ?>
-                        <p>Có tổng cộng <?php echo sizeof($total_user_query->get_results()) . " " . $role_name; ?> tìm thấy</p>
+                        <p><?php _e('Có tổng cộng', 'qlcv'); ?> <?php echo sizeof($total_user_query->get_results()) . " " . $role_name; ?> <?php _e('tìm thấy', 'qlcv'); ?></p>
                         <h2><?php
-                            echo 'Danh sách ' . $role_name;
+                            echo __('Danh sách', 'qlcv') . ' ' . $role_name;
                         ?></h2>
                     </div>
                     <div class="col-lg-auto mb-10 right_button">
-                        <a href="<?php echo get_bloginfo('url') . $_create_link; ?>" class="button button-primary"><span><i class="fa fa-plus"></i>Tạo mới</span></a>
+                        <a href="<?php echo get_bloginfo('url') . $_create_link; ?>" class="button button-primary"><span><i class="fa fa-plus"></i><?php _e('Tạo mới', 'qlcv'); ?></span></a>
                     </div>
                     <div class="col-12 box mb-20">
                         <table class="table table-hover">
@@ -100,18 +100,18 @@ $current_user = wp_get_current_user();
                                     <th>#</th>
                                     <?php
                                     if (($role == 'partner') || ($role == 'foreign_partner')) {
-                                        echo "<th>Mã đối tác</th>";
-                                        echo "<th>Tên người liên hệ</th>";
-                                        echo "<th>Tên đối tác</th>";
+                                        echo "<th>" . __("Mã đối tác", 'qlcv') . "</th>";
+                                        echo "<th>" . __("Tên người liên hệ", 'qlcv') . "</th>";
+                                        echo "<th>" . __("Tên đối tác", 'qlcv') . "</th>";
                                     } else {
-                                        echo "<th>Tên nhân sự</th>";
+                                        echo "<th>" . __("Tên nhân sự", 'qlcv') . "</th>";
                                     }
 
-                                    echo '<th>Số điện thoại</th>
-                                                <th>Email</th>';
+                                    echo "<th>" . __("Số điện thoại", 'qlcv') . "</th>
+                                                <th>Email</th>";
 
                                     if (in_array('contributor', $current_user->roles)) {
-                                        echo '<th>Sửa</th>';
+                                        echo "<th>" . __("Sửa", 'qlcv') . "</th>";
                                     }
                                     ?>
 
@@ -141,7 +141,7 @@ $current_user = wp_get_current_user();
 
                                         if ($so_dien_thoai) {
                                             echo "<td>" . $so_dien_thoai . "</td>";
-                                        } else echo "<td>Chưa có</td>";
+                                        } else echo "<td>" . __("Chưa có", 'qlcv') . "</td>";
 
                                         echo "<td>" . $user->user_email . "</td>";
 
@@ -158,7 +158,7 @@ $current_user = wp_get_current_user();
                                         echo "</tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan=6 class='text-center'>Không có dữ liệu.</td></tr>";
+                                    echo "<tr><td colspan=6 class='text-center'>" . __("Không có dữ liệu.", 'qlcv') . "</td></tr>";
                                 }
                                 ?>
                             </tbody>

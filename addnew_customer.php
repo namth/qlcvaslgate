@@ -36,13 +36,13 @@
             update_field('field_6037200ec98cc', $country, $inserted ); # country
 
             $thongbao = '<div class="alert alert-success" role="alert">
-                            <i class="fa fa-check"></i> Đã tạo tài khoản thành công
+                            <i class="fa fa-check"></i> '. __('Đã tạo tài khoản thành công', 'qlcv') . '
                         </div>';
             # chuyển tới trang danh sách nhân sự
             wp_redirect( get_bloginfo('url') . '/danh-sach-nhan-su/?role=' . $role );
         } else {
             $thongbao = '<div class="alert alert-danger" role="alert">
-                            <i class="zmdi zmdi-info"></i> Có lỗi xảy ra, xin vui lòng kiểm tra lại.
+                            <i class="zmdi zmdi-info"></i> '. __('Có lỗi xảy ra, xin vui lòng kiểm tra lại.', 'qlcv') . '
                         </div>';
         }
 
@@ -84,32 +84,32 @@
                             ?>
                             <div>
                                 <form action="#" method="POST" class="row">
-                                    <div class="col-lg-3 form_title lh45">Họ và tên</div>
+                                    <div class="col-lg-3 form_title lh45"><?php _e('Họ và tên', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="customer_name"></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45">Công ty</div>
+                                    <div class="col-lg-3 form_title lh45"><?php _e('Công ty', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="customer_company"></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45">Email</div>
+                                    <div class="col-lg-3 form_title lh45"><?php _e('Email', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_email"></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45">Số điện thoại</div>
+                                    <div class="col-lg-3 form_title lh45"><?php _e('Số điện thoại', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="phone_number"></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45">Địa chỉ</div>
+                                    <div class="col-lg-3 form_title lh45"><?php _e('Địa chỉ', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="address"></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45">Quốc gia</div>
+                                    <div class="col-lg-3 form_title lh45"><?php _e('Quốc gia', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="country"></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45">Ghi chú</div>
-                                    <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="Thông tin bổ sung" name="note"></textarea></div>
+                                    <div class="col-lg-3 form_title lh45"><?php _e('Ghi chú', 'qlcv'); ?></div>
+                                    <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"></textarea></div>
                                     <div class="col-lg-3"></div>
 
                                     <?php 
@@ -117,7 +117,7 @@
                                     ?>
 
                                     <div class="col-lg-3"></div>
-                                    <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="Tạo mới"></div>
+                                    <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Tạo mới', 'qlcv'); ?>"></div>
 
                                 </form>
                             </div>

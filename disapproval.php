@@ -45,7 +45,7 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
 
         # chuyển trạng thái là Đang thực hiện
         update_field('field_600fde92f9be9', 'Đang thực hiện', $postid);
-        $noi_dung = "nhiệm vụ không được phê duyệt.<br>";
+        $noi_dung = __("nhiệm vụ không được phê duyệt.", 'qlcv') . "<br>";
 
         # lưu lịch sử 
         $row_update = array(
@@ -72,7 +72,7 @@ get_sidebar();
 # lấy thông tin người cần gửi
 $user_arr       = get_field('user', $postid);
 $our_ref        = get_field('our_ref', $job);
-$email_title    = "Từ chối phê duyệt đầu việc: " . get_the_title($job) . " (Số REF:  " . $our_ref . ")";
+$email_title    = __("Từ chối phê duyệt đầu việc: ", 'qlcv') . get_the_title($job) . " (" . __("Số REF: ", 'qlcv') . $our_ref . ")";
 $email_content  = "";
 
 ?>
@@ -87,7 +87,7 @@ $email_content  = "";
         <div class="col-12 col-lg-12 mb-20">
             <div class="page-heading">
                 <?php
-                echo '<h3 class="title">Từ chối phê duyệt nhiệm vụ</h3>';
+                echo '<h3 class="title">' . __('Từ chối phê duyệt nhiệm vụ', 'qlcv') . '</h3>';
                 ?>
             </div>
         </div><!-- Page Heading End -->
@@ -97,7 +97,7 @@ $email_content  = "";
         <div class="row">
             <div class="col-12 col-lg-12 mb-20">
                 <div class="row mbn-20">
-                    <div class="col-lg-3 form_title lh45">Người nhận: </div>
+                    <div class="col-lg-3 form_title lh45"><?php _e('Người nhận:', 'qlcv'); ?> </div>
                     <div class="col-lg-6 col-12 mb-20">
                         <input type="text" value="<?php echo $user_arr['user_email']; ?>" class="form-control" name="email_to">
                     </div>
@@ -110,17 +110,17 @@ $email_content  = "";
                     <div class="col-lg-3 form_title">Email BCC: </div>
                     <div class="col-lg-6 col-12 mb-20">
                         <input type="text" class="form-control" name="email_bcc" value="">
-                        <span class="form-help-text">Các email cách nhau bởi dấu ",".</span>
+                        <span class="form-help-text"><?php _e('Các email cách nhau bởi dấu ",".', 'qlcv'); ?></span>
                     </div>
                     <div class="col-lg-3"></div>
 
-                    <div class="col-lg-3 form_title">Tiêu đề: </div>
+                    <div class="col-lg-3 form_title"><?php _e('Tiêu đề:', 'qlcv'); ?> </div>
                     <div class="col-lg-6 col-12 mb-20">
                         <input type="text" class="form-control" name="email_title" value="<?php echo $email_title; ?>">
                     </div>
                     <div class="col-lg-3"></div>
 
-                    <div class="col-lg-3 form_title">Nội dung: </div>
+                    <div class="col-lg-3 form_title"><?php _e('Nội dung:', 'qlcv'); ?> </div>
                     <div class="col-lg-8 col-12 mb-20">
                         <?php wp_editor($email_content, 'email_content');  ?>
                     </div>
@@ -139,8 +139,8 @@ $email_content  = "";
 
                     <div class="col-lg-3"></div>
                     <div class="col-lg-6 col-12 mb-20">
-                        <input type="submit" class="button button-primary" value="Gửi">
-                        <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a>
+                        <input type="submit" class="button button-primary" value="<?php _e('Gửi', 'qlcv'); ?>">
+                        <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a>
                     </div>
                 </div>
             </div>
