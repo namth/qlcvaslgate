@@ -26,6 +26,13 @@ if (isset($_POST['filter_date'])) {
             ),
         );
     }
+} else {
+    $args_job['date_query'] = array(
+        array(
+            'after'     => date('Ymd', strtotime('-1 month')),
+            'inclusive' => true,
+        ),
+    );
 }
 
 $query = new WP_Query($args_job);
@@ -81,7 +88,6 @@ if ($query->have_posts()) {
     wp_reset_postdata();
 }
 
-
 ?>
 
 <!-- Content Body Start -->
@@ -101,7 +107,7 @@ if ($query->have_posts()) {
         <div class="col-12 col-lg-auto mb-20">
             <div class="page-date-range">
                 <form action="" method="POST" enctype="multipart/form-data">
-                    <input type="text" class="form-control input-date-predefined" name="filter_date">
+                    <input type="text" class="form-control input-date" name="filter_date" value="<?php if ($_POST['filter_date']) { echo $_POST['filter_date']; } else echo date('m/d/Y', strtotime('-1 month')) . ' - ' . date('m/d/Y'); ?>">
                     <input type="submit" class="button button-primary" value="<?php _e('Lọc', 'qlcv'); ?>">
                 </form>
             </div>
