@@ -753,7 +753,7 @@ $type = $_GET['type'];
                                                 'hide_empty' => false,
                                             ));
                                             if($terms){
-                                                echo '<h4 style="margin-top: 20px;">' . __('Chọn chi nhánh thực hiện', 'qlcv') . '?></h4>
+                                                echo '<h4 style="margin-top: 20px;">' . __('Chọn chi nhánh thực hiện', 'qlcv') . '</h4>
                                                       <select class="form-control select2-tags mb-20" name="agency">';
                                                       
                                                 foreach ($terms as $value) {

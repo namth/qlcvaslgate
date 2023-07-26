@@ -22,7 +22,7 @@ msgstr ""
 
 #: post_renew_to_api_renewal.php:43
 msgid "1 năm"
-msgstr ""
+msgstr "1 year"
 
 #: post_renew_to_api_renewal.php:46
 msgid "10 năm"

@@ -539,11 +539,13 @@ function add_new_job()
 
             # notification 
             create_notification($inserted, $email_title, $manager_arr->ID, $user_arr->ID);
+            $data['status'] = 'success';
+            $data['notification'] = '<div class="alert alert-success" role="alert">
+                                        <i class="fa fa-check"></i> ' . __('Đã tạo công việc mới thành công', 'qlcv') . '
+                                      </div>';
+    
+            $data['redirect_link'] = get_permalink($inserted);
         }
-        $data['status'] = 'success';
-        $data['notification'] = '<div class="alert alert-success" role="alert">
-                                    <i class="fa fa-check"></i> ' . __('Đã tạo công việc mới thành công', 'qlcv') . '
-                                  </div>';
     } else {
         $data['status'] = 'error';
         $data['notification'] = '<div class="alert alert-danger" role="alert">
@@ -1082,3 +1084,4 @@ function check_finish_job($jobid) {
         } return false;
     }
 }
+

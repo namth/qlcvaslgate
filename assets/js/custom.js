@@ -215,6 +215,9 @@ jQuery(document).ready(function ($) {
         $("#create_new_job").show();
         if (obj["status"] == "success") {
           $(obj["div_notification"]).html(obj["notification"]);
+
+          /* redirect toi trang chi tiet cong viec */
+          window.location.replace(obj["redirect_link"]);
         } else {
           $(obj["div_notification"]).prepend(obj["notification"]);
           $("html, body").animate(

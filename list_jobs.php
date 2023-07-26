@@ -431,9 +431,11 @@ $current_user = wp_get_current_user();
 
                                         $work_list  = get_field('lich_su_cong_viec');
                                         $work_history = array();
-                                        foreach ($work_list as $key => $value) {
-                                            $work_history[] = $value['mo_ta'];
-                                            // $work_date[] = $value['ngay_thang'];
+                                        if ($work_list){
+                                            foreach ($work_list as $key => $value) {
+                                                $work_history[] = $value['mo_ta'];
+                                                // $work_date[] = $value['ngay_thang'];
+                                            }                                            
                                         }
 
                                         $agency = get_the_terms(get_the_ID(), 'agency');
@@ -453,7 +455,9 @@ $current_user = wp_get_current_user();
                                         } else echo "<td>Chưa có</td>";
                                         echo "<td><a href='" . get_author_posts_url($manager['ID']) . "'>" . $manager['display_name'] . "</a></td>";
                                         echo "<td>" . $tagname . "</td>";
-                                        echo "<td>" . $agency[0]->name . "</td>";
+                                        if (!is_wp_error($agency)) {
+                                            echo "<td>" . $agency[0]->name . "</td>";
+                                        } else echo "<td></td>";
                                         echo "<td>" . $job_value . "</td>";
                                         echo '<td><a href="' . get_bloginfo('url') . '/renewal_post_api/?jobid=' . get_the_ID() . '"><i class="fa fa-telegram"></i></a></td>';
                                         echo "</tr>";

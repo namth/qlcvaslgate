@@ -32,20 +32,13 @@ get_sidebar();
 
     </div><!-- Page Headings End -->
 
-    <?php
+<?php
     $data = array();
 
     # đếm các công việc tiềm năng đã chốt trong khoảng thời gian
     $args_job_p = array(
         'post_type' => 'job',
         'posts_per_page' => -1,
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'group',
-                'field'    => 'slug',
-                'terms'    => 'tiem-nang',
-            ),
-        ),
     );
 
     # thống kê jobs đã chốt
@@ -310,8 +303,7 @@ get_sidebar();
                                 labels: [" . implode(',', $label) . "],
                                 datasets: [{
                                     data: [" . implode(',', $data_value) . "],
-                                    backgroundColor: ['#428bfa', '#fb7da4', '#ff9666', '#17a2b8', '#ee2f2f', '#8727df'],
-                                    hoverBackgroundColor: ['#428bfa', '#fb7da4', '#ff9666', '#17a2b8', '#ee2f2f', '#8727df'],
+                                    backgroundColor: ['#017359', '#06ab06', '#0edc0f', '#febb00', '#ff8e01', '#fe5300', '#e51201', '#fe0090', '#6b00d8', '#3201a8', '#0a34bc', '#006efd', '#0093e0'],
                                     hoverBorderColor: 'beige'
                                 }]
                             },
@@ -346,8 +338,8 @@ get_sidebar();
                                 },
                                 plugins: {
                                     labels: {
-                                      render: 'percentage',
-                                      fontColor: ['white', 'black', 'yellow', 'white', 'white'],
+                                      render: 'value',
+                                      fontColor: ['yellow', 'yellow', 'yellow', 'white', 'black', 'yellow', 'white', 'white', 'white', 'white', 'white', 'white', 'white'],
                                       precision: 1
                                     }
                                 }
@@ -391,13 +383,7 @@ get_sidebar();
                                             labels: [" . implode(',', $label) . "],
                                             datasets: [{
                                                 data: [" . implode(',', $data_value) . "],
-                                                backgroundColor: [
-                                                    '#fb7da4',
-                                                    '#7dfb9b',
-                                                    '#428bfa',
-                                                    '#ff9666',
-                                                    '#ee2f2f',
-                                                ],
+                                                backgroundColor: ['#fe5300', '#e51201', '#fe0090', '#6b00d8', '#3201a8', '#0a34bc', '#006efd', '#0093e0', '#017359', '#06ab06', '#0edc0f', '#febb00', '#ff8e01'],
                                             }]
                                         },
                                         options: {
@@ -430,8 +416,8 @@ get_sidebar();
                                             },
                                             plugins: {
                                                 labels: {
-                                                  render: 'percentage',
-                                                  fontColor: ['white', 'black', 'yellow', 'white', 'white'],
+                                                  render: 'value',
+                                                  fontColor: ['yellow', 'white', 'white', 'white', 'white', 'white', 'white', 'white', 'yellow', 'yellow', 'yellow', 'white', 'black'],
                                                   precision: 1
                                                 }
                                             }
@@ -476,8 +462,7 @@ get_sidebar();
                                 labels: [" . implode(',', $label) . "],
                                 datasets: [{
                                     data: [" . implode(',', $data_value) . "],
-                                    backgroundColor: ['#428bfa', '#fb7da4', '#ff9666', '#17a2b8', '#ee2f2f', '#8727df'],
-                                    hoverBackgroundColor: ['#428bfa', '#fb7da4', '#ff9666', '#17a2b8', '#ee2f2f', '#8727df'],
+                                    backgroundColor: ['#febb00', '#ff8e01', '#fe5300', '#e51201', '#fe0090', '#6b00d8', '#3201a8', '#0a34bc', '#006efd', '#0093e0', '#017359', '#06ab06', '#0edc0f'],
                                     hoverBorderColor: 'beige'
                                 }]
                             },
@@ -512,8 +497,8 @@ get_sidebar();
                                 },
                                 plugins: {
                                     labels: {
-                                      render: 'percentage',
-                                      fontColor: ['white', 'black', 'yellow', 'white', 'white'],
+                                      render: 'value',
+                                      fontColor: ['white', 'black', 'yellow', 'white', 'white', 'white', 'white', 'white', 'white', 'white', 'yellow', 'yellow', 'yellow'],
                                       precision: 1
                                     }
                                 }
@@ -557,13 +542,7 @@ get_sidebar();
                                             labels: [" . implode(',', $label) . "],
                                             datasets: [{
                                                 data: [" . implode(',', $data_value) . "],
-                                                backgroundColor: [
-                                                    '#fb7da4',
-                                                    '#7dfb9b',
-                                                    '#428bfa',
-                                                    '#ff9666',
-                                                    '#ee2f2f',
-                                                ],
+                                                backgroundColor: ['#3201a8', '#0a34bc', '#006efd', '#0093e0', '#017359', '#06ab06', '#0edc0f', '#febb00', '#ff8e01', '#fe5300', '#e51201', '#fe0090', '#6b00d8'],
                                             }]
                                         },
                                         options: {
@@ -596,9 +575,9 @@ get_sidebar();
                                             },
                                             plugins: {
                                                 labels: {
-                                                  render: 'percentage',
-                                                  fontColor: ['white', 'black', 'yellow', 'white', 'white'],
-                                                  precision: 1
+                                                    render: 'value',
+                                                    fontColor: ['white', 'white', 'white', 'white', 'yellow', 'yellow', 'yellow', 'white', 'black', 'yellow', 'white', 'white', 'white'],
+                                                    precision: 1
                                                 }
                                             }
                                         }
@@ -610,7 +589,7 @@ get_sidebar();
                                     var MTC = document.getElementById('chartjs-potential-chart').getContext('2d');";
                         echo        $config;
                         echo        "var MTCchartjs = new Chart(MTC, MTCconfig);
-                                            }";
+                                }";
                         echo "});</script>";
                         ?>
                         <canvas id="chartjs-potential-chart"></canvas>
@@ -700,7 +679,7 @@ get_sidebar();
                                 },
                                 plugins: {
                                     labels: {
-                                      render: 'percentage',
+                                      render: 'value',
                                       fontColor: ['white', 'black', 'yellow', 'white', 'white'],
                                       precision: 1
                                     }
@@ -750,7 +729,7 @@ get_sidebar();
                                 },
                                 plugins: {
                                     labels: {
-                                      render: 'percentage',
+                                      render: 'value',
                                       fontColor: ['white', 'black', 'yellow', 'white', 'white'],
                                       precision: 1
                                     }
