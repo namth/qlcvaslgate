@@ -48,6 +48,7 @@ $data = [
         'Tiềm năng' => [],
         'Đã chốt'   => []
     ],
+    'agency' => [],
 ];
 
 if ($query->have_posts()) {
@@ -56,6 +57,7 @@ if ($query->have_posts()) {
 
         $potential = false;
 
+        # phân loại theo loại công việc
         $terms = wp_get_post_terms(get_the_ID(), 'group');
         $term_names = wp_list_pluck($terms, 'name');
         foreach ($term_names as $term_name) {
@@ -67,7 +69,12 @@ if ($query->have_posts()) {
                 }
             }
         }
-        
+
+        # phân loại theo chi nhánh
+        $agency = wp_get_post_terms(get_the_ID(), 'agency');
+        $agency_name = $agency[0]->name;
+        $data['agency'][$agency_name]['total']++;
+
         if ($potential) {
             # Ghi nhận đầu việc này là tiềm năng
             $data['Tổng tiềm năng']++;
@@ -75,6 +82,7 @@ if ($query->have_posts()) {
                 if ($term->name != "Tiềm năng") {
                     # Nếu không phải tiềm năng thì thêm vào
                     $data['group']['Tiềm năng'][$term->name]++;
+                    $data['agency'][$agency_name]['Tiềm năng'][$term->name]++;
                 }
             }
         } else {
@@ -82,6 +90,7 @@ if ($query->have_posts()) {
             $data['Tổng đã chốt']++;
             foreach ($terms as $term) {
                 $data['group']['Đã chốt'][$term->name]++;
+                $data['agency'][$agency_name]['Đã chốt'][$term->name]++;
             }
         }
     }
@@ -107,7 +116,9 @@ if ($query->have_posts()) {
         <div class="col-12 col-lg-auto mb-20">
             <div class="page-date-range">
                 <form action="" method="POST" enctype="multipart/form-data">
-                    <input type="text" class="form-control input-date" name="filter_date" value="<?php if ($_POST['filter_date']) { echo $_POST['filter_date']; } else echo date('m/d/Y', strtotime('-1 month')) . ' - ' . date('m/d/Y'); ?>">
+                    <input type="text" class="form-control input-date" name="filter_date" value="<?php if ($_POST['filter_date']) {
+                                                                                                        echo $_POST['filter_date'];
+                                                                                                    } else echo date('m/d/Y', strtotime('-1 month')) . ' - ' . date('m/d/Y'); ?>">
                     <input type="submit" class="button button-primary" value="<?php _e('Lọc', 'qlcv'); ?>">
                 </form>
             </div>
@@ -150,7 +161,7 @@ if ($query->have_posts()) {
         </div>
     </div>
 
-    <div class="row mbn-30">
+    <div class="row">
         <!-- Bar Vertical Start -->
         <div class="col-12 mb-30">
             <div class="box">
@@ -158,14 +169,17 @@ if ($query->have_posts()) {
                     <h4 class="title">Chi tiết công việc theo phân nhóm</h4>
                     <?php
                     // print_r($data);
-                    // print_r($data['label']);
+                    // print_r($data['agency']);
 
                     foreach ($data['label'] as $label) {
                         $labels[]   = "'" . $label . "'";
 
-                        $tiemnang[] = $data["group"]["Tiềm năng"][$label]?$data["group"]["Tiềm năng"][$label]:0;
-                        $dachot[]   = $data["group"]["Đã chốt"][$label]?$data["group"]["Đã chốt"][$label]:0;
+                        $tiemnang[] = $data["group"]["Tiềm năng"][$label] ? $data["group"]["Tiềm năng"][$label] : 0;
+                        $dachot[]   = $data["group"]["Đã chốt"][$label] ? $data["group"]["Đã chốt"][$label] : 0;
                     }
+                    $list_labels = implode(', ', $labels);
+                    $list_tiemnang = implode(', ', $tiemnang);
+                    $list_dachot = implode(', ', $dachot);
                     ?>
                 </div>
                 <div class="box-body">
@@ -175,79 +189,157 @@ if ($query->have_posts()) {
                 </div>
             </div>
         </div><!-- Bar Vertical End -->
-        <script>
-            jQuery(document).ready(function($) {
-                if ($('#aslgate-chartjs-barV').length) {
-                    var ECBV = document.getElementById('aslgate-chartjs-barV').getContext('2d');
-                    var ECBVconfig = {
-                        type: 'bar',
-                        data: {
-                            labels: [<?php echo implode(', ',$labels) ?>],
-                            datasets: [{
-                                    label: 'Tiềm năng',
-                                    data: [<?php echo implode(', ',$tiemnang) ?>],
-                                    backgroundColor: '#fb7da4',
-                                    fill: false,
-                                },
-                                {
-                                    label: 'Đã chốt',
-                                    data: [<?php echo implode(', ',$dachot) ?>],
-                                    backgroundColor: '#428bfa',
-                                    fill: false,
-                                }
-                            ]
-                        },
-                        options: {
-                            maintainAspectRatio: false,
-                            legend: {
-                                labels: {
-                                    fontColor: '#333333',
-                                }
-                            },
-                            plugins: {
-                                labels: {
-                                    render: 'value',
-                                },
-                            },
-                            scales: {
-                                xAxes: [{
-                                    display: true,
-                                    stacked: false,
-                                    gridLines: {
-                                        color: 'rgba(136,136,136,0.1)',
-                                        lineWidth: 1,
-                                        drawBorder: false,
-                                        zeroLineWidth: 1,
-                                        zeroLineColor: 'rgba(136,136,136,0.1)',
-                                    },
-                                    ticks: {
-                                        fontColor: '#333333',
-                                    },
-                                }],
-                                yAxes: [{
-                                    display: false,
-                                    stacked: false,
-                                    gridLines: {
-                                        color: 'rgba(136,136,136,0.1)',
-                                        lineWidth: 1,
-                                        drawBorder: false,
-                                        zeroLineWidth: 1,
-                                        zeroLineColor: 'rgba(136,136,136,0.1)',
-                                    },
-                                    ticks: {
-                                        fontColor: '#333333',
-                                    },
-                                }]
-                            }
-                        }
-                    };
-                    var ECBVchartjs = new Chart(ECBV, ECBVconfig);
-                }
-            });
-        </script>
+        
     </div>
 
+    <!-- Ve bieu do so cong viec cua tung chi nhanh 
+    -- Su dung vong lap de lay du lieu
+    -- Co bao nhieu chi nhanh thi ve bay nhieu bang
+    -->
+
+    <div class="row mb-30">
+        <?php
+        $i = 0;
+        foreach ($data['agency'] as $agency => $agencyValue) {
+            # khai bao bien cho data du lieu tung chi nhanh
+            $varConfig = 'agency' . $i++;
+            
+            # Xu ly du lieu de ve bieu do
+            $tiemnang = [];
+            $dachot = [];
+            $labels = [];
+            $total_tiemnang = 0;
+            $total_dachot = 0;
+            foreach ($data['label'] as $label) {
+                $temp1 = $agencyValue["Tiềm năng"][$label] ? $agencyValue["Tiềm năng"][$label] : 0;
+                $temp2 = $agencyValue["Đã chốt"][$label] ? $agencyValue["Đã chốt"][$label] : 0;
+                # Neu co it nhat 1 du lieu thi moi luu vao mang
+                if ($temp1 || $temp2) {
+                    $labels[]   = "'" . $label . "'";
+    
+                    $tiemnang[] = $temp1;
+                    $dachot[]   = $temp2;
+                    $total_tiemnang += $temp1;
+                    $total_dachot += $temp2;
+                }
+            }
+        ?>
+            <div class="col-6 mb-30">
+                <div class="box">
+                    <div class="box-head">
+                        <h4 class="title"><?php echo $agencyValue['total'] ?> công việc tại <?php echo $agency; ?></h4>
+                        <div class="row">
+                            <div class="col-6 mb-10"><?php echo $total_tiemnang; ?> công việc tiềm năng</div>
+                            <div class="col-6 mb-10"><?php echo $total_dachot; ?> công việc đã chốt</div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="aslgate-chartjs">
+                            <canvas id="aslgate-chartjs-<?php echo $varConfig; ?>" height="300px"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- Bar Vertical End -->
+        <?php
+            $jscode .= "if ($('#aslgate-chartjs-" . $varConfig . "').length) {
+                            var ECBV" . $varConfig . " = document.getElementById('aslgate-chartjs-" . $varConfig . "').getContext('2d');
+                            var " . $varConfig . " = {
+                                ...ECBVconfig
+                            };
+                            " . $varConfig . ".data = {
+                                labels: [" . implode(', ', $labels) . "],
+                                datasets: [{
+                                        label: 'Tiềm năng',
+                                        data: [" .  implode(', ', $tiemnang) . "],
+                                        backgroundColor: '#fb7da4',
+                                        fill: false,
+                                    },
+                                    {
+                                        label: 'Đã chốt',
+                                        data: [" .  implode(', ', $dachot) . "],
+                                        backgroundColor: '#428bfa',
+                                        fill: false,
+                                    }
+                                ]
+                            };
+                            var " . $varConfig . "chartjs = new Chart(ECBV" . $varConfig . ", " . $varConfig . ");
+                        }";
+        }
+        ?>
+    </div>
 </div><!-- Content Body End -->
+
+<script>
+    jQuery(document).ready(function($) {
+        if ($('#aslgate-chartjs-barV').length) {
+            var ECBV = document.getElementById('aslgate-chartjs-barV').getContext('2d');
+            var ECBVconfig = {
+                type: 'bar',
+                data: {
+                    labels: [<?php echo $list_labels; ?>],
+                    datasets: [{
+                            label: 'Tiềm năng',
+                            data: [<?php echo $list_tiemnang; ?>],
+                            backgroundColor: '#fb7da4',
+                            fill: false,
+                        },
+                        {
+                            label: 'Đã chốt',
+                            data: [<?php echo $list_dachot; ?>],
+                            backgroundColor: '#428bfa',
+                            fill: false,
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    legend: {
+                        labels: {
+                            fontColor: '#333333',
+                        }
+                    },
+                    plugins: {
+                        labels: {
+                            render: 'value',
+                        },
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            stacked: false,
+                            gridLines: {
+                                color: 'rgba(136,136,136,0.1)',
+                                lineWidth: 1,
+                                drawBorder: false,
+                                zeroLineWidth: 1,
+                                zeroLineColor: 'rgba(136,136,136,0.1)',
+                            },
+                            ticks: {
+                                fontColor: '#333333',
+                            },
+                        }],
+                        yAxes: [{
+                            display: false,
+                            stacked: false,
+                            gridLines: {
+                                color: 'rgba(136,136,136,0.1)',
+                                lineWidth: 1,
+                                drawBorder: false,
+                                zeroLineWidth: 1,
+                                zeroLineColor: 'rgba(136,136,136,0.1)',
+                            },
+                            ticks: {
+                                fontColor: '#333333',
+                            },
+                        }]
+                    }
+                }
+            };
+            var ECBVchartjs = new Chart(ECBV, ECBVconfig);
+        }
+        <?php echo $jscode; ?>
+    });
+</script>
 <?php
 get_footer();
 ?>
