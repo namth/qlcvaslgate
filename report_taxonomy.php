@@ -168,9 +168,6 @@ if ($query->have_posts()) {
                 <div class="box-head">
                     <h4 class="title">Chi tiết công việc theo phân nhóm</h4>
                     <?php
-                    // print_r($data);
-                    // print_r($data['agency']);
-
                     foreach ($data['label'] as $label) {
                         $labels[]   = "'" . $label . "'";
 
@@ -184,7 +181,7 @@ if ($query->have_posts()) {
                 </div>
                 <div class="box-body">
                     <div class="aslgate-chartjs">
-                        <canvas id="aslgate-chartjs-barV" height="300px"></canvas>
+                        <canvas id="aslgate-chartjs-barV" height="450px"></canvas>
                     </div>
                 </div>
             </div>
@@ -251,17 +248,19 @@ if ($query->have_posts()) {
                                 datasets: [{
                                         label: 'Tiềm năng',
                                         data: [" .  implode(', ', $tiemnang) . "],
-                                        backgroundColor: '#fb7da4',
+                                        backgroundColor: '#fe0090',
                                         fill: false,
                                     },
                                     {
                                         label: 'Đã chốt',
                                         data: [" .  implode(', ', $dachot) . "],
-                                        backgroundColor: '#428bfa',
+                                        backgroundColor: '#0a34bc',
                                         fill: false,
                                     }
                                 ]
                             };
+                            " . $varConfig . ".options.scales.xAxes[0].barThickness = 30;
+                            console.log(" . $varConfig . ");
                             var " . $varConfig . "chartjs = new Chart(ECBV" . $varConfig . ", " . $varConfig . ");
                         }";
         }

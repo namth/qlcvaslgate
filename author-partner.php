@@ -129,9 +129,14 @@
 
                                 <div class="box-body p-0">
                                     <?php 
+                                        // xử lý phân trang
+                                        $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
+
                                         $args   = array(
                                             'post_type'     => 'job',
-                                            'posts_per_page'=> 5,
+                                            'paged'         => $paged,
+                                            'posts_per_page'=> 50,
+
                                         );
                                         $args['meta_query'][] = array(
                                             'relation' => 'OR',
@@ -181,7 +186,21 @@
                                         ?>
                                     </ul>
                                     <!--Todo List End-->
+                                    <div class="col-12">
+                                        <div class="pagination justify-content-center">
+                                            <?php
+                                            $big = 999999999; // need an unlikely integer
 
+                                            echo paginate_links(array(
+                                                'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+                                                'format'    => '?paged=%#%',
+                                                'current'   => max(1, get_query_var('paged')),
+                                                'total'     => $query->max_num_pages,
+                                                'type'      => 'list',
+                                            ));
+                                            ?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div><!-- To Do List End -->

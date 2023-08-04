@@ -270,7 +270,6 @@ while (have_posts()) {
                             <!--Thông tin khách hàng-->
                             <div class="col-12 col-sm-auto mb-20">
                                 <?php
-
                                 echo "<p>";
                                 echo "<a href='" . $permalink . "'><b>" . $name . "</b></a><br>";
 

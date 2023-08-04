@@ -8,6 +8,7 @@ while (have_posts()) {
 
     $current_user = wp_get_current_user();
     $partner = get_field('partner_2');
+
     # get all notification where the permalink match with destination in notif
     $args   = array(
         'post_type'     => 'notification',

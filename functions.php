@@ -531,6 +531,7 @@ function add_new_job()
             $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink($inserted);
             $email_content = auto_url($email_content);
 
+            $headers = [];
             $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
             $headers[] = 'Cc: ' . $email_admin;
             $headers[] = 'Cc: ' . $manager_arr->user_email;
@@ -750,6 +751,7 @@ function sendmail_deadline_notification()
                     $email_content = auto_url($email_content);
                     $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
+                    $headers = [];
                     $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
                     $headers[] = 'Cc: ' . $email_admin;
                     $headers[] = 'Cc: ' . $manager_arr['user_email'];
@@ -767,6 +769,7 @@ function sendmail_deadline_notification()
                     $email_content = auto_url($email_content);
                     $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
+                    $headers = [];
                     $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
                     $headers[] = 'Cc: ' . $email_admin;
                     $headers[] = 'Cc: ' . $manager_arr['user_email'];
@@ -783,6 +786,7 @@ function sendmail_deadline_notification()
                     $email_content = auto_url($email_content);
                     $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
+                    $headers = [];
                     $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
                     $headers[] = 'Cc: ' . $email_admin;
                     $headers[] = 'Cc: ' . $manager_arr['user_email'];

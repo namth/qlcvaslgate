@@ -20,10 +20,11 @@ if (
     $manager    = $_POST['manager'];
     $partner    = $_POST['partner'];
     $_agency    = $_POST['agency'];
+    $_post_tag  = $_POST['post_tag'];
     $_customer  = $_POST['_customer'];
     $date_value = explode(' - ', $_POST['deadline']);
-    $date_1     = date('Ymd', strtotime($date_value[0]));
-    $date_2     = date('Ymd', strtotime($date_value[1]));
+    $date_1     = date('Y-m-d', strtotime($date_value[0]));
+    $date_2     = date('Y-m-d', strtotime($date_value[1]));
 
     $_SESSION['list_job'] = array(
         'member'        => $member,
@@ -145,7 +146,9 @@ $current_user = wp_get_current_user();
                                 </select>
                             </div>
                             <div class="col-md-4 mb-20">
-                                <input name="deadline" type="text" class="form-control input-date-predefined" value="<?php echo $_POST['deadline']; ?>">
+                                <input name="deadline" type="text" class="form-control input-date" value="<?php if ($_POST['deadline']) {
+                                                                                                        echo $_POST['deadline'];
+                                                                                                    } else echo date('m/d/Y', strtotime('-1 month')) . ' - ' . date('m/d/Y'); ?>">
                             </div>
                             <div class="col-md-4 mb-20">
                                 <select name="agency" id="" class="form-control select2-tags mb-20">
@@ -157,6 +160,21 @@ $current_user = wp_get_current_user();
                                         ));
                                         foreach ($terms as $value) {
                                             $selected = ($_agency == $value->slug) ? "selected" : "";
+                                            echo "<option value='" . $value->slug . "' " . $selected . ">" . $value->name . "</option>";
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-20">
+                                <select name="post_tag" id="" class="form-control select2-tags mb-20">
+                                    <option value="">-- <?php _e('Nguồn việc', 'qlcv'); ?> --</option>
+                                    <?php
+                                        $terms = get_terms(array(
+                                            'taxonomy' => 'post_tag',
+                                            'hide_empty' => false,
+                                        ));
+                                        foreach ($terms as $value) {
+                                            $selected = ($_post_tag == $value->slug) ? "selected" : "";
                                             echo "<option value='" . $value->slug . "' " . $selected . ">" . $value->name . "</option>";
                                         }
                                     ?>
@@ -174,8 +192,8 @@ $current_user = wp_get_current_user();
             </div>
             <!--Basic Start-->
             <div class="col-12 mb-30">
-
                     <?php
+                    // print_r($_POST);
                     // xử lý phân trang
                     $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
 
@@ -198,9 +216,21 @@ $current_user = wp_get_current_user();
 
                     if (isset($_agency) && ($_agency != '')) {
                         $args['tax_query'][] = array(
-                            'taxonomy'  => 'agency',
-                            'field'     => 'slug',
-                            'terms'     => $_agency,
+                            // array(
+                                'taxonomy'  => 'agency',
+                                'field'     => 'slug',
+                                'terms'     => $_agency,
+                            // ),
+                        );
+                    }
+
+                    if (isset($_post_tag) && ($_post_tag != '')) {
+                        $args['tax_query'][] = array(
+                            // array(
+                                'taxonomy'  => 'post_tag',
+                                'field'     => 'slug',
+                                'terms'     => $_post_tag,
+                            // ),
                         );
                     }
 
@@ -351,7 +381,7 @@ $current_user = wp_get_current_user();
                         $args['date_query'] = array(
                             array(
                                 'after'     => $date_1,
-                                'before'    => ($date_2 + 1),
+                                'before'    => $date_2,
                                 'inclusive' => true,
                             ),
                         );
