@@ -58,10 +58,12 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 update_field('field_600fde50f9be7', $new_deadline, $inserted); # deadline thực hiện
                 update_field('field_600fde92f9be9', "Mới", $inserted); # Status
                 # work process 
-                for ($i=0; $i < count($work_process); $i++) { 
-                    if ($work_process[$i] && $work_date[$i]) {
-                        # cập nhật lịch sử
-                        update_job_history($work_process[$i], $work_date[$i], $job);
+                if (is_array($work_process)) {
+                    for ($i=0; $i < count($work_process); $i++) { 
+                        if ($work_process[$i] && $work_date[$i]) {
+                            # cập nhật lịch sử
+                            update_job_history($work_process[$i], $work_date[$i], $job);
+                        }
                     }
                 }
                 if ($other_work_process && $other_work_date) {

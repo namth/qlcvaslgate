@@ -88,87 +88,87 @@ if (isset($_SESSION['list_task'])) {
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <input name="deadline" type="text" class="form-control input-date-predefined" value="<?php echo $_POST['deadline']; ?>">
+                            <input name="deadline" type="text" class="form-control input-date-predefined" value="">
                         </div>
                         <?php
                         wp_nonce_field('post_nonce', 'post_nonce_field');
                         ?>
-                        <div class="col-md-3">
+                        <div class="col-md-3" id="ajax_filter">
                             <input type="submit" class="button button-primary" value="<?php _e('Lọc', 'qlcv'); ?>" style="padding: 9px 20px;">
                         </div>
                     </form>
                 </div>
+            </div>
+            <!--Basic Start-->
+            <div class="col-12 mb-30" id="data_content">
 
                 <?php
 
-                    // xử lý phân trang
-                    $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
+                // xử lý phân trang
+                $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
 
-                    $args   = array(
-                        'post_type'     => 'task',
-                        'paged'         => $paged,
-                        'posts_per_page' => 10,
+                $args   = array(
+                    'post_type'     => 'task',
+                    'paged'         => $paged,
+                    'posts_per_page' => 10,
+                );
+                if ($member) {
+                    $args['meta_query'][] = array(
+                        'relation' => 'OR',
+                        array(
+                            'key'       => 'user',
+                            'value'     => $member,
+                            'compare'   => '=',
+                        ),
+                        array(
+                            'key'       => 'manager',
+                            'value'     => $member,
+                            'compare'   => '=',
+                        ),
                     );
-                    if ($member) {
+                } else {
+                    if (!in_array('administrator', $current_user->roles) && !in_array('contributor', $current_user->roles)) {
                         $args['meta_query'][] = array(
                             'relation' => 'OR',
                             array(
                                 'key'       => 'user',
-                                'value'     => $member,
+                                'value'     => $current_user->ID,
                                 'compare'   => '=',
                             ),
                             array(
                                 'key'       => 'manager',
-                                'value'     => $member,
-                                'compare'   => '=',
-                            ),
-                        );
-                    } else {
-                        if (!in_array('administrator', $current_user->roles) && !in_array('contributor', $current_user->roles)) {
-                            $args['meta_query'][] = array(
-                                'relation' => 'OR',
-                                array(
-                                    'key'       => 'user',
-                                    'value'     => $current_user->ID,
-                                    'compare'   => '=',
-                                ),
-                                array(
-                                    'key'       => 'manager',
-                                    'value'     => $current_user->ID,
-                                    'compare'   => '=',
-                                ),
-                            );
-                        }
-                    }
-                    if ($status) {
-                        $args['meta_query'][] = array(
-                            array(
-                                'key'       => 'trang_thai',
-                                'value'     => $status,
+                                'value'     => $current_user->ID,
                                 'compare'   => '=',
                             ),
                         );
                     }
-                    if ($date_1 && $date_2) {
-                        $args['meta_query'][] = array(
-                            array(
-                                'key'       => 'deadline',
-                                'compare'   => 'BETWEEN',
-                                'type'      => 'DATE',
-                                'value'     => array($date_1, $date_2),
-                            ),
-                        );
-                    }
+                }
+                if ($status) {
+                    $args['meta_query'][] = array(
+                        array(
+                            'key'       => 'trang_thai',
+                            'value'     => $status,
+                            'compare'   => '=',
+                        ),
+                    );
+                }
+                if ($date_1 && $date_2) {
+                    $args['meta_query'][] = array(
+                        array(
+                            'key'       => 'deadline',
+                            'compare'   => 'BETWEEN',
+                            'type'      => 'DATE',
+                            'value'     => array($date_1, $date_2),
+                        ),
+                    );
+                }
 
-                    $query = new WP_Query($args);
-                    $total_args = $args;
-                    $total_args['posts_per_page'] = -1;
-                    $total_query = new WP_Query($total_args);
+                $query = new WP_Query($args);
                 ?>
-                
+
                 <div class="row justify-content-between">
                     <div class="col-lg-auto mb-10">
-                        <p><?php _e('Có tổng cộng', 'qlcv'); ?> <?php echo $total_query->post_count; ?> <?php _e('nhiệm vụ tìm thấy', 'qlcv'); ?></p>
+                        <p><?php _e('Có tổng cộng', 'qlcv'); ?> <?php echo $query->found_posts; ?> <?php _e('nhiệm vụ tìm thấy', 'qlcv'); ?></p>
                         <h2><?php _e('Danh sách nhiệm vụ', 'qlcv'); ?></h2>
                     </div>
                     <div class="col-12 box mb-20">
@@ -229,7 +229,6 @@ if (isset($_SESSION['list_task'])) {
                                                               </td>';
                                             echo "<td>" . $trang_thai . "</td>";
                                             echo "</tr>";
-                                            
                                         }
                                     }
                                     wp_reset_postdata();
@@ -239,9 +238,9 @@ if (isset($_SESSION['list_task'])) {
                         </table>
                     </div>
                     <div class="col-12">
-                        <div class="pagination justify-content-center">
+                        <div class="pagination justify-content-center" id="task_pagination">
                             <?php
-                            $big = 999999999; // need an unlikely integer
+                            /* $big = 999999999; // need an unlikely integer
 
                             echo paginate_links(array(
                                 'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
@@ -249,7 +248,9 @@ if (isset($_SESSION['list_task'])) {
                                 'current'   => max(1, get_query_var('paged')),
                                 'total'     => $query->max_num_pages,
                                 'type'      => 'list',
-                            ));
+                            )); */
+
+                            echo show_pagination($paged, $query->max_num_pages);
                             ?>
                         </div>
                     </div>
@@ -264,6 +265,7 @@ if (isset($_SESSION['list_task'])) {
     </div><!-- Page Headings End -->
 
 </div><!-- Content Body End -->
+<script src="<?php echo get_template_directory_uri(); ?>/assets/js/list_tasks.js"></script>
 
 <?php
 get_footer();

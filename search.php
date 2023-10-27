@@ -154,6 +154,27 @@ $current_user = wp_get_current_user();
             );
         }
 
+        # cài đặt search theo phân quyền
+        $nhom_cong_viec = get_field('nhom_cong_viec', 'user_' . $current_user->ID);
+        $chi_nhanh = get_field('chi_nhanh', 'user_' . $current_user->ID);
+
+        if (!empty($nhom_cong_viec)) {
+            $args['tax_query'][] = array(
+                'taxonomy'  => 'group',
+                'field'     => 'ID',
+                'terms'     => $nhom_cong_viec,
+                'operator'  => 'IN'
+            );
+        }
+        if (!empty($chi_nhanh)) {
+            $args['tax_query'][] = array(
+                'taxonomy'  => 'agency',
+                'field'     => 'ID',
+                'terms'     => $chi_nhanh,
+                'operator'  => 'IN'
+            );
+        }
+
         $query = new WP_Query($args);
 
         if ($query->have_posts()) {

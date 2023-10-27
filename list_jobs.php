@@ -6,12 +6,21 @@ get_header();
 
 get_sidebar();
 
-$type = $_GET['type'];
-$source = $_GET['source'];
+// lấy luôn số thứ tự của trang ngay từ đầu
+$paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
+
+$type = "";
+if (isset($_GET['type'])) {
+    $type = $_GET['type'];
+}
+if (isset($_GET['source'])) {
+    $source = $_GET['source'];
+}
 if ($type) {
     $get_var = '?type=' . $type;
 } else $get_var = "";
 
+# nếu ấn nút filter (Lọc) thì sẽ lưu vào session
 if (
     isset($_POST['post_nonce_field']) &&
     wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')
@@ -34,6 +43,20 @@ if (
         'date_1'        => $date_1,
         'date_2'        => $date_2,
     );
+} else {
+    $member = $manager = $partner = $_customer = $date_1 = "";
+
+    # load session nếu page từ trang 2 trở đi
+    /* if (isset($_SESSION['list_job'])) {
+        $member = $_SESSION['list_job']['member'];
+        $manager = $_SESSION['list_job']['manager'];
+        $partner = $_SESSION['list_job']['partner'];
+        $_customer = $_SESSION['list_job']['_customer'];
+        $date_1 = $_SESSION['list_job']['date_1'];
+        $date_2 = $_SESSION['list_job']['date_2'];
+    } */
+
+    // print_r($_SESSION['list_job']);
 }
 
 $current_user = wp_get_current_user();
@@ -52,69 +75,69 @@ $current_user = wp_get_current_user();
                 <div id="filter">
                     <form action="#" method="POST" class="mb-20">
                         <div class="row mb-20">
-                        <?php
-                        if (in_array('administrator', $current_user->roles) || in_array('contributor', $current_user->roles)) {
-                        ?>
-                            <div class="col-md-4 mb-20">
-                                <select class="form-control select2-tags mb-20" name="member">
-                                    <option value="">-- <?php _e('Người thực hiện', 'qlcv'); ?> --</option>
-                                    <?php
-                                    $args   = array(
-                                        'role__in'      => array('member', 'contributor'), /*subscriber, contributor, author*/
-                                    );
-                                    $query = get_users($args);
-
-                                    if ($query) {
-                                        foreach ($query as $user) {
-                                            $selected = ($user->ID == $member) ? "selected" : "";
-                                            echo "<option value='" . $user->ID . "' " . $selected . ">" . $user->display_name . " (" . $user->user_email . ")</option>";
-                                        }
-                                    }
-                                    ?>
-                                </select>
-
-                            </div>
-                            <div class="col-md-4 mb-20">
-                                <select class="form-control select2-tags mb-20" name="manager">
-                                    <option value="">-- <?php _e('Người quản lý', 'qlcv'); ?> --</option>
-                                    <?php
-                                    $args   = array(
-                                        'role__in'      => array('member', 'contributor'), /*subscriber, contributor, author*/
-                                    );
-                                    $query = get_users($args);
-
-                                    if ($query) {
-                                        foreach ($query as $user) {
-                                            $selected = ($user->ID == $manager) ? "selected" : "";
-                                            echo "<option value='" . $user->ID . "' " . $selected . ">" . $user->display_name . " (" . $user->user_email . ")</option>";
-                                        }
-                                    }
-                                    ?>
-                                </select>
-
-                            </div>
-                        <?php
-                        } else {
-                            echo '<input type="hidden" name="member" value="' . $current_user->ID . '">';
-                        }
-                        ?>
-                            <div class="col-md-4 mb-20">
-                                <select name="partner" id="" class="form-control select2-tags mb-20">
-                                    <option value="">-- <?php _e('Đối tác', 'qlcv'); ?> --</option>
-                                    <?php
+                            <?php
+                            if (in_array('administrator', $current_user->roles) || in_array('contributor', $current_user->roles)) {
+                            ?>
+                                <div class="col-md-4 mb-20">
+                                    <select class="form-control select2-tags mb-20" name="member">
+                                        <option value="">-- <?php _e('Người thực hiện', 'qlcv'); ?> --</option>
+                                        <?php
                                         $args   = array(
-                                            'role'      => 'partner', /*subscriber, contributor, author*/
+                                            'role__in'      => array('member', 'contributor'), /*subscriber, contributor, author*/
                                         );
                                         $query = get_users($args);
 
                                         if ($query) {
                                             foreach ($query as $user) {
-                                                $ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $user->ID);
-                                                $partner_code   = get_field('partner_code', 'user_' . $user->ID);
-                                                $selected = ($partner == $user->ID) ? "selected" : "";
-                                                echo "<option value='" . $user->ID . "' " . $selected . ">" . $partner_code . " - " . $ten_cong_ty . " (" . $user->user_email . ")</option>";
+                                                $selected = ($user->ID == $member) ? "selected" : "";
+                                                echo "<option value='" . $user->ID . "' " . $selected . ">" . $user->display_name . " (" . $user->user_email . ")</option>";
                                             }
                                         }
+                                        ?>
+                                    </select>
+
+                                </div>
+                                <div class="col-md-4 mb-20">
+                                    <select class="form-control select2-tags mb-20" name="manager">
+                                        <option value="">-- <?php _e('Người quản lý', 'qlcv'); ?> --</option>
+                                        <?php
+                                        $args   = array(
+                                            'role__in'      => array('member', 'contributor'), /*subscriber, contributor, author*/
+                                        );
+                                        $query = get_users($args);
+
+                                        if ($query) {
+                                            foreach ($query as $user) {
+                                                $selected = ($user->ID == $manager) ? "selected" : "";
+                                                echo "<option value='" . $user->ID . "' " . $selected . ">" . $user->display_name . " (" . $user->user_email . ")</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+
+                                </div>
+                            <?php
+                            } else {
+                                echo '<input type="hidden" name="member" value="' . $current_user->ID . '">';
+                            }
+                            ?>
+                            <div class="col-md-4 mb-20">
+                                <select name="partner" id="" class="form-control select2-tags mb-20">
+                                    <option value="">-- <?php _e('Đối tác', 'qlcv'); ?> --</option>
+                                    <?php
+                                    $args   = array(
+                                        'role'      => 'partner', /*subscriber, contributor, author*/
+                                    );
+                                    $query = get_users($args);
+
+                                    if ($query) {
+                                        foreach ($query as $user) {
+                                            $ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $user->ID);
+                                            $partner_code   = get_field('partner_code', 'user_' . $user->ID);
+                                            $selected = ($partner == $user->ID) ? "selected" : "";
+                                            echo "<option value='" . $user->ID . "' " . $selected . ">" . $partner_code . " - " . $ten_cong_ty . " (" . $user->user_email . ")</option>";
+                                        }
+                                    }
                                     ?>
                                 </select>
                             </div>
@@ -122,46 +145,45 @@ $current_user = wp_get_current_user();
                                 <select name="_customer" id="" class="form-control select2-tags mb-20">
                                     <option value="">-- <?php _e('Khách hàng', 'qlcv'); ?> --</option>
                                     <?php
-                                        $args   = array(
-                                            'post_type'     => 'customer',
-                                        );
-                                        $query = new WP_Query($args);
+                                    $args   = array(
+                                        'post_type'     => 'customer',
+                                    );
+                                    $query = new WP_Query($args);
 
-                                        if ($query->have_posts()) {
-                                            while ($query->have_posts()) {
-                                                $query->the_post();
+                                    if ($query->have_posts()) {
+                                        while ($query->have_posts()) {
+                                            $query->the_post();
 
-                                                $cty = get_field('ten_cong_ty');
-                                                $email = get_field('email');
+                                            $cty = get_field('ten_cong_ty');
+                                            $email = get_field('email');
 
-                                                $selected = ($_customer == get_the_ID()) ? "selected" : "";
-                                                echo "<option value='" . get_the_ID() . "' " . $selected . ">" . $cty;
-                                                if ($email) {
-                                                    echo " (" . $email . ")";
-                                                }
-                                                echo "</option>";
-                                            } wp_reset_postdata();
+                                            $selected = ($_customer == get_the_ID()) ? "selected" : "";
+                                            echo "<option value='" . get_the_ID() . "' " . $selected . ">" . $cty;
+                                            if ($email) {
+                                                echo " (" . $email . ")";
+                                            }
+                                            echo "</option>";
                                         }
+                                        wp_reset_postdata();
+                                    }
                                     ?>
                                 </select>
                             </div>
                             <div class="col-md-4 mb-20">
-                                <input name="deadline" type="text" class="form-control input-date" value="<?php if ($_POST['deadline']) {
-                                                                                                        echo $_POST['deadline'];
-                                                                                                    } else echo date('m/d/Y', strtotime('-1 month')) . ' - ' . date('m/d/Y'); ?>">
+                                <input name="deadline" type="text" class="form-control input-date-predefined" value="">
                             </div>
                             <div class="col-md-4 mb-20">
                                 <select name="agency" id="" class="form-control select2-tags mb-20">
                                     <option value="">-- <?php _e('Chi nhánh', 'qlcv'); ?> --</option>
                                     <?php
-                                        $terms = get_terms(array(
-                                            'taxonomy' => 'agency',
-                                            'hide_empty' => false,
-                                        ));
-                                        foreach ($terms as $value) {
-                                            $selected = ($_agency == $value->slug) ? "selected" : "";
-                                            echo "<option value='" . $value->slug . "' " . $selected . ">" . $value->name . "</option>";
-                                        }
+                                    $terms = get_terms(array(
+                                        'taxonomy' => 'agency',
+                                        'hide_empty' => false,
+                                    ));
+                                    foreach ($terms as $value) {
+                                        $selected = ($_agency == $value->slug) ? "selected" : "";
+                                        echo "<option value='" . $value->slug . "' " . $selected . ">" . $value->name . "</option>";
+                                    }
                                     ?>
                                 </select>
                             </div>
@@ -169,21 +191,21 @@ $current_user = wp_get_current_user();
                                 <select name="post_tag" id="" class="form-control select2-tags mb-20">
                                     <option value="">-- <?php _e('Nguồn việc', 'qlcv'); ?> --</option>
                                     <?php
-                                        $terms = get_terms(array(
-                                            'taxonomy' => 'post_tag',
-                                            'hide_empty' => false,
-                                        ));
-                                        foreach ($terms as $value) {
-                                            $selected = ($_post_tag == $value->slug) ? "selected" : "";
-                                            echo "<option value='" . $value->slug . "' " . $selected . ">" . $value->name . "</option>";
-                                        }
+                                    $terms = get_terms(array(
+                                        'taxonomy' => 'post_tag',
+                                        'hide_empty' => false,
+                                    ));
+                                    foreach ($terms as $value) {
+                                        $selected = ($_post_tag == $value->slug) ? "selected" : "";
+                                        echo "<option value='" . $value->slug . "' " . $selected . ">" . $value->name . "</option>";
+                                    }
                                     ?>
                                 </select>
                             </div>
                             <?php
                             wp_nonce_field('post_nonce', 'post_nonce_field');
                             ?>
-                            <div class="col-md-4 mb-20">
+                            <div class="col-md-4 mb-20" id="ajax_filter">
                                 <input type="submit" class="button button-primary" value="<?php _e('Lọc', 'qlcv'); ?>" style="padding: 9px 20px;">
                             </div>
                         </div>
@@ -191,63 +213,103 @@ $current_user = wp_get_current_user();
                 </div>
             </div>
             <!--Basic Start-->
-            <div class="col-12 mb-30">
-                    <?php
-                    // print_r($_POST);
-                    // xử lý phân trang
-                    $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
+            <div class="col-12 mb-30" id="data_content">
+                <?php
 
-                    $args   = array(
-                        'post_type'     => 'job',
-                        'paged'         => $paged,
-                        'posts_per_page' => 20,
-                    );
+                $args   = array(
+                    'post_type'     => 'job',
+                    'paged'         => $paged,
+                    'posts_per_page' => 20,
+                );
 
-                    if (isset($type) && ($type != '')) {
+                $nhom_cong_viec = get_field('nhom_cong_viec', 'user_' . $current_user->ID);
+                if (isset($type) && ($type != '')) {
+                    if (is_array($nhom_cong_viec)) {
+                        
+                        # cài đặt phân quyền ngay từ đầu không cho truy cập vào phân loại nào 
                         $args['tax_query'] = array(
                             'relation' => 'AND',
                             array(
                                 'taxonomy'  => 'group',
                                 'field'     => 'slug',
-                                'terms'     => $type,
+                                'terms'     => 'none',
                             ),
                         );
-                    }
 
-                    if (isset($_agency) && ($_agency != '')) {
-                        $args['tax_query'][] = array(
-                            // array(
-                                'taxonomy'  => 'agency',
-                                'field'     => 'slug',
-                                'terms'     => $_agency,
-                            // ),
-                        );
-                    }
+                        # tìm kiếm trong nhóm, nếu loại công việc truyền trên biến type mà đã đc phân quyền thì hiển thị
+                        foreach ($nhom_cong_viec as $id_cong_viec) {
+                            $term = get_term($id_cong_viec);
+                            
+                            if ($term->name == $type) {
+                                # nếu type trên đường link mà có trong phân quyền thì hiển thị
+                                $args['tax_query'] = array(
+                                    'relation' => 'AND',
+                                    array(
+                                        'taxonomy'  => 'group',
+                                        'field'     => 'slug',
+                                        'terms'     => $term->slug,
+                                    ),
+                                );
 
-                    if (isset($_post_tag) && ($_post_tag != '')) {
-                        $args['tax_query'][] = array(
-                            // array(
-                                'taxonomy'  => 'post_tag',
-                                'field'     => 'slug',
-                                'terms'     => $_post_tag,
-                            // ),
-                        );
+                                break;
+                            }
+                        }
                     }
+                } else {
+                    # filter theo phân quyền
+                    $args['tax_query'][] = array(
+                        'taxonomy'  => 'group',
+                        'field'     => 'ID',
+                        'terms'     => $nhom_cong_viec,
+                        'operator'  => 'IN'
+                    );
+                }
 
-                    /* Nếu không phải danh sách tiềm năng thì ko hiện việc tiềm năng */
-                    if ($type != 'tiem-nang'){
-                        $args['tax_query'][] = array(
-                            'taxonomy'  => 'group',
-                            'field'     => 'slug',
-                            'terms'     => 'tiem-nang',
-                            'operator'  => 'NOT IN',
-                        );
-                    }
-                    if (isset($source) && ($source != '')) {
-                        $args['tag'] = $source;
-                    }
 
-                    /* 
+                if (isset($_agency) && ($_agency != '')) {
+                    # filter theo chi nhánh được lựa chọn
+                    $args['tax_query'][] = array(
+                        // array(
+                        'taxonomy'  => 'agency',
+                        'field'     => 'slug',
+                        'terms'     => $_agency,
+                        // ),
+                    );
+                } else {
+                    # filter theo phân quyền
+                    $chi_nhanh = get_field('chi_nhanh', 'user_' . $current_user->ID);
+                    $args['tax_query'][] = array(
+                        'taxonomy'  => 'agency',
+                        'field'     => 'ID',
+                        'terms'     => $chi_nhanh,
+                        'operator'  => 'IN'
+                    );
+                }
+
+                if (isset($_post_tag) && ($_post_tag != '')) {
+                    $args['tax_query'][] = array(
+                        // array(
+                        'taxonomy'  => 'post_tag',
+                        'field'     => 'slug',
+                        'terms'     => $_post_tag,
+                        // ),
+                    );
+                }
+
+                /* Nếu không phải danh sách tiềm năng thì ko hiện việc tiềm năng */
+                if ($type != 'tiem-nang') {
+                    $args['tax_query'][] = array(
+                        'taxonomy'  => 'group',
+                        'field'     => 'slug',
+                        'terms'     => 'tiem-nang',
+                        'operator'  => 'NOT IN',
+                    );
+                }
+                if (isset($source) && ($source != '')) {
+                    $args['tag'] = $source;
+                }
+
+                /* 
                         Lọc người thực hiện và người quản lý
                         -- Nếu không phải admin --
                           A
@@ -264,9 +326,38 @@ $current_user = wp_get_current_user();
                         * Nếu có set người quản lý thì search theo người quản lý
                         * Nếu có set người thực hiện thì search theo người thực hiện 
                     */
-                    if (!in_array('administrator', $current_user->roles)) {
-                        if ($manager) {
-                            if ($member && ($member != $current_user->ID)) {
+                if (!in_array('administrator', $current_user->roles)) {
+                    if ($manager) {
+                        if ($member && ($member != $current_user->ID)) {
+                            $args['meta_query'][] = array(
+                                array(
+                                    'key'       => 'member',
+                                    'value'     => $member,
+                                    'compare'   => '=',
+                                ),
+                                array(
+                                    'key'       => 'manager',
+                                    'value'     => $current_user->ID,
+                                    'compare'   => '=',
+                                ),
+                            );
+                        } else {
+                            $args['meta_query'][] = array(
+                                array(
+                                    'key'       => 'manager',
+                                    'value'     => $manager,
+                                    'compare'   => '=',
+                                ),
+                                array(
+                                    'key'       => 'member',
+                                    'value'     => $current_user->ID,
+                                    'compare'   => '=',
+                                ),
+                            );
+                        }
+                    } else {
+                        if ($member) {
+                            if ($member != $current_user->ID) {
                                 $args['meta_query'][] = array(
                                     array(
                                         'key'       => 'member',
@@ -282,122 +373,92 @@ $current_user = wp_get_current_user();
                             } else {
                                 $args['meta_query'][] = array(
                                     array(
-                                        'key'       => 'manager',
-                                        'value'     => $manager,
-                                        'compare'   => '=',
-                                    ),
-                                    array(
                                         'key'       => 'member',
-                                        'value'     => $current_user->ID,
+                                        'value'     => $member,
                                         'compare'   => '=',
                                     ),
                                 );
                             }
                         } else {
-                            if ($member) {
-                                if ($member != $current_user->ID) {
-                                    $args['meta_query'][] = array(
-                                        array(
-                                            'key'       => 'member',
-                                            'value'     => $member,
-                                            'compare'   => '=',
-                                        ),
-                                        array(
-                                            'key'       => 'manager',
-                                            'value'     => $current_user->ID,
-                                            'compare'   => '=',
-                                        ),
-                                    );
-                                }
-                                else {
-                                    $args['meta_query'][] = array(
-                                        array(
-                                            'key'       => 'member',
-                                            'value'     => $member,
-                                            'compare'   => '=',
-                                        ),
-                                    );
-                                }
-                            } else {
-                                $args['meta_query'][] = array(
-                                    'relation' => 'OR',
-                                    array(
-                                        'key'       => 'member',
-                                        'value'     => $current_user->ID,
-                                        'compare'   => '=',
-                                    ),
-                                    array(
-                                        'key'       => 'manager',
-                                        'value'     => $current_user->ID,
-                                        'compare'   => '=',
-                                    ),
-                                );
-                            }
-                        }
-                    } else {
-                        if ($member) {
                             $args['meta_query'][] = array(
+                                'relation' => 'OR',
                                 array(
                                     'key'       => 'member',
-                                    'value'     => $member,
+                                    'value'     => $current_user->ID,
                                     'compare'   => '=',
                                 ),
-                            );
-                        }
-                        if ($manager) {
-                            $args['meta_query'][] = array(
                                 array(
                                     'key'       => 'manager',
-                                    'value'     => $manager,
+                                    'value'     => $current_user->ID,
                                     'compare'   => '=',
                                 ),
                             );
                         }
                     }
-
-                    /* Search theo partner */
-                    if ($partner) {
+                } else {
+                    if ($member) {
                         $args['meta_query'][] = array(
                             array(
-                                'key'       => 'partner_2',
-                                'value'     => $partner,
+                                'key'       => 'member',
+                                'value'     => $member,
                                 'compare'   => '=',
                             ),
                         );
                     }
-                    
-                    /* Search theo customer */
-                    if ($_customer) {
+                    if ($manager) {
                         $args['meta_query'][] = array(
                             array(
-                                'key'       => 'customer',
-                                'value'     => $_customer,
+                                'key'       => 'manager',
+                                'value'     => $manager,
                                 'compare'   => '=',
                             ),
                         );
                     }
+                }
 
-                    if ($date_1 && $date_2) {
-                        $args['date_query'] = array(
-                            array(
-                                'after'     => $date_1,
-                                'before'    => $date_2,
-                                'inclusive' => true,
-                            ),
-                        );
-                    }
-                    
-                    $query = new WP_Query($args);
+                /* Search theo partner */
+                if ($partner) {
+                    $args['meta_query'][] = array(
+                        array(
+                            'key'       => 'partner_2',
+                            'value'     => $partner,
+                            'compare'   => '=',
+                        ),
+                    );
+                }
 
-                    // print_r($args);
-                    $total_args = $args;
-                    $total_args['posts_per_page'] = -1;
-                    $total_query = new WP_Query($total_args);
+                /* Search theo customer */
+                if ($_customer) {
+                    $args['meta_query'][] = array(
+                        array(
+                            'key'       => 'customer',
+                            'value'     => $_customer,
+                            'compare'   => '=',
+                        ),
+                    );
+                }
 
-                    ?>
+                if ($date_1 && $date_2) {
+                    $args['date_query'] = array(
+                        array(
+                            'after'     => $date_1,
+                            'before'    => $date_2,
+                            'inclusive' => true,
+                        ),
+                    );
+                }
+
+                $query = new WP_Query($args);
+
+                // print_r($args);
+                // $total_args = $args;
+                // $total_args['posts_per_page'] = -1;
+                // $total_query = new WP_Query($total_args);
+
+                ?>
                 <div class="row justify-content-between">
                     <div class="col-lg-auto mb-10">
-                        <p><?php _e('Có tổng cộng', 'qlcv'); ?> <?php echo $total_query->post_count; ?> <?php _e('công việc tìm thấy', 'qlcv'); ?></p>
+                        <p><?php _e('Có tổng cộng', 'qlcv'); ?> <?php echo $query->found_posts; ?> <?php _e('công việc tìm thấy', 'qlcv'); ?></p>
                         <h2><?php _e('Danh sách công việc', 'qlcv'); ?></h2>
                     </div>
                     <div class="col-lg-auto mb-10 right_button">
@@ -411,7 +472,7 @@ $current_user = wp_get_current_user();
                                     <th><?php _e('Ngày tháng', 'qlcv'); ?></th>
                                     <th><?php _e('Công việc lớn', 'qlcv'); ?></th>
                                     <th><?php _e('Lịch sử CV', 'qlcv'); ?></th>
-                                    <?php 
+                                    <?php
                                     if (!$type || ($type == 'tiem-nang')) {
                                         _e("<th>Phân loại</th>", 'qlcv');
                                     }
@@ -461,11 +522,11 @@ $current_user = wp_get_current_user();
 
                                         $work_list  = get_field('lich_su_cong_viec');
                                         $work_history = array();
-                                        if ($work_list){
+                                        if ($work_list) {
                                             foreach ($work_list as $key => $value) {
                                                 $work_history[] = $value['mo_ta'];
                                                 // $work_date[] = $value['ngay_thang'];
-                                            }                                            
+                                            }
                                         }
 
                                         $agency = get_the_terms(get_the_ID(), 'agency');
@@ -501,17 +562,9 @@ $current_user = wp_get_current_user();
                         </table>
                     </div>
                     <div class="col-12">
-                        <div class="pagination justify-content-center">
+                        <div class="pagination justify-content-center" id="job_pagination">
                             <?php
-                            $big = 999999999; // need an unlikely integer
-
-                            echo paginate_links(array(
-                                'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-                                'format'    => '?paged=%#%',
-                                'current'   => max(1, get_query_var('paged')),
-                                'total'     => $query->max_num_pages,
-                                'type'      => 'list',
-                            ));
+                            echo show_pagination($paged, $query->max_num_pages);
                             ?>
                         </div>
                     </div>
@@ -526,6 +579,7 @@ $current_user = wp_get_current_user();
     </div><!-- Page Headings End -->
 
 </div><!-- Content Body End -->
+<script src="<?php echo get_template_directory_uri(); ?>/assets/js/list_jobs.js"></script>
 
 <?php
 get_footer();

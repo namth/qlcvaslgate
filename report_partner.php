@@ -25,7 +25,7 @@ get_sidebar();
             <div class="page-date-range">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <input type="text" class="form-control input-date-predefined" name="filter_date">
-                    <input type="submit" class="button button-primary" value="Lọc', 'qlcv'); ?>">
+                    <input type="submit" class="button button-primary" value="<?php _e('Lọc', 'qlcv'); ?>">
                 </form>
             </div>
         </div><!-- Page Button Group End -->
@@ -34,6 +34,7 @@ get_sidebar();
 
     <?php
     $data = array();
+    $customer = array();
 
     # đếm các công việc tiềm năng đã chốt trong khoảng thời gian
     $args_partner  = array(
@@ -81,12 +82,16 @@ get_sidebar();
 
             $quoc_gia = trim(get_field('quoc_gia'));
 
-            $customer[$quoc_gia]++;
+            if (array_key_exists($quoc_gia, $customer)) {
+                $customer[$quoc_gia]++;
+            } else {
+                $customer[$quoc_gia] = 1;
+            }
         }
         wp_reset_postdata();
     }
 
-
+    $partner = $p_worked = $p_not_worked = [];
     $query = new WP_User_Query($args_partner);
     $users = $query->get_results();
 
@@ -97,10 +102,14 @@ get_sidebar();
             $vip        = get_field('vip' , 'user_' . $user->ID);
             $worked     = get_field('worked' , 'user_' . $user->ID);
 
-            $partner[$quoc_gia]['Tổng số đối tác']++;
+            if (array_key_exists($quoc_gia, $partner)) {
+                $partner[$quoc_gia]['Tổng số đối tác']++;
+            }
             foreach ( $user->roles as $role ){
                 $role_name = translate_user_role($wp_roles->roles[$role]['name']);
-                $partner[$quoc_gia][$role_name]++;
+                if (array_key_exists($quoc_gia, $partner)) {
+                    $partner[$quoc_gia][$role_name]++;
+                }
 
                 if (!in_array($role_name, $role_arr)) {
                     $role_arr[] = $role_name;
@@ -108,8 +117,14 @@ get_sidebar();
             }
 
             if ($worked) {
-                $p_worked[$vip]++;
-            } else $p_not_worked[$vip]++;
+                if (array_key_exists($vip, $p_worked)) {
+                    $p_worked[$vip]++;
+                } else $p_worked[$vip] = 1;
+            } else {
+                if (array_key_exists($vip, $p_not_worked)) {
+                    $p_not_worked[$vip]++;
+                } else $p_not_worked[$vip] = 1;
+            }
         }
     }
 ?>
@@ -126,11 +141,12 @@ get_sidebar();
                         <?php
                         $label = array();
                         $data_value = array();
+                        $dynamic_data = "";
                         foreach ($partner as $country => $roles) {
                             $label[] = "'" . $country . "'";
 
                             foreach ($role_arr as $key => $role) {
-                                if ($roles[$role]) {
+                                if (array_key_exists($role, $roles) && $roles[$role]) {
                                     $data_value[$role][$country] = $roles[$role];
                                 } else $data_value[$role][$country] = "";
                             }
@@ -147,64 +163,66 @@ get_sidebar();
                             },";
                         }
 
-                        $config = "var MTCconfig = {
-                                        type: 'bar',
-                                        data: {
-                                            labels: [" . implode(',', $label) . "],
-                                            datasets: [" . $dynamic_data . "]
-                                        },
-                                        options: {
-                                            maintainAspectRatio: false,
-                                            legend: {
-                                                labels: {
-                                                    fontColor: '#aaaaaa',
-                                                }
+                        if ($dynamic_data) {
+                            $config = "var MTCconfig = {
+                                            type: 'bar',
+                                            data: {
+                                                labels: [" . implode(',', $label) . "],
+                                                datasets: [" . $dynamic_data . "]
                                             },
-                                            scales: {
-                                                xAxes: [{
-                                                    display: true,
-                                                    gridLines: {
-                                                        color: 'rgba(136,136,136,0.1)',
-                                                        lineWidth: 1,
-                                                        drawBorder: false,
-                                                        zeroLineWidth: 1,
-                                                        zeroLineColor: 'rgba(136,136,136,0.1)',
-                                                    },
-                                                    ticks: {
+                                            options: {
+                                                maintainAspectRatio: false,
+                                                legend: {
+                                                    labels: {
                                                         fontColor: '#aaaaaa',
-                                                    },
-                                                }],
-                                                yAxes: [{
-                                                    display: true,
-                                                    gridLines: {
-                                                        color: 'rgba(136,136,136,0.1)',
-                                                        lineWidth: 1,
-                                                        drawBorder: false,
-                                                        zeroLineWidth: 1,
-                                                        zeroLineColor: 'rgba(136,136,136,0.1)',
-                                                    },
-                                                    ticks: {
-                                                        fontColor: '#aaaaaa',
-                                                    },
-                                                }]
-                                            },
-                                            plugins: {
-                                                labels: {
-                                                  render: 'value',
-                                                  precision: 1
+                                                    }
+                                                },
+                                                scales: {
+                                                    xAxes: [{
+                                                        display: true,
+                                                        gridLines: {
+                                                            color: 'rgba(136,136,136,0.1)',
+                                                            lineWidth: 1,
+                                                            drawBorder: false,
+                                                            zeroLineWidth: 1,
+                                                            zeroLineColor: 'rgba(136,136,136,0.1)',
+                                                        },
+                                                        ticks: {
+                                                            fontColor: '#aaaaaa',
+                                                        },
+                                                    }],
+                                                    yAxes: [{
+                                                        display: true,
+                                                        gridLines: {
+                                                            color: 'rgba(136,136,136,0.1)',
+                                                            lineWidth: 1,
+                                                            drawBorder: false,
+                                                            zeroLineWidth: 1,
+                                                            zeroLineColor: 'rgba(136,136,136,0.1)',
+                                                        },
+                                                        ticks: {
+                                                            fontColor: '#aaaaaa',
+                                                        },
+                                                    }]
+                                                },
+                                                plugins: {
+                                                    labels: {
+                                                      render: 'value',
+                                                      precision: 1
+                                                    }
                                                 }
                                             }
-                                        }
-                                    };";
-
-                        echo "<script defer>";
-                        echo "jQuery(document).ready(function($) {";
-                        echo    "if( $('#chartjs-job-chart').length ) {
-                                    var MTC = document.getElementById('chartjs-job-chart').getContext('2d');";
-                        echo        $config;
-                        echo        "var MTCchartjs = new Chart(MTC, MTCconfig);
-                                            }";
-                        echo "});</script>";
+                                        };";
+    
+                            echo "<script defer>";
+                            echo "jQuery(document).ready(function($) {";
+                            echo    "if( $('#chartjs-job-chart').length ) {
+                                        var MTC = document.getElementById('chartjs-job-chart').getContext('2d');";
+                            echo        $config;
+                            echo        "var MTCchartjs = new Chart(MTC, MTCconfig);
+                                                }";
+                            echo "});</script>";
+                        }
                         ?>
                         <canvas id="chartjs-job-chart"></canvas>
                     </div>
@@ -307,67 +325,69 @@ get_sidebar();
                 <div class="box-body">
                     <div class="chartjs-market-trends-chart">
                         <?php
-                        $config = "var MTCconfig = {
-                                        type: 'pie',
-                                        data: {
-                                            labels: ['Đã chốt', 'Tiềm năng'],
-                                            datasets: [{
-                                                data: [" . implode(',', array(array_sum($p_worked), array_sum($p_not_worked))) . "],
-                                                backgroundColor: [
-                                                    '#fb7da4',
-                                                    '#428bfa',
-                                                    '#7dfb9b',
-                                                    '#ff9666',
-                                                    '#ee2f2f',
-                                                ],
-                                            }]
-                                        },
-                                        options: {
-                                            maintainAspectRatio: false,
-                                            legend: {
-                                                position: 'top',
-                                                labels: {
-                                                    boxWidth: 30,
-                                                    padding: 20,
-                                                    fontColor: '#aaaaaa',
-                                                }
+                        if ($p_worked || $p_not_worked) {
+                            $config = "var MTCconfig = {
+                                            type: 'pie',
+                                            data: {
+                                                labels: ['Đã chốt', 'Tiềm năng'],
+                                                datasets: [{
+                                                    data: [" . implode(',', array(array_sum($p_worked), array_sum($p_not_worked))) . "],
+                                                    backgroundColor: [
+                                                        '#fb7da4',
+                                                        '#428bfa',
+                                                        '#7dfb9b',
+                                                        '#ff9666',
+                                                        '#ee2f2f',
+                                                    ],
+                                                }]
                                             },
-                                            tooltips: {
-                                                mode: 'point',
-                                                intersect: false,
-                                                xPadding: 10,
-                                                yPadding: 10,
-                                                caretPadding: 10,
-                                                cornerRadius: 4,
-                                                titleFontSize: 0,
-                                                titleMarginBottom: 2,
-                                            },
-                                            hover: {
-                                                mode: 'nearest',
-                                                intersect: true
-                                            },
-                                            animation: {
-                                                animateScale: true,
-                                                animateRotate: true
-                                            },
-                                            plugins: {
-                                                labels: {
-                                                  render: 'percentage',
-                                                  fontColor: ['white', 'white', 'yellow', 'white', 'white'],
-                                                  precision: 1
+                                            options: {
+                                                maintainAspectRatio: false,
+                                                legend: {
+                                                    position: 'top',
+                                                    labels: {
+                                                        boxWidth: 30,
+                                                        padding: 20,
+                                                        fontColor: '#aaaaaa',
+                                                    }
+                                                },
+                                                tooltips: {
+                                                    mode: 'point',
+                                                    intersect: false,
+                                                    xPadding: 10,
+                                                    yPadding: 10,
+                                                    caretPadding: 10,
+                                                    cornerRadius: 4,
+                                                    titleFontSize: 0,
+                                                    titleMarginBottom: 2,
+                                                },
+                                                hover: {
+                                                    mode: 'nearest',
+                                                    intersect: true
+                                                },
+                                                animation: {
+                                                    animateScale: true,
+                                                    animateRotate: true
+                                                },
+                                                plugins: {
+                                                    labels: {
+                                                      render: 'percentage',
+                                                      fontColor: ['white', 'white', 'yellow', 'white', 'white'],
+                                                      precision: 1
+                                                    }
                                                 }
                                             }
-                                        }
-                                    };";
-
-                        echo "<script defer>";
-                        echo "jQuery(document).ready(function($) {";
-                        echo    "if( $('#chartjs-p_total-chart').length ) {
-                                    var MTC = document.getElementById('chartjs-p_total-chart').getContext('2d');";
-                        echo        $config;
-                        echo        "var MTCchartjs = new Chart(MTC, MTCconfig);
-                                            }";
-                        echo "});</script>";
+                                        };";
+    
+                            echo "<script defer>";
+                            echo "jQuery(document).ready(function($) {";
+                            echo    "if( $('#chartjs-p_total-chart').length ) {
+                                        var MTC = document.getElementById('chartjs-p_total-chart').getContext('2d');";
+                            echo        $config;
+                            echo        "var MTCchartjs = new Chart(MTC, MTCconfig);
+                                                }";
+                            echo "});</script>";
+                        }
                         ?>
                         <canvas id="chartjs-p_total-chart"></canvas>
                     </div>

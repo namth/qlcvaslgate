@@ -51,6 +51,7 @@ get_sidebar();
                             <div class="col-lg-3 form_title lh45"><?php _e('Phân loại:', 'qlcv'); ?> </div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control select2-tags mb-20" name="jtype">
+                                    <option value="">Tất cả</option>
                                     <?php
                                     $terms = get_terms(array(
                                         'taxonomy' => 'group',
@@ -320,7 +321,7 @@ get_sidebar();
                                 }
                             }
 
-                            if (isset($type) && ($type != '')) {
+                            /* if (isset($type) && ($type != '')) {
                                 $args['tax_query'] = array(
                                     'relation' => 'AND',
                                     array(
@@ -329,7 +330,62 @@ get_sidebar();
                                         'terms'     => $type,
                                     ),
                                 );
+                            } */
+                            # phân quyền theo loại công việc cho user
+                            $nhom_cong_viec = get_field('nhom_cong_viec', 'user_' . $current_user->ID);
+                            if (isset($type) && ($type != '')) {
+                                if (is_array($nhom_cong_viec)) {
+                                    
+                                    # cài đặt phân quyền ngay từ đầu không cho truy cập vào phân loại nào 
+                                    $args['tax_query'] = array(
+                                        'relation' => 'AND',
+                                        array(
+                                            'taxonomy'  => 'group',
+                                            'field'     => 'slug',
+                                            'terms'     => 'none',
+                                        ),
+                                    );
+
+                                    # tìm kiếm trong nhóm, nếu loại công việc truyền trên biến type mà đã đc phân quyền thì hiển thị
+                                    foreach ($nhom_cong_viec as $id_cong_viec) {
+                                        $term = get_term($id_cong_viec);
+                                        
+                                        if ($term->name == $type) {
+                                            # nếu type trên đường link mà có trong phân quyền thì hiển thị
+                                            $args['tax_query'] = array(
+                                                'relation' => 'AND',
+                                                array(
+                                                    'taxonomy'  => 'group',
+                                                    'field'     => 'slug',
+                                                    'terms'     => $term->slug,
+                                                ),
+                                            );
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            } else {
+                                # filter theo phân quyền
+                                $args['tax_query'][] = array(
+                                    'taxonomy'  => 'group',
+                                    'field'     => 'ID',
+                                    'terms'     => $nhom_cong_viec,
+                                    'operator'  => 'IN'
+                                );
                             }
+                            
+                            # cài đặt phân quyền theo chi nhánh cho user
+                            $chi_nhanh = get_field('chi_nhanh', 'user_' . $current_user->ID);
+                            if (!empty($chi_nhanh)) {
+                                $args['tax_query'][] = array(
+                                    'taxonomy'  => 'agency',
+                                    'field'     => 'ID',
+                                    'terms'     => $chi_nhanh,
+                                    'operator'  => 'IN'
+                                );
+                            }
+                            
 
                             $query = new WP_Query($args);
                             // print_r($args);

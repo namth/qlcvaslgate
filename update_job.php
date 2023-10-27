@@ -86,11 +86,13 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         update_field('field_603627f913b2c', $member, $postid); # save to member, manager field
         update_field('field_603629217fe93', $manager, $postid); 
         # work process 
-        for ($i=0; $i < count($work_process); $i++) { 
-            if ($work_process[$i] && $work_date[$i]) {
-                # cập nhật lịch sử
-                update_job_history($work_process[$i], $work_date[$i], $postid);
-                print_r('update: ' . $work_process[$i] . '<br>');
+        if (is_array($work_process)) {
+            for ($i=0; $i < count($work_process); $i++) { 
+                if ($work_process[$i] && $work_date[$i]) {
+                    # cập nhật lịch sử
+                    update_job_history($work_process[$i], $work_date[$i], $postid);
+                    print_r('update: ' . $work_process[$i] . '<br>');
+                }
             }
         }
         if ($other_work_process && $other_work_date) {
@@ -124,20 +126,23 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                     echo "Upload: <br>";
                     require_once(ABSPATH . 'wp-admin/includes/file.php');
                     $uploadedfile = $_FILES['file_upload'];
-                    $movefile = wp_handle_upload($uploadedfile, array('test_form' => false));
-                    //On sauvegarde la photo dans le média library
-                    if ($movefile) {
-                        $wp_upload_dir = wp_upload_dir();
-                        $attachment = array(
-                            'guid' => $wp_upload_dir['url'] . '/' . basename($movefile['file']),
-                            'post_mime_type' => $movefile['type'],
-                            'post_title' => preg_replace('/\.[^.]+$/', '', basename($movefile['file'])),
-                            'post_content' => '',
-                            'post_status' => 'inherit',
-                        );
-                        $attach_id = wp_insert_attachment($attachment, $movefile['file']);
-
-                        update_field('field_600fdca20269f', $attach_id, $postid);
+                    # check neu file upload khong co loi, tuc la khong empty
+                    if ($uploadedfile["error"] == 0) {
+                        $movefile = wp_handle_upload($uploadedfile, array('test_form' => false));
+                        //On sauvegarde la photo dans le média library
+                        if ($movefile) {
+                            $wp_upload_dir = wp_upload_dir();
+                            $attachment = array(
+                                'guid' => $wp_upload_dir['url'] . '/' . basename($movefile['file']),
+                                'post_mime_type' => $movefile['type'],
+                                'post_title' => preg_replace('/\.[^.]+$/', '', basename($movefile['file'])),
+                                'post_content' => '',
+                                'post_status' => 'inherit',
+                            );
+                            $attach_id = wp_insert_attachment($attachment, $movefile['file']);
+    
+                            update_field('field_600fdca20269f', $attach_id, $postid);
+                        }
                     }
                 }
                 update_field('field_600fd7db6154d', $ten_nhan_hieu, $postid);
@@ -178,7 +183,7 @@ get_sidebar();
 $terms      = get_the_terms($postid, 'group');
 $term_names = wp_list_pluck($terms, 'name');
 $agency     = get_the_terms($postid, 'agency');
-print_r($agency);
+// print_r($agency);
 ?>
 
 <!-- Content Body Start -->
@@ -602,7 +607,7 @@ print_r($agency);
                         <div class="box-head">
                             <h2 class="title"><?php _e('Tài chính công việc', 'qlcv'); ?></h2>
                         </div>
-                        <div class="box-body">
+                        <div class="box-body finance">
                             <div class="row mbn-20">
                                 <div class="col-lg-6 col-12 mb-20">
                                     <div class="mb-20">
@@ -689,6 +694,7 @@ print_r($agency);
     </form>
 
 </div><!-- Content Body End -->
+<script src="<?php echo get_template_directory_uri(); ?>/assets/js/update_job.js"></script>
 
 <?php
 get_footer();

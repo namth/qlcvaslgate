@@ -5,6 +5,7 @@ function all_my_hooks(){
     $dir = dirname( __FILE__ );
     require_once( $dir . '/custom_posts.php');
     require_once( $dir . '/custom_fields.php');
+    require_once( $dir . '/ajax_filter.php');
 }
 
 register_nav_menus(array('main-menu' => esc_html__('Main Menu', 'blankslate')));
@@ -485,20 +486,23 @@ function add_new_job()
                     if (isset($_FILES['file_upload'])) {
                         require_once(ABSPATH . 'wp-admin/includes/file.php');
                         $uploadedfile = $_FILES['file_upload'];
-                        $movefile = wp_handle_upload($uploadedfile, array('test_form' => false));
-                        //On sauvegarde la photo dans le média library
-                        if ($movefile) {
-                            $wp_upload_dir = wp_upload_dir();
-                            $attachment = array(
-                                'guid' => $wp_upload_dir['url'] . '/' . basename($movefile['file']),
-                                'post_mime_type' => $movefile['type'],
-                                'post_title' => preg_replace('/\.[^.]+$/', '', basename($movefile['file'])),
-                                'post_content' => '',
-                                'post_status' => 'inherit',
-                            );
-                            $attach_id = wp_insert_attachment($attachment, $movefile['file']);
+                        # check neu file upload khong co loi, tuc la khong empty
+                        if ($uploadedfile["error"] == 0) {
+                            $movefile = wp_handle_upload($uploadedfile, array('test_form' => false));
+                            //On sauvegarde la photo dans le média library
+                            if ($movefile) {
+                                $wp_upload_dir = wp_upload_dir();
+                                $attachment = array(
+                                    'guid' => $wp_upload_dir['url'] . '/' . basename($movefile['file']),
+                                    'post_mime_type' => $movefile['type'],
+                                    'post_title' => preg_replace('/\.[^.]+$/', '', basename($movefile['file'])),
+                                    'post_content' => '',
+                                    'post_status' => 'inherit',
+                                );
+                                $attach_id = wp_insert_attachment($attachment, $movefile['file']);
 
-                            update_field('field_600fdca20269f', $attach_id, $inserted);
+                                update_field('field_600fdca20269f', $attach_id, $inserted);
+                            }
                         }
                     }
                     update_field('field_600fd7db6154d', $brand_name, $inserted);
@@ -564,6 +568,7 @@ function add_new_job()
 # using author role template
 function author_role_template($templates = '')
 {
+    $templates = [];
     $author = get_queried_object();
     // print_r($author);
     $role = $author->roles[0];
@@ -1089,3 +1094,52 @@ function check_finish_job($jobid) {
     }
 }
 
+# Custom pagination ajax
+function show_pagination($current_page, $total_page){
+    # validate dữ liệu
+    if (($current_page > 0) && ($current_page <= $total_page)) {
+        $pagination = '<ul class="page-numbers">';
+        $temp = '<li><span aria-current="page" class="page-numbers current">' . $current_page . '</span></li>';
+    
+        # tính toán hiện số trang trước trang hiện tại
+        for ($i=1; $i <= 4; $i++) { 
+            # tính toán số trang trước trang current
+            $previous_page = $current_page - $i;
+            if (($i <= 2) && ($previous_page > 0)) {
+                $temp = '<li><a href="#" class="page-numbers" data-page="' . $previous_page . '">' . $previous_page . '</a></li>' . $temp;
+            } else if (($i == 3) && ($previous_page > 1)) {
+                $temp = '<li><span class="page-numbers dots">…</span></li>' . $temp;
+            } else if (($i == 4) && ($previous_page >= 0)) {
+                $temp = '<li><a href="#" class="page-numbers" data-page="1">1</a></li>' . $temp;
+            }
+        }
+
+        # hiển thị nút trang trước
+        if ($current_page != 1) {
+            $previous_page = $current_page - 1;
+            $temp = '<li><a class="prev page-numbers" href="#" data-page="' . $previous_page . '">« Trang trước</a></li>' . $temp;
+        }
+
+        # tính toán hiện số trang sau trang hiện tại
+        for ($i=1; $i <= 4; $i++) { 
+            # tính toán số trang sau trang current
+            $next_page = $current_page + $i;
+            if (($i <= 2) && ($next_page <= $total_page)) {
+                $temp .= '<li><a href="#" class="page-numbers" data-page="' . $next_page . '">' . $next_page . '</a></li>';
+            } else if (($i == 3) && ($next_page <= $total_page)) {
+                $temp .= '<li><span class="page-numbers dots">…</span></li>';
+            } else if (($i == 4) && ($next_page <= $total_page + 1)) {
+                $temp .= '<li><a href="#" class="page-numbers" data-page="' . $total_page . '">' . $total_page . '</a></li>';
+            }
+        }
+    
+        # hiển thị nút trang sau
+        if ($current_page != $total_page) {
+            $next_page = $current_page + 1;
+            $temp .= '<li><a href="#" class="next page-numbers" data-page="' . $next_page . '">Trang sau »</a></li>';
+        }
+            
+        $pagination .= $temp . '</ul>';
+        return $pagination;
+    }
+}
