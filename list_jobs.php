@@ -239,8 +239,8 @@ $current_user = wp_get_current_user();
                         # tìm kiếm trong nhóm, nếu loại công việc truyền trên biến type mà đã đc phân quyền thì hiển thị
                         foreach ($nhom_cong_viec as $id_cong_viec) {
                             $term = get_term($id_cong_viec);
-                            
-                            if ($term->name == $type) {
+
+                            if (($term->name == $type)||($term->slug == $type)) {
                                 # nếu type trên đường link mà có trong phân quyền thì hiển thị
                                 $args['tax_query'] = array(
                                     'relation' => 'AND',

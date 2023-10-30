@@ -221,8 +221,8 @@ while (have_posts()) {
                             <?php
                             $history = get_field('history');
                             // print_r($history);
-                            if (have_rows('history', $user_id)) {
-                                while (have_rows('history', $user_id)) {
+                            if (have_rows('history')) {
+                                while (have_rows('history')) {
                                     the_row();
 
                                     $thoi_gian = DateTime::createFromFormat('d/m/Y', get_sub_field('thoi_gian'));
