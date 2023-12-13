@@ -223,7 +223,7 @@ $current_user = wp_get_current_user();
                 );
 
                 $nhom_cong_viec = get_field('nhom_cong_viec', 'user_' . $current_user->ID);
-                if (isset($type) && ($type != '')) {
+                if (isset($type) && ($type != '') && ($type != 'tiem-nang')) {
                     if (is_array($nhom_cong_viec)) {
                         
                         # cài đặt phân quyền ngay từ đầu không cho truy cập vào phân loại nào 
@@ -257,23 +257,30 @@ $current_user = wp_get_current_user();
                     }
                 } else {
                     # filter theo phân quyền
+                    $args['tax_query']['relation'] = 'AND';
                     $args['tax_query'][] = array(
                         'taxonomy'  => 'group',
                         'field'     => 'ID',
                         'terms'     => $nhom_cong_viec,
                         'operator'  => 'IN'
                     );
+                    if ($type == 'tiem-nang') {
+                        $args['tax_query'][] = array(
+                            'taxonomy'  => 'group',
+                            'field'     => 'slug',
+                            'terms'     => 'tiem-nang',
+                            'operator'  => 'IN'
+                        );
+                    }
                 }
 
 
                 if (isset($_agency) && ($_agency != '')) {
                     # filter theo chi nhánh được lựa chọn
                     $args['tax_query'][] = array(
-                        // array(
                         'taxonomy'  => 'agency',
                         'field'     => 'slug',
                         'terms'     => $_agency,
-                        // ),
                     );
                 } else {
                     # filter theo phân quyền
@@ -304,7 +311,13 @@ $current_user = wp_get_current_user();
                         'terms'     => 'tiem-nang',
                         'operator'  => 'NOT IN',
                     );
-                }
+                } /* else {
+                    $args['tax_query'][] = array(
+                        'taxonomy'  => 'group',
+                        'field'     => 'slug',
+                        'terms'     => 'tiem-nang',
+                    );
+                } */
                 if (isset($source) && ($source != '')) {
                     $args['tag'] = $source;
                 }

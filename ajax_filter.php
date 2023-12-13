@@ -6,16 +6,16 @@ function ajax_filter_jobs()
     $current_user = wp_get_current_user();
     $paged = $_POST['paged'];
     $type = "";
-    if (isset($_GET['type'])) {
-        $type = $_GET['type'];
+
+    if (isset($_POST['type'])) {
+        $type = urldecode($_POST['type']);
     }
-    if (isset($_GET['source'])) {
-        $source = $_GET['source'];
+    if (isset($_POST['source'])) {
+        $source = $_POST['source'];
     }
     if ($type) {
         $get_var = '?type=' . $type;
     } else $get_var = "";
-
 
     $member     = $output['member'];
     $manager    = $output['manager'];
@@ -36,9 +36,9 @@ function ajax_filter_jobs()
     );
 
     $nhom_cong_viec = get_field('nhom_cong_viec', 'user_' . $current_user->ID);
-    if (isset($type) && ($type != '')) {
+    if (isset($type) && ($type != '') && ($type != 'tiem-nang')) {
         if (is_array($nhom_cong_viec)) {
-
+            
             # cài đặt phân quyền ngay từ đầu không cho truy cập vào phân loại nào 
             $args['tax_query'] = array(
                 'relation' => 'AND',
@@ -53,7 +53,7 @@ function ajax_filter_jobs()
             foreach ($nhom_cong_viec as $id_cong_viec) {
                 $term = get_term($id_cong_viec);
 
-                if ($term->name == $type) {
+                if (($term->name == $type)||($term->slug == $type)) {
                     # nếu type trên đường link mà có trong phân quyền thì hiển thị
                     $args['tax_query'] = array(
                         'relation' => 'AND',
@@ -70,12 +70,21 @@ function ajax_filter_jobs()
         }
     } else {
         # filter theo phân quyền
+        $args['tax_query']['relation'] = 'AND';
         $args['tax_query'][] = array(
             'taxonomy'  => 'group',
             'field'     => 'ID',
             'terms'     => $nhom_cong_viec,
             'operator'  => 'IN'
         );
+        if ($type == 'tiem-nang') {
+            $args['tax_query'][] = array(
+                'taxonomy'  => 'group',
+                'field'     => 'slug',
+                'terms'     => 'tiem-nang',
+                'operator'  => 'IN'
+            );
+        }
     }
 
 
@@ -264,6 +273,7 @@ function ajax_filter_jobs()
     $query = new WP_Query($args);
 
     // print_r($args);
+    // print_r(urldecode($_POST["getvars"]));
     // $total_args = $args;
     // $total_args['posts_per_page'] = -1;
     // $total_query = new WP_Query($total_args);

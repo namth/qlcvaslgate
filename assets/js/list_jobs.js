@@ -1,4 +1,22 @@
 jQuery(document).ready(function ($) {
+    
+    $.extend({
+        getUrlVars: function(){
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for(var i = 0; i < hashes.length; i++)
+            {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        },
+        getUrlVar: function(name){
+            return $.getUrlVars()[name];
+        }
+    });
+    
     $('#ajax_filter input[type="submit"]').on('click', function(){
         var data_filter = $('#filter form').serialize();
         // console.log(data_filter);
@@ -28,16 +46,28 @@ jQuery(document).ready(function ($) {
     $(document).on('click', '#job_pagination li a', function(){
         var paged = $(this).data('page');
         var data_filter = $('#filter form').serialize();
-        // console.log(data_filter);
+        var asltype = $.getUrlVar("type");
+        var aslsource = $.getUrlVar("source");
+
+        var getvarData = {};
+        getvarData.action   = "ajax_filter_jobs";
+        getvarData.data     = data_filter;
+        getvarData.paged    = paged;
+
+        
+        if (typeof asltype !== 'undefined') {
+            getvarData.type = asltype;
+        }
+        if (typeof aslsource !== 'undefined') {
+            getvarData.source = aslsource;
+        }
+
+        // console.log(getvarData);
 
         $.ajax({
             type: "POST",
             url: AJAX.ajax_url,
-            data: {
-                action: "ajax_filter_jobs",
-                data: data_filter,
-                paged: paged
-            },
+            data: getvarData,
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);
                 console.log(xhr.responseText);
