@@ -3,6 +3,7 @@
     Template Name: Sửa thông tin đối tác
 */
 $history_link   = $_SERVER['HTTP_REFERER'];
+$thongbao = "";
 
 if (is_user_logged_in()) {
     # get edit user data
@@ -29,7 +30,18 @@ if (is_user_logged_in()) {
         $phone_number   = $_POST['phone_number'];
         $address        = $_POST['address'];
         $country        = $_POST['country'];
+        $city           = $_POST['city']; #
+        $vietnam_company= $_POST['vietnam_company'];
+        $languages      = $_POST['languages'];
         $note           = $_POST['note'];
+        $phan_loai      = $_POST['phan_loai'];
+    
+        if ($phan_loai) {
+            if (isset($_POST['staffs'])) {
+                $staffs     = implode("|", $_POST['staffs']);
+            }
+        }
+        
         $email_cc       = $_POST['email_cc'];
         $email_bcc      = $_POST['email_bcc'];
         $roles          = $_POST['roles'];
@@ -82,6 +94,11 @@ if (is_user_logged_in()) {
             update_field('field_600d3211060ec', $phone_number, 'user_' . $new_partner); # phone number
             update_field('field_600d323d060ee', $address, 'user_' . $new_partner); # address
             update_field('field_6037200ec98cc', $country, 'user_' . $new_partner); # country
+            update_field('field_65a5625b5eb0e', $city, 'user_' . $new_partner); # city
+            update_field('field_65a562035eb0c', $vietnam_company, 'user_' . $new_partner); # $vietnam_company
+            update_field('field_65a4acb5db9c6', $phan_loai, 'user_' . $new_partner); # $có phải là cty hay không
+            update_field('field_65a4acebdb9c7', $staffs, 'user_' . $new_partner); # $update người trong công ty
+            update_field('field_65a5622f5eb0d', $languages, 'user_' . $new_partner); # $languages
             update_field('field_6039b28e2ba07', $email_cc, 'user_' . $new_partner); # email_cc
             update_field('field_609a038489e8c', $email_bcc, 'user_' . $new_partner); # email_bcc
             update_field('field_61cd79bf1653f', $worked, 'user_' . $new_partner); # đã chốt hoặc tiềm năng
@@ -133,6 +150,11 @@ get_sidebar();
                     $so_dien_thoai  = get_field('so_dien_thoai', 'user_' . $this_user->ID);
                     $dia_chi        = get_field('dia_chi', 'user_' . $this_user->ID);
                     $quoc_gia       = get_field('quoc_gia', 'user_' . $this_user->ID);
+                    $city           = get_field('city' , 'user_' . $this_user->ID);
+                    $is_company     = get_field('is_company' , 'user_' . $this_user->ID);
+                    $staffs         = get_field('staffs' , 'user_' . $this_user->ID);
+                    $vietnam_company= get_field('vietnam_company' , 'user_' . $this_user->ID);
+                    $languages      = get_field('languages' , 'user_' . $this_user->ID);
                     $document       = get_field('document', 'user_' . $this_user->ID);
                     $partner_code   = get_field('partner_code', 'user_' . $this_user->ID);
                     $email_cc       = get_field('email_cc', 'user_' . $this_user->ID);
@@ -149,19 +171,19 @@ get_sidebar();
                     ?>
                     <div>
                         <form action="#" method="POST" class="row">
-                            <div class="col-lg-3 form_title lh45">Email <span class="text-danger">*</span></div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right">Email <span class="text-danger">*</span></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_email" value="<?php echo $this_user->user_email; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45"><?php _e('Tên công ty/tổ chức', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Tên công ty/tổ chức', 'qlcv'); ?> <span class="text-danger">*</span></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_company" value="<?php echo $ten_cong_ty; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45"><?php _e('Mã đối tác', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Mã đối tác', 'qlcv'); ?> <span class="text-danger">*</span></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="partner_code" value="<?php echo $partner_code; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45"><?php _e('Vai trò', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                            <div class="col-lg-3 form_title text-lg-right"><?php _e('Vai trò', 'qlcv'); ?> <span class="text-danger">*</span></div>
                             <div class="col-lg-9 col-12 mb-20">
                                 <?php
                                 foreach ($role_list as $key => $value) {
@@ -177,12 +199,12 @@ get_sidebar();
 
                             </div>
 
-                            <div class="col-lg-3 form_title lh45"><?php _e('Họ và tên', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Họ và tên', 'qlcv'); ?> <span class="text-danger">*</span></div>
                             <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="first_name" placeholder="<?php _e('Họ', 'qlcv'); ?>" value="<?php echo $this_user->user_firstname; ?>"></div>
                             <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="last_name" placeholder="<?php _e('Tên', 'qlcv'); ?>" value="<?php echo $this_user->user_lastname; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title mb-10 mt-10"><?php _e('Trạng thái', 'qlcv'); ?></div>
+                            <div class="col-lg-3 form_title mb-10 mt-10 text-lg-right"><?php _e('Trạng thái', 'qlcv'); ?></div>
                             <div class="col-lg-3 col-12 mb-20 mt-10">
                                 <div class="adomx-checkbox-radio-group inline">
                                     <label class="adomx-radio-2"><input type="radio" name="worked" value="1" <?php if ($worked) echo "checked"; ?>> <i class="icon"></i> <?php _e('Đã chốt', 'qlcv'); ?></label>
@@ -191,7 +213,7 @@ get_sidebar();
                             </div>
                             <div class="col-lg-6"></div>
 
-                            <div class="col-lg-3 form_title lh45"><?php _e('Phân loại', 'qlcv'); ?></div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Phân loại', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control mb-20" name="type_of_client">
                                     <?php
@@ -216,7 +238,7 @@ get_sidebar();
                             </div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45"><?php _e('Cấp độ', 'qlcv'); ?></div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Cấp độ', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control mb-20" name="partner_vip">
                                     <?php
@@ -241,31 +263,82 @@ get_sidebar();
                             </div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45"><?php _e('Số điện thoại', 'qlcv'); ?></div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Số điện thoại', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="phone_number" value="<?php echo $so_dien_thoai; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45"><?php _e('Địa chỉ', 'qlcv'); ?></div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Địa chỉ', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="address" value="<?php echo $dia_chi; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45"><?php _e('Quốc gia', 'qlcv'); ?></div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Quốc gia', 'qlcv'); ?> <span class="text-danger">*</span></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="country" value="<?php echo $quoc_gia; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Email CC</div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Thành phố', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="city" value="<?php echo $city; ?>"></div>
+                            <div class="col-lg-3"></div>
+
+                            <div class="col-lg-3 form_title text-lg-right"><?php _e('Đã có công ty tại Việt Nam?', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                            <div class="col-lg-6 col-12 mb-20">
+                                <div class="adomx-checkbox-radio-group">
+                                    <?php 
+                                        $checked = $vietnam_company?"checked":"";
+                                    ?>
+                                    <label class="adomx-switch"><input type="checkbox" name="vietnam_company" <?php echo $checked; ?>> <i class="lever"></i></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3"></div>
+
+                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Ngôn ngữ giao tiếp', 'qlcv'); ?></div>
+                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="languages" value="<?php echo $languages; ?>"></div>
+                            <div class="col-lg-3"></div>
+
+                            <div class="col-lg-3 form_title lh45 text-lg-right">Email CC</div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="email_cc" value="<?php echo $email_cc; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45">Email BCC</div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right">Email BCC</div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <input type="text" class="form-control" name="email_bcc" value="<?php echo $email_bcc; ?>">
                                 <span class="form-help-text"><?php _e('Mỗi email cách nhau dấu ","', 'qlcv'); ?></span>
                             </div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45"><?php _e('Ghi chú', 'qlcv'); ?></div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Ghi chú', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"><?php echo get_user_meta($this_user->ID, 'description', true); ?></textarea></div>
+                            <div class="col-lg-3"></div>
+
+                            <div class="col-lg-3 form_title text-lg-right"><?php _e('Loại tài khoản', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                            <div class="col-lg-6 col-12 mb-20">
+                                <div class="">
+                                    <label for="" class="inline">
+                                        <input type="radio" name="phan_loai" value="0" <?php echo $is_company?"":"checked"; ?>> <?php _e('Cá nhân', 'qlcv'); ?>
+                                    </label>
+                                    <label for="" class="inline">
+                                        <input type="radio" name="phan_loai" value="1" <?php echo $is_company?"checked":""; ?>> <?php _e('Tổ chức', 'qlcv'); ?>
+                                    </label>
+                                </div>
+                                <div style="<?php echo $is_company?"":"display: none;"; ?> margin-top: 15px;" id="phanloai">
+                                    <small>Thêm danh sách thành viên công ty vào ô dưới đây</small>
+                                    <select class="form-control select2-tags mb-20" multiple="" name="staffs[]">
+                                        <?php
+                                        $args   = array(
+                                            'role__in'      => array('partner', 'foreign_partner'),
+                                        );
+                                        $query = get_users($args);
+    
+                                        if ($query) {
+                                            $staff_arr = explode("|", $staffs);
+                                            foreach ($query as $user) {
+                                                $selected = in_array($user->ID, $staff_arr)?"selected":"";
+                                                echo "<option value='" . $user->ID . "' " . $selected . ">" . $user->display_name . " (" . $user->user_email . ")</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-lg-3"></div>
 
                             <?php

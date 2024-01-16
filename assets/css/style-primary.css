@@ -15472,3 +15472,18 @@ body.skin-dark .cus-radio.light .icon::before {
   border-radius: 10px;
   font-size: 20px;
 }
+.action_cell{
+  display: flex;
+  flex-direction: column;
+}
+.action_cell .hidden_link{
+  display: none;
+  font-size: 12px;
+  color: dodgerblue;
+}
+.action_cell:hover .hidden_link{
+  display: block;
+}
+.action_cell:hover .hidden_link:hover{
+  text-decoration: underline;
+}

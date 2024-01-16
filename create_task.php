@@ -8,6 +8,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
     $current_post   = get_post($job);
     $member         = get_field('member', $job); # người thực hiện
     $manager        = get_field('manager', $job); # người quản lý 
+    $supervisor     = explode("|", get_field('supervisor', $job)); # người giám sát
     $history_link   = $_SERVER['HTTP_REFERER'];
 
     if (
@@ -24,6 +25,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         $content        = $_POST['content'];
         $member         = $_POST['member'];
         $manager        = $_POST['manager'];
+        $supervisor     = implode("|", $_POST['supervisor']);
         $date_history   = $_POST['date_history'];
         $history_link   = $_POST['history_link'];
         # work process
@@ -55,6 +57,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 update_field('field_600fdff6b4390', $job, $inserted); # job
                 update_field('field_600fded7b438f', $member, $inserted); # người thực hiện
                 update_field('field_60fd46973dd42', $manager, $inserted); # người quản lý
+                update_field('field_659ce731517c9', $supervisor, $inserted); # data_supervisor
                 update_field('field_600fde50f9be7', $new_deadline, $inserted); # deadline thực hiện
                 update_field('field_600fde92f9be9', "Mới", $inserted); # Status
                 # work process 
@@ -128,6 +131,7 @@ $phan_loai  = get_field('phan_loai', $job);
             <div class="page-heading">
                 <?php
                 echo '<h3 class="title">' . get_the_title() . '</h3>';
+
                 ?>
             </div>
         </div><!-- Page Heading End -->
@@ -299,6 +303,28 @@ $phan_loai  = get_field('phan_loai', $job);
                                 if ($query) {
                                     foreach ($query as $user) {
                                         echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-3"></div>
+
+                        <div class="col-lg-3 form_title lh45"><?php _e('Người giám sát', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                        <div class="col-lg-6 col-12 mb-20">
+                            <select class="form-control select2-tags mb-20" multiple="" name="supervisor[]" >
+                                <?php
+                                
+                                $args   = array(
+                                    'role__in'  => array('administrator', 'editor', 'contributor'), /*subscriber, contributor, author*/
+                                    'exclude'   => $manager['ID'],
+                                );
+                                $query = get_users($args);
+
+                                if ($query) {
+                                    foreach ($query as $user) {
+                                        $selected = in_array($user->ID, $supervisor)?"selected":"";
+                                        echo "<option value='" . $user->ID . "' " . $selected . ">" . $user->display_name . " (" . $user->user_email . ")</option>";
                                     }
                                 }
                                 ?>

@@ -355,6 +355,40 @@ while (have_posts()) {
                     </div>
                 <?php
                 }
+                $supervisor = explode("|", get_field('supervisor'));
+                if ($supervisor) {
+                ?>
+                    <div class="box mb-20">
+                        <div class="page-heading box-head">
+                            <h3 class="mb-10"><?php _e('Thông tin người giám sát', 'qlcv'); ?></h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="d-flex justify-content-between row mb-20">
+                                <?php 
+                                    foreach ($supervisor as $supervisorID) {
+                                        $supervisor_user = get_user_by("ID", $supervisorID);
+                                ?>
+                                <div class="col-12 col-sm-auto mb-20">
+                                    <?php
+                                        $supervisor_url = get_author_posts_url($supervisor_user->ID);
+                                        $phone          = get_field('so_dien_thoai', 'user_' . $supervisor_user->ID);
+
+                                        echo "<p>";
+                                        echo "<a href='" . $supervisor_url . "'><b>" . $supervisor_user->display_name . "</b></a><br>";
+                                        if($phone) echo $phone . "<br>";
+                                        echo $supervisor_user->user_email . "<br>";
+                                        echo "</p>";
+
+                                    ?>
+                                </div>
+                                <?php 
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                }
                 ?>
             </div>
 

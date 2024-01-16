@@ -165,16 +165,19 @@ jQuery(document).ready(function ($) {
   // xử lý khi bấm hoàn thành form tạo đầu việc mới
   $(".finish_newjob").click(function () {
     // get data from previous steps on smart wizard
-    var $data_partner = $('select[name="partner"]').val();
+    var $data_partner   = $('select[name="partner"]').val();
     var $data_foreign_partner = $('select[name="foreign_partner"]').val();
-    var $data_customer = $('select[name="customer"]').val();
-    var $data_job = $("form#new_job")[0];
-    var $data_manager = $('select[name="manager"]').val();
-    var $data_member = $('select[name="member"]').val();
-    var $data_agency = $('select[name="agency"]').val();
-    var $currency = $('form#finance input[name="currency"]:checked').val();
-    var $total_value = $('form#finance input[name="total_value"]').val();
-    var $paid = $('form#finance input[name="paid"]').val();
+    var $data_customer  = $('select[name="customer"]').val();
+    var $data_job       = $("form#new_job")[0];
+    var $data_manager   = $('select[name="manager"]').val();
+    var $data_member    = $('select[name="member"]').val();
+    var $data_supervisor = $('select[name="supervisor"]').val();
+    var $data_agency    = $('select[name="agency"]').val();
+    var $currency       = $('form#finance input[name="currency"]:checked').val();
+    var $total_value    = $('form#finance input[name="total_value"]').val();
+    var $paid           = $('form#finance input[name="paid"]').val();
+
+    console.log($data_supervisor.join("|"));
     //khởi tạo đối tượng form data
     var form_data = new FormData($data_job);
 
@@ -184,10 +187,14 @@ jQuery(document).ready(function ($) {
     form_data.append("data_customer", $data_customer);
     form_data.append("data_manager", $data_manager);
     form_data.append("data_member", $data_member);
+    form_data.append("data_supervisor", $data_supervisor.join("|"));
     form_data.append("data_agency", $data_agency);
     form_data.append("currency", $currency);
     form_data.append("total_value", $total_value);
     form_data.append("paid", $paid);
+
+
+    console.log(form_data);
 
     $.ajax({
       type: "POST",
@@ -285,6 +292,19 @@ jQuery(document).ready(function ($) {
       $("#timestamp").show(300);
     } else {
       $("#timestamp").hide(300);
+    }
+  });
+
+  /* addnew_partner.php
+    Switch chuyển phân loại sang công ty thì sẽ hiện ô nhập danh sách thành viên
+  */
+  $('input[name="phan_loai"]').change(function() {
+    var val = $(this).val();
+    // alert(val);
+    if (val == 1) {
+      $("#phanloai").show(300);
+    } else {
+      $("#phanloai").hide(300);
     }
   });
 });

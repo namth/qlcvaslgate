@@ -547,7 +547,10 @@ $current_user = wp_get_current_user();
                                         echo "<tr>";
                                         echo "<td>" . $our_ref . "</td>";
                                         echo "<td>" . get_the_date('d/m/Y') . "</td>";
-                                        echo "<td><a href='" . get_permalink() . "'>" . get_the_title() . "</a></td>";
+                                        echo "<td class='action_cell'>
+                                                <a href='" . get_permalink() . "'>" . get_the_title() . "</a>
+                                                <a class='hidden_link' href='" . get_bloginfo('url') . "/duplicate-job/?jobid=" . get_the_ID() . "'><i class='fa fa-clone'></i> Duplicate This</a>    
+                                            </td>";
                                         echo "<td>" . end($work_history) . "</td>";
                                         if (!$type || ($type == 'tiem-nang')) {
                                             echo "<td>" . '<span class="badge badge-secondary">' . $phan_loai . '</span>' . "</td>";

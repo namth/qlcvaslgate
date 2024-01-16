@@ -355,6 +355,7 @@ function add_new_job()
     $data_customer          = $_POST['data_customer'];
     $data_manager           = $_POST['data_manager'];
     $data_member            = $_POST['data_member'];
+    $data_supervisor        = $_POST['data_supervisor'];
     $data_agency            = $_POST['data_agency'];
     // $data_job       = parse_str( $_POST['data_job'], $output );
 
@@ -394,7 +395,11 @@ function add_new_job()
     $currency       = $_POST['currency'];
     $total_value    = $_POST['total_value'];
     $paid           = $_POST['paid'];
-    $remaining      = $total_value - $paid;
+    # tính toán số tiền còn lại
+    if ($total_value) {
+        # validate các số có null không, trước khi tính toán
+        $remaining      = $paid?$total_value - $paid:$total_value;
+    }
 
     # add new customer
     if (
@@ -446,6 +451,7 @@ function add_new_job()
             update_field('field_609bf99f726ef', $data_foreign_partner, $inserted); # data_foreign_partner
             update_field('field_603629217fe93', $data_manager, $inserted); # manager
             update_field('field_603627f913b2c', $data_member, $inserted); # data_member
+            update_field('field_659ce731517c9', $data_supervisor, $inserted); # data_supervisor
             update_field('field_600fdbda0269e', $danh_muc, $inserted); # phân loại
             update_field('field_6099f6bb87256', $country, $inserted); # quốc gia nộp
             update_field('field_6099f71187257', $partner_ref, $inserted); # Số REF của đối tác
@@ -554,12 +560,12 @@ function add_new_job()
     } else {
         $data['status'] = 'error';
         $data['notification'] = '<div class="alert alert-danger" role="alert">
-                                    <i class="zmdi zmdi-info"></i> ' . __('Có lỗi xảy ra, xin vui lòng kiểm tra lại.', 'qlcv') . '
+                                    <i class="zmdi zmdi-info"></i> ' . __('Có lỗi xảy ra, xin vui lòng kiểm tra lại. Những trường đánh dấu * là bắt buộc.', 'qlcv') . '
                                   </div>';
     }
 
     $data['div_notification']   = '#create_new_job';
-    // $data['test'] = $_POST;
+    // $data['test'] = $data_supervisor;
 
     echo json_encode($data);
     exit;

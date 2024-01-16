@@ -128,15 +128,19 @@ $current_user = wp_get_current_user();
                                         $so_dien_thoai  = get_field('so_dien_thoai', 'user_' . $user->ID);
                                         $partner_code   = get_field('partner_code', 'user_' . $user->ID);
                                         $ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $user->ID);
+                                        $is_company     = get_field('is_company' , 'user_' . $user->ID);
+                                        $author_link    = get_author_posts_url($user->ID);
 
                                         echo "<tr>";
                                         echo "<td>" . $i . "</td>";
+
                                         if (($role == 'partner') || ($role == 'foreign_partner')) {
+                                            $icon_company = $is_company?"<i class='fa fa-building'></i>":"";
                                             echo "<td>" . $partner_code . "</td>";
-                                            echo "<td><a href='" . get_author_posts_url($user->ID) . "'>" . $user->display_name . "</a></td>";
-                                            echo "<td>" . $ten_cong_ty . "</td>";
+                                            echo "<td><a href='" . $author_link . "'>" . $user->display_name . "</a></td>";
+                                            echo "<td><a href='" . $author_link . "'>" . $icon_company . " " . $ten_cong_ty . "</a></td>";
                                         } else {
-                                            echo "<td><a href='" . get_author_posts_url($user->ID) . "'>" . $user->display_name . "</a></td>";
+                                            echo "<td><a href='" . $author_link . "'>" . $user->display_name . "</a></td>";
                                         }
 
                                         if ($so_dien_thoai) {

@@ -6,11 +6,12 @@ $history_link   = $_SERVER['HTTP_REFERER'];
 
 if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
     # lấy dữ liệu bài viết
-    $current_post = get_post($postid);
-    $postid = $_GET['jobid'];
-    $current_user = wp_get_current_user();
-    $current_time = current_time('timestamp', 7);
-    $phan_loai = get_field('phan_loai', $postid);
+    $current_post   = get_post($postid);
+    $postid         = $_GET['jobid'];
+    $current_user   = wp_get_current_user();
+    $current_time   = current_time('timestamp', 7);
+    $phan_loai      = get_field('phan_loai', $postid);
+    $supervisor     = explode("|", get_field('supervisor', $postid)); # người giám sát
 
     if (
         is_user_logged_in() &&
@@ -24,6 +25,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         $foreign_partner= $_POST['foreign_partner'];
         $member         = $_POST['member'];
         $manager        = $_POST['manager'];
+        $supervisor     = implode("|", $_POST['supervisor']);
         $agency         = $_POST['agency'];
         # job
         $jobname        = $_POST['jobname'];
@@ -85,6 +87,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         update_field('field_609bf99f726ef', $foreign_partner, $postid); 
         update_field('field_603627f913b2c', $member, $postid); # save to member, manager field
         update_field('field_603629217fe93', $manager, $postid); 
+        update_field('field_659ce731517c9', $supervisor, $postid); # data_supervisor
         # work process 
         if (is_array($work_process)) {
             for ($i=0; $i < count($work_process); $i++) { 
@@ -197,6 +200,7 @@ $agency     = get_the_terms($postid, 'agency');
             <div class="page-heading">
                 <?php
                 echo '<h3 class="title">' . get_the_title() . '</h3>';
+
                 ?>
             </div>
         </div><!-- Page Heading End -->
@@ -283,6 +287,25 @@ $agency     = get_the_terms($postid, 'agency');
                                             ?>
                                         </select>
                                     </div>
+
+                                    <div class="mb-20">
+                                        <label for=""><b><?php _e('Chi nhánh', 'qlcv'); ?></b></label>
+                                        <select class="form-control select2-tags mb-20" name='agency'>
+                                            <option value="">-- <?php _e('Chi nhánh', 'qlcv'); ?> --</option>
+                                            <?php
+                                            $terms = get_terms(array(
+                                                'taxonomy' => 'agency',
+                                                'hide_empty' => false,
+                                            ));
+                                            if($terms){
+                                                foreach ($terms as $value) {
+                                                    $selected = ($agency[0]->slug == $value->slug) ? "selected" : "";
+                                                    echo "<option value='" . $value->slug . "' " . $selected . ">" . $value->name . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="col-6 mb-20">
@@ -333,18 +356,18 @@ $agency     = get_the_terms($postid, 'agency');
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b><?php _e('Chi nhánh', 'qlcv'); ?></b></label>
-                                        <select class="form-control select2-tags mb-20" name='agency'>
-                                            <option value="">-- <?php _e('Chi nhánh', 'qlcv'); ?> --</option>
+                                        <label for=""><b><?php _e('Người giám sát', 'qlcv'); ?></b></label>
+                                        <select class="form-control select2-tags mb-20" multiple="" name="supervisor[]">
                                             <?php
-                                            $terms = get_terms(array(
-                                                'taxonomy' => 'agency',
-                                                'hide_empty' => false,
-                                            ));
-                                            if($terms){
-                                                foreach ($terms as $value) {
-                                                    $selected = ($agency[0]->slug == $value->slug) ? "selected" : "";
-                                                    echo "<option value='" . $value->slug . "' " . $selected . ">" . $value->name . "</option>";
+                                            $args   = array(
+                                                'role__in'      => array('administrator', 'editor', 'contributor'),
+                                            );
+                                            $query = get_users($args);
+
+                                            if ($query) {
+                                                foreach ($query as $user) {
+                                                    $selected = in_array($user->ID, $supervisor)?"selected":"";    
+                                                    echo "<option value='" . $user->ID . "' " . $selected . ">" . $user->display_name . " (" . $user->user_email . ")</option>";
                                                 }
                                             }
                                             ?>

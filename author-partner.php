@@ -62,13 +62,15 @@
                         <!--Author Information Start-->
                         <div class="col-xlg-6 col-lg-6 col-12 mb-30">
                             <div class="box">
-                                <div class="box-head">
-                                    <h3 class="title"><?php _e('Thông tin cá nhân', 'qlcv'); ?></h3>
-                                </div>
                                 <?php 
                                     $so_dien_thoai  = get_field('so_dien_thoai' , 'user_' . $this_user->ID);
                                     $dia_chi        = get_field('dia_chi' , 'user_' . $this_user->ID);
                                     $quoc_gia       = get_field('quoc_gia' , 'user_' . $this_user->ID);
+                                    $city           = get_field('city' , 'user_' . $this_user->ID);
+                                    $is_company     = get_field('is_company' , 'user_' . $this_user->ID);
+                                    $staffs         = get_field('staffs' , 'user_' . $this_user->ID);
+                                    $vietnam_company= get_field('vietnam_company' , 'user_' . $this_user->ID);
+                                    $languages      = get_field('languages' , 'user_' . $this_user->ID);
                                     $email_cc       = get_field('email_cc' , 'user_' . $this_user->ID);
                                     $email_bcc      = get_field('email_bcc' , 'user_' . $this_user->ID);
                                     $partner_code   = get_field('partner_code' , 'user_' . $this_user->ID);
@@ -79,12 +81,21 @@
 
                                     $tinh_trang     = $worked?"Đã chốt":"Tiềm năng";
                                 ?>
+                                <div class="box-head">
+                                    <h3 class="title">
+                                        <?php
+                                            if ($is_company) {
+                                                _e('Thông tin doanh nghiệp', 'qlcv');
+                                            } else _e('Thông tin cá nhân', 'qlcv'); ?>
+                                    </h3>
+                                </div>
                                 <div class="box-body">
                                     <div class="order-details-customer-info">
                                         <ul class="mb-30">
                                             <li><span><i class="ti-user"></i> <?php _e('Mã đối tác', 'qlcv'); ?></span><span> <?php echo $partner_code; ?></span></li>
                                             <li><span><i class="ti-home"></i> <?php _e('Tên công ty', 'qlcv'); ?></span><span> <?php echo $ten_cong_ty; ?></span></li>
                                             <li><span><i class="ti-flag"></i> <?php _e('Tình trạng', 'qlcv'); ?></span><span> <?php echo $tinh_trang; ?></span></li>
+                                            <li><span><i class="ti-comments-smiley"></i> <?php _e('Giao tiếp', 'qlcv'); ?></span><span> <?php echo $languages; ?></span></li>
                                             <li><span><i class="ti-control-shuffle"></i> <?php _e('Phân loại', 'qlcv'); ?></span><span> <?php echo $type_of_client; ?></span></li>
                                             <li><span><i class="ti-crown"></i> <?php _e('Cấp độ', 'qlcv'); ?></span><span> <?php echo $vip; ?></span></li>
                                             <li><span><i class="ti-email"></i> Email</span><span> <?php echo $this_user->user_email; ?></span></li>
@@ -100,9 +111,35 @@
                                                 <span> <?php echo $quoc_gia; ?></span>
                                             </li>
                                             <li>
+                                                <span><i class="ti-location-pin"></i> <?php _e('Thành phố', 'qlcv'); ?></span>
+                                                <span> <?php echo $city; ?></span>
+                                            </li>
+                                            <li>
                                                 <span><i class="ti-direction"></i> <?php _e('Ghi chú', 'qlcv'); ?></span>
                                                 <span> <?php echo $this_user->description; ?></span>
                                             </li>
+                                            <?php 
+                                                if ($is_company) {
+                                                    ?>
+                                                        <li>
+                                                            <span><i class="ti-pin"></i> <?php _e('Doanh nghiệp', 'qlcv'); ?></span>
+                                                            <span> <?php echo $vietnam_company?"Đã có tại Việt Nam":"Chưa có tại việt Nam"; ?></span>
+                                                        </li>
+                                                        <li>
+                                                            <span><i class="ti-pin"></i> <?php _e('Nhân sự', 'qlcv'); ?></span>
+                                                            <div>
+                                                    <?php
+                                                    if ($staffs) {
+                                                        $staff_array = explode("|", $staffs);
+                                                        foreach ($staff_array as $starffID) {
+                                                            $staff = get_user_by("ID", $starffID);
+
+                                                            echo "<div><a href='" . get_author_posts_url($staff->ID) . "'><i class='ti-user'></i> " . $staff->display_name . " (" . $staff->user_email . ")</a></div>";
+                                                        }
+                                                    }
+                                                    echo "</div></li>";
+                                                }
+                                            ?>
                                         </ul>
 
                                         <!-- if current user isn't this user, don't show edit button -->
