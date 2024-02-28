@@ -32,22 +32,31 @@ if (is_user_logged_in()) {
         $country        = $_POST['country'];
         $city           = $_POST['city']; #
         $vietnam_company= $_POST['vietnam_company'];
-        $languages      = $_POST['languages'];
+        if ($_POST['languages']) {
+            $languages      = implode(", ", $_POST['languages']);
+        }
         $note           = $_POST['note'];
         $phan_loai      = $_POST['phan_loai'];
-    
         if ($phan_loai) {
             if (isset($_POST['staffs'])) {
                 $staffs     = implode("|", $_POST['staffs']);
             }
         }
         
+        if ($_POST['detail_client_type']) {
+            $detail_client_type = implode(", ", $_POST['detail_client_type']);
+        }
+        $fdi            = $_POST['fdi'];
+        if ($_POST['fdi_countries']) {
+            $fdi_countries  = implode(", ", $_POST['fdi_countries']);
+        }
         $email_cc       = $_POST['email_cc'];
         $email_bcc      = $_POST['email_bcc'];
         $roles          = $_POST['roles'];
         $display_name   = $first_name . " " . $last_name;
         $history_link   = $_POST['history_link'];
         $worked         = $_POST['worked'];
+        $nguon_dau_viec = $_POST['nguon_dau_viec'];
 
         # check partner code
         $current_partner_code = get_field('partner_code' , 'user_' . $this_user->ID);
@@ -98,10 +107,16 @@ if (is_user_logged_in()) {
             update_field('field_65a562035eb0c', $vietnam_company, 'user_' . $new_partner); # $vietnam_company
             update_field('field_65a4acb5db9c6', $phan_loai, 'user_' . $new_partner); # $có phải là cty hay không
             update_field('field_65a4acebdb9c7', $staffs, 'user_' . $new_partner); # $update người trong công ty
-            update_field('field_65a5622f5eb0d', $languages, 'user_' . $new_partner); # $languages
+            if($languages) update_field('field_65a5622f5eb0d', $languages, 'user_' . $new_partner); # $languages
             update_field('field_6039b28e2ba07', $email_cc, 'user_' . $new_partner); # email_cc
             update_field('field_609a038489e8c', $email_bcc, 'user_' . $new_partner); # email_bcc
             update_field('field_61cd79bf1653f', $worked, 'user_' . $new_partner); # đã chốt hoặc tiềm năng
+            update_field('field_65de936686343', $nguon_dau_viec, 'user_' . $new_partner); # nguồn đến từ đâu
+            update_field('field_65dcc97fa77b9', $detail_client_type, 'user_' . $new_partner); # chuyên ngành đối tác
+            update_field('field_65ddcd2141e6f', $fdi, 'user_' . $new_partner); # có vốn fdi không
+            if ($fdi && $fdi_countries) {
+                update_field('field_65ddcd7941e70', $fdi_countries, 'user_' . $new_partner); # quốc gia đầu tư
+            }
 
             $thongbao = '<div class="alert alert-success" role="alert">
                                 <i class="fa fa-check"></i> ' . __('Đã sửa thông tin thành công', 'qlcv') . '
@@ -162,6 +177,9 @@ get_sidebar();
                     $type_of_client = get_field('type_of_client', 'user_' . $this_user->ID);
                     $partner_vip    = get_field('vip', 'user_' . $this_user->ID);
                     $worked         = get_field('worked', 'user_' . $this_user->ID);
+                    $fdi            = get_field('fdi', 'user_' . $this_user->ID);
+                    $fdi_countries  = get_field('fdi_countries', 'user_' . $this_user->ID);
+                    $source         = get_field('source', 'user_' . $this_user->ID);
 
                     $role_list      = array(
                         'partner' => 'Đối tác',
@@ -213,7 +231,25 @@ get_sidebar();
                             </div>
                             <div class="col-lg-6"></div>
 
-                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Phân loại', 'qlcv'); ?></div>
+                            <div class="col-lg-3 form_title text-left text-lg-right mb-10 mt-10"><?php _e('Nguồn', 'qlcv'); ?></div>
+                            <div class="col-lg-3 col-12 mb-20 mt-10">
+                                <div class="adomx-checkbox-radio-group inline">
+                                    <?php 
+                                        $terms = get_terms(array(
+                                            'taxonomy' => 'post_tag',
+                                            'hide_empty' => false,
+                                        ));
+                                        
+                                        foreach ($terms as $value) {
+                                            $checked = ($value->name==$source)?"checked":"";
+                                            echo '<label class="adomx-radio-2"><input type="radio" name="nguon_dau_viec" value="' . $value->name . '" ' . $checked . '> <i class="icon"></i> ' . $value->name . '</label>';
+                                        }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-lg-6"></div>
+
+                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Phân loại chính', 'qlcv'); ?></div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control mb-20" name="type_of_client">
                                     <?php
@@ -234,6 +270,23 @@ get_sidebar();
                                     }
                                     ?>
                                     
+                                </select>
+                            </div>
+                            <div class="col-lg-3"></div>
+
+                            <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Chuyên ngành', 'qlcv'); ?></div>
+                            <div class="col-lg-6 col-12 mb-20">
+                                <select class="form-control select2-tags mb-20" multiple="" name="detail_client_type[]">
+                                    <?php 
+                                        $list_other_jobs = get_term_children(10, 'group');
+                                        $list_selected = explode(", ", get_field('detail_client_type', 'user_' . $this_user->ID));
+
+                                        foreach ($list_other_jobs as $jobid) {
+                                            $term = get_term($jobid, 'group');
+                                            $selected = is_array($list_selected) && in_array($term->name, $list_selected)?"selected":"";
+                                            echo "<option value='" . $term->name . "' " . $selected . ">" . $term->name . "</option>";
+                                        }
+                                    ?>
                                 </select>
                             </div>
                             <div class="col-lg-3"></div>
@@ -272,11 +325,28 @@ get_sidebar();
                             <div class="col-lg-3"></div>
 
                             <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Quốc gia', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="country" value="<?php echo $quoc_gia; ?>"></div>
+                            <div class="col-lg-6 col-12 mb-20">
+                                <select class="form-control select2-tags mb-20" name="country">
+                                    <option value="">-- <?php _e('Chọn quốc gia') ?> --</option>
+                                    <?php
+                                        $list_country = explode(PHP_EOL, get_field('list_country', 'option'));
+    
+                                        if ($list_country) {
+                                            foreach ($list_country as $country) {
+                                                $country = trim($country);
+                                                $selected = ($country == $quoc_gia)?"selected":"";
+                                                echo "<option value='" . $country . "' " . $selected . ">" . $country . "</option>";
+                                            }
+                                        }
+                                    ?>
+                                </select>
+                            </div>
                             <div class="col-lg-3"></div>
 
                             <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Thành phố', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="city" value="<?php echo $city; ?>"></div>
+                            <div class="col-lg-6 col-12 mb-20">
+                                <input type="text" class="form-control" name="city" value="<?php echo $city; ?>">
+                            </div>
                             <div class="col-lg-3"></div>
 
                             <div class="col-lg-3 form_title text-lg-right"><?php _e('Đã có công ty tại Việt Nam?', 'qlcv'); ?> <span class="text-danger">*</span></div>
@@ -290,8 +360,60 @@ get_sidebar();
                             </div>
                             <div class="col-lg-3"></div>
 
+                            <div class="col-lg-3 form_title text-lg-right"><?php _e('Phân loại đầu tư', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                            <div class="col-lg-6 col-12 mb-20">
+                                <div class="adomx-checkbox-radio-group inline">
+                                    <?php 
+                                        $options = [
+                                            0 => __('100% Việt Nam', 'qlcv'), 
+                                            1 => __('Có vốn đầu tư nước ngoài (FDI)', 'qlcv')
+                                        ];
+                                        $style = $fdi?'display: block;':'display: none;';
+
+                                        foreach ($options as $key => $value) {
+                                            $checked = ($key==$fdi)?"checked":"";
+                                            echo '<label class="adomx-radio-2"><input type="radio" name="fdi" value="' . $key . '" ' . $checked . '> <i class="icon"></i> ' . $value . '</label>';
+                                        }
+                                    ?>
+                                </div>
+                                <div style="<?php echo $style; ?> margin-top: 15px;" id="fdi">
+                                    <small>Tại nước nào?</small>
+                                    <select class="form-control select2-tags mb-20" multiple="" name="fdi_countries[]">
+                                        <?php
+                                        $list_country = explode(PHP_EOL, get_field('list_country', 'option'));
+                                        $list_selected = explode(", ", $fdi_countries);
+    
+                                        if ($list_country) {
+                                            foreach ($list_country as $country) {
+                                                $country = trim($country);
+                                                $selected = is_array($list_selected) && in_array($country, $list_selected)?"selected":"";
+                                                echo "<option value='" . $country . "' " . $selected . ">" . $country . "</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3"></div>
+
                             <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Ngôn ngữ giao tiếp', 'qlcv'); ?></div>
-                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="languages" value="<?php echo $languages; ?>"></div>
+                            <div class="col-lg-6 col-12 mb-20">
+                                <select class="form-control select2-tags mb-20" multiple="" name="languages[]">
+                                    <?php
+                                        $list_languages = explode(PHP_EOL, get_field('languages', 'option'));
+                                        $list_selected = explode(", ", $languages);
+                                        
+                                        if ($list_languages) {
+                                            foreach ($list_languages as $language) {
+                                                $language = trim($language);
+                                                $selected = is_array($list_selected) && in_array( $language, $list_selected )?"selected":"";
+                                                
+                                                echo "<option value='" . $language . "' " . $selected . ">" . $language . "</option>";
+                                            }
+                                        }
+                                    ?>
+                                </select>
+                            </div>
                             <div class="col-lg-3"></div>
 
                             <div class="col-lg-3 form_title lh45 text-lg-right">Email CC</div>
@@ -311,13 +433,19 @@ get_sidebar();
 
                             <div class="col-lg-3 form_title text-lg-right"><?php _e('Loại tài khoản', 'qlcv'); ?> <span class="text-danger">*</span></div>
                             <div class="col-lg-6 col-12 mb-20">
-                                <div class="">
-                                    <label for="" class="inline">
-                                        <input type="radio" name="phan_loai" value="0" <?php echo $is_company?"":"checked"; ?>> <?php _e('Cá nhân', 'qlcv'); ?>
-                                    </label>
-                                    <label for="" class="inline">
-                                        <input type="radio" name="phan_loai" value="1" <?php echo $is_company?"checked":""; ?>> <?php _e('Tổ chức', 'qlcv'); ?>
-                                    </label>
+                                <div class="adomx-checkbox-radio-group inline">
+                                    <?php 
+                                        $options = [
+                                            0 => __('Cá nhân', 'qlcv'), 
+                                            1 => __('Tổ chức', 'qlcv')
+                                        ];
+                                        $style = $is_company?'display: block;':'display: none;';
+
+                                        foreach ($options as $key => $value) {
+                                            $checked = ($key==$is_company)?"checked":"";
+                                            echo '<label class="adomx-radio-2"><input type="radio" name="phan_loai" value="' . $key . '" ' . $checked . '> <i class="icon"></i> ' . $value . '</label>';
+                                        }
+                                    ?>
                                 </div>
                                 <div style="<?php echo $is_company?"":"display: none;"; ?> margin-top: 15px;" id="phanloai">
                                     <small>Thêm danh sách thành viên công ty vào ô dưới đây</small>

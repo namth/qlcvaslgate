@@ -78,6 +78,32 @@ function add_new_user()
     $display_name   = $first_name . " " . $last_name;
     $user_pass      = 'd1412@pass';
 
+    $worked         = $output['worked'];
+    $nguon_dau_viec = $output['nguon_dau_viec'];
+    $partner_vip    = $output['partner_vip'];
+    $email_cc       = $output['email_cc'];
+    $email_bcc      = $output['email_bcc'];
+    $city           = $output['city']; #
+    $vietnam_company= $output['vietnam_company'];
+    if ($output['languages']) {
+        $languages      = implode(", ", $output['languages']);
+    }
+
+    $phan_loai      = $output['phan_loai'];
+    if ($output['detail_client_type']) {
+        $detail_client_type = implode(", ", $output['detail_client_type']);
+    }
+    $fdi            = $output['fdi'];
+    if ($output['fdi_countries']) {
+        $fdi_countries  = implode(", ", $output['fdi_countries']);
+    }
+    
+    if ($phan_loai) {
+        if ($output['staffs']) {
+            $staffs     = implode("|", $output['staffs']);
+        }
+    }
+
     if (search_partner($user_code)) {
         $error_partner_code = true;
         $error_message = __("<b>Trùng mã đối tác</b>", 'qlcv');
@@ -108,6 +134,20 @@ function add_new_user()
         update_field('field_6037200ec98cc', $country, 'user_' . $new_partner); # country
         update_field('field_6010f85bfcf55', $link_onedrive, 'user_' . $new_partner); # link_onedrive
         update_field('field_60a3cbacb1330', $type_of_client, 'user_' . $new_partner); # type_of_client
+        update_field('field_65a5625b5eb0e', $city, 'user_' . $new_partner); # city
+        update_field('field_65a562035eb0c', $vietnam_company, 'user_' . $new_partner); # $vietnam_company
+        update_field('field_65a4acb5db9c6', $phan_loai, 'user_' . $new_partner); # $có phải là cty hay không
+        update_field('field_65a4acebdb9c7', $staffs, 'user_' . $new_partner); # $update người trong công ty
+        update_field('field_65a5622f5eb0d', $languages, 'user_' . $new_partner); # $languages
+        update_field('field_6039b28e2ba07', $email_cc, 'user_' . $new_partner); # email_cc
+        update_field('field_609a038489e8c', $email_bcc, 'user_' . $new_partner); # email_bcc
+        update_field('field_61cd79bf1653f', $worked, 'user_' . $new_partner); # đã chốt hoặc tiềm năng
+        update_field('field_65de936686343', $nguon_dau_viec, 'user_' . $new_partner); # nguồn đến từ đâu
+        update_field('field_65dcc97fa77b9', $detail_client_type, 'user_' . $new_partner); # chuyên ngành đối tác
+        update_field('field_65ddcd2141e6f', $fdi, 'user_' . $new_partner); # có vốn fdi không
+        if ($fdi && $fdi_countries) {
+            update_field('field_65ddcd7941e70', $fdi_countries, 'user_' . $new_partner); # quốc gia đầu tư
+        }
 
         $data['status'] = 'success';
         $data['content'] = "<option value='" . $new_partner . "' selected>" . $display_name . " (" . $user_email . ")</option>";
@@ -359,7 +399,7 @@ function add_new_job()
     $data_agency            = $_POST['data_agency'];
     // $data_job       = parse_str( $_POST['data_job'], $output );
 
-    $country        = $_POST['country'];
+    $country        = implode(", ", $_POST['country']);
     $job_name       = $_POST['job_name'];
     $partner_ref    = $_POST['partner_ref'];
     $our_ref        = $_POST['our_ref'];
@@ -391,6 +431,9 @@ function add_new_job()
         $current_user   = wp_get_current_user();
         $current_time   = current_time('timestamp', 7);
     }
+    if($danh_muc == "Việc khác"){
+        $danhmuckhac = $_POST['other_job'];
+    }
     # finance
     $currency       = $_POST['currency'];
     $total_value    = $_POST['total_value'];
@@ -402,13 +445,8 @@ function add_new_job()
     }
 
     # add new customer
-    if (
-        $job_name &&
-        $data_partner &&
-        $data_customer &&
-        $data_manager &&
-        $data_member
-    ) {
+    if ( $job_name && $data_partner && $data_customer &&
+        $data_manager && $data_member ) {
 
         $args = array(
             'post_title'    => $job_name,
@@ -481,7 +519,11 @@ function add_new_job()
             if ($tiem_nang) {
                 wp_set_object_terms($inserted, array("Tiềm năng", $danh_muc), 'group');
             } else wp_set_object_terms($inserted, $danh_muc, 'group');
-            wp_set_object_terms($inserted, $nguon_dau_viec, 'post_tag');
+            
+            #set danh mục khác nếu có
+            if ($danhmuckhac && ($danh_muc == "Việc khác")) wp_set_object_terms($inserted, $danhmuckhac, 'group', true);
+            #set nguồn đầu việc
+            if ($nguon_dau_viec) wp_set_object_terms($inserted, $nguon_dau_viec, 'post_tag');
 
             if($data_agency){
                 wp_set_object_terms($inserted, $data_agency, 'agency');
@@ -701,7 +743,7 @@ add_action('deadline_notification', 'sendmail_deadline_notification');
 function sendmail_deadline_notification()
 {
     #check all task not finish and check if the deadline is running half or a quarter to deadline
-    $status = 'Hoàn thành';
+    $status = ['Hoàn thành', 'Huỷ'];
     $args   = array(
         'post_type'     => array('task', 'job'),
         'posts_per_page' => '-1',
@@ -709,7 +751,7 @@ function sendmail_deadline_notification()
             array(
                 'key'       => 'trang_thai',
                 'value'     => $status,
-                'compare'   => '!=',
+                'compare'   => 'NOT IN',
             ),
         ),
     );

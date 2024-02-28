@@ -62,23 +62,48 @@
                         <!--Author Information Start-->
                         <div class="col-xlg-6 col-lg-6 col-12 mb-30">
                             <div class="box">
-                                <div class="box-head">
-                                    <h3 class="title"><?php _e('Thông tin cá nhân', 'qlcv'); ?></h3>
-                                </div>
                                 <?php 
                                     $so_dien_thoai  = get_field('so_dien_thoai' , 'user_' . $this_user->ID);
                                     $dia_chi        = get_field('dia_chi' , 'user_' . $this_user->ID);
                                     $quoc_gia       = get_field('quoc_gia' , 'user_' . $this_user->ID);
+                                    $city           = get_field('city' , 'user_' . $this_user->ID);
+                                    $is_company     = get_field('is_company' , 'user_' . $this_user->ID);
+                                    $staffs         = get_field('staffs' , 'user_' . $this_user->ID);
+                                    $vietnam_company = get_field('vietnam_company' , 'user_' . $this_user->ID);
+                                    $languages      = get_field('languages' , 'user_' . $this_user->ID);
                                     $email_cc       = get_field('email_cc' , 'user_' . $this_user->ID);
                                     $email_bcc      = get_field('email_bcc' , 'user_' . $this_user->ID);
                                     $partner_code   = get_field('partner_code' , 'user_' . $this_user->ID);
                                     $ten_cong_ty    = get_field('ten_cong_ty' , 'user_' . $this_user->ID);
+                                    $type_of_client = get_field('type_of_client' , 'user_' . $this_user->ID);
+                                    $vip            = get_field('vip' , 'user_' . $this_user->ID);
+                                    $worked         = get_field('worked' , 'user_' . $this_user->ID);
+                                    $fdi            = get_field('fdi' , 'user_' . $this_user->ID);
+                                    $fdi_countries  = get_field('fdi_countries' , 'user_' . $this_user->ID);
+                                    $detail_client_type = get_field('detail_client_type' , 'user_' . $this_user->ID);
+                                    $source         = get_field('source' , 'user_' . $this_user->ID);
+
+                                    $tinh_trang     = $worked?"Đã chốt":"Tiềm năng";
                                 ?>
+                                <div class="box-head">
+                                    <h3 class="title">
+                                        <?php
+                                            if ($is_company) {
+                                                _e('Thông tin doanh nghiệp', 'qlcv');
+                                            } else _e('Thông tin cá nhân', 'qlcv'); ?>
+                                    </h3>
+                                </div>
                                 <div class="box-body">
                                     <div class="order-details-customer-info">
                                         <ul class="mb-30">
                                             <li><span><i class="ti-user"></i> <?php _e('Mã đối tác', 'qlcv'); ?></span><span> <?php echo $partner_code; ?></span></li>
-                                            <li><span><i class="ti-layout-column4"></i> <?php _e('Tên công ty', 'qlcv'); ?></span><span> <?php echo $ten_cong_ty; ?></span></li>
+                                            <li><span><i class="ti-home"></i> <?php _e('Tên công ty', 'qlcv'); ?></span><span> <?php echo $ten_cong_ty; ?></span></li>
+                                            <li><span><i class="ti-flag"></i> <?php _e('Tình trạng', 'qlcv'); ?></span><span> <?php echo $tinh_trang; ?></span></li>
+                                            <li><span><i class="ti-flag"></i> <?php _e('Nguồn', 'qlcv'); ?></span><span> <?php echo $source; ?></span></li>
+                                            <li><span><i class="ti-comments-smiley"></i> <?php _e('Giao tiếp', 'qlcv'); ?></span><span> <?php echo $languages; ?></span></li>
+                                            <li><span><i class="ti-control-shuffle"></i> <?php _e('Phân loại', 'qlcv'); ?></span><span> <?php echo $type_of_client; ?></span></li>
+                                            <li><span><i class="ti-control-shuffle"></i> <?php _e('Chuyên ngành', 'qlcv'); ?></span><span> <?php echo $detail_client_type; ?></span></li>
+                                            <li><span><i class="ti-crown"></i> <?php _e('Cấp độ', 'qlcv'); ?></span><span> <?php echo $vip; ?></span></li>
                                             <li><span><i class="ti-email"></i> Email</span><span> <?php echo $this_user->user_email; ?></span></li>
                                             <li><span><i class="ti-email"></i> Email CC</span><span> <?php echo $email_cc; ?></span></li>
                                             <li><span><i class="ti-email"></i> Email BCC</span><span> <?php echo $email_bcc; ?></span></li>
@@ -92,9 +117,39 @@
                                                 <span> <?php echo $quoc_gia; ?></span>
                                             </li>
                                             <li>
+                                                <span><i class="ti-location-pin"></i> <?php _e('Thành phố', 'qlcv'); ?></span>
+                                                <span> <?php echo $city; ?></span>
+                                            </li>
+                                            <li>
                                                 <span><i class="ti-direction"></i> <?php _e('Ghi chú', 'qlcv'); ?></span>
                                                 <span> <?php echo $this_user->description; ?></span>
                                             </li>
+                                            <?php 
+                                                if ($is_company) {
+                                                    ?>
+                                                        <li>
+                                                            <span><i class="ti-pin"></i> <?php _e('Doanh nghiệp', 'qlcv'); ?></span>
+                                                            <span> <?php echo $vietnam_company?"Đã có tại Việt Nam":"Chưa có tại việt Nam"; ?></span>
+                                                        </li>
+                                                        <li>
+                                                            <span><i class="ti-pin"></i> <?php _e('Vốn đầu tư', 'qlcv'); ?></span>
+                                                            <span> <?php echo $fdi?"Vốn FDI từ " . $fdi_countries:"100% Việt Nam"; ?></span>
+                                                        </li>
+                                                        <li>
+                                                            <span><i class="ti-user"></i> <?php _e('Nhân sự', 'qlcv'); ?></span>
+                                                            <div>
+                                                    <?php
+                                                    if ($staffs) {
+                                                        $staff_array = explode("|", $staffs);
+                                                        foreach ($staff_array as $starffID) {
+                                                            $staff = get_user_by("ID", $starffID);
+
+                                                            echo "<div><a href='" . get_author_posts_url($staff->ID) . "'><i class='ti-user'></i> " . $staff->display_name . " (" . $staff->user_email . ")</a></div>";
+                                                        }
+                                                    }
+                                                    echo "</div></li>";
+                                                }
+                                            ?>
                                         </ul>
 
                                         <!-- if current user isn't this user, don't show edit button -->
@@ -121,9 +176,14 @@
 
                                 <div class="box-body p-0">
                                     <?php 
+                                        // xử lý phân trang
+                                        $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
+
                                         $args   = array(
                                             'post_type'     => 'job',
-                                            'posts_per_page'=> 5,
+                                            'paged'         => $paged,
+                                            'posts_per_page'=> 50,
+
                                         );
                                         $args['meta_query'][] = array(
                                             'relation' => 'OR',
@@ -148,13 +208,15 @@
                                                 while ( $query->have_posts() ) {
                                                     $query->the_post();
 
+                                                    if (check_finish_job(get_the_ID(  ))) {
+                                                        $class = "zmdi zmdi-badge-check";
+                                                    } else $class = "fa fa-file-text-o";
+
                                         ?>
                                                     <!--Todo Item Start-->
                                                     <li>
                                                         <div class="list-action">
-                                                            <button class="status"><i class="zmdi zmdi-star-outline"></i></button>
-                                                            <label class="adomx-checkbox"><input type="checkbox"> <i class="icon"></i></label>
-                                                            <button class="remove"><i class="zmdi zmdi-delete"></i></button>
+                                                            <i class="<?php echo $class; ?>"></i>
                                                         </div>
                                                         <div class="list-content">
                                                             <?php 
@@ -162,9 +224,6 @@
                                                                 echo get_the_title(); 
                                                                 echo '</a>';
                                                             ?>
-                                                        </div>
-                                                        <div class="list-action right">
-                                                            <button class="remove"><i class="zmdi zmdi-delete"></i></button>
                                                         </div>
                                                     </li>
                                                     <!--Todo Item End-->
@@ -174,7 +233,21 @@
                                         ?>
                                     </ul>
                                     <!--Todo List End-->
+                                    <div class="col-12">
+                                        <div class="pagination justify-content-center">
+                                            <?php
+                                            $big = 999999999; // need an unlikely integer
 
+                                            echo paginate_links(array(
+                                                'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+                                                'format'    => '?paged=%#%',
+                                                'current'   => max(1, get_query_var('paged')),
+                                                'total'     => $query->max_num_pages,
+                                                'type'      => 'list',
+                                            ));
+                                            ?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div><!-- To Do List End -->

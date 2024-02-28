@@ -478,11 +478,11 @@ while (have_posts()) {
 
                                 echo "<p>";
                                 echo "<a href='" . $link_customer . "'><b>" . $name . "</b></a><br>";
-                                echo $business . "<br>";
-                                echo $phone . "<br>";
-                                echo $email . "<br>";
-                                echo $address . "<br>";
-                                echo $quoc_gia . "<br>";
+                                if($business) echo $business . "<br>";
+                                if($phone) echo $phone . "<br>";
+                                if($email) echo $email . "<br>";
+                                if($address) echo $address . "<br>";
+                                if($quoc_gia) echo $quoc_gia . "<br>";
                                 echo "</p>";
 
                                 ?>

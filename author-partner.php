@@ -69,7 +69,7 @@
                                     $city           = get_field('city' , 'user_' . $this_user->ID);
                                     $is_company     = get_field('is_company' , 'user_' . $this_user->ID);
                                     $staffs         = get_field('staffs' , 'user_' . $this_user->ID);
-                                    $vietnam_company= get_field('vietnam_company' , 'user_' . $this_user->ID);
+                                    $vietnam_company = get_field('vietnam_company' , 'user_' . $this_user->ID);
                                     $languages      = get_field('languages' , 'user_' . $this_user->ID);
                                     $email_cc       = get_field('email_cc' , 'user_' . $this_user->ID);
                                     $email_bcc      = get_field('email_bcc' , 'user_' . $this_user->ID);
@@ -78,6 +78,10 @@
                                     $type_of_client = get_field('type_of_client' , 'user_' . $this_user->ID);
                                     $vip            = get_field('vip' , 'user_' . $this_user->ID);
                                     $worked         = get_field('worked' , 'user_' . $this_user->ID);
+                                    $fdi            = get_field('fdi' , 'user_' . $this_user->ID);
+                                    $fdi_countries  = get_field('fdi_countries' , 'user_' . $this_user->ID);
+                                    $detail_client_type = get_field('detail_client_type' , 'user_' . $this_user->ID);
+                                    $source         = get_field('source' , 'user_' . $this_user->ID);
 
                                     $tinh_trang     = $worked?"Đã chốt":"Tiềm năng";
                                 ?>
@@ -95,8 +99,10 @@
                                             <li><span><i class="ti-user"></i> <?php _e('Mã đối tác', 'qlcv'); ?></span><span> <?php echo $partner_code; ?></span></li>
                                             <li><span><i class="ti-home"></i> <?php _e('Tên công ty', 'qlcv'); ?></span><span> <?php echo $ten_cong_ty; ?></span></li>
                                             <li><span><i class="ti-flag"></i> <?php _e('Tình trạng', 'qlcv'); ?></span><span> <?php echo $tinh_trang; ?></span></li>
+                                            <li><span><i class="ti-flag"></i> <?php _e('Nguồn', 'qlcv'); ?></span><span> <?php echo $source; ?></span></li>
                                             <li><span><i class="ti-comments-smiley"></i> <?php _e('Giao tiếp', 'qlcv'); ?></span><span> <?php echo $languages; ?></span></li>
                                             <li><span><i class="ti-control-shuffle"></i> <?php _e('Phân loại', 'qlcv'); ?></span><span> <?php echo $type_of_client; ?></span></li>
+                                            <li><span><i class="ti-control-shuffle"></i> <?php _e('Chuyên ngành', 'qlcv'); ?></span><span> <?php echo $detail_client_type; ?></span></li>
                                             <li><span><i class="ti-crown"></i> <?php _e('Cấp độ', 'qlcv'); ?></span><span> <?php echo $vip; ?></span></li>
                                             <li><span><i class="ti-email"></i> Email</span><span> <?php echo $this_user->user_email; ?></span></li>
                                             <li><span><i class="ti-email"></i> Email CC</span><span> <?php echo $email_cc; ?></span></li>
@@ -126,7 +132,11 @@
                                                             <span> <?php echo $vietnam_company?"Đã có tại Việt Nam":"Chưa có tại việt Nam"; ?></span>
                                                         </li>
                                                         <li>
-                                                            <span><i class="ti-pin"></i> <?php _e('Nhân sự', 'qlcv'); ?></span>
+                                                            <span><i class="ti-pin"></i> <?php _e('Vốn đầu tư', 'qlcv'); ?></span>
+                                                            <span> <?php echo $fdi?"Vốn FDI từ " . $fdi_countries:"100% Việt Nam"; ?></span>
+                                                        </li>
+                                                        <li>
+                                                            <span><i class="ti-user"></i> <?php _e('Nhân sự', 'qlcv'); ?></span>
                                                             <div>
                                                     <?php
                                                     if ($staffs) {

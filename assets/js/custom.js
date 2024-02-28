@@ -307,4 +307,16 @@ jQuery(document).ready(function ($) {
       $("#phanloai").hide(300);
     }
   });
+  /* addnew_partner.php
+    Switch chuyển phân loại sang công ty thì sẽ hiện ô nhập danh sách thành viên
+  */
+  $('input[name="fdi"]').change(function() {
+    var val = $(this).val();
+    // alert(val);
+    if (val == 1) {
+      $("#fdi").show(300);
+    } else {
+      $("#fdi").hide(300);
+    }
+  });
 });
