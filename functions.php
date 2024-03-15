@@ -587,6 +587,14 @@ function add_new_job()
             $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
             $headers[] = 'Cc: ' . $email_admin;
             $headers[] = 'Cc: ' . $manager_arr->user_email;
+            # send email to supervisor
+            if ($data_supervisor) {
+                $supervisors = explode("|", $data_supervisor);
+                foreach ($supervisors as $supervisor) {
+                    $supervisor_obj = get_user_by('ID', $supervisor);
+                    $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+                }
+            }
 
             $sent = wp_mail($to, $email_title, $email_content, $headers);
 
@@ -778,6 +786,7 @@ function sendmail_deadline_notification()
             $jobID = get_field('job');
             $our_ref = get_field('our_ref', $jobID);
             $manager_arr = get_field('manager', $jobID);
+            $$data_supervisor = get_field('supervisor', $jobID);
 
             $email_admin = get_field('email_admin', 'option');
             $to = $user_arr['user_email'];
@@ -804,12 +813,12 @@ function sendmail_deadline_notification()
                     $email_content = auto_url($email_content);
                     $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
-                    $headers = [];
-                    $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-                    $headers[] = 'Cc: ' . $email_admin;
-                    $headers[] = 'Cc: ' . $manager_arr['user_email'];
+                    // $headers = [];
+                    // $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
+                    // $headers[] = 'Cc: ' . $email_admin;
+                    // $headers[] = 'Cc: ' . $manager_arr['user_email'];
 
-                    $sent = wp_mail($to, $email_title, $email_content, $headers);
+                    // $sent = wp_mail($to, $email_title, $email_content, $headers);
                 } else if (date('d/m/Y', $current_time) == date('d/m/Y', $end_time)) {
                     # send mail notification
                     $email_title = __('Lưu ý công việc đến hạn ', 'qlcv');
@@ -822,12 +831,12 @@ function sendmail_deadline_notification()
                     $email_content = auto_url($email_content);
                     $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
-                    $headers = [];
-                    $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-                    $headers[] = 'Cc: ' . $email_admin;
-                    $headers[] = 'Cc: ' . $manager_arr['user_email'];
+                    // $headers = [];
+                    // $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
+                    // $headers[] = 'Cc: ' . $email_admin;
+                    // $headers[] = 'Cc: ' . $manager_arr['user_email'];
 
-                    $sent = wp_mail($to, $email_title, $email_content, $headers);
+                    // $sent = wp_mail($to, $email_title, $email_content, $headers);
                 } else if ($day_remaining == '-1') {
                     # miss deadline
                     $email_title = __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' đã quá hạn trả lời.';
@@ -839,18 +848,26 @@ function sendmail_deadline_notification()
                     $email_content = auto_url($email_content);
                     $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
-                    $headers = [];
-                    $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-                    $headers[] = 'Cc: ' . $email_admin;
-                    $headers[] = 'Cc: ' . $manager_arr['user_email'];
-
-                    $sent = wp_mail($to, $email_title, $email_content, $headers);
-
                     # marked to this task is missed.
                     $miss_deadline = get_field('field_6010e0a43311a');
                     update_field('field_6010e0a43311a', $miss_deadline + 1);
                     update_field('field_600fde92f9be9', 'Quá hạn');
                 }
+                
+                $headers = [];
+                $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
+                $headers[] = 'Cc: ' . $email_admin;
+                $headers[] = 'Cc: ' . $manager_arr['user_email'];
+                # send email to supervisor
+                if ( $data_supervisor ) {
+                    $supervisors = explode("|", $data_supervisor);
+                    foreach ($supervisors as $supervisor) {
+                        $supervisor_obj = get_user_by('ID', $supervisor);
+                        $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+                    }
+                }
+
+                $sent = wp_mail($to, $email_title, $email_content, $headers);
 
                 # push notification & save history
                 if ($sent) {
