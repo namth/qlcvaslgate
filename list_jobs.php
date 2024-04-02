@@ -285,12 +285,14 @@ $current_user = wp_get_current_user();
                 } else {
                     # filter theo phân quyền
                     $chi_nhanh = get_field('chi_nhanh', 'user_' . $current_user->ID);
-                    $args['tax_query'][] = array(
-                        'taxonomy'  => 'agency',
-                        'field'     => 'ID',
-                        'terms'     => $chi_nhanh,
-                        'operator'  => 'IN'
-                    );
+                    if ($chi_nhanh) {
+                        $args['tax_query'][] = array(
+                            'taxonomy'  => 'agency',
+                            'field'     => 'ID',
+                            'terms'     => $chi_nhanh,
+                            'operator'  => 'IN'
+                        );
+                    }
                 }
 
                 if (isset($_post_tag) && ($_post_tag != '')) {
@@ -463,7 +465,7 @@ $current_user = wp_get_current_user();
 
                 $query = new WP_Query($args);
 
-                // print_r($args);
+                print_r($args);
                 // $total_args = $args;
                 // $total_args['posts_per_page'] = -1;
                 // $total_query = new WP_Query($total_args);
@@ -549,7 +551,7 @@ $current_user = wp_get_current_user();
                                         echo "<td>" . get_the_date('d/m/Y') . "</td>";
                                         echo "<td class='action_cell'>
                                                 <a href='" . get_permalink() . "'>" . get_the_title() . "</a>
-                                                <a class='hidden_link' href='" . get_bloginfo('url') . "/duplicate-job/?jobid=" . get_the_ID() . "'><i class='fa fa-clone'></i> Duplicate This</a>    
+                                                <a class='hidden_link' href='" . get_bloginfo('url') . "/duplicate-job/?jobid=" . get_the_ID() . "'  onclick=\"return confirm('Bạn có chắc muốn nhân đôi việc này?')\"><i class='fa fa-clone'></i> Duplicate This</a>    
                                             </td>";
                                         echo "<td>" . end($work_history) . "</td>";
                                         if (!$type || ($type == 'tiem-nang')) {

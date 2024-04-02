@@ -590,9 +590,11 @@ function add_new_job()
             # send email to supervisor
             if ($data_supervisor) {
                 $supervisors = explode("|", $data_supervisor);
-                foreach ($supervisors as $supervisor) {
-                    $supervisor_obj = get_user_by('ID', $supervisor);
-                    $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+                if(!empty($supervisors)){
+                    foreach ($supervisors as $supervisor) {
+                        $supervisor_obj = get_user_by('ID', $supervisor);
+                        $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+                    }
                 }
             }
 
@@ -782,11 +784,10 @@ function sendmail_deadline_notification()
             $day_remaining = round(((($end_time - $current_time) / 24) / 60) / 60);
 
             $user_arr = get_field('user');
-            $manager_arr = get_field('manager');
             $jobID = get_field('job');
             $our_ref = get_field('our_ref', $jobID);
             $manager_arr = get_field('manager', $jobID);
-            $$data_supervisor = get_field('supervisor', $jobID);
+            $data_supervisor = get_field('supervisor', $jobID);
 
             $email_admin = get_field('email_admin', 'option');
             $to = $user_arr['user_email'];
@@ -856,14 +857,20 @@ function sendmail_deadline_notification()
                 
                 $headers = [];
                 $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-                $headers[] = 'Cc: ' . $email_admin;
-                $headers[] = 'Cc: ' . $manager_arr['user_email'];
+                if ($email_admin) {
+                    $headers[] = 'Cc: ' . $email_admin;
+                }
+                if ($manager_arr['user_email']) {
+                    $headers[] = 'Cc: ' . $manager_arr['user_email'];
+                }
                 # send email to supervisor
                 if ( $data_supervisor ) {
                     $supervisors = explode("|", $data_supervisor);
-                    foreach ($supervisors as $supervisor) {
-                        $supervisor_obj = get_user_by('ID', $supervisor);
-                        $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+                    if(!empty($supervisors)){
+                        foreach ($supervisors as $supervisor) {
+                            $supervisor_obj = get_user_by('ID', $supervisor);
+                            $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+                        }
                     }
                 }
 
