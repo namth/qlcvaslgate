@@ -465,7 +465,7 @@ $current_user = wp_get_current_user();
 
                 $query = new WP_Query($args);
 
-                print_r($args);
+                // print_r($args);
                 // $total_args = $args;
                 // $total_args['posts_per_page'] = -1;
                 // $total_query = new WP_Query($total_args);
