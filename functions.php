@@ -6,6 +6,8 @@ function all_my_hooks(){
     require_once( $dir . '/custom_posts.php');
     require_once( $dir . '/custom_fields.php');
     require_once( $dir . '/ajax_filter.php');
+    require_once ($dir . '/datacenter/secret.php');
+    require_once ($dir . '/datacenter/mongodb_connection.php');
 }
 
 register_nav_menus(array('main-menu' => esc_html__('Main Menu', 'blankslate')));
@@ -775,111 +777,122 @@ function sendmail_deadline_notification()
             $current_time = current_time('timestamp', 7);
 
             $deadline = get_field('deadline');
-            $tmp = DateTime::createFromFormat('d/m/Y', $deadline);
-            $end_time = strtotime($tmp->format('d-m-Y'));
-
-            $half_time = ($end_time + $start_time) / 2;
-            $quater_time = ($end_time + $half_time) / 2;
-
-            $day_remaining = round(((($end_time - $current_time) / 24) / 60) / 60);
-
-            $user_arr = get_field('user');
-            $jobID = get_field('job');
-            $our_ref = get_field('our_ref', $jobID);
-            $manager_arr = get_field('manager', $jobID);
-            $data_supervisor = get_field('supervisor', $jobID);
-
-            $email_admin = get_field('email_admin', 'option');
-            $to = $user_arr['user_email'];
-            if ($jobID) {
-                $joblb = " cho " . get_the_title($jobID) . " (" . $our_ref . ")";
-            } else {
-                $joblb = '';
-            }
-
-            if ($to) {
-
-                if ((date('d/m/Y', $current_time) == date('d/m/Y', $half_time)) ||
-                    (date('d/m/Y', $current_time) == date('d/m/Y', $quater_time))
-                ) {
-                    # send mail notification
-                    $lan_nhac = (date('d/m/Y', $current_time) == date('d/m/Y', $quater_time)) ? '2' : '1';
-
-                    $email_title = __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' ' . __('chưa trả lời.', 'qlcv');
-                    $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
-                    $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
-                    $email_content .= __("Lần nhắc thứ ", 'qlcv') . "" . $lan_nhac . " đối với đầu việc: " . get_the_title() . "<br>";
-                    $email_content .= __('Thời hạn để xử lý công việc này là', 'qlcv') . ' ' . $deadline . '. ' . __('Như vậy, bạn còn', 'qlcv') . ' ' . $day_remaining . ' ' . __('ngày để trả lời.', 'qlcv');
-                    $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink();
-                    $email_content = auto_url($email_content);
-                    $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
-
-                    // $headers = [];
-                    // $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-                    // $headers[] = 'Cc: ' . $email_admin;
-                    // $headers[] = 'Cc: ' . $manager_arr['user_email'];
-
-                    // $sent = wp_mail($to, $email_title, $email_content, $headers);
-                } else if (date('d/m/Y', $current_time) == date('d/m/Y', $end_time)) {
-                    # send mail notification
-                    $email_title = __('Lưu ý công việc đến hạn ', 'qlcv');
-                    $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
-                    $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
-                    $email_content .= "Lần nhắc thứ 3 đối với đầu việc: " . get_the_title() . "<br>";
-                    $email_content .= __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' ' . __('đến hạn trả lời hôm nay và', 'qlcv') . ' ' . $user_arr['display_name'] . ' ' . __('chưa trả lời.', 'qlcv') . ' <br>';
-                    $email_content .= $user_arr['display_name'] . ' ' . __('cần trả lời ngay.', 'qlcv');
-                    $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink();
-                    $email_content = auto_url($email_content);
-                    $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
-
-                    // $headers = [];
-                    // $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-                    // $headers[] = 'Cc: ' . $email_admin;
-                    // $headers[] = 'Cc: ' . $manager_arr['user_email'];
-
-                    // $sent = wp_mail($to, $email_title, $email_content, $headers);
-                } else if ($day_remaining == '-1') {
-                    # miss deadline
-                    $email_title = __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' đã quá hạn trả lời.';
-                    $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
-                    $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
-                    $email_content .= __("Lần nhắc thứ 4 đối với đầu việc:", 'qlcv') . " " . get_the_title() . "<br>";
-                    $email_content .= $user_arr['display_name'] . ' ' . __('cần gửi báo cáo cho người quản lý về lý do chưa trả lời này.', 'qlcv');
-                    $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink();
-                    $email_content = auto_url($email_content);
-                    $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
-
-                    # marked to this task is missed.
-                    $miss_deadline = get_field('field_6010e0a43311a');
-                    update_field('field_6010e0a43311a', $miss_deadline + 1);
-                    update_field('field_600fde92f9be9', 'Quá hạn');
+            # nếu có trường deadline thì mới xử lý tiếp, không thì kết thúc.
+            if ($deadline) {
+                $tmp = DateTime::createFromFormat('d/m/Y', $deadline);
+                $end_time = strtotime($tmp->format('d-m-Y'));
+    
+                $half_time = ($end_time + $start_time) / 2;
+                $quater_time = ($end_time + $half_time) / 2;
+    
+                $day_remaining = round(((($end_time - $current_time) / 24) / 60) / 60);
+    
+                $user_arr = get_field('user');
+                $jobID = get_field('job');
+                $our_ref = get_field('our_ref', $jobID);
+                $manager_arr = get_field('manager', $jobID);
+                $data_supervisor = get_field('supervisor', $jobID);
+    
+                $email_admin = get_field('email_admin', 'option');
+                $to = $user_arr['user_email'];
+                if ($jobID) {
+                    $joblb = " cho " . get_the_title($jobID) . " (" . $our_ref . ")";
+                } else {
+                    $joblb = '';
                 }
-                
-                $headers = [];
-                $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-                if ($email_admin) {
-                    $headers[] = 'Cc: ' . $email_admin;
-                }
-                if ($manager_arr['user_email']) {
-                    $headers[] = 'Cc: ' . $manager_arr['user_email'];
-                }
-                # send email to supervisor
-                if ( $data_supervisor ) {
-                    $supervisors = explode("|", $data_supervisor);
-                    if(!empty($supervisors)){
-                        foreach ($supervisors as $supervisor) {
-                            $supervisor_obj = get_user_by('ID', $supervisor);
-                            $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+    
+                if ($to) {
+                    # reset cờ để kiểm tra, nếu có gửi email sẽ set bằng true
+                    $sendFlag = false;
+                    
+                    if ((date('d/m/Y', $current_time) == date('d/m/Y', $half_time)) ||
+                        (date('d/m/Y', $current_time) == date('d/m/Y', $quater_time))
+                    ) {
+                        # send mail notification
+                        $lan_nhac = (date('d/m/Y', $current_time) == date('d/m/Y', $quater_time)) ? '2' : '1';
+    
+                        $email_title = __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' ' . __('chưa trả lời.', 'qlcv');
+                        $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
+                        $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
+                        $email_content .= __("Lần nhắc thứ ", 'qlcv') . "" . $lan_nhac . " đối với đầu việc: " . get_the_title() . "<br>";
+                        $email_content .= __('Thời hạn để xử lý công việc này là', 'qlcv') . ' ' . $deadline . '. ' . __('Như vậy, bạn còn', 'qlcv') . ' ' . $day_remaining . ' ' . __('ngày để trả lời.', 'qlcv');
+                        $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink();
+                        $email_content = auto_url($email_content);
+                        $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
+    
+                        // $headers = [];
+                        // $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
+                        // $headers[] = 'Cc: ' . $email_admin;
+                        // $headers[] = 'Cc: ' . $manager_arr['user_email'];
+    
+                        // $sent = wp_mail($to, $email_title, $email_content, $headers);
+                        $sendFlag = true;
+                    } else if (date('d/m/Y', $current_time) == date('d/m/Y', $end_time)) {
+                        # send mail notification
+                        $email_title = __('Lưu ý công việc đến hạn ', 'qlcv');
+                        $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
+                        $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
+                        $email_content .= "Lần nhắc thứ 3 đối với đầu việc: " . get_the_title() . "<br>";
+                        $email_content .= __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' ' . __('đến hạn trả lời hôm nay và', 'qlcv') . ' ' . $user_arr['display_name'] . ' ' . __('chưa trả lời.', 'qlcv') . ' <br>';
+                        $email_content .= $user_arr['display_name'] . ' ' . __('cần trả lời ngay.', 'qlcv');
+                        $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink();
+                        $email_content = auto_url($email_content);
+                        $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
+    
+                        // $headers = [];
+                        // $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
+                        // $headers[] = 'Cc: ' . $email_admin;
+                        // $headers[] = 'Cc: ' . $manager_arr['user_email'];
+    
+                        // $sent = wp_mail($to, $email_title, $email_content, $headers);
+                        $sendFlag = true;
+                    } else if ($day_remaining == '-1') {
+                        # miss deadline
+                        $email_title = __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' đã quá hạn trả lời.';
+                        $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
+                        $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
+                        $email_content .= __("Lần nhắc thứ 4 đối với đầu việc:", 'qlcv') . " " . get_the_title() . "<br>";
+                        $email_content .= $user_arr['display_name'] . ' ' . __('cần gửi báo cáo cho người quản lý về lý do chưa trả lời này.', 'qlcv');
+                        $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink();
+                        $email_content = auto_url($email_content);
+                        $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
+    
+                        $sendFlag = true;
+                        # marked to this task is missed.
+                        $miss_deadline = get_field('field_6010e0a43311a');
+                        update_field('field_6010e0a43311a', $miss_deadline + 1);
+                        update_field('field_600fde92f9be9', 'Quá hạn');
+                    }
+                    
+                    # nếu cờ gửi email được bật, sẽ tiến hành gửi email cho admin, người chịu trách nhiệm, người quản lý, và người giám sát.
+                    if ($sendFlag) {
+                        $headers = [];
+                        $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
+                        if ($email_admin) {
+                            $headers[] = 'Cc: ' . $email_admin;
+                        }
+                        if ($manager_arr['user_email']) {
+                            $headers[] = 'Cc: ' . $manager_arr['user_email'];
+                        }
+                        # send email to supervisor
+                        if ( $data_supervisor ) {
+                            $supervisors = explode("|", $data_supervisor);
+                            if(!empty($supervisors)){
+                                foreach ($supervisors as $supervisor) {
+                                    $supervisor_obj = get_user_by('ID', $supervisor);
+                                    $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+                                }
+                            }
+                        }
+        
+                        $sent = wp_mail($to, $email_title, $email_content, $headers);
+        
+                        # push notification & save history
+                        if ($sent) {
+                            create_notification(get_the_ID(), $email_title, $manager_arr['ID'], $user_arr['ID']);
+                            $sent = 0;
                         }
                     }
-                }
-
-                $sent = wp_mail($to, $email_title, $email_content, $headers);
-
-                # push notification & save history
-                if ($sent) {
-                    create_notification(get_the_ID(), $email_title, $manager_arr['ID'], $user_arr['ID']);
-                    $sent = 0;
                 }
             }
         }
@@ -1215,3 +1228,4 @@ function show_pagination($current_page, $total_page){
         return $pagination;
     }
 }
+
