@@ -6,7 +6,7 @@ function all_my_hooks(){
     require_once( $dir . '/custom_posts.php');
     require_once( $dir . '/custom_fields.php');
     require_once( $dir . '/ajax_filter.php');
-    require_once ($dir . '/datacenter/secret.php');
+    // require_once ($dir . '/datacenter/secret.php');
     require_once ($dir . '/datacenter/mongodb_connection.php');
 }
 
