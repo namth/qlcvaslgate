@@ -11647,7 +11647,7 @@ body.side-header-green .side-header .side-header-close {
   -webkit-transform: translateX(-50%);
       -ms-transform: translateX(-50%);
           transform: translateX(-50%);
-  top: 36px;
+  /* top: 36px; */
   bottom: 12px;
   width: 1px;
   background-color: #bfbfbf;

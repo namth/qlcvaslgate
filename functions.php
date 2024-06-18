@@ -6,8 +6,8 @@ function all_my_hooks(){
     require_once( $dir . '/custom_posts.php');
     require_once( $dir . '/custom_fields.php');
     require_once( $dir . '/ajax_filter.php');
-    // require_once ($dir . '/datacenter/secret.php');
-    // require_once ($dir . '/datacenter/mongodb_connection.php');
+    require_once ($dir . '/datacenter/secret.php');
+    require_once ($dir . '/datacenter/mongodb_connection.php');
 }
 
 register_nav_menus(array('main-menu' => esc_html__('Main Menu', 'blankslate')));
@@ -1229,3 +1229,167 @@ function show_pagination($current_page, $total_page){
     }
 }
 
+
+function CreateDatabaseQlcv()
+{
+    global $wpdb;
+    $charsetCollate = $wpdb->get_charset_collate();
+    # table 1
+    $aslTable = $wpdb->prefix . 'aslcustomer';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `id` bigint(20) UNSIGNED NOT NULL,
+        `name` varchar(255) NOT NULL,
+        `companyName` varchar(255) NOT NULL,
+        `country` varchar(255) NOT NULL,
+        `phone` varchar(20) NULL,
+        `email` varchar(255) NOT NULL,
+        `date` timestamp NOT NULL,
+        PRIMARY KEY (`id`)
+    ) {$charsetCollate};";
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($createAslTable);
+
+    # table 2
+    $aslTable = $wpdb->prefix . 'aslpartner';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `id` bigint(20) UNSIGNED NOT NULL,
+        `name` varchar(255) NOT NULL,
+        `partner_code` varchar(20) NULL,
+        `companyName` varchar(255) NOT NULL,
+        `country` varchar(255) NOT NULL,
+        `address` varchar(255) NOT NULL,
+        `city` varchar(255) NOT NULL,
+        `is_company` tinyint(4) NOT NULL,
+        `staffs` varchar(255) NULL,
+        `vn_company` tinyint(4) NULL,
+        `languages` varchar(255) NULL,
+        `email_cc` varchar(255) NULL,
+        `email_bcc` varchar(255) NULL,
+        `type_of_client` varchar(255) NULL,
+        `vip` varchar(255) NULL,
+        `status` varchar(255) NULL,
+        `fdi` varchar(255) NULL,
+        `fdi_from` varchar(255) NULL,
+        `client_type` varchar(255) NULL,
+        `source` varchar(255) NULL,
+        `phone` varchar(20) NULL,
+        `email` varchar(255) NOT NULL,
+        `role_partner__in` tinyint(4) NULL,
+        `role_partner__out` tinyint(4) NULL,
+        `date` timestamp NOT NULL,
+        PRIMARY KEY (`id`)
+    ) {$charsetCollate};";
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($createAslTable);
+
+    # table 3
+    $aslTable = $wpdb->prefix . 'aslmember';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `id` bigint(20) UNSIGNED NOT NULL,
+        `name` varchar(255) NOT NULL,
+        `address` varchar(255) NOT NULL,
+        `phone` varchar(20) NULL,
+        `email` varchar(255) NOT NULL,
+        `date` timestamp NOT NULL,
+        `agency_hn` tinyint(4) NOT NULL,
+        `agency_hcm` tinyint(4) NOT NULL,
+        `group_trademark` tinyint(4) NOT NULL,
+        `group_patent` tinyint(4) NOT NULL,
+        `group_design` tinyint(4) NOT NULL,
+        `group_franchise` tinyint(4) NOT NULL,
+        `group_copyright` tinyint(4) NOT NULL,
+        `group_others` tinyint(4) NOT NULL,
+        `group_potential` tinyint(4) NOT NULL,
+        `role_admin` tinyint(4) NOT NULL,
+        `role_manager` tinyint(4) NOT NULL,
+        `role_member` tinyint(4) NOT NULL,
+        `role_law_manager` tinyint(4) NOT NULL,
+        `role_ip_manager` tinyint(4) NOT NULL,
+        PRIMARY KEY (`id`)
+    ) {$charsetCollate};";
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($createAslTable);
+
+    # table 4
+    $aslTable = $wpdb->prefix . 'asljob';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `id` bigint(20) UNSIGNED NOT NULL,
+        `title` varchar(255) NOT NULL,
+        `type` varchar(255) NOT NULL,
+        `our_ref` varchar(50) NULL,
+        `customerid` bigint(20) UNSIGNED NULL,
+        `first_partnerid` bigint(20) UNSIGNED NULL,
+        `partnerid` bigint(20) UNSIGNED NULL,
+        `partner_out_id` bigint(20) UNSIGNED NULL,
+        `memberid` bigint(20) UNSIGNED NULL,
+        `managerid` bigint(20) UNSIGNED NULL,
+        `currency` varchar(5) NULL,
+        `total_value` varchar(255) NULL,
+        `paid` varchar(255) NULL,
+        `remainning` varchar(255) NULL,
+        `total_cost` varchar(255) NULL,
+        `currency_out` varchar(5) NULL,
+        `advance_money` varchar(255) NULL,
+        `debt` varchar(255) NULL,
+        `payment_status` varchar(255) NULL,
+        `source` varchar(255) NULL,
+        `date` timestamp NOT NULL,
+        `contract_sign_date` timestamp NOT NULL,
+        `agency_hn` tinyint(4) NOT NULL,
+        `agency_hcm` tinyint(4) NOT NULL,
+        PRIMARY KEY (`id`)
+    ) {$charsetCollate};";
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($createAslTable);
+
+    # table 5
+    $aslTable = $wpdb->prefix . 'asltask';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `id` bigint(20) UNSIGNED NOT NULL,
+        `title` varchar(255) NOT NULL,
+        `jobid` bigint(20) UNSIGNED NOT NULL,
+        `memberid` bigint(20) UNSIGNED NOT NULL,
+        `managerid` bigint(20) UNSIGNED NOT NULL,
+        `status` varchar(255) NULL,
+        `deadline` timestamp NULL,
+        `time_to_response` timestamp NULL,
+        `miss_deadline` tinyint(4) NULL,
+        `date` timestamp NOT NULL,
+        PRIMARY KEY (`id`)
+    ) {$charsetCollate};";
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($createAslTable);
+
+    # table 6
+    $aslTable = $wpdb->prefix . 'asljobhistory';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `jobid` bigint(20) UNSIGNED NOT NULL,
+        `name` varchar(255) NOT NULL,
+        `date` timestamp NULL
+    ) {$charsetCollate};";
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($createAslTable);
+
+    # table 7
+    $aslTable = $wpdb->prefix . 'asltaskhistory';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `taskid` bigint(20) UNSIGNED NOT NULL,
+        `content` varchar(255) NOT NULL,
+        `userid` bigint(20) UNSIGNED NOT NULL,
+        `date` timestamp NOT NULL
+    ) {$charsetCollate};";
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($createAslTable);
+
+    # table 8
+    $aslTable = $wpdb->prefix . 'aslsupervisor';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `jobid` bigint(20) UNSIGNED NOT NULL,
+        `supervisorid` bigint(20) UNSIGNED NOT NULL
+    ) {$charsetCollate};";
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($createAslTable);
+
+
+}
+add_action('after_switch_theme', 'CreateDatabaseQlcv');

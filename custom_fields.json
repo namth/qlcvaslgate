@@ -1,0 +1,2815 @@
+[
+  {
+    "key": "group_614363a2f0d95",
+    "title": "Cài đặt API",
+    "fields": [
+      {
+        "key": "field_614363ab79fb1",
+        "label": "API URL",
+        "name": "api_url",
+        "type": "text",
+        "instructions": "Đường dẫn tới trang web cần kết nối",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_6143645b79fb2",
+        "label": "Username",
+        "name": "username",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_6143646579fb3",
+        "label": "Password",
+        "name": "password",
+        "type": "password",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "placeholder": "",
+        "prepend": "",
+        "append": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "options_page",
+          "operator": "==",
+          "value": "theme-settings"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_60af6bc3e0ff9",
+    "title": "Cài đặt chung",
+    "fields": [
+      {
+        "key": "field_60afcd9abd81b",
+        "label": "Email Admin",
+        "name": "email_admin",
+        "type": "text",
+        "instructions": "Email nhận thông báo từ website",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_639754cce3c32",
+        "label": "Logo",
+        "name": "logo",
+        "type": "image",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "return_format": "url",
+        "preview_size": "medium",
+        "library": "all",
+        "min_width": "",
+        "min_height": "",
+        "min_size": "",
+        "max_width": "",
+        "max_height": "",
+        "max_size": "",
+        "mime_types": ""
+      },
+      {
+        "key": "field_639745fa401f4",
+        "label": "Sidebar background",
+        "name": "sidebar_background",
+        "type": "color_picker",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      },
+      {
+        "key": "field_63974628401f6",
+        "label": "Home line 1 background",
+        "name": "home_line_1_background",
+        "type": "color_picker",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      },
+      {
+        "key": "field_6397465d401f7",
+        "label": "Home line 2 background",
+        "name": "home_line_2_background",
+        "type": "color_picker",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      },
+      {
+        "key": "field_63974667401f8",
+        "label": "Home line 3 background",
+        "name": "home_line_3_background",
+        "type": "color_picker",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      },
+      {
+        "key": "field_63974678401f9",
+        "label": "Text color",
+        "name": "text_color",
+        "type": "color_picker",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "options_page",
+          "operator": "==",
+          "value": "theme-settings"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_61cd897bb866d",
+    "title": "Cấu hình khác",
+    "fields": [
+      {
+        "key": "field_61cd898b2be6f",
+        "label": "Phân loại đối tác",
+        "name": "partner_list_type",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "maxlength": "",
+        "rows": "",
+        "new_lines": ""
+      },
+      {
+        "key": "field_61cd89bc2be70",
+        "label": "Phân cấp VIP (đối tác)",
+        "name": "partner_vip_type",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "maxlength": "",
+        "rows": "",
+        "new_lines": ""
+      },
+      {
+        "key": "field_65dc6da693394",
+        "label": "Ngôn ngữ giao tiếp",
+        "name": "languages",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "maxlength": "",
+        "rows": "",
+        "new_lines": ""
+      },
+      {
+        "key": "field_65ddcf172909a",
+        "label": "Danh sách quốc gia",
+        "name": "list_country",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "maxlength": "",
+        "rows": "",
+        "new_lines": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "options_page",
+          "operator": "==",
+          "value": "other-acf-settings"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_600d30ac2f437",
+    "title": "Customer, Partner",
+    "fields": [
+      {
+        "key": "field_600d31f4060eb",
+        "label": "Tên công ty",
+        "name": "ten_cong_ty",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600d3211060ec",
+        "label": "Số điện thoại",
+        "name": "so_dien_thoai",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600d3235060ed",
+        "label": "Email",
+        "name": "email",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600d323d060ee",
+        "label": "Địa chỉ",
+        "name": "dia_chi",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_6037200ec98cc",
+        "label": "Quốc gia",
+        "name": "quoc_gia",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_65a5625b5eb0e",
+        "label": "Thành phố",
+        "name": "city",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_6010f85bfcf55",
+        "label": "Hồ sơ giấy tờ",
+        "name": "document",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_6039b28e2ba07",
+        "label": "Email CC",
+        "name": "email_cc",
+        "type": "text",
+        "instructions": "Các email cách nhau một dấu \",\"",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "maxlength": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": ""
+      },
+      {
+        "key": "field_609a038489e8c",
+        "label": "Email BCC",
+        "name": "email_bcc",
+        "type": "text",
+        "instructions": "Các email cách nhau một dấu \",\"",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "maxlength": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": ""
+      },
+      {
+        "key": "field_614319e51e117",
+        "label": "API ID",
+        "name": "api_id",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_65de936686343",
+        "label": "Nguồn",
+        "name": "source",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_65a5622f5eb0d",
+        "label": "Ngôn ngữ giao tiếp",
+        "name": "languages",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "customer"
+        },
+        {
+          "param": "user_role",
+          "operator": "!=",
+          "value": "administrator"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_60f8d9790c99a",
+    "title": "Email",
+    "fields": [
+      {
+        "key": "field_60f8d97d1b0f8",
+        "label": "Email to",
+        "name": "email_to",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60f8d98a1b0f9",
+        "label": "Email CC",
+        "name": "email_cc",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60f8d9911b0fa",
+        "label": "Email BCC",
+        "name": "email_bcc",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "email"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_6012888dc73aa",
+    "title": "Groups",
+    "fields": [
+      {
+        "key": "field_601288a7b585e",
+        "label": "Trạng thái",
+        "name": "status",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "maxlength": "",
+        "rows": "",
+        "new_lines": ""
+      },
+      {
+        "key": "field_601289dc09f5d",
+        "label": "Danh sách các công việc",
+        "name": "work_list",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "maxlength": "",
+        "rows": "",
+        "new_lines": ""
+      },
+      {
+        "key": "field_60c19e6b8afad",
+        "label": "Mã viết tắt loại đầu việc",
+        "name": "groups_code",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60c19e8c8afae",
+        "label": "Số thứ tự",
+        "name": "order_number",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "taxonomy",
+          "operator": "==",
+          "value": "group"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_600fcf8bdcc8a",
+    "title": "Job",
+    "fields": [
+      {
+        "key": "field_600fe093bb385",
+        "label": "Customer",
+        "name": "customer",
+        "type": "post_object",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "post_type": {
+          "0": "customer"
+        },
+        "taxonomy": "",
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "object",
+        "ui": 1
+      },
+      {
+        "key": "field_602f78f1c59ba",
+        "label": "Partner 1",
+        "name": "partner_1",
+        "type": "user",
+        "instructions": "Đối tác đầu tiên mang việc về (Người giới thiệu)",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "role": {
+          "0": "partner"
+        },
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "array"
+      },
+      {
+        "key": "field_602f7923c59bb",
+        "label": "Partner 2",
+        "name": "partner_2",
+        "type": "user",
+        "instructions": "Đối tác tiếp quản khách hàng hiện tại",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "role": {
+          "0": "partner"
+        },
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "array"
+      },
+      {
+        "key": "field_609bf99f726ef",
+        "label": "Partner nước ngoài",
+        "name": "foreign_partner",
+        "type": "user",
+        "instructions": "Đối tác nước ngoài xử lý vụ việc",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "role": {
+          "0": "foreign_partner"
+        },
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "array"
+      },
+      {
+        "key": "field_603627f913b2c",
+        "label": "Người thực hiện",
+        "name": "member",
+        "type": "user",
+        "instructions": "Người thực hiện",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "role": {
+          "0": "member"
+        },
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "array"
+      },
+      {
+        "key": "field_603629217fe93",
+        "label": "Người quản lý",
+        "name": "manager",
+        "type": "user",
+        "instructions": "Người quản lý",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "role": {
+          "0": "contributor",
+          "1": "administrator"
+        },
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "array"
+      },
+      {
+        "key": "field_659ce731517c9",
+        "label": "Người giám sát",
+        "name": "supervisor",
+        "type": "text",
+        "instructions": "lưu ID người giám sát, cách nhau dấu \"|\"",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_6099f6bb87256",
+        "label": "Quốc gia nộp",
+        "name": "country",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60a38cc126a5f",
+        "label": "Link tài liệu",
+        "name": "link_onedrive",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "maxlength": "",
+        "rows": "",
+        "new_lines": ""
+      },
+      {
+        "key": "field_60fceb18a736d",
+        "label": "Lưu ý",
+        "name": "mindful",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "maxlength": "",
+        "rows": "",
+        "new_lines": ""
+      },
+      {
+        "key": "field_6099f71187257",
+        "label": "Số REF của đối tác",
+        "name": "partner_ref",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_6099f75a87258",
+        "label": "Số REF của mình",
+        "name": "our_ref",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600fdbda0269e",
+        "label": "Phân loại",
+        "name": "phan_loai",
+        "type": "radio",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "choices": {
+          "Nhãn hiệu": "Nhãn hiệu",
+          "Sáng chế": "Sáng chế",
+          "Kiểu dáng": "Kiểu dáng"
+        },
+        "allow_null": 1,
+        "other_choice": 0,
+        "default_value": "",
+        "layout": "vertical",
+        "return_format": "value",
+        "save_other_choice": 0
+      },
+      {
+        "key": "field_600fdca20269f",
+        "label": "Logo",
+        "name": "logo",
+        "type": "image",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": [
+          {
+            "field": "field_600fdbda0269e",
+            "operator": "==",
+            "value": "Nhãn hiệu"
+          }
+        ],
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "return_format": "url",
+        "preview_size": "full",
+        "library": "all",
+        "min_width": "",
+        "min_height": "",
+        "min_size": "",
+        "max_width": "",
+        "max_height": "",
+        "max_size": "",
+        "mime_types": ""
+      },
+      {
+        "key": "field_600fd7db6154d",
+        "label": "Tên nhãn hiệu",
+        "name": "ten_nhan_hieu",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": [
+          {
+            "field": "field_600fdbda0269e",
+            "operator": "==",
+            "value": "Nhãn hiệu"
+          }
+        ],
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600fd7ec6154e",
+        "label": "Nhóm",
+        "name": "nhom",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": [
+          {
+            "field": "field_600fdbda0269e",
+            "operator": "==",
+            "value": "Nhãn hiệu"
+          }
+        ],
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600fd7f46154f",
+        "label": "Số lượng nhóm",
+        "name": "so_luong_nhom",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": [
+          {
+            "field": "field_600fdbda0269e",
+            "operator": "==",
+            "value": "Nhãn hiệu"
+          }
+        ],
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600fd84dcbfa2",
+        "label": "Bản mô tả sáng chế",
+        "name": "ban_mo_ta_sang_che",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": [
+          {
+            "field": "field_600fdbda0269e",
+            "operator": "==",
+            "value": "Sáng chế"
+          }
+        ],
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600fd874cbfa3",
+        "label": "Số lượng yêu cầu bảo hộ",
+        "name": "so_luong_yeu_cau_bao_ho",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": [
+          {
+            "field": "field_600fdbda0269e",
+            "operator": "==",
+            "value": "Sáng chế"
+          }
+        ],
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600fd895cbfa5",
+        "label": "Số lượng yêu cầu bảo hộ độc lập",
+        "name": "so_luong_yeu_cau_bao_ho_doc_lap",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": [
+          {
+            "field": "field_600fdbda0269e",
+            "operator": "==",
+            "value": "Sáng chế"
+          }
+        ],
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600fd8b88a1c1",
+        "label": "Bộ ảnh",
+        "name": "bo_anh",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": [
+          {
+            "field": "field_600fdbda0269e",
+            "operator": "==",
+            "value": "Kiểu dáng"
+          }
+        ],
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600fd8f38a1c2",
+        "label": "Bản mô tả của bộ ảnh",
+        "name": "ban_mo_ta_cua_bo_anh",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": [
+          {
+            "field": "field_600fdbda0269e",
+            "operator": "==",
+            "value": "Kiểu dáng"
+          }
+        ],
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600fd9048a1c3",
+        "label": "Số lượng phương án",
+        "name": "so_luong_phuong_an",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": [
+          {
+            "field": "field_600fdbda0269e",
+            "operator": "==",
+            "value": "Kiểu dáng"
+          }
+        ],
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60ffc8f3d152b",
+        "label": "Ngày chốt công việc",
+        "name": "contract_sign_date",
+        "type": "date_picker",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "display_format": "d/m/Y",
+        "return_format": "d/m/Y",
+        "first_day": 1
+      },
+      {
+        "key": "field_614332003d839",
+        "label": "API ID",
+        "name": "api_id",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "job"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_606ec7017fcd6",
+    "title": "Job Data",
+    "fields": [
+      {
+        "key": "field_606fe68f81af2",
+        "label": "Mã code",
+        "name": "ma_code",
+        "type": "text",
+        "instructions": "Để khách hàng nhập để vào xem thông tin",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_606ec70f02a63",
+        "label": "Số đơn",
+        "name": "so_don",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_606ec71f02a64",
+        "label": "Ngày nộp đơn",
+        "name": "ngay_nop_don",
+        "type": "date_picker",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "display_format": "d/m/Y",
+        "return_format": "d/m/Y",
+        "first_day": 1
+      },
+      {
+        "key": "field_606ec7aa02a65",
+        "label": "Số bằng",
+        "name": "so_bang",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_606ec7b602a66",
+        "label": "Ngày cấp bằng",
+        "name": "ngay_cap_bang",
+        "type": "date_picker",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "display_format": "d/m/Y",
+        "return_format": "d/m/Y",
+        "first_day": 1
+      },
+      {
+        "key": "field_606ed4e802a6a",
+        "label": "Lịch sử công việc",
+        "name": "lich_su_cong_viec",
+        "type": "repeater",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "collapsed": "",
+        "min": 0,
+        "max": 0,
+        "layout": "table",
+        "button_label": "",
+        "sub_fields": [
+          {
+            "key": "field_606ed54502a6b",
+            "label": "Mô tả",
+            "name": "mo_ta",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+          },
+          {
+            "key": "field_606ed56802a6c",
+            "label": "Ngày tháng",
+            "name": "ngay_thang",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+          },
+          {
+            "key": "field_606fe3fc5b431",
+            "label": "Hoàn thành",
+            "name": "hoan_thanh",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+          }
+        ]
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "job"
+        },
+        {
+          "param": "post_taxonomy",
+          "operator": "!=",
+          "value": "group:viec-khac"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_608526e25d8f9",
+    "title": "Member",
+    "fields": [
+      {
+        "key": "field_608526e761c0d",
+        "label": "Người quản lý trực tiếp",
+        "name": "manager",
+        "type": "user",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "role": "",
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "id"
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "current_user_role",
+          "operator": "==",
+          "value": "member"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_607e4dcfd2764",
+    "title": "Notification",
+    "fields": [
+      {
+        "key": "field_607e4dd677999",
+        "label": "Destination",
+        "name": "destination",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_6127bd871eed8",
+        "label": "Manager",
+        "name": "manager",
+        "type": "user",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "role": "",
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "id"
+      },
+      {
+        "key": "field_608529d6e89fb",
+        "label": "Member",
+        "name": "receiver",
+        "type": "user",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "role": "",
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "id"
+      },
+      {
+        "key": "field_607e4dfe7799a",
+        "label": "Admin new notif",
+        "name": "admin_new_notif",
+        "type": "true_false",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "message": "",
+        "default_value": 1,
+        "ui": 0,
+        "ui_on_text": "",
+        "ui_off_text": ""
+      },
+      {
+        "key": "field_60857d1875727",
+        "label": "Manager new notif",
+        "name": "manager_new_notif",
+        "type": "true_false",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "message": "",
+        "default_value": 1,
+        "ui": 0,
+        "ui_on_text": "",
+        "ui_off_text": ""
+      },
+      {
+        "key": "field_6127bdb4be5a1",
+        "label": "Member new notif",
+        "name": "member_new_notif",
+        "type": "true_false",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "message": "",
+        "default_value": 1,
+        "ui": 0,
+        "ui_on_text": "",
+        "ui_off_text": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "notification"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_602f7988265a2",
+    "title": "Partner",
+    "fields": [
+      {
+        "key": "field_607a4fb37b7e0",
+        "label": "Mã partner",
+        "name": "partner_code",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60a3cbacb1330",
+        "label": "Phân loại",
+        "name": "type_of_client",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_65dcc97fa77b9",
+        "label": "Chi tiết phân loại",
+        "name": "detail_client_type",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_61cd79951653e",
+        "label": "Phân cấp VIP",
+        "name": "vip",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_61cd79bf1653f",
+        "label": "Đã chốt",
+        "name": "worked",
+        "type": "true_false",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "message": "",
+        "default_value": 0,
+        "ui": 0,
+        "ui_on_text": "",
+        "ui_off_text": ""
+      },
+      {
+        "key": "field_65a4acb5db9c6",
+        "label": "Đối tác là công ty",
+        "name": "is_company",
+        "type": "true_false",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "message": "",
+        "default_value": 0,
+        "ui": 0,
+        "ui_on_text": "",
+        "ui_off_text": ""
+      },
+      {
+        "key": "field_65a4acebdb9c7",
+        "label": "Nhân sự công ty",
+        "name": "staffs",
+        "type": "text",
+        "instructions": "Mỗi user sẽ là 1 IDs, cách nhau bởi dấu \"|\"",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_65a562035eb0c",
+        "label": "Đã có công ty tại Việt Nam chưa",
+        "name": "vietnam_company",
+        "type": "true_false",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "message": "",
+        "default_value": 0,
+        "ui": 0,
+        "ui_on_text": "",
+        "ui_off_text": ""
+      },
+      {
+        "key": "field_65ddcd2141e6f",
+        "label": "Công ty có vốn đầu tư nước ngoài?",
+        "name": "fdi",
+        "type": "true_false",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "message": "",
+        "default_value": 0,
+        "ui": 0,
+        "ui_on_text": "",
+        "ui_off_text": ""
+      },
+      {
+        "key": "field_65ddcd7941e70",
+        "label": "Quốc gia đầu tư",
+        "name": "fdi_countries",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "user_role",
+          "operator": "==",
+          "value": "partner"
+        },
+        {
+          "param": "user_role",
+          "operator": "==",
+          "value": "foreign_partner"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_652d19f7ed5b9",
+    "title": "Phân quyền truy cập",
+    "fields": [
+      {
+        "key": "field_652d1a2715e84",
+        "label": "Phân chia chi nhánh",
+        "name": "chi_nhanh",
+        "type": "taxonomy",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "taxonomy": "agency",
+        "field_type": "checkbox",
+        "add_term": 1,
+        "save_terms": 0,
+        "load_terms": 0,
+        "return_format": "id",
+        "multiple": 0,
+        "allow_null": 0
+      },
+      {
+        "key": "field_652d1a5e15e85",
+        "label": "Phân chia theo nhóm công việc",
+        "name": "nhom_cong_viec",
+        "type": "taxonomy",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "taxonomy": "group",
+        "field_type": "checkbox",
+        "add_term": 1,
+        "save_terms": 0,
+        "load_terms": 0,
+        "return_format": "id",
+        "multiple": 0,
+        "allow_null": 0
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "user_role",
+          "operator": "==",
+          "value": "all"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_60bb0c5466cf1",
+    "title": "Phiếu thu chi",
+    "fields": [
+      {
+        "key": "field_60bb0c67ad592",
+        "label": "Ngày thu chi",
+        "name": "finance_date",
+        "type": "date_picker",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "display_format": "d/m/Y",
+        "return_format": "d/m/Y",
+        "first_day": 1
+      },
+      {
+        "key": "field_60bb0c7aad593",
+        "label": "Phân loại",
+        "name": "finance_type",
+        "type": "radio",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "choices": {
+          "Thu": "Thu",
+          "Chi": "Chi"
+        },
+        "allow_null": 0,
+        "other_choice": 0,
+        "default_value": "Thu",
+        "layout": "vertical",
+        "return_format": "value",
+        "save_other_choice": 0
+      },
+      {
+        "key": "field_60bb0d37ad594",
+        "label": "Người nhận phiếu",
+        "name": "finance_user",
+        "type": "user",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "role": "",
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "array"
+      },
+      {
+        "key": "field_60bb0da4ad595",
+        "label": "Công việc liên quan",
+        "name": "finance_job",
+        "type": "post_object",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "post_type": {
+          "0": "job"
+        },
+        "taxonomy": "",
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "id",
+        "ui": 1
+      },
+      {
+        "key": "field_60bb0e2fad596",
+        "label": "Số tiền",
+        "name": "finance_value",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60bb0e38ad597",
+        "label": "Loại tiền tệ",
+        "name": "finance_currency",
+        "type": "radio",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "choices": {
+          "USD": "USD",
+          "VND": "VND"
+        },
+        "allow_null": 0,
+        "other_choice": 0,
+        "default_value": "",
+        "layout": "vertical",
+        "return_format": "value",
+        "save_other_choice": 0
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "finance"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_61a0d4e08b42f",
+    "title": "Quy trình thực hiện",
+    "fields": [
+      {
+        "key": "field_61a0d4e7d252d",
+        "label": "Quy trình",
+        "name": "work_process",
+        "type": "textarea",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "maxlength": "",
+        "rows": "",
+        "new_lines": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "taxonomy",
+          "operator": "==",
+          "value": "group"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_60bb2f7309161",
+    "title": "Sổ cái",
+    "fields": [
+      {
+        "key": "field_60bb2f7cf9156",
+        "label": "Total (USD)",
+        "name": "total_usd",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60bb2f98f9157",
+        "label": "Total (VND)",
+        "name": "total_vnd",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "options_page",
+          "operator": "==",
+          "value": "theme-settings"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_60a231d3915c1",
+    "title": "Tài chính của công việc",
+    "fields": [
+      {
+        "key": "field_60a231d395dd8",
+        "label": "Tổng tiền",
+        "name": "total_value",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60a231d395f2e",
+        "label": "Đã thanh toán",
+        "name": "paid",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60a231d39602e",
+        "label": "Loại tiền tệ",
+        "name": "currency",
+        "type": "radio",
+        "instructions": "Loại sử dụng cho đối tác/khách hàng",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "choices": {
+          "USD": "USD",
+          "VND": "VND"
+        },
+        "allow_null": 0,
+        "other_choice": 0,
+        "default_value": "USD",
+        "layout": "vertical",
+        "return_format": "value",
+        "save_other_choice": 0
+      },
+      {
+        "key": "field_60a231d3961b0",
+        "label": "Số tiền còn lại",
+        "name": "remainning",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60afae64cfd69",
+        "label": "Chi phí cho đối tác nước ngoài",
+        "name": "total_cost",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60afafbccfd6c",
+        "label": "Loại tiền tệ",
+        "name": "currency_out",
+        "type": "radio",
+        "instructions": "Loại sử dụng cho đối tác nước ngoài",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "choices": {
+          "USD": "USD",
+          "VND": "VND"
+        },
+        "allow_null": 0,
+        "other_choice": 0,
+        "default_value": "USD",
+        "layout": "vertical",
+        "return_format": "value",
+        "save_other_choice": 0
+      },
+      {
+        "key": "field_60afaeb8cfd6a",
+        "label": "Tạm ứng cho đối tác nước ngoài",
+        "name": "advance_money",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60afaf50cfd6b",
+        "label": "Tiền còn nợ",
+        "name": "debt",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_60bcae4823de4",
+        "label": "Trạng thái",
+        "name": "payment_status",
+        "type": "true_false",
+        "instructions": "Đánh dấu công việc này đã xử lý thanh toán xong hết chưa?",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "message": "",
+        "default_value": 0,
+        "ui": 0,
+        "ui_on_text": "",
+        "ui_off_text": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "job"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  },
+  {
+    "key": "group_600fde4c16805",
+    "title": "Task, Simple Job",
+    "fields": [
+      {
+        "key": "field_600fdff6b4390",
+        "label": "Job",
+        "name": "job",
+        "type": "post_object",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "post_type": {
+          "0": "job"
+        },
+        "taxonomy": "",
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "id",
+        "ui": 1
+      },
+      {
+        "key": "field_600fded7b438f",
+        "label": "Người thực hiện",
+        "name": "user",
+        "type": "user",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "role": "",
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "array"
+      },
+      {
+        "key": "field_60fd46973dd42",
+        "label": "Người quản lý",
+        "name": "manager",
+        "type": "user",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "role": "",
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "array"
+      },
+      {
+        "key": "field_659ce87bca17e",
+        "label": "Người giám sát",
+        "name": "supervisor",
+        "type": "text",
+        "instructions": "lưu ID người giám sát, cách nhau dấu \"|\"",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_600fde50f9be7",
+        "label": "Deadline thực hiện",
+        "name": "deadline",
+        "type": "date_picker",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "display_format": "d/m/Y",
+        "return_format": "d/m/Y",
+        "first_day": 1
+      },
+      {
+        "key": "field_600fde70f9be8",
+        "label": "Deadline chờ phản hồi",
+        "name": "time_to_response",
+        "type": "date_picker",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "display_format": "d/m/Y",
+        "return_format": "d/m/Y",
+        "first_day": 1
+      },
+      {
+        "key": "field_600fde92f9be9",
+        "label": "Trạng thái",
+        "name": "trang_thai",
+        "type": "select",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "choices": {
+          "Mới": "Mới",
+          "Đang thực hiện": "Đang thực hiện",
+          "Đã gửi đi": "Đã gửi đi",
+          "Đã xem": "Đã xem",
+          "Hủy": "Hủy",
+          "Chờ phản hồi": "Chờ phản hồi",
+          "Hoàn thành": "Hoàn thành"
+        },
+        "default_value": {
+          "0": "Mới"
+        },
+        "allow_null": 0,
+        "multiple": 0,
+        "ui": 0,
+        "return_format": "value",
+        "ajax": 0,
+        "placeholder": ""
+      },
+      {
+        "key": "field_6010e02533119",
+        "label": "History",
+        "name": "history",
+        "type": "repeater",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "collapsed": "",
+        "min": 0,
+        "max": 0,
+        "layout": "table",
+        "button_label": "",
+        "sub_fields": [
+          {
+            "key": "field_601285090da06",
+            "label": "Người thực hiện",
+            "name": "nguoi_thuc_hien",
+            "type": "user",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "role": "",
+            "allow_null": 0,
+            "multiple": 0,
+            "return_format": "id"
+          },
+          {
+            "key": "field_601285860da07",
+            "label": "Nội dung",
+            "name": "noi_dung",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+          },
+          {
+            "key": "field_601285900da08",
+            "label": "Thời gian",
+            "name": "thoi_gian",
+            "type": "date_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+              "width": "",
+              "class": "",
+              "id": ""
+            },
+            "display_format": "d/m/Y",
+            "return_format": "d/m/Y",
+            "first_day": 1
+          }
+        ]
+      },
+      {
+        "key": "field_6010e0a43311a",
+        "label": "Miss deadline",
+        "name": "miss_deadline",
+        "type": "number",
+        "instructions": "Đánh giá kết quả hoàn thành công việc, trễ deadline +1 mỗi lần.",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "min": "",
+        "max": "",
+        "step": ""
+      },
+      {
+        "key": "field_607a56b7622af",
+        "label": "Code",
+        "name": "code",
+        "type": "text",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "default_value": "",
+        "placeholder": "",
+        "prepend": "",
+        "append": "",
+        "maxlength": ""
+      },
+      {
+        "key": "field_607d38a16ee31",
+        "label": "Phê duyệt",
+        "name": "phe_duyet",
+        "type": "true_false",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "message": "",
+        "default_value": 0,
+        "ui": 0,
+        "ui_on_text": "",
+        "ui_off_text": ""
+      },
+      {
+        "key": "field_607d38c56ee32",
+        "label": "Thông báo cho khách",
+        "name": "thong_bao",
+        "type": "true_false",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "message": "",
+        "default_value": 0,
+        "ui": 0,
+        "ui_on_text": "",
+        "ui_off_text": ""
+      },
+      {
+        "key": "field_60c2432b28405",
+        "label": "Đối tác nhận việc",
+        "name": "partner",
+        "type": "user",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "role": {
+          "0": "partner",
+          "1": "foreign_partner"
+        },
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "array"
+      },
+      {
+        "key": "field_60f8d9ec31144",
+        "label": "Email",
+        "name": "email",
+        "type": "post_object",
+        "instructions": "",
+        "required": 0,
+        "conditional_logic": 0,
+        "wrapper": {
+          "width": "",
+          "class": "",
+          "id": ""
+        },
+        "post_type": {
+          "0": "email"
+        },
+        "taxonomy": "",
+        "allow_null": 0,
+        "multiple": 0,
+        "return_format": "id",
+        "ui": 1
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "task"
+        },
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "job"
+        },
+        {
+          "param": "post_taxonomy",
+          "operator": "==",
+          "value": "category:khong-phan-loai"
+        }
+      ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": ""
+  }
+]
