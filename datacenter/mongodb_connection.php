@@ -775,7 +775,7 @@ function export_mysql_job($paged) {
             $work_list  = get_field('lich_su_cong_viec');
             if ($work_list) {
                 foreach ($work_list as $key => $value) {
-                    if (preg_match("/^\d{1,2}/\d{1,2}/\d{4}$/", $value['ngay_thang'])) {
+                    if (preg_match("/^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/", $value['ngay_thang'])) {
                         $tmp = DateTime::createFromFormat('d/m/Y', $value['ngay_thang']);
                         $ngay_thang = $tmp->format('Y-m-d H:i:s');
                     } else $ngay_thang = "";

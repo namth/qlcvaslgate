@@ -51,6 +51,11 @@ require_once (__DIR__ . "/datacenter/mongodb_connection.php");
                 <div id="result">
                     <h3>Kết quả</h3>
                     <?php 
+                        $date = "14/7/2024";
+
+                        if (preg_match("/^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/", $date)) {
+                            echo "Đúng";
+                        } else echo "Sai format";
                         // global $wpdb;
 
                         // $aslTable = $wpdb->prefix . 'asljob';
