@@ -51,7 +51,158 @@ require_once (__DIR__ . "/datacenter/mongodb_connection.php");
                 <div id="result">
                     <h3>Kết quả</h3>
                     <?php 
-                        
+                        // global $wpdb;
+
+                        // $aslTable = $wpdb->prefix . 'asljob';
+                        // $aslHistory = $wpdb->prefix . 'asljobhistory';
+                        // $aslSupervisor = $wpdb->prefix . 'aslsupervisor';
+                        // $posts_per_page = 20;
+                        // $args   = array(
+                        //     'post_type'     => 'job',
+                        //     'paged'         => 170,
+                        //     'posts_per_page'=> $posts_per_page,
+                        // );
+                    
+                        // $query = new WP_Query( $args );
+                    
+                        // if( $query->have_posts() ) {
+                        //     while ( $query->have_posts() ) {
+                        //         $query->the_post();
+                    
+                        //         $jobID          = get_the_ID();
+                        //         $our_ref        = get_field('our_ref');
+                        //         $customer       = get_field('customer');
+                        //         $phan_loai      = get_field('phan_loai');
+                        //         $partner_1      = get_field('partner_1');
+                        //         $partner_2      = get_field('partner_2');
+                        //         $foreign_partner = get_field('foreign_partner');
+                        //         $member         = get_field('member');
+                        //         $manager        = get_field('manager');
+                        //         $tags_obj       = get_the_tags();
+                        //         $tagname_arr    = array();
+                        //         if ($tags_obj) {
+                        //             foreach ($tags_obj as $key => $value) {
+                        //                 $tagname_arr[] = $value->name;
+                        //             }
+                        //         }
+
+                        //         # check partner isset?
+                        //         if (is_array($foreign_partner)) {
+                        //             $foreign_partner_id = $foreign_partner['ID'];
+                        //         } else $foreign_partner_id = NULL;
+
+                        //         if (is_array($partner_1)) {
+                        //             $partner_1_id = $partner_1['ID'];
+                        //         } else $partner_1_id = NULL;
+
+
+                        //         # get field cash in
+                        //         $total_value    = get_field('total_value');
+                        //         $paid           = get_field('paid');
+                        //         $remainning     = get_field('remainning');
+                        //         $currency       = get_field('currency');
+                        //         # get field cash out
+                        //         $total_cost     = get_field('total_cost');
+                        //         $advance_money  = get_field('advance_money');
+                        //         $debt           = get_field('debt');
+                        //         $currency_out   = get_field('currency_out');
+                        //         $payment_status = get_field('payment_status');
+                    
+                        //         if (get_field('contract_sign_date')) {
+                        //             $tmp = DateTime::createFromFormat('d/m/Y', get_field('contract_sign_date'));
+                        //             $contract_sign_date = $tmp->format('Y-m-d H:i:s');
+                        //         } else $contract_sign_date = "";
+                    
+                        //         # save history to export
+                        //         $work_list  = get_field('lich_su_cong_viec');
+                        //         if ($work_list) {
+                        //             foreach ($work_list as $key => $value) {
+                        //                 if (preg_match("/^\d{1,2}/\d{1,2}/\d{4}$/", $value['ngay_thang'])) {
+                        //                     $tmp = DateTime::createFromFormat('d/m/Y', $value['ngay_thang']);
+                        //                     $ngay_thang = $tmp->format('Y-m-d H:i:s');
+                        //                 } else $ngay_thang = "";
+                        //                 $data_arr = [
+                        //                     'jobid' => $jobID,
+                        //                     'name'  => $value['mo_ta'],
+                        //                     'date'  => $ngay_thang
+                        //                 ];
+                    
+                        //                 $wpdb->insert(
+                        //                     $aslHistory,
+                        //                     $data_arr
+                        //                 );
+                        //             }
+                        //         }
+                    
+                        //         # save supervisor to export
+                        //         $data_supervisor = get_field('supervisor');
+                        //         if ( $data_supervisor ) {
+                        //             $supervisors = explode("|", $data_supervisor);
+                        //             if(!empty($supervisors)){
+                        //                 foreach ($supervisors as $supervisor) {
+                        //                     $data_arr = [
+                        //                         'jobid' => $jobID,
+                        //                         'supervisorid' => $supervisor
+                        //                     ];
+                    
+                        //                     $wpdb->insert(
+                        //                         $aslSupervisor,
+                        //                         $data_arr
+                        //                     );
+                        //                 }
+                        //             }
+                        //         }
+                    
+                        //         $brand = array();
+                        //         $agency = get_the_terms(get_the_ID(), 'agency');
+                        //         foreach ($agency as $id_chi_nhanh) {
+                        //             $term = get_term($id_chi_nhanh);
+                    
+                        //             $brand[] = $term->name;
+                        //         }
+                    
+                        //         if (is_array($brand)) {
+                        //             $agency_hn = in_array('ha-noi', $brand)?1:0;
+                        //             $agency_hcm = in_array('ho-chi-minh', $brand)?1:0;
+                        //         }
+                    
+                        //         $date = DateTime::createFromFormat('m/d/Y', get_the_date('m/d/Y'));
+                                
+                        //         $job = [
+                        //             'id'        => get_the_ID(),
+                        //             'title'     => get_the_title(),
+                        //             'type'      => $phan_loai,
+                        //             'our_ref'   => $our_ref,
+                        //             'customerid'        => $customer->ID,
+                        //             'first_partnerid'   => $partner_1_id,
+                        //             'partnerid'         => $partner_2['ID'],
+                        //             'partner_out_id'    => $foreign_partner_id,
+                        //             'memberid'      => $member['ID'],
+                        //             'managerid'     => $manager['ID'],
+                        //             'currency'      => $currency,
+                        //             'total_value'   => $total_value,
+                        //             'paid'          => $work_list,
+                        //             'remainning'    => $remainning,
+                        //             'total_cost'    => $total_cost,
+                        //             'currency_out'  => $currency_out,
+                        //             'advance_money' => $advance_money,
+                        //             'debt'          => $debt,
+                        //             'payment_status'=> $payment_status,
+                        //             'source'        => implode(",", $tagname_arr),
+                        //             'date'          => $date->format('Y-m-d H:i:s'),
+                        //             'contract_sign_date' => $contract_sign_date,
+                        //             'agency_hn'     => $agency_hn,
+                        //             'agency_hcm'    => $agency_hcm
+                        //         ];
+                    
+                        //         // print_r($job);
+                        //         $sent = $wpdb->insert(
+                        //             $aslTable,
+                        //             $job
+                        //         );
+                        //     } 
+                        //     wp_reset_postdata();
+                        // }
                     ?>
                 </div>
             </div>

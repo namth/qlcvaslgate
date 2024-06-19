@@ -744,6 +744,16 @@ function export_mysql_job($paged) {
                     $tagname_arr[] = $value->name;
                 }
             }
+
+            # check partner isset?
+            if (is_array($foreign_partner)) {
+                $foreign_partner_id = $foreign_partner['ID'];
+            } else $foreign_partner_id = NULL;
+
+            if (is_array($partner_1)) {
+                $partner_1_id = $partner_1['ID'];
+            } else $partner_1_id = NULL;
+
             # get field cash in
             $total_value    = get_field('total_value');
             $paid           = get_field('paid');
@@ -765,8 +775,7 @@ function export_mysql_job($paged) {
             $work_list  = get_field('lich_su_cong_viec');
             if ($work_list) {
                 foreach ($work_list as $key => $value) {
-                    // $work_history[] = $value['mo_ta'];
-                    if ($value['ngay_thang']) {
+                    if (preg_match("/^\d{1,2}/\d{1,2}/\d{4}$/", $value['ngay_thang'])) {
                         $tmp = DateTime::createFromFormat('d/m/Y', $value['ngay_thang']);
                         $ngay_thang = $tmp->format('Y-m-d H:i:s');
                     } else $ngay_thang = "";
@@ -823,9 +832,9 @@ function export_mysql_job($paged) {
                 'type'      => $phan_loai,
                 'our_ref'   => $our_ref,
                 'customerid'        => $customer->ID,
-                'first_partnerid'   => $partner_1['ID'],
+                'first_partnerid'   => $partner_1_id,
                 'partnerid'         => $partner_2['ID'],
-                'partner_out_id'    => $foreign_partner['ID'],
+                'partner_out_id'    => $foreign_partner_id,
                 'memberid'      => $member['ID'],
                 'managerid'     => $manager['ID'],
                 'currency'      => $currency,
