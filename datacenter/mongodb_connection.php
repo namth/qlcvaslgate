@@ -835,7 +835,7 @@ function export_mysql_job($paged) {
             foreach ($agency as $id_chi_nhanh) {
                 $term = get_term($id_chi_nhanh);
 
-                $brand[] = $term->name;
+                $brand[] = $term->slug;
             }
 
             if (is_array($brand)) {
