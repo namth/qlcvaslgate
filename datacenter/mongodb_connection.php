@@ -814,7 +814,7 @@ function export_mysql_job($paged) {
 
             # group to export
             $groups = get_the_terms(get_the_ID(), 'group');
-            // print_r($groups);
+            
             foreach ($groups as $idgroup) {
                 $term = get_term($idgroup);
                 $groupname = $term->name?$term->name:"No";
@@ -858,7 +858,7 @@ function export_mysql_job($paged) {
                 'managerid'     => $manager['ID'],
                 'currency'      => $currency,
                 'total_value'   => $total_value,
-                'paid'          => $work_list,
+                'paid'          => $paid,
                 'remainning'    => $remainning,
                 'total_cost'    => $total_cost,
                 'currency_out'  => $currency_out,
