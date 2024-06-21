@@ -715,6 +715,7 @@ function export_mysql_job($paged) {
     $aslTable = $wpdb->prefix . 'asljob';
     $aslHistory = $wpdb->prefix . 'asljobhistory';
     $aslSupervisor = $wpdb->prefix . 'aslsupervisor';
+    $aslGroup = $wpdb->prefix . 'asljobgroup';
     $posts_per_page = 20;
     $args   = array(
         'post_type'     => 'job',
@@ -810,6 +811,24 @@ function export_mysql_job($paged) {
                     }
                 }
             }
+
+            # group to export
+            $groups = get_the_terms(get_the_ID(), 'group');
+            // print_r($groups);
+            foreach ($groups as $idgroup) {
+                $term = get_term($idgroup);
+                $groupname = $term->name?$term->name:"No";
+                $data_arr = [
+                    'jobid' => $jobID,
+                    'groupname' =>  $groupname
+                ];
+
+                $wpdb->insert(
+                    $aslGroup,
+                    $data_arr
+                );
+            }
+            
 
             $brand = array();
             $agency = get_the_terms(get_the_ID(), 'agency');

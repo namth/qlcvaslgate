@@ -1390,6 +1390,15 @@ function CreateDatabaseQlcv()
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
 
+    # table 9
+    $aslTable = $wpdb->prefix . 'asljobgroup';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `jobid` bigint(20) UNSIGNED NOT NULL,
+        `groupname` varchar(255) NOT NULL
+    ) {$charsetCollate};";
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($createAslTable);
+
 
 }
 add_action('after_switch_theme', 'CreateDatabaseQlcv');
