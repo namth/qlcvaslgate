@@ -884,7 +884,6 @@ function sendmail_deadline_notification()
                                 }
                             }
                         }
-        
                         $sent = wp_mail($to, $email_title, $email_content, $headers);
         
                         # push notification & save history
@@ -1237,7 +1236,7 @@ function CreateDatabaseQlcv()
     # table 1
     $aslTable = $wpdb->prefix . 'aslcustomer';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
-        `id` bigint(20) UNSIGNED NOT NULL,
+        `customerid` bigint(20) UNSIGNED NOT NULL,
         `name` varchar(255) NOT NULL,
         `companyName` varchar(255) NOT NULL,
         `country` varchar(255) NOT NULL,
@@ -1252,7 +1251,7 @@ function CreateDatabaseQlcv()
     # table 2
     $aslTable = $wpdb->prefix . 'aslpartner';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
-        `id` bigint(20) UNSIGNED NOT NULL,
+        `partnerid` bigint(20) UNSIGNED NOT NULL,
         `name` varchar(255) NOT NULL,
         `partner_code` varchar(20) NULL,
         `companyName` varchar(255) NOT NULL,
@@ -1285,7 +1284,7 @@ function CreateDatabaseQlcv()
     # table 3
     $aslTable = $wpdb->prefix . 'aslmember';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
-        `id` bigint(20) UNSIGNED NOT NULL,
+        `memberid` bigint(20) UNSIGNED NOT NULL,
         `name` varchar(255) NOT NULL,
         `address` varchar(255) NOT NULL,
         `phone` varchar(20) NULL,
@@ -1313,16 +1312,16 @@ function CreateDatabaseQlcv()
     # table 4
     $aslTable = $wpdb->prefix . 'asljob';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
-        `id` bigint(20) UNSIGNED NOT NULL,
-        `title` varchar(255) NOT NULL,
-        `type` varchar(255) NOT NULL,
-        `our_ref` varchar(50) NULL,
+        `jobid` bigint(20) UNSIGNED NOT NULL,
         `customerid` bigint(20) UNSIGNED NULL,
         `first_partnerid` bigint(20) UNSIGNED NULL,
         `partnerid` bigint(20) UNSIGNED NULL,
         `partner_out_id` bigint(20) UNSIGNED NULL,
         `memberid` bigint(20) UNSIGNED NULL,
         `managerid` bigint(20) UNSIGNED NULL,
+        `title` varchar(255) NOT NULL,
+        `type` varchar(255) NOT NULL,
+        `our_ref` varchar(50) NULL,
         `currency` varchar(5) NULL,
         `total_value` varchar(255) NULL,
         `paid` varchar(255) NULL,
@@ -1345,11 +1344,11 @@ function CreateDatabaseQlcv()
     # table 5
     $aslTable = $wpdb->prefix . 'asltask';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
-        `id` bigint(20) UNSIGNED NOT NULL,
-        `title` varchar(255) NOT NULL,
+        `taskid` bigint(20) UNSIGNED NOT NULL,
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `memberid` bigint(20) UNSIGNED NOT NULL,
         `managerid` bigint(20) UNSIGNED NOT NULL,
+        `title` varchar(255) NOT NULL,
         `status` varchar(255) NULL,
         `deadline` timestamp NULL,
         `time_to_response` timestamp NULL,
@@ -1374,8 +1373,8 @@ function CreateDatabaseQlcv()
     $aslTable = $wpdb->prefix . 'asltaskhistory';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `taskid` bigint(20) UNSIGNED NOT NULL,
-        `content` varchar(255) NOT NULL,
         `userid` bigint(20) UNSIGNED NOT NULL,
+        `content` varchar(255) NOT NULL,
         `date` timestamp NOT NULL
     ) {$charsetCollate};";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');

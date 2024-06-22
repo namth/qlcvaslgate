@@ -19,7 +19,9 @@ jQuery(document).ready(function ($) {
     
     $('#ajax_filter input[type="submit"]').on('click', function(){
         var data_filter = $('#filter form').serialize();
-        // console.log(data_filter);
+        const searchParams = new URLSearchParams(window.location.search);
+
+        // console.log(searchParams.get('type'));
 
         $.ajax({
             type: "POST",
@@ -27,6 +29,7 @@ jQuery(document).ready(function ($) {
             data: {
                 action: "ajax_filter_jobs",
                 data: data_filter,
+                type: searchParams.get('type'),
                 paged: 1
             },
             error: function (xhr, ajaxOptions, thrownError) {

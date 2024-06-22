@@ -253,7 +253,7 @@ function export_mysql_customer($paged) {
             $date = DateTime::createFromFormat('m/d/Y', get_the_date('m/d/Y'));
 
             $customer = [
-                'id'            => get_the_ID(),
+                'customerid'            => get_the_ID(),
                 'name'          => $name,
                 'companyName'   => $cong_ty,
                 'country'       => $quoc_gia,
@@ -385,7 +385,7 @@ function export_mysql_partner($current_page) {
             }
 
             $partner =[
-                'id'            => $user->ID,
+                'partnerid'     => $user->ID,
                 'name'          => $user->display_name,
                 'partner_code'  => $partner_code,
                 'companyName'   => $ten_cong_ty,
@@ -589,7 +589,7 @@ function export_mysql_member($current_page) {
             }
 
             $partner = [
-                'id'            => $user->ID,
+                'memberid'      => $user->ID,
                 'name'          => $user->display_name,
                 'address'       => $dia_chi,
                 'phone'         => $so_dien_thoai,
@@ -846,16 +846,16 @@ function export_mysql_job($paged) {
             $date = DateTime::createFromFormat('m/d/Y', get_the_date('m/d/Y'));
             
             $job = [
-                'id'        => get_the_ID(),
-                'title'     => get_the_title(),
-                'type'      => $phan_loai,
-                'our_ref'   => $our_ref,
+                'jobid'             => get_the_ID(),
                 'customerid'        => $customer->ID,
                 'first_partnerid'   => $partner_1_id,
                 'partnerid'         => $partner_2['ID'],
                 'partner_out_id'    => $foreign_partner_id,
-                'memberid'      => $member['ID'],
-                'managerid'     => $manager['ID'],
+                'memberid'          => $member['ID'],
+                'managerid'         => $manager['ID'],
+                'title'         => get_the_title(),
+                'type'          => $phan_loai,
+                'our_ref'       => $our_ref,
                 'currency'      => $currency,
                 'total_value'   => $total_value,
                 'paid'          => $paid,
