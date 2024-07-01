@@ -271,7 +271,7 @@ function export_mysql_customer($paged) {
         wp_reset_postdata();
     }
 
-    return true;
+    // return true;
 }
 
 function export_customer($paged) {
@@ -1028,7 +1028,7 @@ function export_mysql_task($paged) {
             $miss_deadline = get_field('miss_deadline')?get_field('miss_deadline'):0;
 
             $task = [
-                'id'        => $taskid,
+                'taskid'    => $taskid,
                 'title'     => get_the_title(),
                 'jobid'     => $jobID,
                 'memberid'  => $user_arr["ID"],
@@ -1069,7 +1069,7 @@ function export_mysql_task($paged) {
         } 
         wp_reset_postdata();
     }
-    return $sent;
+    // return $sent;
 }
 
 function export_task($paged) {
