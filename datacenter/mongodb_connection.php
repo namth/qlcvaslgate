@@ -841,7 +841,9 @@ function export_mysql_job($paged) {
                         if ($i==1) {
                             $data_arr['groupname'] = $term->name;
                         } else {
-                            $data_arr['groupname2'] = $term->name;
+                            if ($term->slug != 'viec-khac') {
+                                $data_arr['groupname'] = $term->name;
+                            }
                         }    
                     }    
                     
