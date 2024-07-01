@@ -1243,7 +1243,7 @@ function CreateDatabaseQlcv()
         `phone` varchar(20) NULL,
         `email` varchar(255) NOT NULL,
         `date` timestamp NOT NULL,
-        PRIMARY KEY (`id`)
+        PRIMARY KEY (`customerid`)
     ) {$charsetCollate};";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
@@ -1276,7 +1276,7 @@ function CreateDatabaseQlcv()
         `role_partner__in` tinyint(4) NULL,
         `role_partner__out` tinyint(4) NULL,
         `date` timestamp NOT NULL,
-        PRIMARY KEY (`id`)
+        PRIMARY KEY (`partnerid`)
     ) {$charsetCollate};";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
@@ -1304,7 +1304,7 @@ function CreateDatabaseQlcv()
         `role_member` tinyint(4) NOT NULL,
         `role_law_manager` tinyint(4) NOT NULL,
         `role_ip_manager` tinyint(4) NOT NULL,
-        PRIMARY KEY (`id`)
+        PRIMARY KEY (`memberid`)
     ) {$charsetCollate};";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
@@ -1336,7 +1336,7 @@ function CreateDatabaseQlcv()
         `contract_sign_date` timestamp NOT NULL,
         `agency_hn` tinyint(4) NOT NULL,
         `agency_hcm` tinyint(4) NOT NULL,
-        PRIMARY KEY (`id`)
+        PRIMARY KEY (`jobid`)
     ) {$charsetCollate};";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
@@ -1354,7 +1354,7 @@ function CreateDatabaseQlcv()
         `time_to_response` timestamp NULL,
         `miss_deadline` tinyint(4) NULL,
         `date` timestamp NOT NULL,
-        PRIMARY KEY (`id`)
+        PRIMARY KEY (`taskid`)
     ) {$charsetCollate};";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
