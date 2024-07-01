@@ -12878,3 +12878,22 @@ body.side-header-green .side-header .side-header-close {
   align-items: end;
   justify-content: center;
 }
+#loading {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: rgb(102,18,158);
+  background: linear-gradient(90deg, rgba(0,138,207,1) 0%, rgba(0,14,94,1) 50%, rgba(102,18,158,1) 100%);
+  width: 100%;
+  height: 9px;
+  border-radius: 9px;
+}
+#loading #processbar{
+  width: 100%;
+  display: block;
+  position: absolute;
+  background: #efefef;
+  height: 9px;
+  right: 0;
+  top: 0;
+}

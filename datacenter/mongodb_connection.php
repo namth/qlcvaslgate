@@ -169,6 +169,7 @@ function run_export_mongo(){
     echo json_encode([
         'total_page'    => $total_page,
         'function'      => $function,
+        'data_table'    => $asl_data_type
     ]);
     exit;
 }

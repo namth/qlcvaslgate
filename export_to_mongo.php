@@ -47,10 +47,14 @@ require_once (__DIR__ . "/datacenter/mongodb_connection.php");
                 </form>
                 <input type="hidden" name="total_page" value="">
                 <input type="hidden" name="current_page" value="">
+                <b id="labelimport"></b>
                 <div id="process"></div>
                 <div id="result">
                     
                 </div>
+                <span id="loading">
+                    <span id="processbar"></span>
+                </span>
             </div>
         </div>
 
@@ -78,8 +82,12 @@ require_once (__DIR__ . "/datacenter/mongodb_connection.php");
                 
                 if (obj['current_page']<= total_page) {
                     goto_import(functional, total_page, obj['current_page']);
-                    $("#process").html(obj['current_page']/total_page*100 + "%");
+                    var calc = obj['current_page']/total_page*100;
+                    var percent = Math.round(calc * 100) / 100 + "%";
+                    var processbar = (100 - calc) + "%";
+                    $("#process").html(percent);
                     $("#result").append(obj['result']);
+                    $("#processbar").css('width', processbar);
                 }
                 console.log(resp);
             },
@@ -90,8 +98,6 @@ require_once (__DIR__ . "/datacenter/mongodb_connection.php");
 
         $('.main form').submit(function(){
             var asl_data_type   = $('select[name="asl_data_type"]').val();
-            var mongo_method = $('select[name="mongo_method"]').val();
-            var start_page  = $('input[name="start_page"]').val();
 
             $.ajax({
                 type: "POST",
@@ -114,6 +120,7 @@ require_once (__DIR__ . "/datacenter/mongodb_connection.php");
                     
                     goto_import(obj['function'], obj['total_page'], 1);
                     $("#process").html(1/obj['total_page']*100 + "%");
+                    $("#labelimport").html("Importing " + obj['data_table'] + "...");
                     console.log(resp);
                 },
             });    
