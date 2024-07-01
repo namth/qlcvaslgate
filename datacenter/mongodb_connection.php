@@ -58,103 +58,104 @@ function asl_find($collection, $filter) {
 */
 add_action('wp_ajax_run_export_mongo', 'run_export_mongo');
 function run_export_mongo(){
+    global $wpdb;
+
     $asl_data_type  = $_POST['asl_data_type'];
-    $mongo_method   = $_POST['mongo_method'];
-    $start_page     = $_POST['start_page'];
+    // $mongo_method   = $_POST['mongo_method'];
+    // $start_page     = $_POST['start_page'];
 
     switch ($asl_data_type) {
         case 'customer':
-            /* 
-                Tiếp tục phân nhánh và lấy được tổng số trang
-            */
-            switch ($mongo_method) {
-                case 'insertMany':
-                    $posts_per_page = 20;
+            $posts_per_page = 20;
         
-                    $args   = array(
-                        'post_type'     => 'customer',
-                        'paged'         => 1,
-                        'posts_per_page'=> $posts_per_page,
-                    );
-        
-                    $query = new WP_Query( $args );
-                    $total_page = $query->max_num_pages;
-                    $function   = 'insert_customer';
-                    break;
+            $args   = array(
+                'post_type'     => 'customer',
+                'paged'         => 1,
+                'posts_per_page'=> $posts_per_page,
+            );
 
-                case 'update':
-                    $total_page = 0;
-                    $function   = 'update_customer';
-                
-                default:
-                    $total_page = 0;
-                    $function = 'none';
-                    break;
-            }
+            $query = new WP_Query( $args );
+            $total_page = $query->max_num_pages;
+            $function   = 'insert_customer';
+            # delete all data before insert
+            $aslTable = $wpdb->prefix . 'aslcustomer';
+            delete_mysql_table($aslTable);
             break;
 
         case 'partner':
-            if ($mongo_method == 'insertMany') {
-                $posts_per_page = 20;
-        
-                $count_args  = array(
-                    'role__in'  => ['partner', 'foreign_partner'],
-                    'number'    => 999999,
-                );
-                $user_count_query = new WP_User_Query($count_args);
-                $partner_number = $user_count_query->get_results();
+            $posts_per_page = 20;
+    
+            $count_args  = array(
+                'role__in'  => ['partner', 'foreign_partner'],
+                'number'    => 999999,
+            );
+            $user_count_query = new WP_User_Query($count_args);
+            $partner_number = $user_count_query->get_results();
 
-                $total_page = ceil(count($partner_number)/$posts_per_page);
-                $function   = 'insert_partner';
-            }
+            $total_page = ceil(count($partner_number)/$posts_per_page);
+            $function   = 'insert_partner';
+            # delete all data before insert
+            // $aslTable = $wpdb->prefix . 'aslpartner';
+            // delete_mysql_table($aslTable);
             break;
 
         case 'member':
-            if ($mongo_method == 'insertMany') {
-                $posts_per_page = 20;
-        
-                $count_args  = array(
-                    'role__in'  => ['contributor', 'administrator', 'member', 'law_manager', 'ip_manager'],
-                    'number'    => 999999,
-                );
-                $user_count_query = new WP_User_Query($count_args);
-                $member_number = $user_count_query->get_results();
+            $posts_per_page = 20;
+    
+            $count_args  = array(
+                'role__in'  => ['contributor', 'administrator', 'member', 'law_manager', 'ip_manager'],
+                'number'    => 999999,
+            );
+            $user_count_query = new WP_User_Query($count_args);
+            $member_number = $user_count_query->get_results();
 
-                $total_page = ceil(count($member_number)/$posts_per_page);
-                $function   = 'insert_member';
-            }
+            $total_page = ceil(count($member_number)/$posts_per_page);
+            $function   = 'insert_member';
+            # delete all data before insert
+            $aslTable = $wpdb->prefix . 'aslmember';
+            delete_mysql_table($aslTable);
             break;
 
         case 'job':
-            if ($mongo_method == 'insertMany') {
-                $posts_per_page = 20;
-        
-                $args   = array(
-                    'post_type'     => 'job',
-                    'paged'         => 1,
-                    'posts_per_page'=> $posts_per_page,
-                );
+            $posts_per_page = 20;
     
-                $query = new WP_Query( $args );
-                $total_page = $query->max_num_pages;
-                $function   = 'insert_job';
-            }
+            $args   = array(
+                'post_type'     => 'job',
+                'paged'         => 1,
+                'posts_per_page'=> $posts_per_page,
+            );
+
+            $query = new WP_Query( $args );
+            $total_page = $query->max_num_pages;
+            $function   = 'insert_job';
+            # delete all data before insert
+            $aslTable = $wpdb->prefix . 'asljob';
+            delete_mysql_table($aslTable);
+            $aslTable = $wpdb->prefix . 'asljobhistory';
+            delete_mysql_table($aslTable);
+            $aslTable = $wpdb->prefix . 'aslsupervisor';
+            delete_mysql_table($aslTable);
+            $aslTable = $wpdb->prefix . 'asljobgroup';
+            delete_mysql_table($aslTable);
             break;
         
         case 'task':
-            if ($mongo_method == 'insertMany') {
-                $posts_per_page = 20;
-        
-                $args   = array(
-                    'post_type'     => 'task',
-                    'paged'         => 1,
-                    'posts_per_page'=> $posts_per_page,
-                );
+            $posts_per_page = 20;
     
-                $query = new WP_Query( $args );
-                $total_page = $query->max_num_pages;
-                $function   = 'insert_task';
-            }
+            $args   = array(
+                'post_type'     => 'task',
+                'paged'         => 1,
+                'posts_per_page'=> $posts_per_page,
+            );
+
+            $query = new WP_Query( $args );
+            $total_page = $query->max_num_pages;
+            $function   = 'insert_task';
+            # delete all data before insert
+            $aslTable = $wpdb->prefix . 'asltask';
+            delete_mysql_table($aslTable);
+            $aslTable = $wpdb->prefix . 'asltaskhistory';
+            delete_mysql_table($aslTable);
             break;
         
         default:
@@ -167,11 +168,16 @@ function run_export_mongo(){
     */
     echo json_encode([
         'total_page'    => $total_page,
-        'action'        => $mongo_method,
         'function'      => $function,
-        'current_page'  => $start_page
     ]);
     exit;
+}
+
+# delete all data from table before insert new records
+function delete_mysql_table($tableName){
+    global $wpdb;
+    $delete = $wpdb->query("TRUNCATE TABLE $tableName");
+    return $delete;
 }
 
 add_action('wp_ajax_js_export', 'js_export');
@@ -250,7 +256,6 @@ function export_mysql_customer($paged) {
             $email = get_field('email');
             $cong_ty = get_field('ten_cong_ty');
             $quoc_gia = get_field('quoc_gia');
-            $date = DateTime::createFromFormat('m/d/Y', get_the_date('m/d/Y'));
 
             $customer = [
                 'customerid'            => get_the_ID(),
@@ -259,7 +264,7 @@ function export_mysql_customer($paged) {
                 'country'       => $quoc_gia,
                 'phone'         => $so_dien_thoai,
                 'email'         => $email,
-                'date'          => $date->format('Y-m-d H:i:s'),
+                'date'          => get_the_date('Y-m-d H:i:s'),
             ];
             // print_r($customer);
 
@@ -374,7 +379,6 @@ function export_mysql_partner($current_page) {
             $source         = get_field('source' , 'user_' . $user->ID);
 
             $tinh_trang     = $worked?"Đã chốt":"Tiềm năng";
-            // $date = DateTime::createFromFormat('m/d/Y', get_the_date('m/d/Y'));
 
 
             # display user role name
@@ -412,12 +416,13 @@ function export_mysql_partner($current_page) {
                 'date'          => $user->user_registered,
             ];
 
-            $wpdb->insert(
+            $insert = $wpdb->insert(
                 $aslTable,
                 $partner
             );
         }
     }
+    return $insert;
 }
 
 function export_partner($current_page) {
@@ -530,6 +535,7 @@ function export_mysql_member($current_page) {
     global $wpdb;
 
     $aslTable = $wpdb->prefix . 'aslmember';
+
     $users_per_page = 20;
     $offset = $users_per_page * ($current_page - 1);
 
@@ -766,7 +772,6 @@ function export_mysql_job($paged) {
             $debt           = get_field('debt');
             $currency_out   = get_field('currency_out');
             $payment_status = get_field('payment_status');
-            $date = DateTime::createFromFormat('m/d/Y', get_the_date('m/d/Y'));
 
             if (get_field('contract_sign_date')) {
                 $tmp = DateTime::createFromFormat('d/m/Y', get_field('contract_sign_date'));
@@ -817,7 +822,7 @@ function export_mysql_job($paged) {
             $groups = get_the_terms(get_the_ID(), 'group');
             $data_arr = [
                 'jobid' => $jobID,
-                'date'  => $date->format('Y-m-d H:i:s'),
+                'date'  => get_the_date('Y-m-d H:i:s'),
             ];
 
             $i = 0;
@@ -882,7 +887,7 @@ function export_mysql_job($paged) {
                 'debt'          => $debt,
                 'payment_status'=> $payment_status,
                 'source'        => implode(",", $tagname_arr),
-                'date'          => $date->format('Y-m-d H:i:s'),
+                'date'          => get_the_date('Y-m-d H:i:s'),
                 'contract_sign_date' => $contract_sign_date,
                 'agency_hn'     => $agency_hn,
                 'agency_hcm'    => $agency_hcm
@@ -1017,8 +1022,6 @@ function export_mysql_task($paged) {
             $jobID      = get_field('job');
             $user_arr   = get_field('user');
             $manager    = get_field('manager');
-            // print_r($user_arr);
-            $create     = DateTime::createFromFormat('m/d/Y', get_the_date('m/d/Y'));
             $deadline   = DateTime::createFromFormat('d/m/Y', get_field('deadline'));
             if (get_field('time_to_response')) {
                 $tmp = DateTime::createFromFormat('d/m/Y', get_field('time_to_response'));
@@ -1035,9 +1038,9 @@ function export_mysql_task($paged) {
                 'managerid' => $manager["ID"],
                 'status'    => $trang_thai,
                 'deadline'  => $deadline->format('Y-m-d H:i:s'),
-                'time_to_response' => $time_to_response,
-                'miss_deadline'    => $miss_deadline,
-                'date'      => $create->format('Y-m-d H:i:s'),
+                'time_to_response'  => $time_to_response,
+                'miss_deadline'     => $miss_deadline,
+                'date'              => get_the_date('Y-m-d H:i:s'),
             ];
                 
             $sent = $wpdb->insert(
