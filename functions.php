@@ -1393,7 +1393,10 @@ function CreateDatabaseQlcv()
     $aslTable = $wpdb->prefix . 'asljobgroup';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
-        `groupname` varchar(255) NOT NULL
+        `groupname` varchar(255) NOT NULL,
+        `groupname2` varchar(255) NOT NULL,
+        `type` varchar(255) NOT NULL,
+        `date` timestamp NOT NULL
     ) {$charsetCollate};";
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);

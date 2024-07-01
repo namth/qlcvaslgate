@@ -766,6 +766,7 @@ function export_mysql_job($paged) {
             $debt           = get_field('debt');
             $currency_out   = get_field('currency_out');
             $payment_status = get_field('payment_status');
+            $date = DateTime::createFromFormat('m/d/Y', get_the_date('m/d/Y'));
 
             if (get_field('contract_sign_date')) {
                 $tmp = DateTime::createFromFormat('d/m/Y', get_field('contract_sign_date'));
@@ -814,20 +815,37 @@ function export_mysql_job($paged) {
 
             # group to export
             $groups = get_the_terms(get_the_ID(), 'group');
-            
+            $data_arr = [
+                'jobid' => $jobID,
+                'date'  => $date->format('Y-m-d H:i:s'),
+            ];
+
+            $i = 0;
             foreach ($groups as $idgroup) {
                 $term = get_term($idgroup);
-                $groupname = $term->name?$term->name:"No";
-                $data_arr = [
-                    'jobid' => $jobID,
-                    'groupname' =>  $groupname
-                ];
-
-                $wpdb->insert(
-                    $aslGroup,
-                    $data_arr
-                );
-            }
+                $groupname = $term->name?$term->name:"";
+                # if $groupname has value, next process
+                if ($groupname) {
+                    # if job is potential, set type
+                    if ($term->slug == 'tiem-nang') {
+                        $data_arr['type'] = $term->name;
+                    } else {
+                        # set groupname1 and groupname2
+                        $i++;
+                        if ($i==1) {
+                            $data_arr['groupname'] = $term->name;
+                        } else {
+                            $data_arr['groupname2'] = $term->name;
+                        }    
+                    }    
+                    
+                }    
+            }    
+            # insert to database
+            $wpdb->insert(
+                $aslGroup,
+                $data_arr
+            );
             
 
             $brand = array();
@@ -842,8 +860,6 @@ function export_mysql_job($paged) {
                 $agency_hn = in_array('ha-noi', $brand)?1:0;
                 $agency_hcm = in_array('ho-chi-minh', $brand)?1:0;
             }
-
-            $date = DateTime::createFromFormat('m/d/Y', get_the_date('m/d/Y'));
             
             $job = [
                 'jobid'             => get_the_ID(),
