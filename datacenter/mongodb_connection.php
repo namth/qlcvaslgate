@@ -423,7 +423,7 @@ function export_mysql_partner($current_page) {
             );
         }
     }
-    return $insert;
+    // return $insert;
 }
 
 function export_partner($current_page) {
