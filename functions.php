@@ -1233,6 +1233,8 @@ function CreateDatabaseQlcv()
 {
     global $wpdb;
     $charsetCollate = $wpdb->get_charset_collate();
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    
     # table 1
     $aslTable = $wpdb->prefix . 'aslcustomer';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
@@ -1245,7 +1247,6 @@ function CreateDatabaseQlcv()
         `date` timestamp NOT NULL,
         PRIMARY KEY (`customerid`)
     ) {$charsetCollate};";
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
 
     # table 2
@@ -1278,7 +1279,6 @@ function CreateDatabaseQlcv()
         `date` timestamp NULL,
         PRIMARY KEY (`partnerid`)
     ) {$charsetCollate};";
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
 
     # table 3
@@ -1306,7 +1306,6 @@ function CreateDatabaseQlcv()
         `role_ip_manager` tinyint(4) NOT NULL,
         PRIMARY KEY (`memberid`)
     ) {$charsetCollate};";
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
 
     # table 4
@@ -1338,7 +1337,6 @@ function CreateDatabaseQlcv()
         `agency_hcm` tinyint(4) NOT NULL,
         PRIMARY KEY (`jobid`)
     ) {$charsetCollate};";
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
 
     # table 5
@@ -1356,7 +1354,6 @@ function CreateDatabaseQlcv()
         `date` timestamp NOT NULL,
         PRIMARY KEY (`taskid`)
     ) {$charsetCollate};";
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
 
     # table 6
@@ -1366,7 +1363,6 @@ function CreateDatabaseQlcv()
         `name` varchar(255) NOT NULL,
         `date` timestamp NULL
     ) {$charsetCollate};";
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
 
     # table 7
@@ -1377,7 +1373,6 @@ function CreateDatabaseQlcv()
         `content` varchar(255) NOT NULL,
         `date` timestamp NOT NULL
     ) {$charsetCollate};";
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
 
     # table 8
@@ -1386,18 +1381,25 @@ function CreateDatabaseQlcv()
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `supervisorid` bigint(20) UNSIGNED NOT NULL
     ) {$charsetCollate};";
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
 
     # table 9
+    $aslTable = $wpdb->prefix . 'asljobcountry';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `jobid` bigint(20) UNSIGNED NOT NULL,
+        `country` varchar(255) NULL
+    ) {$charsetCollate};";
+    dbDelta($createAslTable);
+
+    # table 10
     $aslTable = $wpdb->prefix . 'asljobgroup';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `groupname` varchar(255) NOT NULL,
+        `flag` varchar(255) NOT NULL,
         `type` varchar(255) NOT NULL,
         `date` timestamp NOT NULL
     ) {$charsetCollate};";
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($createAslTable);
 
 

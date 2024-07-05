@@ -137,6 +137,8 @@ function run_export_mongo(){
             delete_mysql_table($aslTable);
             $aslTable = $wpdb->prefix . 'asljobgroup';
             delete_mysql_table($aslTable);
+            $aslTable = $wpdb->prefix . 'asljobcountry';
+            delete_mysql_table($aslTable);
             break;
         
         case 'task':
@@ -723,6 +725,7 @@ function export_mysql_job($paged) {
     $aslHistory = $wpdb->prefix . 'asljobhistory';
     $aslSupervisor = $wpdb->prefix . 'aslsupervisor';
     $aslGroup = $wpdb->prefix . 'asljobgroup';
+    $aslCountry = $wpdb->prefix . 'asljobcountry';
     $posts_per_page = 20;
     $args   = array(
         'post_type'     => 'job',
@@ -800,6 +803,21 @@ function export_mysql_job($paged) {
                 }
             }
 
+            # save country to export
+            $country    = get_field('country');
+            $list_country = explode(',', $country);
+            foreach ($list_country as $key => $value) {
+                $data_arr   = [
+                    'jobid' => $jobID,
+                    'country' => trim($value)
+                ];
+
+                $wpdb->insert(
+                    $aslCountry,
+                    $data_arr
+                );
+            }
+
             # save supervisor to export
             $data_supervisor = get_field('supervisor');
             if ( $data_supervisor ) {
@@ -827,6 +845,7 @@ function export_mysql_job($paged) {
             ];
 
             $i = 0;
+            $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu'];
             foreach ($groups as $idgroup) {
                 $term = get_term($idgroup);
                 $groupname = $term->name?$term->name:"";
@@ -834,12 +853,16 @@ function export_mysql_job($paged) {
                 if ($groupname) {
                     # if job is potential, set type
                     if ($term->slug == 'tiem-nang') {
-                        $data_arr['type'] = $term->name;
+                        $data_arr['flag'] = $term->name;
                     } else {
                         # set groupname1 and groupname2
                         $i++;
                         if ($i==1) {
                             $data_arr['groupname'] = $term->name;
+                            $data_arr['flag'] = "Đã chốt";
+                            if (in_array($term->slug, $list_ip)) {
+                                $data_arr['type'] = "IP";
+                            } else $data_arr['type'] = "Law";
                         } else {
                             if ($term->slug != 'viec-khac') {
                                 $data_arr['groupname'] = $term->name;
