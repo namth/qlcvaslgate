@@ -3,6 +3,24 @@ get_header();
 
 get_sidebar();
 
+$color = [
+    'button-primary',
+    'button-secondary',
+    'button-success',
+    'button-danger',
+    'button-warning',
+    'button-info',
+    'button-rss',
+    'button-outlook',
+    'button-android',
+    'button-wikipedia',
+    'button-vk',
+    'button-skype',
+    'button-reddit',
+    'button-dark',
+    'button-light',
+];
+
 while (have_posts()) {
     the_post();
 
@@ -67,6 +85,20 @@ while (have_posts()) {
         # chuyển đối tác sang trạng thái đã chốt
         update_field('field_61cd79bf1653f', 1, 'user_' . $partner['ID']);
     }
+
+    # update other potential
+    if (isset($_POST['other_potential'])) {
+        $other_potential = $_POST['other_potential'];
+        # get all child term of tiềm năng
+        $list_other_potential = get_term_children(11, 'group');
+        foreach ($list_other_potential as $potential) {
+            $term = get_term($potential, 'group');
+            wp_remove_object_terms(get_the_ID(), $term->term_id, 'group');
+        }
+        if ($other_potential != "Tiềm năng") {
+            wp_add_object_terms(get_the_ID(), $other_potential, 'group');
+        }
+    }
 ?>
 
     <!-- Content Body Start -->
@@ -74,7 +106,6 @@ while (have_posts()) {
 
         <!-- Page Headings Start -->
         <div class="row justify-content-between mb-10">
-
             <div class="col-12 col-lg-12 mb-20">
                 <a href="<?php echo get_bloginfo('url'); ?>/danh-sach-cong-viec/"><?php _e('List công việc', 'qlcv'); ?></a> > <?php the_title(); ?>
             </div>
@@ -83,15 +114,23 @@ while (have_posts()) {
                 <div class="box">
                     <div class="page-heading box-head">
                         <h3 class="mb-10"><?php the_title(); ?> </h3>
-                        <span class="badge badge-primary"><?php echo $phan_loai; ?></span>
+                        <!-- <span class="badge badge-primary"><?php echo $phan_loai; ?></span> -->
                         <?php
                         if (in_array('administrator', $current_user->roles)) {
-                        ?>
-                            <span class="badge badge-secondary"><?php echo $tagname; ?></span>
-                        <?php
+                            $rand_color = $color[array_rand($color)];
+                            echo "<span class='badge " . $rand_color . "'>" . $tagname . "</span> ";
                         }
-                        ?>
-                        <?php
+                        # get all child term of tiềm năng of this post and show it
+                        $list_other_potential = get_the_terms(get_the_ID(), 'group');
+                        if ($list_other_potential) {
+                            foreach ($list_other_potential as $potential) {
+                                $term = get_term($potential, 'group');
+                                # get a random of $color
+                                $rand_color = $color[array_rand($color)];
+                                echo "<span class='badge " . $rand_color . "'>" . $term->name . "</span> ";
+                            }
+                        }
+
                         if ($deadline) {
                             echo '<span class="badge badge-info">' . $trang_thai . '</span> ';
                             echo '<span class="badge badge-outline badge-danger">';
@@ -206,8 +245,32 @@ while (have_posts()) {
                 $term_names = wp_list_pluck($terms, 'name');
 
                 if (in_array("Tiềm năng", $term_names)) {
+                    echo "<div id='group_action'>";
                     echo '<a href="' . get_the_permalink() . '?update=Done" class="button button-primary"><span><i class="fa fa-sort"></i>' . __('Chuyển thành công việc chính thức', 'qlcv') . '</span></a>';
+                    ?>
 
+                        <!-- form select to change category for this post -->
+                        <button class="button button-outlook" id="change_cat_button"><i class="fa fa-refresh"></i><?php _e('Chuyển phân loại', 'qlcv'); ?></button>
+                        <div id="change_cat">
+                            <form action="" method="post">
+                                <!-- <input type="hidden" name="post_id" value="<?php echo get_the_ID(); ?>"> -->
+                                <select class="form-control select2-tags mb-20" name="other_potential">
+                                    <option value=""> -- Chọn phân loại tiềm năng -- </option>
+                                    <?php 
+                                        $list_other_jobs = get_term_children(11, 'group');
+                                        foreach ($list_other_jobs as $jobid) {
+                                            $term = get_term($jobid, 'group');
+                                            echo "<option value='" . $term->name . "'>" . $term->name . "</option>";
+                                        }
+                                    ?>
+                                    <option value="Tiềm năng">Hủy các phân loại con</option>
+                                </select>
+                                <input class="button button-outlook" type="submit" value="Chọn">
+                                <button class="button button-rss">Hủy</button>
+                            </form>
+                        </div> 
+                    <?php 
+                    echo "</div>";
                 } else if ($deadline) {
                 ?>
                     <div class="box">

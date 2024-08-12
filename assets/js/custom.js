@@ -320,5 +320,9 @@ jQuery(document).ready(function ($) {
     }
   });
 
-  
+  // when click on #change_cat_button, show the form in id #change_cat
+  $("#change_cat_button").click(function () {
+    $(this).hide();
+    $("#change_cat").toggle(200);
+  });
 });

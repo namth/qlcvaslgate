@@ -567,3 +567,79 @@ function ajax_filter_tasks()
     <?php
     exit;
 }
+
+
+add_action('wp_ajax_ajax_author_jobs', 'ajax_author_jobs');
+function ajax_author_jobs()
+{
+    $paged = $_POST['paged'];
+    $author = $_POST['author'];
+    $numberposts = $_POST['numberposts'];
+
+    $args   = array(
+        'post_type'     => 'job',
+        'paged'         => $paged,
+        'posts_per_page'=> $numberposts,
+
+    );
+    $args['meta_query'][] = array(
+        'relation' => 'OR',
+        array(
+            'key'       => 'partner_2',
+            'value'     => $author,
+            'compare'   => '=',
+        ),
+        array(
+            'key'       => 'partner_1',
+            'value'     => $author,
+            'compare'   => '=',
+        ),
+    );
+
+    $query = new WP_Query($args);
+    ?>
+
+    <!--Todo List Start-->
+    <ul class="todo-list">
+        <?php 
+            if( $query->have_posts() ) {
+                while ( $query->have_posts() ) {
+                    $query->the_post();
+
+                    if (check_finish_job(get_the_ID(  ))) {
+                        $class = "zmdi zmdi-badge-check";
+                    } else $class = "fa fa-file-text-o";
+
+        ?>
+                    <!--Todo Item Start-->
+                    <li>
+                        <div class="list-action">
+                            <i class="<?php echo $class; ?>"></i>
+                        </div>
+                        <div class="list-content">
+                            <?php 
+                                echo '<a href="' . get_permalink() . '">';
+                                echo get_the_title(); 
+                                echo '</a>';
+                            ?>
+                        </div>
+                    </li>
+                    <!--Todo Item End-->
+        <?php 
+                } wp_reset_postdata();
+            }
+        ?>
+    </ul>
+    <!--Todo List End-->
+    <div class="col-12">
+        <div class="pagination justify-content-center" id="author_job">
+            <input type="hidden" name="authorid" id="authorid" value="<?php echo $author; ?>">
+            <input type="hidden" name="numberposts" id="numberposts" value="<?php echo $numberposts; ?>">
+            <?php
+            echo show_pagination($paged, $query->max_num_pages);
+            ?>
+        </div>
+    </div>
+    <?php
+    exit;
+}

@@ -15487,3 +15487,18 @@ body.skin-dark .cus-radio.light .icon::before {
 .action_cell:hover .hidden_link:hover{
   text-decoration: underline;
 }
+#group_action{
+  display: flex;
+  gap: 20px;
+}
+#change_cat{
+  display: none;
+}
+#change_cat form{
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+#change_cat form .selection > span{
+  padding-right: 40px;
+}

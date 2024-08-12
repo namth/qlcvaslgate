@@ -487,7 +487,7 @@ $agency     = get_the_terms($postid, 'agency');
                     </div>
 
                     <?php
-                    if ($phan_loai != "Việc khác") {
+                    if ($phan_loai != "Việc luật") {
                         $so_don         = get_field('so_don', $postid);
                         $ngay_nop_don   = get_field('ngay_nop_don', $postid);
                         $so_bang        = get_field('so_bang', $postid);

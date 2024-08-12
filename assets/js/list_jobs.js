@@ -84,4 +84,36 @@ jQuery(document).ready(function ($) {
         return false;
 
     });
+
+    /* Xử lý phân trang ajax trang author */
+    $(document).on('click', '#author_job li a', function(){
+        var paged = $(this).data('page');
+        var author_id = $("input[name='authorid']").val();
+        var numberposts = $("input[name='numberposts']").val();
+
+        var getvarData = {};
+        getvarData.action   = "ajax_author_jobs";
+        getvarData.paged    = paged;
+        getvarData.author   = author_id;
+        getvarData.numberposts   = numberposts;
+
+        console.log(getvarData);
+
+        $.ajax({
+            type: "POST",
+            url: AJAX.ajax_url,
+            data: getvarData,
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(xhr.responseText);
+                console.log(thrownError);
+            },
+            success: function (resp) {
+                // console.log(resp);
+                $('#author_listjob').html(resp);
+            },
+        });
+        return false;
+
+    });
 });

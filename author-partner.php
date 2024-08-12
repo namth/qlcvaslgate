@@ -174,15 +174,16 @@
                                     <h3 class="title"><?php _e('Danh sách công việc', 'qlcv'); ?></h3>
                                 </div>
 
-                                <div class="box-body p-0">
+                                <div class="box-body p-0" id="author_listjob">
                                     <?php 
                                         // xử lý phân trang
                                         $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
+                                        $post_per_page = 20;
 
                                         $args   = array(
                                             'post_type'     => 'job',
                                             'paged'         => $paged,
-                                            'posts_per_page'=> 50,
+                                            'posts_per_page'=> $post_per_page,
 
                                         );
                                         $args['meta_query'][] = array(
@@ -234,17 +235,21 @@
                                     </ul>
                                     <!--Todo List End-->
                                     <div class="col-12">
-                                        <div class="pagination justify-content-center">
+                                        <div class="pagination justify-content-center" id="author_job">
+                                            <input type="hidden" name="authorid" id="authorid" value="<?php echo $this_user->ID; ?>">
+                                            <input type="hidden" name="numberposts" id="numberposts" value="<?php echo $post_per_page; ?>">
                                             <?php
-                                            $big = 999999999; // need an unlikely integer
+                                            // $big = 999999999; // need an unlikely integer
 
-                                            echo paginate_links(array(
-                                                'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-                                                'format'    => '?paged=%#%',
-                                                'current'   => max(1, get_query_var('paged')),
-                                                'total'     => $query->max_num_pages,
-                                                'type'      => 'list',
-                                            ));
+                                            // echo paginate_links(array(
+                                            //     'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+                                            //     'format'    => '?paged=%#%',
+                                            //     'current'   => max(1, get_query_var('paged')),
+                                            //     'total'     => $query->max_num_pages,
+                                            //     'type'      => 'list',
+                                            // ));
+
+                                            echo show_pagination($paged, $query->max_num_pages);
                                             ?>
                                         </div>
                                     </div>
@@ -259,6 +264,7 @@
 
             </div>
         </div><!-- Content Body End -->
+        <script src="<?php echo get_template_directory_uri(); ?>/assets/js/list_jobs.js"></script>
 
 <?php 
   get_footer();
