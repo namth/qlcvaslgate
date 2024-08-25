@@ -1155,3 +1155,84 @@ function export_task($paged) {
 
     return $sent;
 }
+
+
+/* 
+*  Update data to DB
+*/
+add_action('wp_ajax_setup_page_number', 'setup_page_number');
+function setup_page_number(){
+    # connect to database
+    global $wpdb;
+    $limit = 20;
+    $aslTable = $wpdb->prefix . 'asljob';
+
+    $count_sql  = "SELECT COUNT(*) FROM $aslTable";
+    $rowcount   = $wpdb->get_var($count_sql);
+    $total_page = ceil($rowcount / $limit);
+
+    echo $total_page;
+    exit;
+}
+
+/* 
+* Update data with page number
+*/
+add_action('wp_ajax_update_data_with_page', 'update_data_with_page');
+function update_data_with_page(){
+    # connect to database
+    global $wpdb;
+
+    $aslTable = $wpdb->prefix . 'asljob';
+    
+    $limit = 20;
+    $page = $_POST['page'];
+    $total_page = $_POST['total_page'];
+    
+    $offset  = ($page - 1) * $limit;
+    $logid = "";
+
+    $sql     = "SELECT * 
+                FROM $aslTable
+                ORDER BY `jobid` ASC
+                LIMIT %d
+                OFFSET %d";
+    
+    $data = $wpdb->get_results($wpdb->prepare($sql, $limit, $offset), ARRAY_A);
+
+    if (!empty($data)) {
+        foreach ($data as $key => $value) {
+            $jobid = $value['jobid'];
+            
+            # update data to custom field by jobid
+            // $logid .= $jobid . " ";
+            $currency       = $value['currency'];
+            $total_value    = $value['total_value'];
+            $paid           = $value['paid'];
+            $remainning     = $value['remainning'];
+            $total_cost     = $value['total_cost'];
+            $currency_out   = $value['currency_out'];
+            $advance_money  = $value['advance_money'];
+            $debt           = $value['debt'];
+
+            update_field('field_60a231d395dd8', $total_value, $jobid);
+            update_field('field_60a231d395f2e', $paid, $jobid);
+            update_field('field_60a231d3961b0', $remainning, $jobid);
+            update_field('field_60a231d39602e', $currency, $jobid);
+
+            update_field('field_60afae64cfd69', $total_cost, $jobid);
+            update_field('field_60afaeb8cfd6a', $advance_money, $jobid);
+            update_field('field_60afaf50cfd6b', $debt, $jobid);
+            update_field('field_60afafbccfd6c', $currency_out, $jobid);
+        }
+    }
+
+    echo json_encode([
+        'status'        => 'success',
+        'current_page'  => ++$page,
+        'total_page'    => $total_page,
+        'result'        => $logid
+    ]);
+
+    exit;
+}

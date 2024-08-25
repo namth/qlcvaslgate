@@ -1,0 +1,215 @@
+Sáng chế
+----
+Nộp đơn
+Bổ sung POA
+Bổ sung Tài liệu ưu tiên
+Bổ sung tài liệu khác
+Thông báo chấp nhận hợp lệ
+Xuất invoice cho Khách
+Cập nhật tình trạng
+Công bố đơn
+Yêu cầu công bố sớm
+Thông báo thiếu sót
+Gửi TB trả lời thiếu sót cho Khách
+Thông báo kết quả xét nghiệm nội dung
+Gửi TB trả lời XNND cho Khách
+Yêu cầu xét nghiệm nội dung
+Thông báo cấp bằng
+Cấp bằng
+Duy trì
+Li xăng
+Chuyển nhượng
+Sửa đổi
+Phản đối
+Huỷ
+Khiếu nại
+Xử lý xâm phạm
+Giám định
+Khởi kiện
+Application Filing report
+POA Submission 
+Priority Document Submission
+Other document Submissions 
+Formality acceptance
+Invoice Issuing 
+Status update
+Substantive examination Request
+Report to Client on responding to formality correction
+Report to Client on responding to substantive examination result 
+Application Publication
+Earlier Publication Request
+Formality correction Notice
+Substantive examination result Notice
+Notice on granting patent
+Granting patent 
+Annuity report
+Licensing report
+Assignment report
+Amendment report
+Opposition report
+Cancellation report
+Appeal report
+Infringement report
+Evaluation at VIPRI
+Court
+----
+
+
+Bản quyền
+----
+Nộp đơn
+Bổ sung POA
+Bổ sung Tài liệu
+Xuất invoice cho Khách
+Cập nhật tình trạng
+Thông báo Cấp
+Sửa đổi
+Chuyển nhượng
+Xử lý vi phạm bản quyền
+Soạn hợp đồng
+----
+
+
+Franchise
+----
+Nộp đơn
+Bổ sung POA
+Bổ sung Tài liệu
+Xuất invoice cho Khách
+Cập nhật tình trạng
+Thông báo cấp bằng
+Sửa đổi
+----
+
+
+Kiểu dáng
+----
+Nộp đơn
+Bổ sung POA
+Bổ sung Tài liệu ưu tiên
+Bổ sung tài liệu khác
+Thông báo chấp nhận hợp lệ
+Cập nhật tình trạng
+Xuất invoice cho Khách
+Chỉnh sửa bộ ảnh hoặc bản mô tả
+Công bố đơn
+Yêu cầu công bố sớm
+Thông báo thiếu sót
+Gửi TB trả lời thiếu sót cho Khách
+Thông báo kết quả xét nghiệm nội dung
+Gửi TB trả lời XNND cho Khách
+Thông báo cấp bằng
+Cấp bằng
+Gia hạn
+Tra cứu
+Li xăng
+Chuyển nhượng
+Sửa đổi
+Phản đối
+Huỷ
+Khiếu nại
+Xử lý xâm phạm
+Giám định
+Khởi kiện
+Application Filing report
+POA Submission 
+Priority Document Submission
+Other document Submissions 
+Formality acceptance
+Invoice Issuing 
+Status update
+Substantive examination Request
+Report to Client on responding to formality correction
+Report to Client on responding to substantive examination result 
+Application Publication
+Earlier Publication Request
+Formality correction Notice
+Substantive examination result Notice
+Notice on granting design
+Granting design 
+Renewal report
+Licensing report
+Assignment report
+Amendment report
+Amendment of Drawings
+Opposition report
+Cancellation report
+Appeal report
+Infringement report
+Evaluation at VIPRI
+Court
+----
+
+
+Nhãn hiệu
+----
+Nộp đơn
+Bổ sung POA
+Bổ sung Tài liệu ưu tiên
+Nộp Affidavit
+Nộp bằng chứng sử dụng
+Bổ sung tài liệu khác
+Thông báo chấp nhận hợp lệ
+Xuất invoice cho Khách
+Thúc đẩy thẩm định nội dung đơn
+Cập nhật tình trạng
+Công bố đơn
+Yêu cầu công bố sớm
+Thông báo thiếu sót
+Gửi TB trả lời thiếu sót cho Khách
+Thông báo kết quả xét nghiệm nội dung
+Gửi TB trả lời XNND cho Khách
+Thông báo cấp bằng
+Cấp bằng
+Gia hạn
+Tra cứu
+Li xăng
+Chuyển nhượng
+Sửa đổi
+Phản đối
+Huỷ
+Khiếu nại
+Xử lý xâm phạm
+Giám định
+Khởi kiện
+Application Filing report
+POA Submission 
+Affidavit Filing
+Filing proof of use
+Priority Document Submission
+Other document Submissions 
+Formality acceptance
+Invoice Issuing 
+Status update
+Substantive examination Request
+Report to Client on responding to formality correction
+Report to Client on responding to substantive examination result 
+Application Publication
+Formality correction Notice
+Substantive examination result Notice
+Notice on issuing trademark certificate
+Issuance of trademark certificate 
+Renewal report
+Licensing report
+Assignment report
+Amendment report
+Amendment of trademark
+Opposition report
+Cancellation report
+Appeal report
+Infringement report
+Evaluation at VIPRI
+Court
+----
+
+
+Tiềm năng
+----
+Kiểm tra tình trạng với Khách
+Nhắc khách hàng kiểm tra email
+Nhắc khách hàng ký hợp đồng
+Nhắc khách hàng gửi tài liệu
+Khách hàng yêu cầu gọi lại
+Gửi lại báo giá mới cho Khách hàng
+Gửi tài liệu thêm cho Khách hàng
+Nhắc khách hàng cung cấp thêm thông tin

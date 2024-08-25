@@ -325,4 +325,14 @@ jQuery(document).ready(function ($) {
     $(this).hide();
     $("#change_cat").toggle(200);
   });
+
+  // when click #change_cat .cancel, hide the form in id #change_cat
+  $("#change_cat .cancel").click(function (e) {
+    e.preventDefault();
+    
+    $("#change_cat").hide();
+    $("#change_cat_button").show();
+
+    return false;
+  });
 });

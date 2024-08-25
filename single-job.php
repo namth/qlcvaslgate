@@ -266,7 +266,7 @@ while (have_posts()) {
                                     <option value="Tiềm năng">Hủy các phân loại con</option>
                                 </select>
                                 <input class="button button-outlook" type="submit" value="Chọn">
-                                <button class="button button-rss">Hủy</button>
+                                <button class="button button-rss cancel">Hủy</button>
                             </form>
                         </div> 
                     <?php 

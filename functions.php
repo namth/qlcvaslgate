@@ -424,8 +424,8 @@ function add_new_job()
     $sche_info      = $_POST['sche_info'];
     $sche_request_1 = $_POST['sche_request_1'];
     $sche_request_2 = $_POST['sche_request_2'];
-    # Việc luật
-    if (($_POST['deadline']) && ($danh_muc == "Việc luật")) {
+    # Luật
+    if (($_POST['deadline']) && ($danh_muc == "Luật")) {
         # xử lý chuỗi ngày tháng từ dạng DD/MM/YYYY sang YYYYMMDD để phù hợp với format của ACF custom field
         $deadline_arr   = explode('/', $_POST['deadline']);
         $temp_date      = array_reverse($deadline_arr);
@@ -433,7 +433,7 @@ function add_new_job()
         $current_user   = wp_get_current_user();
         $current_time   = current_time('timestamp', 7);
     }
-    if($danh_muc == "Việc luật"){
+    if($danh_muc == "Luật"){
         $danhmuckhac = $_POST['other_job'];
     }
     # finance
@@ -523,7 +523,7 @@ function add_new_job()
             } else wp_set_object_terms($inserted, $danh_muc, 'group');
             
             #set danh mục khác nếu có
-            if ($danhmuckhac && ($danh_muc == "Việc luật")) wp_set_object_terms($inserted, $danhmuckhac, 'group', true);
+            if ($danhmuckhac && ($danh_muc == "Luật")) wp_set_object_terms($inserted, $danhmuckhac, 'group', true);
             #set nguồn đầu việc
             if ($nguon_dau_viec) wp_set_object_terms($inserted, $nguon_dau_viec, 'post_tag');
 

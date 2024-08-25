@@ -109,7 +109,7 @@ if (isset($_GET['type'])) {
                                                             <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#sangche" data-group="Sáng chế"><?php _e('Sáng chế', 'qlcv'); ?></a></li>
                                                             <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#otherip" data-group="Bản quyền"><?php _e('Bản quyền', 'qlcv'); ?></a></li>
                                                             <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#otherip" data-group="Franchise"><?php _e('Franchise', 'qlcv'); ?></a></li>
-                                                            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#vieckhac" data-group="Việc luật"><?php _e('Việc luật', 'qlcv'); ?></a></li>
+                                                            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#vieckhac" data-group="Luật"><?php _e('Luật', 'qlcv'); ?></a></li>
                                                         </ul>
                                                     <?php
                                                     }
@@ -130,7 +130,7 @@ if (isset($_GET['type'])) {
                                                             $class_sang_che     = "active show";
                                                             break;
 
-                                                        case 'Việc luật':
+                                                        case 'Luật':
                                                             $class_nhan_hieu = $class_kieu_dang = $class_sang_che = $class_otherip = "";
                                                             $class_viec_khac    = "active show";
                                                             break;

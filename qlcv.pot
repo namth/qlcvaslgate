@@ -1715,7 +1715,7 @@ msgid "VD: Nhãn hiệu 9OUTFIT"
 msgstr ""
 
 #: create_job.php:109
-msgid "Việc luật"
+msgid "Luật"
 msgstr ""
 
 #: functions.php:56
