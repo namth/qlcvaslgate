@@ -196,6 +196,7 @@ while (have_posts()) {
                                 $so_bang        = get_field('so_bang');
                                 $ngay_cap_bang  = get_field('ngay_cap_bang');
                                 $mindful        = get_field('mindful');
+                                $country        = get_field('country');
 
                                 if ($partner_ref) {
                                     echo __("Số REF của đối tác: ", 'qlcv') . $partner_ref . "<br>";
@@ -215,6 +216,8 @@ while (have_posts()) {
                                 if ($ngay_cap_bang) {
                                     echo __("Ngày cấp bằng: ", 'qlcv') . $ngay_cap_bang . "<br>";
                                 }
+                                if ($country) echo __("Quốc gia nộp: ", 'qlcv') . $country . "<br>";
+
 
                                 $content = get_the_content();
                                 if ($content) {

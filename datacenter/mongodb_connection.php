@@ -1165,7 +1165,7 @@ function setup_page_number(){
     # connect to database
     global $wpdb;
     $limit = 20;
-    $aslTable = $wpdb->prefix . 'asljob';
+    $aslTable = $wpdb->prefix . 'asljobcountry';
 
     $count_sql  = "SELECT COUNT(*) FROM $aslTable";
     $rowcount   = $wpdb->get_var($count_sql);
@@ -1183,11 +1183,13 @@ function update_data_with_page(){
     # connect to database
     global $wpdb;
 
-    $aslTable = $wpdb->prefix . 'asljob';
+    $aslTable = $wpdb->prefix . 'asljobcountry';
     
     $limit = 20;
     $page = $_POST['page'];
     $total_page = $_POST['total_page'];
+    $prev_jobid = $_POST['prev_jobid'];
+    $tmp_countries = explode(', ', $_POST['countries']);
     
     $offset  = ($page - 1) * $limit;
     $logid = "";
@@ -1205,25 +1207,39 @@ function update_data_with_page(){
             $jobid = $value['jobid'];
             
             # update data to custom field by jobid
-            // $logid .= $jobid . " ";
-            $currency       = $value['currency'];
+            /* $currency       = $value['currency'];
             $total_value    = $value['total_value'];
             $paid           = $value['paid'];
             $remainning     = $value['remainning'];
             $total_cost     = $value['total_cost'];
             $currency_out   = $value['currency_out'];
             $advance_money  = $value['advance_money'];
-            $debt           = $value['debt'];
-
-            update_field('field_60a231d395dd8', $total_value, $jobid);
+            $debt           = $value['debt']; */
+            
+            /* update_field('field_60a231d395dd8', $total_value, $jobid);
             update_field('field_60a231d395f2e', $paid, $jobid);
             update_field('field_60a231d3961b0', $remainning, $jobid);
             update_field('field_60a231d39602e', $currency, $jobid);
-
+            
             update_field('field_60afae64cfd69', $total_cost, $jobid);
             update_field('field_60afaeb8cfd6a', $advance_money, $jobid);
             update_field('field_60afaf50cfd6b', $debt, $jobid);
-            update_field('field_60afafbccfd6c', $currency_out, $jobid);
+            update_field('field_60afafbccfd6c', $currency_out, $jobid); */
+            
+            $country  = $value['country'];
+
+            # if not same jobid and prev_jobid and it is the last item of foreach, update country to job
+            if ($prev_jobid != $jobid) {
+                # update country to job
+                $countries = implode(", ", $tmp_countries);
+                update_field('field_6099f6bb87256', $countries, $prev_jobid);
+
+                # add country to array
+                $tmp_countries = array($country);
+                $prev_jobid = $jobid;
+            } else {
+                $tmp_countries[] = $country;
+            }
         }
     }
 
@@ -1231,6 +1247,8 @@ function update_data_with_page(){
         'status'        => 'success',
         'current_page'  => ++$page,
         'total_page'    => $total_page,
+        'prev_jobid'    => $prev_jobid,
+        'countries'     => implode(", ", $tmp_countries),
         'result'        => $logid
     ]);
 
