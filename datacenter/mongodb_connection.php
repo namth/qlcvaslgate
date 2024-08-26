@@ -1165,7 +1165,7 @@ function setup_page_number(){
     # connect to database
     global $wpdb;
     $limit = 20;
-    $aslTable = $wpdb->prefix . 'asljobcountry';
+    $aslTable = $wpdb->prefix . 'aslcustomer';
 
     $count_sql  = "SELECT COUNT(*) FROM $aslTable";
     $rowcount   = $wpdb->get_var($count_sql);
@@ -1183,20 +1183,20 @@ function update_data_with_page(){
     # connect to database
     global $wpdb;
 
-    $aslTable = $wpdb->prefix . 'asljobcountry';
+    $aslTable = $wpdb->prefix . 'aslcustomer';
     
     $limit = 20;
     $page = $_POST['page'];
     $total_page = $_POST['total_page'];
-    $prev_jobid = $_POST['prev_jobid'];
-    $tmp_countries = explode(', ', $_POST['countries']);
+    // $prev_jobid = $_POST['prev_jobid'];
+    // $tmp_countries = explode(', ', $_POST['countries']);
     
     $offset  = ($page - 1) * $limit;
     $logid = "";
 
     $sql     = "SELECT * 
                 FROM $aslTable
-                ORDER BY `jobid` ASC
+                ORDER BY `customerid` ASC
                 LIMIT %d
                 OFFSET %d";
     
@@ -1204,7 +1204,7 @@ function update_data_with_page(){
 
     if (!empty($data)) {
         foreach ($data as $key => $value) {
-            $jobid = $value['jobid'];
+            $customerid = $value['customerid'];
             
             # update data to custom field by jobid
             /* $currency       = $value['currency'];
@@ -1229,7 +1229,7 @@ function update_data_with_page(){
             $country  = $value['country'];
 
             # if not same jobid and prev_jobid and it is the last item of foreach, update country to job
-            if ($prev_jobid != $jobid) {
+            /* if ($prev_jobid != $jobid) {
                 # update country to job
                 $countries = implode(", ", $tmp_countries);
                 update_field('field_6099f6bb87256', $countries, $prev_jobid);
@@ -1239,7 +1239,10 @@ function update_data_with_page(){
                 $prev_jobid = $jobid;
             } else {
                 $tmp_countries[] = $country;
-            }
+            } */
+
+            # update country to customer
+            update_field('field_6037200ec98cc', $country, $customerid);
         }
     }
 
@@ -1247,8 +1250,8 @@ function update_data_with_page(){
         'status'        => 'success',
         'current_page'  => ++$page,
         'total_page'    => $total_page,
-        'prev_jobid'    => $prev_jobid,
-        'countries'     => implode(", ", $tmp_countries),
+        // 'prev_jobid'    => $prev_jobid,
+        // 'countries'     => implode(", ", $tmp_countries),
         'result'        => $logid
     ]);
 
