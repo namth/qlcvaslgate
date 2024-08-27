@@ -1387,7 +1387,12 @@ function CreateDatabaseQlcv()
     $aslTable = $wpdb->prefix . 'asljobcountry';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
-        `country` varchar(255) NULL
+        `customerid` bigint(20) UNSIGNED NULL,
+        `partnerid` bigint(20) UNSIGNED NULL,
+        `memberid` bigint(20) UNSIGNED NULL,
+        `managerid` bigint(20) UNSIGNED NULL,
+        `country` varchar(255) NULL,
+        `date` timestamp NOT NULL
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 

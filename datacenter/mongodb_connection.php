@@ -809,7 +809,12 @@ function export_mysql_job($paged) {
             foreach ($list_country as $key => $value) {
                 $data_arr   = [
                     'jobid' => $jobID,
-                    'country' => trim($value)
+                    'customerid'        => $customer->ID,
+                    'partnerid'         => $partner_2['ID'],
+                    'memberid'          => $member['ID'],
+                    'managerid'         => $manager['ID'],
+                    'country'   => trim($value),
+                    'date'      => get_the_date('Y-m-d H:i:s'),
                 ];
 
                 $wpdb->insert(

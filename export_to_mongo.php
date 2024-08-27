@@ -45,7 +45,7 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                     <div class="col-lg-6 col-12 mb-20">
                         <input type="submit" class="button button-primary" value="<?php _e('Start', 'qlcv'); ?>">
                         <a class="button button-primary" id="importAll" style="color: white;">Import All</a>
-                        <a class="button button-secondary" id="updateData" style="color: white;">Update Partner</a>
+                        <!-- <a class="button button-secondary" id="updateData" style="color: white;">Update Partner</a> -->
                     </div>
 
                 </form>
