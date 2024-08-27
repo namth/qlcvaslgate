@@ -109,6 +109,7 @@ $current_user = wp_get_current_user();
 
                                     echo "<th>" . __("Số điện thoại", 'qlcv') . "</th>
                                                 <th>Email</th>";
+                                    echo "<th>" . __("Quốc gia", 'qlcv') . "</th>";
 
                                     if (in_array('contributor', $current_user->roles)) {
                                         echo "<th>" . __("Sửa", 'qlcv') . "</th>";
@@ -129,6 +130,7 @@ $current_user = wp_get_current_user();
                                         $partner_code   = get_field('partner_code', 'user_' . $user->ID);
                                         $ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $user->ID);
                                         $is_company     = get_field('is_company' , 'user_' . $user->ID);
+                                        $quoc_gia       = get_field('quoc_gia' , 'user_' . $user->ID);
                                         $author_link    = get_author_posts_url($user->ID);
 
                                         echo "<tr>";
@@ -148,6 +150,7 @@ $current_user = wp_get_current_user();
                                         } else echo "<td>" . __("Chưa có", 'qlcv') . "</td>";
 
                                         echo "<td>" . $user->user_email . "</td>";
+                                        echo "<td>" . $quoc_gia . "</td>";
 
                                         # display user role name
                                         if (!empty($user->roles) && is_array($user->roles)) {

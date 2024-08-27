@@ -45,7 +45,7 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                     <div class="col-lg-6 col-12 mb-20">
                         <input type="submit" class="button button-primary" value="<?php _e('Start', 'qlcv'); ?>">
                         <a class="button button-primary" id="importAll" style="color: white;">Import All</a>
-                        <a class="button button-secondary" id="updateData" style="color: white;">Update Job Country</a>
+                        <a class="button button-secondary" id="updateData" style="color: white;">Update Partner</a>
                     </div>
 
                 </form>
@@ -219,7 +219,7 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
         * read data from db with page number
         * update data to db
         */
-        function update_data_with_page( total_page, page, prev_jobid, countries ) {
+        function update_data_with_page( total_page, page ) {
             $.ajax({
                 type: "POST",
                 url: AJAX.ajax_url,
@@ -237,7 +237,7 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                     var obj = JSON.parse(resp);
 
                     if (obj['current_page'] <= total_page) {
-                        update_data_with_page(total_page, obj['current_page'], obj['prev_jobid'], obj['countries']);
+                        update_data_with_page( total_page, obj['current_page'] );
                         var calc = obj['current_page'] / total_page * 100;
                         var percent = Math.round(calc * 100) / 100 + "%";
                         var processbar = (100 - calc) + "%";
@@ -275,7 +275,7 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                     $("input[name='total_page']").val(resp);
 
                     /* call function update_data_with_page */
-                    update_data_with_page(resp, 1, 0, []);
+                    update_data_with_page(resp, 1);
                 },
             });
             return false;
