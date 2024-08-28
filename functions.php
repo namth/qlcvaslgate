@@ -1400,6 +1400,10 @@ function CreateDatabaseQlcv()
     $aslTable = $wpdb->prefix . 'asljobgroup';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
+        `customerid` bigint(20) UNSIGNED NULL,
+        `partnerid` bigint(20) UNSIGNED NULL,
+        `memberid` bigint(20) UNSIGNED NULL,
+        `managerid` bigint(20) UNSIGNED NULL,
         `groupname` varchar(255) NOT NULL,
         `flag` varchar(255) NOT NULL,
         `type` varchar(255) NOT NULL,

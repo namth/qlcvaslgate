@@ -846,6 +846,10 @@ function export_mysql_job($paged) {
             $groups = get_the_terms(get_the_ID(), 'group');
             $data_arr = [
                 'jobid' => $jobID,
+                'customerid'        => $customer->ID,
+                'partnerid'         => $partner_2['ID'],
+                'memberid'          => $member['ID'],
+                'managerid'         => $manager['ID'],
                 'date'  => get_the_date('Y-m-d H:i:s'),
             ];
 
