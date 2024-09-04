@@ -1320,6 +1320,8 @@ function CreateDatabaseQlcv()
         `managerid` bigint(20) UNSIGNED NULL,
         `title` varchar(255) NOT NULL,
         `type` varchar(255) NOT NULL,
+        `type_group` varchar(255) NOT NULL,
+        `flag` varchar(255) NOT NULL,
         `our_ref` varchar(50) NULL,
         `currency` varchar(5) NULL,
         `total_value` bigint(20) UNSIGNED NULL,

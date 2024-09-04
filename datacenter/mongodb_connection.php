@@ -858,6 +858,8 @@ function export_mysql_job($paged) {
             foreach ($groups as $idgroup) {
                 $term = get_term($idgroup);
                 $groupname = $term->name?$term->name:"";
+
+                $data_arr['type'] = NULL;
                 # if $groupname has value, next process
                 if ($groupname) {
                     # if job is potential, set type
@@ -911,6 +913,8 @@ function export_mysql_job($paged) {
                 'managerid'         => $manager['ID'],
                 'title'         => get_the_title(),
                 'type'          => $phan_loai,
+                'type_group'    => $data_arr['type'],
+                'flag'          => $data_arr['flag'],
                 'our_ref'       => $our_ref,
                 'currency'      => $currency,
                 'total_value'   => $total_value,
