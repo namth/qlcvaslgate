@@ -1322,6 +1322,7 @@ function CreateDatabaseQlcv()
         `type` varchar(255) NOT NULL,
         `type_group` varchar(255) NOT NULL,
         `flag` varchar(255) NOT NULL,
+        `potential` varchar(255) NULL,
         `our_ref` varchar(50) NULL,
         `currency` varchar(5) NULL,
         `total_value` bigint(20) UNSIGNED NULL,
@@ -1348,6 +1349,8 @@ function CreateDatabaseQlcv()
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `memberid` bigint(20) UNSIGNED NOT NULL,
         `managerid` bigint(20) UNSIGNED NOT NULL,
+        `customerid` bigint(20) UNSIGNED NULL,
+        `partnerid` bigint(20) UNSIGNED NULL,
         `title` varchar(255) NOT NULL,
         `status` varchar(255) NULL,
         `deadline` timestamp NULL,
@@ -1363,7 +1366,8 @@ function CreateDatabaseQlcv()
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `name` varchar(255) NOT NULL,
-        `date` timestamp NULL
+        `date` timestamp NULL,
+        PRIMARY KEY (`jobid`)
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 
@@ -1373,7 +1377,8 @@ function CreateDatabaseQlcv()
         `taskid` bigint(20) UNSIGNED NOT NULL,
         `userid` bigint(20) UNSIGNED NOT NULL,
         `content` varchar(255) NOT NULL,
-        `date` timestamp NOT NULL
+        `date` timestamp NOT NULL,
+        PRIMARY KEY (`taskid`)
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 
@@ -1381,7 +1386,8 @@ function CreateDatabaseQlcv()
     $aslTable = $wpdb->prefix . 'aslsupervisor';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
-        `supervisorid` bigint(20) UNSIGNED NOT NULL
+        `supervisorid` bigint(20) UNSIGNED NOT NULL,
+        PRIMARY KEY (`jobid`)
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 
@@ -1394,7 +1400,8 @@ function CreateDatabaseQlcv()
         `memberid` bigint(20) UNSIGNED NULL,
         `managerid` bigint(20) UNSIGNED NULL,
         `country` varchar(255) NULL,
-        `date` timestamp NOT NULL
+        `date` timestamp NOT NULL,
+        PRIMARY KEY (`jobid`)
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 
@@ -1409,7 +1416,8 @@ function CreateDatabaseQlcv()
         `groupname` varchar(255) NOT NULL,
         `flag` varchar(255) NOT NULL,
         `type` varchar(255) NOT NULL,
-        `date` timestamp NOT NULL
+        `date` timestamp NOT NULL,
+        PRIMARY KEY (`jobid`)
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 

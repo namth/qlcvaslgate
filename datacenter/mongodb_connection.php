@@ -808,11 +808,11 @@ function export_mysql_job($paged) {
             $list_country = explode(',', $country);
             foreach ($list_country as $key => $value) {
                 $data_arr   = [
-                    'jobid' => $jobID,
-                    'customerid'        => $customer->ID,
-                    'partnerid'         => $partner_2['ID'],
-                    'memberid'          => $member['ID'],
-                    'managerid'         => $manager['ID'],
+                    'jobid'         => $jobID,
+                    'customerid'    => $customer->ID,
+                    'partnerid'     => $partner_2['ID'],
+                    'memberid'      => $member['ID'],
+                    'managerid'     => $manager['ID'],
                     'country'   => trim($value),
                     'date'      => get_the_date('Y-m-d H:i:s'),
                 ];
@@ -855,18 +855,18 @@ function export_mysql_job($paged) {
 
             $i = 0;
             $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu'];
+            
             foreach ($groups as $idgroup) {
                 $term = get_term($idgroup);
                 $groupname = $term->name?$term->name:"";
 
-                $data_arr['type'] = NULL;
                 # if $groupname has value, next process
                 if ($groupname) {
                     # if job is potential, set type
                     if ($term->slug == 'tiem-nang') {
                         $data_arr['flag'] = $term->name;
                     } else {
-                        # set groupname1 and groupname2
+                        # set groupname to $data_arr['groupname']
                         $i++;
                         if ($i==1) {
                             $data_arr['groupname'] = $term->name;
@@ -878,8 +878,16 @@ function export_mysql_job($paged) {
                             if ($term->slug != 'viec-khac') {
                                 $data_arr['groupname'] = $term->name;
                             }
-                        }    
+                        }
                     }    
+
+                    # get all child of potential category, compare each ID with $term->term_id, if match, set $data_arr['potential']
+                    $all_child = get_term_children(11, 'group');
+                    if (in_array($idgroup, $all_child)) {
+                        $potential = $term->name;
+                    } else {
+                        $potential = "";
+                    }
                     
                 }    
             }    
@@ -915,6 +923,7 @@ function export_mysql_job($paged) {
                 'type'          => $phan_loai,
                 'type_group'    => $data_arr['type'],
                 'flag'          => $data_arr['flag'],
+                'potential'     => $potential,
                 'our_ref'       => $our_ref,
                 'currency'      => $currency,
                 'total_value'   => $total_value,
@@ -1061,6 +1070,9 @@ function export_mysql_task($paged) {
             $jobID      = get_field('job');
             $user_arr   = get_field('user');
             $manager    = get_field('manager');
+            $customer   = get_field('customer', $jobID);
+            $partner_2  = get_field('partner_2', $jobID);
+
             $deadline   = DateTime::createFromFormat('d/m/Y', get_field('deadline'));
             if (get_field('time_to_response')) {
                 $tmp = DateTime::createFromFormat('d/m/Y', get_field('time_to_response'));
@@ -1075,6 +1087,8 @@ function export_mysql_task($paged) {
                 'jobid'     => $jobID,
                 'memberid'  => $user_arr["ID"],
                 'managerid' => $manager["ID"],
+                'customerid'=> $customer->ID,
+                'partnerid' => $partner_2['ID'],
                 'status'    => $trang_thai,
                 'deadline'  => $deadline->format('Y-m-d H:i:s'),
                 'time_to_response'  => $time_to_response,
