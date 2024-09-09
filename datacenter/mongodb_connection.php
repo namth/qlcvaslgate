@@ -855,6 +855,7 @@ function export_mysql_job($paged) {
 
             $i = 0;
             $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu'];
+            $potential = "";
             
             foreach ($groups as $idgroup) {
                 $term = get_term($idgroup);
@@ -885,8 +886,6 @@ function export_mysql_job($paged) {
                     $all_child = get_term_children(11, 'group');
                     if (in_array($idgroup, $all_child)) {
                         $potential = $term->name;
-                    } else {
-                        $potential = "";
                     }
                     
                 }    
