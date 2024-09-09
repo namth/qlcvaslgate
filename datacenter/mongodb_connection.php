@@ -857,35 +857,34 @@ function export_mysql_job($paged) {
             $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu'];
             $potential = "";
             
-            foreach ($groups as $idgroup) {
-                $term = get_term($idgroup);
-                $groupname = $term->name?$term->name:"";
+            foreach ($groups as $group) {
+                $groupname = $group->name?$group->name:"";
 
                 # if $groupname has value, next process
                 if ($groupname) {
                     # if job is potential, set type
-                    if ($term->slug == 'tiem-nang') {
-                        $data_arr['flag'] = $term->name;
+                    if ($group->slug == 'tiem-nang') {
+                        $data_arr['flag'] = $group->name;
                     } else {
                         # set groupname to $data_arr['groupname']
                         $i++;
                         if ($i==1) {
-                            $data_arr['groupname'] = $term->name;
+                            $data_arr['groupname'] = $group->name;
                             $data_arr['flag'] = "Đã chốt";
-                            if (in_array($term->slug, $list_ip)) {
+                            if (in_array($group->slug, $list_ip)) {
                                 $data_arr['type'] = "IP";
                             } else $data_arr['type'] = "Law";
                         } else {
-                            if ($term->slug != 'viec-khac') {
-                                $data_arr['groupname'] = $term->name;
+                            if ($group->slug != 'viec-khac') {
+                                $data_arr['groupname'] = $group->name;
                             }
                         }
                     }    
 
                     # get all child of potential category, compare each ID with $term->term_id, if match, set $data_arr['potential']
                     $all_child = get_term_children(11, 'group');
-                    if (in_array($idgroup, $all_child)) {
-                        $potential = $term->name;
+                    if (in_array($group->term_id, $all_child)) {
+                        $potential = $groupname;
                     }
                     
                 }    

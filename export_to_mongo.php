@@ -58,7 +58,9 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                 <span id="loading">
                     <span id="processbar"></span>
                 </span>
-                <div id="history"></div>
+                <div id="history">
+                    
+                </div>
             </div>
         </div>
 
