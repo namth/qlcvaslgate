@@ -6,6 +6,8 @@ function all_my_hooks(){
     require_once( $dir . '/custom_posts.php');
     require_once( $dir . '/custom_fields.php');
     require_once( $dir . '/ajax_filter.php');
+    require_once( $dir . '/logs_function.php');
+    require_once( $dir . '/form_function.php');
     // require_once ($dir . '/datacenter/secret.php');
     require_once ($dir . '/datacenter/mongodb_connection.php');
 }
@@ -63,126 +65,14 @@ add_action('wp_ajax_add_user', 'add_new_user');
 function add_new_user()
 {
     # get data from the form
-    $data = parse_str($_POST['data'], $output);
+    $data_parse = parse_str($_POST['data'], $output);
 
-    $company_name   = $output['company_name'];
-    $user_code      = $output['user_code'];
-    $first_name     = $output['first_name'];
-    $last_name      = $output['last_name'];
-    $user_email     = $output['user_email'];
-    $phone_number   = $output['phone_number'];
-    $address        = $output['address'];
-    $country        = $output['country'];
-    $note           = $output['note'];
-    $link_onedrive  = $output['link_onedrive'];
-    $role           = $output['role'];;
-    $type_of_client = $output['type_of_client'];;
-    $display_name   = $first_name . " " . $last_name;
-    $user_pass      = 'd1412@pass';
+    $result = process_addnew_partner($output);
 
-    $worked         = $output['worked'];
-    $nguon_dau_viec = $output['nguon_dau_viec'];
-    $partner_vip    = $output['partner_vip'];
-    $email_cc       = $output['email_cc'];
-    $email_bcc      = $output['email_bcc'];
-    $city           = $output['city']; #
-    $vietnam_company= $output['vietnam_company'];
-    if ($output['languages']) {
-        $languages      = implode(", ", $output['languages']);
-    }
-
-    $phan_loai      = $output['phan_loai'];
-    if ($output['detail_client_type']) {
-        $detail_client_type = implode(", ", $output['detail_client_type']);
-    }
-    $fdi            = $output['fdi'];
-    if ($output['fdi_countries']) {
-        $fdi_countries  = implode(", ", $output['fdi_countries']);
-    }
-    
-    if ($phan_loai) {
-        if ($output['staffs']) {
-            $staffs     = implode("|", $output['staffs']);
-        }
-    }
-
-    if (search_partner($user_code)) {
-        $error_partner_code = true;
-        $error_message = __("<b>Trùng mã đối tác</b>", 'qlcv');
-    }
-
-    # add new user
-    $args = array(
-        'user_login'    => $user_email,
-        'user_email'    => $user_email,
-        'user_pass'     => $user_pass,
-        'first_name'    => $first_name,
-        'last_name'     => $last_name,
-        'display_name'  => $display_name,
-        'description'   => $note,
-        'role'          => $role,
-    );
-
-    $new_partner = wp_insert_user($args);
-
-    $data = array();
-    # if it's success create new user,
-    # add more info throught custom fields
-    if (!is_wp_error($new_partner) && !$error_partner_code) {
-        update_field('field_600d31f4060eb', $company_name, 'user_' . $new_partner); # company_name
-        update_field('field_607a4fb37b7e0', $user_code, 'user_' . $new_partner); # user_code
-        update_field('field_600d3211060ec', $phone_number, 'user_' . $new_partner); # phone number
-        update_field('field_600d323d060ee', $address, 'user_' . $new_partner); # address
-        update_field('field_6037200ec98cc', $country, 'user_' . $new_partner); # country
-        update_field('field_6010f85bfcf55', $link_onedrive, 'user_' . $new_partner); # link_onedrive
-        update_field('field_60a3cbacb1330', $type_of_client, 'user_' . $new_partner); # type_of_client
-        update_field('field_65a5625b5eb0e', $city, 'user_' . $new_partner); # city
-        update_field('field_65a562035eb0c', $vietnam_company, 'user_' . $new_partner); # $vietnam_company
-        update_field('field_65a4acb5db9c6', $phan_loai, 'user_' . $new_partner); # $có phải là cty hay không
-        update_field('field_65a4acebdb9c7', $staffs, 'user_' . $new_partner); # $update người trong công ty
-        update_field('field_65a5622f5eb0d', $languages, 'user_' . $new_partner); # $languages
-        update_field('field_6039b28e2ba07', $email_cc, 'user_' . $new_partner); # email_cc
-        update_field('field_609a038489e8c', $email_bcc, 'user_' . $new_partner); # email_bcc
-        update_field('field_61cd79bf1653f', $worked, 'user_' . $new_partner); # đã chốt hoặc tiềm năng
-        update_field('field_65de936686343', $nguon_dau_viec, 'user_' . $new_partner); # nguồn đến từ đâu
-        update_field('field_65dcc97fa77b9', $detail_client_type, 'user_' . $new_partner); # chuyên ngành đối tác
-        update_field('field_65ddcd2141e6f', $fdi, 'user_' . $new_partner); # có vốn fdi không
-        if ($fdi && $fdi_countries) {
-            update_field('field_65ddcd7941e70', $fdi_countries, 'user_' . $new_partner); # quốc gia đầu tư
-        }
-
-        $data['status'] = 'success';
-        $data['content'] = "<option value='" . $new_partner . "' selected>" . $display_name . " (" . $user_email . ")</option>";
-        $data['notification'] = '<div class="alert alert-success" role="alert">
-                                    <i class="fa fa-check"></i> ' . __('Đã tạo tài khoản thành công', 'qlcv') . '
-                                  </div>';
-    } else {
-        $data['status'] = 'error';
-        $data['notification'] = '<div class="alert alert-danger" role="alert">
-                                    <i class="zmdi zmdi-info"></i> ' . __('Có lỗi xảy ra, xin vui lòng kiểm tra lại.', 'qlcv') . ' ' . $error_message . '
-                                  </div>';
-    }
-
-    switch ($role) {
-        case 'partner':
-            $data['hide_form']          = '#create_partner';
-            $data['div_notification']   = '#create_partner .notification';
-            $data['select_element']     = 'select[name="partner"]';
-            break;
-
-        case 'foreign_partner':
-            $data['hide_form']          = '#create_foreign_partner';
-            $data['div_notification']   = '#create_foreign_partner .notification';
-            $data['select_element']     = 'select[name="foreign_partner"]';
-            break;
-
-        default:
-            break;
-    }
-
-    echo json_encode($data);
+    echo json_encode($result);
     exit;
 }
+
 # process when you choose the range of date that listing all tasks in that time
 add_action('wp_ajax_list_task_by_date', 'list_task_by_date');
 function list_task_by_date()
@@ -396,6 +286,8 @@ function add_new_job()
     $data_foreign_partner   = $_POST['data_foreign_partner'];
     $data_customer          = $_POST['data_customer'];
     $data_manager           = $_POST['data_manager'];
+    $data_co_manager        = $_POST['data_co_manager'];
+    $data_co_member         = $_POST['data_co_member'];
     $data_member            = $_POST['data_member'];
     $data_supervisor        = $_POST['data_supervisor'];
     $data_agency            = $_POST['data_agency'];
@@ -492,6 +384,8 @@ function add_new_job()
             update_field('field_603629217fe93', $data_manager, $inserted); # manager
             update_field('field_603627f913b2c', $data_member, $inserted); # data_member
             update_field('field_659ce731517c9', $data_supervisor, $inserted); # data_supervisor
+            update_field('field_675f0e8c798f8', $data_co_manager, $inserted); # data_co_manager
+            update_field('field_675f0e27798f7', $data_co_member, $inserted); # data_co_member
             update_field('field_600fdbda0269e', $danh_muc, $inserted); # phân loại
             update_field('field_6099f6bb87256', $country, $inserted); # quốc gia nộp
             update_field('field_6099f71187257', $partner_ref, $inserted); # Số REF của đối tác
@@ -1421,6 +1315,18 @@ function CreateDatabaseQlcv()
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 
+    # table 11
+    $aslTable = $wpdb->prefix . 'asllogs';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `logid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        `userid` bigint(20) UNSIGNED NOT NULL,
+        `postid` bigint(20) UNSIGNED NULL,
+        `edituser` bigint(20) UNSIGNED NULL,
+        `content` varchar(255) NOT NULL,
+        `date` timestamp NOT NULL,
+        PRIMARY KEY (`logid`)
+    ) {$charsetCollate};";
+    dbDelta($createAslTable);
 
 }
 add_action('after_switch_theme', 'CreateDatabaseQlcv');

@@ -97,7 +97,17 @@
                                     <div class="order-details-customer-info">
                                         <ul class="mb-30">
                                             <li><span><i class="ti-user"></i> <?php _e('Mã đối tác', 'qlcv'); ?></span><span> <?php echo $partner_code; ?></span></li>
-                                            <li><span><i class="ti-home"></i> <?php _e('Tên công ty', 'qlcv'); ?></span><span> <?php echo $ten_cong_ty; ?></span></li>
+                                            <?php 
+                                                # if this user is a company, show company name
+                                                if ($is_company) {
+                                                    echo '<li><span><i class="ti-home"></i> ' . __('Tên công ty', 'qlcv') . '</span><span> ' . $ten_cong_ty . '</span></li>';
+                                                    # show website of user meta
+                                                    $website = get_user_meta($this_user->ID, 'website', true);
+                                                    if ($website) {
+                                                        echo '<li><span><i class="ti-world"></i> ' . __('Website', 'qlcv') . '</span> <a href="' . $website . '">' . $website . '</a></li>';
+                                                    }
+                                                }
+                                            ?>
                                             <li><span><i class="ti-flag"></i> <?php _e('Tình trạng', 'qlcv'); ?></span><span> <?php echo $tinh_trang; ?></span></li>
                                             <li><span><i class="ti-flag"></i> <?php _e('Nguồn', 'qlcv'); ?></span><span> <?php echo $source; ?></span></li>
                                             <li><span><i class="ti-comments-smiley"></i> <?php _e('Giao tiếp', 'qlcv'); ?></span><span> <?php echo $languages; ?></span></li>

@@ -84,6 +84,9 @@ while (have_posts()) {
         update_field('field_60ffc8f3d152b', $current_time->format('Ymd'));
         # chuyển đối tác sang trạng thái đã chốt
         update_field('field_61cd79bf1653f', 1, 'user_' . $partner['ID']);
+        # create log, switch job status to official
+        $log = "Chuyển công việc tiềm năng sang công việc chính thức";
+        asl_create_log($log, get_the_ID());
     }
 
     # update other potential
@@ -97,6 +100,14 @@ while (have_posts()) {
         }
         if ($other_potential != "Tiềm năng") {
             wp_add_object_terms(get_the_ID(), $other_potential, 'group');
+
+            # create log, add child term of potential
+            $log = "Chuyển công việc tiềm năng sang phân loại \"" . $other_potential . "\"";
+            asl_create_log($log, get_the_ID());
+        } else {
+            # create log, remove all child term of potential
+            $log = "Hủy các phân loại con của công việc tiềm năng";
+            asl_create_log($log, get_the_ID());
         }
     }
 ?>
@@ -345,29 +356,8 @@ while (have_posts()) {
                             ?>
                         </div>
                         <div class="box-body">
-                        <div class="row">
-                            <div class="col-md-6 col-12">
-                                <h5><?php _e('Người quản lý', 'qlcv'); ?></h5>
-                                <?php 
-                                    $manager = get_field('manager');
-
-                                    echo $manager['display_name'] . "<br>";
-                                    echo $manager['user_email'] . "<br>";
-                                    echo get_field('so_dien_thoai', 'user_' . $manager['ID']) . "<br>";
-                                ?>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <h5><?php _e('Người thực hiện', 'qlcv'); ?></h5>
-                                <?php 
-                                    $member = get_field('user');
-
-                                    echo $member['display_name'] . "<br>";
-                                    echo $member['user_email'] . "<br>";
-                                    echo get_field('so_dien_thoai', 'user_' . $member['ID']) . "<br>";
-                                ?>
-                            </div>
-                        </div>
-                        <hr>
+                            
+                            <hr>
                             <ul class="timeline-list">
                                 <?php
                                 $history = get_field('history');
@@ -410,112 +400,202 @@ while (have_posts()) {
                     </div>
                 <?php
                 } 
-                {
                 ?>
-                    <div class="box">
-                        <div class="box-head">
-                            <div class="row justify-content-between">
-                                <div class="col-lg-auto">
-                                    <h4 class="title"><?php _e('Danh sách nhiệm vụ', 'qlcv'); ?></h4>
-                                </div>
-                                <div class="col-lg-auto">
-                                    <a href="<?php echo get_bloginfo('url'); ?>/tao-nhiem-vu-moi/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-primary"><span><i class="fa fa-tasks"></i><?php _e('Thêm nhiệm vụ', 'qlcv'); ?></span></a>
-                                    <a href="<?php echo get_bloginfo('url'); ?>/sua-cong-viec/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-android" data-tippy-content="<?php _e('Cập nhật nội dung', 'qlcv'); ?>"><i class="fa fa-pencil-square-o"></i></a>
-                                    <a href="<?php echo get_bloginfo('url'); ?>/tao-phieu-thu-chi/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-outlook" id="quick_update" data-tippy-content="<?php _e('Tạo phiếu thu chi', 'qlcv'); ?>"><i class="zmdi zmdi-money"></i></a>
-                                    <a href="<?php echo get_bloginfo('url'); ?>/renewal_post_api/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-skype" data-tippy-content="<?php _e('Chuyển dữ liệu sang renewal', 'qlcv'); ?>"><i class="fa fa-telegram"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="box-body">
-                            <div class="table-responsive">
-                                <table class="table daily-sale-report">
-
-                                    <!-- Table Head Start -->
-                                    <thead>
-                                        <tr>
-                                            <th><?php _e('Nhiệm vụ', 'qlcv'); ?></th>
-                                            <th><?php _e('Trạng thái', 'qlcv'); ?></th>
-                                            <th>Deadline</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead><!-- Table Head End -->
-
-                                    <!-- Table Body Start -->
-                                    <tbody>
-                                        <?php
-                                        $args   = array(
-                                            'post_type'     => 'task',
-                                            'number'        => -1,
-                                            'meta_query'    => array(
-                                                'relation'      => 'AND',
-                                                array(
-                                                    'key'       => 'job',
-                                                    'compare'   => '=',
-                                                    'value'     => get_the_ID(),
-                                                ),
-                                            ),
-                                        );
-                                        $query = new WP_Query($args);
-
-                                        // print_r($query);
-
-                                        if ($query->have_posts()) {
-                                            while ($query->have_posts()) {
-                                                $query->the_post();
-
-                                                $trangthai          = get_field('trang_thai');
-                                                $deadline           = get_field('deadline');
-                                                $time_to_response   = get_field('time_to_response');
-
-                                                // Tính toán tiến độ công việc
-                                                $start_time     = strtotime(get_the_date('d-m-Y'));
-                                                $current_time   = current_time('timestamp', 7);
-                                                $temp           = new DateTime();
-                                                $tmp            = $temp->createFromFormat('d/m/Y', $deadline);
-                                                $end_time       = strtotime($tmp->format('d-m-Y'));
-
-                                                // nếu thời gian hiện tại ít hơn deadline thì mới tính %
-                                                if ($current_time < $end_time) {
-                                                    $work_percent = round(($current_time - $start_time) / ($end_time - $start_time) * 100);
-                                                } else {
-                                                    $work_percent = 100;
-                                                }
-
-                                                # if it have respone date, shown it, if not, show deadline
-                                                if ($trang_thai == "Chờ phản hồi") {
-                                                    $deadline_label = $time_to_response;
-                                                } else if ($trang_thai != "Hoàn thành") {
-                                                    $deadline_label = $deadline;
-                                                } else {
-                                                    $deadline_label = "Xong";
-                                                }
-
-                                                // $deadline_label = $work_percent=='100'?"100%":$deadline;
-
-                                                echo "<tr>";
-                                                echo '<td class="fw-600"><a href=' . get_permalink() . '>' . get_the_title() . '</a></td>';
-                                                echo '<td>' . $trangthai . '</td>';
-                                                echo '<td><div class="progress" style="height: 24px;">
-                                                                <div class="progress-bar" role="progressbar" style="width: ' . $work_percent . '%" aria-valuenow="' . $work_percent . '" aria-valuemin="0" aria-valuemax="100">' . $deadline . '</div>
-                                                                </div>
-                                                              </td>';
-                                                echo '<td>
-                                                                <a href="' . get_bloginfo('url') . '/sua-noi-dung-nhiem-vu/?taskid=' . get_the_ID() . '" class="button button-xs button-box button-android" data-tippy-content="' . __('Sửa nội dung nhiệm vụ', 'qlcv') . '"><i class="fa fa-pencil-square-o"></i></a>
-                                                                <a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-xs button-box button-rss" id="quick_update" data-tippy-content="' . __('Sửa deadline và người xử lý', 'qlcv') . '"><i class="zmdi zmdi-assignment"></i></a>
-                                                                <a href="' . get_permalink( ) . '?stt=Huỷ" class="button button-xs button-box button-reddit" data-tippy-content="Huỷ"><i class="fa fa-trash" onclick="return confirm(\'' . __('Bạn chắc chắn muốn hủy công việc này chứ?', 'qlcv') . '\')"></i></a>
-                                                              </td>';
-                                                echo "</tr>";
-                                            }
-                                            wp_reset_postdata();
-                                        }
-                                        ?>
-                                    </tbody><!-- Table Body End -->
-
-                                </table>
+                <div class="box">
+                    <div class="box-head">
+                        <div class="row justify-content-between">
+                            <div class="col-lg-auto">
+                                <h4 class="title"><?php _e('Danh sách nhân sự xử lý', 'qlcv'); ?></h4>
                             </div>
                         </div>
                     </div>
-                <?php
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <h5><?php _e('Người quản lý', 'qlcv'); ?></h5>
+                                <?php 
+                                    $manager = get_field('manager');
+                                    if (isset($manager['ID'])) {
+                                        echo '<a href="' . get_author_posts_url($manager['ID']) . '">' . $manager['display_name'] . '</a><br>';
+                                        echo $manager['user_email'] . "<br>";
+                                        echo get_field('so_dien_thoai', 'user_' . $manager['ID']) . "<br>";
+                                    }
+
+                                    # if have co_manager, explode to array and show it
+                                    $co_manager = get_field('co_manager');
+                                    if ($co_manager) {
+                                        echo "<br><h5>" . __('Người cùng quản lý', 'qlcv') . "</h5>";
+                                        $co_manager_arr = explode("|", $co_manager);
+                                        foreach ($co_manager_arr as $co_manager_id) {
+                                            $co_manager_info = get_userdata($co_manager_id);
+                                            echo '<a href="' . get_author_posts_url($co_manager_id) . '">' . $co_manager_info->display_name . '</a>';
+                                        }
+                                    }
+                                ?>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <h5><?php _e('Người thực hiện', 'qlcv'); ?></h5>
+                                <?php 
+                                    $member = get_field('member');
+                                    # if have member, show it
+                                    if (isset($member['ID'])) {
+                                        echo '<a href="' . get_author_posts_url($member['ID']) . '">' . $member['display_name'] . '</a><br>';
+                                        echo $member['user_email'] . "<br>";
+                                        echo get_field('so_dien_thoai', 'user_' . $member['ID']) . "<br>";
+                                    }
+                                    
+                                    # if have co_member, explode to array and show it
+                                    $co_member = get_field('co_member');
+                                    if ($co_member) {
+                                        echo "<br><h5>" . __('Người cùng thực hiện', 'qlcv') . "</h5>";
+                                        $co_member_arr = explode("|", $co_member);
+                                        foreach ($co_member_arr as $co_member_id) {
+                                            $co_member_info = get_userdata($co_member_id);
+                                            echo '<a href="' . get_author_posts_url($co_member_id) . '">' . $co_member_info->display_name . '</a>';
+                                        }
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-head">
+                        <div class="row justify-content-between">
+                            <div class="col-lg-auto">
+                                <h4 class="title"><?php _e('Danh sách nhiệm vụ', 'qlcv'); ?></h4>
+                            </div>
+                            <div class="col-lg-auto">
+                                <a href="<?php echo get_bloginfo('url'); ?>/tao-nhiem-vu-moi/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-primary"><span><i class="fa fa-tasks"></i><?php _e('Thêm nhiệm vụ', 'qlcv'); ?></span></a>
+                                <a href="<?php echo get_bloginfo('url'); ?>/sua-cong-viec/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-android" data-tippy-content="<?php _e('Cập nhật nội dung', 'qlcv'); ?>"><i class="fa fa-pencil-square-o"></i></a>
+                                <a href="<?php echo get_bloginfo('url'); ?>/tao-phieu-thu-chi/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-outlook" id="quick_update" data-tippy-content="<?php _e('Tạo phiếu thu chi', 'qlcv'); ?>"><i class="zmdi zmdi-money"></i></a>
+                                <a href="<?php echo get_bloginfo('url'); ?>/renewal_post_api/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-skype" data-tippy-content="<?php _e('Chuyển dữ liệu sang renewal', 'qlcv'); ?>"><i class="fa fa-telegram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table daily-sale-report">
+
+                                <!-- Table Head Start -->
+                                <thead>
+                                    <tr>
+                                        <th><?php _e('Nhiệm vụ', 'qlcv'); ?></th>
+                                        <th><?php _e('Trạng thái', 'qlcv'); ?></th>
+                                        <th>Deadline</th>
+                                        <th></th>
+                                    </tr>
+                                </thead><!-- Table Head End -->
+
+                                <!-- Table Body Start -->
+                                <tbody>
+                                    <?php
+                                    $args   = array(
+                                        'post_type'     => 'task',
+                                        'number'        => -1,
+                                        'meta_query'    => array(
+                                            'relation'      => 'AND',
+                                            array(
+                                                'key'       => 'job',
+                                                'compare'   => '=',
+                                                'value'     => get_the_ID(),
+                                            ),
+                                        ),
+                                    );
+                                    $query = new WP_Query($args);
+
+                                    // print_r($query);
+
+                                    if ($query->have_posts()) {
+                                        while ($query->have_posts()) {
+                                            $query->the_post();
+
+                                            $trangthai          = get_field('trang_thai');
+                                            $deadline           = get_field('deadline');
+                                            $time_to_response   = get_field('time_to_response');
+
+                                            // Tính toán tiến độ công việc
+                                            $start_time     = strtotime(get_the_date('d-m-Y'));
+                                            $current_time   = current_time('timestamp', 7);
+                                            $temp           = new DateTime();
+                                            $tmp            = $temp->createFromFormat('d/m/Y', $deadline);
+                                            $end_time       = strtotime($tmp->format('d-m-Y'));
+
+                                            // nếu thời gian hiện tại ít hơn deadline thì mới tính %
+                                            if ($current_time < $end_time) {
+                                                $work_percent = round(($current_time - $start_time) / ($end_time - $start_time) * 100);
+                                            } else {
+                                                $work_percent = 100;
+                                            }
+
+                                            # if it have respone date, shown it, if not, show deadline
+                                            if ($trang_thai == "Chờ phản hồi") {
+                                                $deadline_label = $time_to_response;
+                                            } else if ($trang_thai != "Hoàn thành") {
+                                                $deadline_label = $deadline;
+                                            } else {
+                                                $deadline_label = "Xong";
+                                            }
+
+                                            // $deadline_label = $work_percent=='100'?"100%":$deadline;
+
+                                            echo "<tr>";
+                                            echo '<td class="fw-600"><a href=' . get_permalink() . '>' . get_the_title() . '</a></td>';
+                                            echo '<td>' . $trangthai . '</td>';
+                                            echo '<td><div class="progress" style="height: 24px;">
+                                                            <div class="progress-bar" role="progressbar" style="width: ' . $work_percent . '%" aria-valuenow="' . $work_percent . '" aria-valuemin="0" aria-valuemax="100">' . $deadline . '</div>
+                                                            </div>
+                                                            </td>';
+                                            echo '<td>
+                                                            <a href="' . get_bloginfo('url') . '/sua-noi-dung-nhiem-vu/?taskid=' . get_the_ID() . '" class="button button-xs button-box button-android" data-tippy-content="' . __('Sửa nội dung nhiệm vụ', 'qlcv') . '"><i class="fa fa-pencil-square-o"></i></a>
+                                                            <a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-xs button-box button-rss" id="quick_update" data-tippy-content="' . __('Sửa deadline và người xử lý', 'qlcv') . '"><i class="zmdi zmdi-assignment"></i></a>
+                                                            <a href="' . get_permalink( ) . '?stt=Huỷ" class="button button-xs button-box button-reddit" data-tippy-content="Huỷ"><i class="fa fa-trash" onclick="return confirm(\'' . __('Bạn chắc chắn muốn hủy công việc này chứ?', 'qlcv') . '\')"></i></a>
+                                                            </td>';
+                                            echo "</tr>";
+                                        }
+                                        wp_reset_postdata();
+                                    }
+                                    ?>
+                                </tbody><!-- Table Body End -->
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <?php 
+                # show log of this job
+                $logs = asl_get_logs(get_the_ID());
+                # if have not log, don't show it
+                if ($logs) {
+                    // print_r($logs);
+                    echo '<div class="box" style="margin-top:20px;">';
+                    echo '<div class="box-head">';
+                    echo '<h4 class="title">' . __('Lịch sử hoạt động', 'qlcv') . '</h4>';
+                    echo '</div>';
+                    echo '<div class="box-body">';
+                    echo '<ul class="timeline-list">';
+                    foreach ($logs as $log) {
+                        $timestamp = $log->date;
+                        echo '<li>';
+                        echo '<span class="icon">';
+                        echo "<img src='" . get_avatar_url($log->userid) . "' style='border-radius:40px;'/>";
+                        echo '</span>';
+                        echo '<div class="details">';
+                        echo '<h5 class="title">';
+                        echo get_the_author_meta('display_name', $log->userid);
+                        echo '</h5>';
+                        echo '<span class="time">' . $timestamp . '</span>';
+                        echo '<div class="content">';
+                        echo '<p>';
+                        echo $log->content;
+                        echo '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</li>';
+                    }
+                    echo '</ul>';
+                    echo '</div>';
+                    echo '</div>';
                 }
                 ?>
             </div><!-- Page Heading End -->

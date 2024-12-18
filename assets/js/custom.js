@@ -17,8 +17,9 @@ jQuery(document).ready(function ($) {
       },
       success: function (resp) {
         // alert(resp);
+        console.log(resp);
         var obj = JSON.parse(resp);
-        // console.log(obj);
+        console.log(obj);
         if (obj["status"] == "success") {
           $(obj["hide_form"]).html(obj["notification"]);
           $(obj["select_element"]).prepend(obj["content"]).show(200);
@@ -172,6 +173,8 @@ jQuery(document).ready(function ($) {
     var $data_manager   = $('select[name="manager"]').val();
     var $data_member    = $('select[name="member"]').val();
     var $data_supervisor = $('select[name="supervisor"]').val();
+    var $data_co_manager = $('select[name="co_manager"]').val();
+    var $data_co_member = $('select[name="co_member"]').val();
     var $data_agency    = $('select[name="agency"]').val();
     var $currency       = $('form#finance input[name="currency"]:checked').val();
     var $total_value    = $('form#finance input[name="total_value"]').val();
@@ -188,6 +191,8 @@ jQuery(document).ready(function ($) {
     form_data.append("data_manager", $data_manager);
     form_data.append("data_member", $data_member);
     form_data.append("data_supervisor", $data_supervisor.join("|"));
+    form_data.append("data_co_manager", $data_co_manager.join("|"));
+    form_data.append("data_co_member", $data_co_member.join("|"));
     form_data.append("data_agency", $data_agency);
     form_data.append("currency", $currency);
     form_data.append("total_value", $total_value);
@@ -298,15 +303,23 @@ jQuery(document).ready(function ($) {
   /* addnew_partner.php
     Switch chuyển phân loại sang công ty thì sẽ hiện ô nhập danh sách thành viên
   */
-  $('input[name="phan_loai"]').change(function() {
-    var val = $(this).val();
-    // alert(val);
+  function switch_is_company() {
+    var val = $('input[name="phan_loai"]:checked').val();
     if (val == 1) {
+      $(".phanloai").show(300);
       $("#phanloai").show(300);
     } else {
+      $(".phanloai").hide(300);
       $("#phanloai").hide(300);
     }
+  }
+  /* when load page, read input["phan_loai"] and switch to right type */
+  switch_is_company();
+  /* when change input["phan_loai"], switch to right type */
+  $('input[name="phan_loai"]').change(function() {
+    switch_is_company();
   });
+
   /* addnew_partner.php
     Switch chuyển phân loại sang công ty thì sẽ hiện ô nhập danh sách thành viên
   */

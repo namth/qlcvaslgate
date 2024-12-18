@@ -12,6 +12,8 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
     $current_time   = current_time('timestamp', 7);
     $phan_loai      = get_field('phan_loai', $postid);
     $supervisor     = explode("|", get_field('supervisor', $postid)); # người giám sát
+    $co_manager     = explode("|", get_field('co_manager', $postid)); # người cùng quản lý
+    $co_member      = explode("|", get_field('co_member', $postid)); # người cùng thực hiện
 
     if (
         is_user_logged_in() &&
@@ -26,6 +28,15 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         $member         = $_POST['member'];
         $manager        = $_POST['manager'];
         $supervisor     = implode("|", $_POST['supervisor']);
+        # if co_manager is array, then implode to string, else set it to empty
+        if (is_array($_POST['co_manager'])) {
+            $co_manager     = implode("|", $_POST['co_manager']);
+        } else $co_manager = "";
+        # if co_member is array, then implode to string, else set it to empty
+        if (is_array($_POST['co_member'])) {
+            $co_member      = implode("|", $_POST['co_member']);
+        } else $co_member = "";
+        
         $agency         = $_POST['agency'];
         # job
         $jobname        = $_POST['jobname'];
@@ -88,6 +99,9 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         update_field('field_603627f913b2c', $member, $postid); # save to member, manager field
         update_field('field_603629217fe93', $manager, $postid); 
         update_field('field_659ce731517c9', $supervisor, $postid); # data_supervisor
+        # co_member & co_manager
+        update_field('field_675f0e8c798f8', $co_manager, $postid);
+        update_field('field_675f0e27798f7', $co_member, $postid);
         # work process 
         if (is_array($work_process)) {
             for ($i=0; $i < count($work_process); $i++) { 
@@ -175,6 +189,9 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 break;
         }
 
+        # create log, save history of this job
+        $log = "Cập nhật công việc";
+        asl_create_log($log,$postid);
 
         wp_redirect($history_link);
     }
@@ -333,6 +350,25 @@ $agency     = get_the_terms($postid, 'agency');
                                     </div>
 
                                     <div class="mb-20">
+                                        <label for=""><b><?php _e('Người cùng quản lý', 'qlcv'); ?></b></label>
+                                        <select class="form-control select2-tags mb-20" multiple="" name="co_manager[]">
+                                            <?php
+                                            $args   = array(
+                                                'role'    => 'contributor', /*subscriber, contributor, author*/
+                                            );
+                                            $query = get_users($args);
+
+                                            if ($query) {
+                                                foreach ($query as $user) {
+                                                    $selected = in_array($user->ID, $co_manager)?"selected":"";
+                                                    echo "<option value='" . $user->ID . "' " . $selected . ">" . $user->display_name . " (" . $user->user_email . ")</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-20">
                                         <label for=""><b><?php _e('Người thực hiện', 'qlcv'); ?></b></label>
                                         <select class="form-control select2-tags mb-20" name='member'>
                                             <?php
@@ -349,6 +385,26 @@ $agency     = get_the_terms($postid, 'agency');
                                             if ($query) {
                                                 foreach ($query as $user) {
                                                     echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+
+                                    <!-- Người cùng thực hiện -->
+                                    <div class="mb-20">
+                                        <label for=""><b><?php _e('Người cùng thực hiện', 'qlcv'); ?></b></label>
+                                        <select class="form-control select2-tags mb-20" multiple="" name="co_member[]">
+                                            <?php
+                                            $args   = array(
+                                                'role__in'      => array('member', 'contributor'),
+                                            );
+                                            $query = get_users($args);
+
+                                            if ($query) {
+                                                foreach ($query as $user) {
+                                                    $selected = in_array($user->ID, $co_member)?"selected":"";    
+                                                    echo "<option value='" . $user->ID . "' " . $selected . ">" . $user->display_name . " (" . $user->user_email . ")</option>";
                                                 }
                                             }
                                             ?>

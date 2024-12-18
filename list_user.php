@@ -102,7 +102,7 @@ $current_user = wp_get_current_user();
                                     if (($role == 'partner') || ($role == 'foreign_partner')) {
                                         echo "<th>" . __("Mã đối tác", 'qlcv') . "</th>";
                                         echo "<th>" . __("Tên người liên hệ", 'qlcv') . "</th>";
-                                        echo "<th>" . __("Tên đối tác", 'qlcv') . "</th>";
+                                        echo "<th>" . __("Tên công ty/tổ chức", 'qlcv') . "</th>";
                                     } else {
                                         echo "<th>" . __("Tên nhân sự", 'qlcv') . "</th>";
                                     }

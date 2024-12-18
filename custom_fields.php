@@ -562,8 +562,6 @@ if( function_exists('acf_add_local_field_group') ):
                     'operator' => '==',
                     'value' => 'customer',
                 ),
-            ),
-            array(
                 array(
                     'param' => 'user_role',
                     'operator' => '!=',
@@ -909,6 +907,44 @@ if( function_exists('acf_add_local_field_group') ):
                 'maxlength' => '',
             ),
             array(
+                'key' => 'field_675f0e27798f7',
+                'label' => 'Người cùng thực hiện',
+                'name' => 'co_member',
+                'type' => 'text',
+                'instructions' => 'lưu ID người đồng xử lý, cách nhau dấu "|"',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'placeholder' => '',
+                'prepend' => '',
+                'append' => '',
+                'maxlength' => '',
+            ),
+            array(
+                'key' => 'field_675f0e8c798f8',
+                'label' => 'Người cùng quản lý',
+                'name' => 'co_manager',
+                'type' => 'text',
+                'instructions' => 'lưu ID người đồng quản lý, cách nhau dấu "|"',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'placeholder' => '',
+                'prepend' => '',
+                'append' => '',
+                'maxlength' => '',
+            ),
+            array(
                 'key' => 'field_6099f6bb87256',
                 'label' => 'Quốc gia nộp',
                 'name' => 'country',
@@ -1037,11 +1073,9 @@ if( function_exists('acf_add_local_field_group') ):
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
-                        array(
-                            'field' => 'field_600fdbda0269e',
-                            'operator' => '==',
-                            'value' => 'Nhãn hiệu',
-                        ),
+                        0 => 'field_600fdbda0269e',
+                        1 => '==',
+                        2 => 'Nhãn hiệu',
                     ),
                 ),
                 'wrapper' => array(
@@ -1069,11 +1103,9 @@ if( function_exists('acf_add_local_field_group') ):
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
-                        array(
-                            'field' => 'field_600fdbda0269e',
-                            'operator' => '==',
-                            'value' => 'Nhãn hiệu',
-                        ),
+                        0 => 'field_600fdbda0269e',
+                        1 => '==',
+                        2 => 'Nhãn hiệu',
                     ),
                 ),
                 'wrapper' => array(
@@ -1096,11 +1128,9 @@ if( function_exists('acf_add_local_field_group') ):
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
-                        array(
-                            'field' => 'field_600fdbda0269e',
-                            'operator' => '==',
-                            'value' => 'Nhãn hiệu',
-                        ),
+                        0 => 'field_600fdbda0269e',
+                        1 => '==',
+                        2 => 'Nhãn hiệu',
                     ),
                 ),
                 'wrapper' => array(
@@ -1123,11 +1153,9 @@ if( function_exists('acf_add_local_field_group') ):
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
-                        array(
-                            'field' => 'field_600fdbda0269e',
-                            'operator' => '==',
-                            'value' => 'Nhãn hiệu',
-                        ),
+                        0 => 'field_600fdbda0269e',
+                        1 => '==',
+                        2 => 'Nhãn hiệu',
                     ),
                 ),
                 'wrapper' => array(
@@ -1150,11 +1178,9 @@ if( function_exists('acf_add_local_field_group') ):
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
-                        array(
-                            'field' => 'field_600fdbda0269e',
-                            'operator' => '==',
-                            'value' => 'Sáng chế',
-                        ),
+                        0 => 'field_600fdbda0269e',
+                        1 => '==',
+                        2 => 'Sáng chế',
                     ),
                 ),
                 'wrapper' => array(
@@ -1177,11 +1203,9 @@ if( function_exists('acf_add_local_field_group') ):
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
-                        array(
-                            'field' => 'field_600fdbda0269e',
-                            'operator' => '==',
-                            'value' => 'Sáng chế',
-                        ),
+                        0 => 'field_600fdbda0269e',
+                        1 => '==',
+                        2 => 'Sáng chế',
                     ),
                 ),
                 'wrapper' => array(
@@ -1204,11 +1228,9 @@ if( function_exists('acf_add_local_field_group') ):
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
-                        array(
-                            'field' => 'field_600fdbda0269e',
-                            'operator' => '==',
-                            'value' => 'Sáng chế',
-                        ),
+                        0 => 'field_600fdbda0269e',
+                        1 => '==',
+                        2 => 'Sáng chế',
                     ),
                 ),
                 'wrapper' => array(
@@ -1231,11 +1253,9 @@ if( function_exists('acf_add_local_field_group') ):
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
-                        array(
-                            'field' => 'field_600fdbda0269e',
-                            'operator' => '==',
-                            'value' => 'Kiểu dáng',
-                        ),
+                        0 => 'field_600fdbda0269e',
+                        1 => '==',
+                        2 => 'Kiểu dáng',
                     ),
                 ),
                 'wrapper' => array(
@@ -1258,11 +1278,9 @@ if( function_exists('acf_add_local_field_group') ):
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
-                        array(
-                            'field' => 'field_600fdbda0269e',
-                            'operator' => '==',
-                            'value' => 'Kiểu dáng',
-                        ),
+                        0 => 'field_600fdbda0269e',
+                        1 => '==',
+                        2 => 'Kiểu dáng',
                     ),
                 ),
                 'wrapper' => array(
@@ -1285,11 +1303,9 @@ if( function_exists('acf_add_local_field_group') ):
                 'required' => 0,
                 'conditional_logic' => array(
                     array(
-                        array(
-                            'field' => 'field_600fdbda0269e',
-                            'operator' => '==',
-                            'value' => 'Kiểu dáng',
-                        ),
+                        0 => 'field_600fdbda0269e',
+                        1 => '==',
+                        2 => 'Kiểu dáng',
                     ),
                 ),
                 'wrapper' => array(
@@ -1937,8 +1953,6 @@ if( function_exists('acf_add_local_field_group') ):
                     'operator' => '==',
                     'value' => 'partner',
                 ),
-            ),
-            array(
                 array(
                     'param' => 'user_role',
                     'operator' => '==',
@@ -2833,8 +2847,6 @@ if( function_exists('acf_add_local_field_group') ):
                     'operator' => '==',
                     'value' => 'task',
                 ),
-            ),
-            array(
                 array(
                     'param' => 'post_type',
                     'operator' => '==',

@@ -241,256 +241,10 @@ if (isset($_GET['type'])) {
                                     <div class="col-12 mb-20">
                                         <button class="button button-primary create_new_button" data-div="#create_partner"><span><i class="fa fa-user-plus"></i><?php _e('Tạo đối tác mới', 'qlcv'); ?></span></button>
                                         <div id="create_partner" style="display: none;">
-                                            <form action="#" method="POST" class="row">
-                                                <div class="col-12 mb-20 notification">
-                                                    <h4><?php _e('Nhập thông tin đối tác mới', 'qlcv'); ?></h4>
-                                                </div>
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Tên công ty/tổ chức', 'qlcv'); ?></div>
-                                                <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="company_name"></div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Mã đối tác', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                                                <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_code"></div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Họ và tên', 'qlcv'); ?></div>
-                                                <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="first_name" placeholder="<?php _e('Họ', 'qlcv'); ?>"></div>
-                                                <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="last_name" placeholder="<?php _e('Tên', 'qlcv'); ?>"></div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-left text-lg-right mb-10 mt-10"><?php _e('Trạng thái', 'qlcv'); ?></div>
-                                                <div class="col-lg-3 col-12 mb-20 mt-10">
-                                                    <div class="adomx-checkbox-radio-group inline">
-                                                        <?php 
-                                                            $options = [0 => __('Đã chốt', 'qlcv'), 1 => __('Tiềm năng', 'qlcv')];
-                                                            $default = 1;
-
-                                                            foreach ($options as $key => $value) {
-                                                                $checked = ($key==$default)?"checked":"";
-                                                                echo '<label class="adomx-radio-2"><input type="radio" name="worked" value="' . $key . '" ' . $checked . '> <i class="icon"></i> ' . $value . '</label>';
-                                                            }
-                                                        ?>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6"></div>
-
-                                                <div class="col-lg-3 form_title text-left text-lg-right mb-10 mt-10"><?php _e('Nguồn', 'qlcv'); ?></div>
-                                                <div class="col-lg-3 col-12 mb-20 mt-10">
-                                                    <div class="adomx-checkbox-radio-group inline">
-                                                        <?php 
-                                                            $terms = get_terms(array(
-                                                                'taxonomy' => 'post_tag',
-                                                                'hide_empty' => false,
-                                                            ));
-                                                            foreach ($terms as $value) {
-                                                                echo '<label class="adomx-radio-2"><input type="radio" name="nguon_dau_viec" value="' . $value->name . '"> <i class="icon"></i> ' . $value->name . '</label>';
-                                                            }
-                                                        ?>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6"></div>
-
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45">Email <span class="text-danger">*</span></div>
-                                                <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_email"></div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title lh45 text-lg-right">Email CC</div>
-                                                <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="email_cc" value="<?php if(isset($_POST['email_cc'])) echo $_POST['email_cc']; ?>"></div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title lh45 text-lg-right">Email BCC</div>
-                                                <div class="col-lg-6 col-12 mb-20">
-                                                    <input type="text" class="form-control" name="email_bcc" value="<?php if(isset($_POST['email_bcc'])) echo $_POST['email_bcc']; ?>">
-                                                    <span class="form-help-text"><?php _e('Mỗi email cách nhau dấu ","', 'qlcv'); ?></span>
-                                                </div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Phân loại chính', 'qlcv'); ?></div>
-                                                <div class="col-lg-6 col-12 mb-20">
-                                                    <select class="form-control mb-20" name="type_of_client">
-                                                    <?php
-                                                        $partner_list_type = explode(PHP_EOL, get_field('partner_list_type', 'option'));
-
-                                                        foreach ($partner_list_type as $value) {
-                                                            $value = trim($value);
-                                                            $selected = ($value == $_POST['type_of_client'])?"selected":"";
-                                                            if ($value) {
-                                                                echo '<option value="' . $value . '" ' . $selected . '>' . $value . '</option>';
-                                                            }
-                                                        }
-                                                    ?>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Chuyên ngành', 'qlcv'); ?></div>
-                                                <div class="col-lg-6 col-12 mb-20">
-                                                    <select class="form-control select2-tags mb-20" multiple="" name="detail_client_type[]">
-                                                        <?php 
-                                                            $list_other_jobs = get_term_children(10, 'group');
-                                                            
-                                                            foreach ($list_other_jobs as $jobid) {
-                                                                $term = get_term($jobid, 'group');
-                                                                echo "<option value='" . $term->name . "'>" . $term->name . "</option>";
-                                                            }
-                                                        ?>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Cấp độ', 'qlcv'); ?></div>
-                                                <div class="col-lg-6 col-12 mb-20">
-                                                    <select class="form-control mb-20" name="partner_vip">
-                                                        <?php
-                                                        $partner_vip_type = explode(PHP_EOL, get_field('partner_vip_type', 'option'));
-                                                        
-                                                        foreach ($partner_vip_type as $value) {
-                                                            $value = trim($value);
-                                                            $selected = ($value==$_POST['partner_vip'])?"selected":"";
-                                                            if ($value) {
-                                                                echo '<option value="' . $value . '" ' . $selected . '>' . $value . '</option>';
-                                                            }
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Số điện thoại', 'qlcv'); ?></div>
-                                                <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="phone_number"></div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Địa chỉ', 'qlcv'); ?></div>
-                                                <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="address"></div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Quốc gia', 'qlcv'); ?></div>
-                                                <div class="col-lg-6 col-12 mb-20">
-                                                    <select class="form-control select2-tags mb-20" name="country">
-                                                        <option value="">-- <?php _e('Chọn quốc gia') ?> --</option>
-                                                        <?php
-                                                            $list_country = explode(PHP_EOL, get_field('list_country', 'option'));
-                        
-                                                            if ($list_country) {
-                                                                foreach ($list_country as $country) {
-                                                                    $country = trim($country);
-                                                                    echo "<option value='" . $country . "'>" . $country . "</option>";
-                                                                }
-                                                            }
-                                                        ?>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Thành phố', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                                                <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="city" value="<?php if(isset($_POST['city'])) echo $_POST['city']; ?>"></div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-lg-right"><?php _e('Đã có công ty tại Việt Nam?', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                                                <div class="col-lg-6 col-12 mb-20">
-                                                    <div class="adomx-checkbox-radio-group">
-                                                        <label class="adomx-switch"><input type="checkbox" name="vietnam_company"> <i class="lever"></i></label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-lg-right"><?php _e('Phân loại đầu tư', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                                                <div class="col-lg-6 col-12 mb-20">
-                                                    <div class="adomx-checkbox-radio-group inline">
-                                                        <?php 
-                                                            $options = [
-                                                                0 => __('100% Việt Nam', 'qlcv'), 
-                                                                1 => __('Có vốn đầu tư nước ngoài (FDI)', 'qlcv')
-                                                            ];
-                                                            
-                                                            foreach ($options as $key => $value) {
-                                                                echo '<label class="adomx-radio-2"><input type="radio" name="fdi" value="' . $key . '"> <i class="icon"></i> ' . $value . '</label>';
-                                                            }
-                                                        ?>
-                                                    </div>
-                                                    <div style="display: none; margin-top: 15px;" id="fdi">
-                                                        <small>Tại nước nào?</small>
-                                                        <select class="form-control select2-tags mb-20" multiple="" name="fdi_countries[]">
-                                                            <?php
-                                                            $list_country = explode(PHP_EOL, get_field('list_country', 'option'));
-                                                            
-                                                            if ($list_country) {
-                                                                foreach ($list_country as $country) {
-                                                                    $country = trim($country);
-                                                                    echo "<option value='" . $country . "'>" . $country . "</option>";
-                                                                }
-                                                            }
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Ngôn ngữ giao tiếp', 'qlcv'); ?></div>
-                                                <div class="col-lg-6 col-12 mb-20">
-                                                    <select class="form-control select2-tags mb-20" multiple="" name="languages[]">
-                                                        <?php
-                                                            $languages = explode(PHP_EOL, get_field('languages', 'option'));
-                                                            
-                                                            if ($languages) {
-                                                                foreach ($languages as $language) {
-                                                                    $language = trim($language);
-                                                                    echo "<option value='" . $language . "'>" . $language . "</option>";
-                                                                }
-                                                            }
-                                                        ?>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Ghi chú', 'qlcv'); ?></div>
-                                                <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"></textarea></div>
-                                                <div class="col-lg-3"></div>
-
-                                                <div class="col-lg-3 form_title text-lg-right"><?php _e('Loại tài khoản', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                                                <div class="col-lg-6 col-12 mb-20">
-                                                    <div class="adomx-checkbox-radio-group inline">
-                                                        <?php 
-                                                            $options = [
-                                                                0 => __('Cá nhân', 'qlcv'), 
-                                                                1 => __('Tổ chức', 'qlcv')
-                                                            ];
-                                                            
-                                                            foreach ($options as $key => $value) {
-                                                                echo '<label class="adomx-radio-2"><input type="radio" name="phan_loai" value="' . $key . '"> <i class="icon"></i> ' . $value . '</label>';
-                                                            }
-                                                        ?>
-                                                    </div>
-                                                    <div style="display: none; margin-top: 15px;" id="phanloai">
-                                                        <small>Thêm danh sách thành viên công ty vào ô dưới đây</small>
-                                                        <select class="form-control select2-tags mb-20" multiple="" name="staffs[]">
-                                                            <?php
-                                                            $args   = array(
-                                                                'role__in'      => array('partner', 'foreign_partner'),
-                                                            );
-                                                            $query = get_users($args);
-                        
-                                                            if ($query) {
-                                                                foreach ($query as $user) {
-                                                                    echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
-                                                                }
-                                                            }
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3"></div>
-
-                                                <?php
-                                                wp_nonce_field('post_nonce', 'post_nonce_field');
-                                                ?>
-                                                <input type="hidden" name="role" value="partner">
-
-                                                <div class="col-lg-3"></div>
-                                                <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Tạo mới', 'qlcv'); ?>"></div>
-
-
-                                            </form>
+                                            <?php 
+                                                # add new partner form
+                                                form_addnew_partner('partner');
+                                            ?>
                                         </div>
                                     </div>
                                     <div class="foreign_partner">
@@ -517,255 +271,10 @@ if (isset($_GET['type'])) {
                                         <div class="col-12 mb-20">
                                             <button class="button button-primary create_new_button" data-div="#create_foreign_partner"><span><i class="fa fa-user-plus"></i><?php _e('Tạo đối tác nước ngoài mới', 'qlcv'); ?></span></button>
                                             <div id="create_foreign_partner" style="display: none;">
-                                                <form action="#" method="POST" class="row">
-                                                    <div class="col-12 mb-20 notification">
-                                                        <h4><?php _e('Nhập thông tin đối tác', 'qlcv'); ?></h4>
-                                                    </div>
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Tên công ty/tổ chức', 'qlcv'); ?></div>
-                                                    <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="company_name"></div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Mã đối tác', 'qlcv'); ?></div>
-                                                    <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_code"></div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Họ và tên', 'qlcv'); ?></div>
-                                                    <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="first_name" placeholder="<?php _e('Họ', 'qlcv'); ?>"></div>
-                                                    <div class="col-lg-3 col-12 mb-20"><input type="text" class="form-control" name="last_name" placeholder="<?php _e('Tên', 'qlcv'); ?>"></div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-left text-lg-right mb-10 mt-10"><?php _e('Trạng thái', 'qlcv'); ?></div>
-                                                    <div class="col-lg-3 col-12 mb-20 mt-10">
-                                                        <div class="adomx-checkbox-radio-group inline">
-                                                            <?php 
-                                                                $options = [0 => __('Đã chốt', 'qlcv'), 1 => __('Tiềm năng', 'qlcv')];
-                                                                $default = 1;
-
-                                                                foreach ($options as $key => $value) {
-                                                                    $checked = ($key==$default)?"checked":"";
-                                                                    echo '<label class="adomx-radio-2"><input type="radio" name="worked" value="' . $key . '" ' . $checked . '> <i class="icon"></i> ' . $value . '</label>';
-                                                                }
-                                                            ?>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6"></div>
-
-                                                    <div class="col-lg-3 form_title text-left text-lg-right mb-10 mt-10"><?php _e('Nguồn', 'qlcv'); ?></div>
-                                                    <div class="col-lg-3 col-12 mb-20 mt-10">
-                                                        <div class="adomx-checkbox-radio-group inline">
-                                                            <?php 
-                                                                $terms = get_terms(array(
-                                                                    'taxonomy' => 'post_tag',
-                                                                    'hide_empty' => false,
-                                                                ));
-                                                                foreach ($terms as $value) {
-                                                                    echo '<label class="adomx-radio-2"><input type="radio" name="nguon_dau_viec" value="' . $value->name . '"> <i class="icon"></i> ' . $value->name . '</label>';
-                                                                }
-                                                            ?>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6"></div>
-
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45">Email <span class="text-danger">*</span></div>
-                                                    <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_email"></div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title lh45 text-lg-right">Email CC</div>
-                                                    <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="email_cc" value="<?php if(isset($_POST['email_cc'])) echo $_POST['email_cc']; ?>"></div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title lh45 text-lg-right">Email BCC</div>
-                                                    <div class="col-lg-6 col-12 mb-20">
-                                                        <input type="text" class="form-control" name="email_bcc" value="<?php if(isset($_POST['email_bcc'])) echo $_POST['email_bcc']; ?>">
-                                                        <span class="form-help-text"><?php _e('Mỗi email cách nhau dấu ","', 'qlcv'); ?></span>
-                                                    </div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Phân loại chính', 'qlcv'); ?></div>
-                                                    <div class="col-lg-6 col-12 mb-20">
-                                                        <select class="form-control mb-20" name="type_of_client">
-                                                        <?php
-                                                            $partner_list_type = explode(PHP_EOL, get_field('partner_list_type', 'option'));
-
-                                                            foreach ($partner_list_type as $value) {
-                                                                $value = trim($value);
-                                                                $selected = ($value == $_POST['type_of_client'])?"selected":"";
-                                                                if ($value) {
-                                                                    echo '<option value="' . $value . '" ' . $selected . '>' . $value . '</option>';
-                                                                }
-                                                            }
-                                                        ?>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Chuyên ngành', 'qlcv'); ?></div>
-                                                    <div class="col-lg-6 col-12 mb-20">
-                                                        <select class="form-control select2-tags mb-20" multiple="" name="detail_client_type[]">
-                                                            <?php 
-                                                                $list_other_jobs = get_term_children(10, 'group');
-                                                                
-                                                                foreach ($list_other_jobs as $jobid) {
-                                                                    $term = get_term($jobid, 'group');
-                                                                    echo "<option value='" . $term->name . "'>" . $term->name . "</option>";
-                                                                }
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Cấp độ', 'qlcv'); ?></div>
-                                                    <div class="col-lg-6 col-12 mb-20">
-                                                        <select class="form-control mb-20" name="partner_vip">
-                                                            <?php
-                                                            $partner_vip_type = explode(PHP_EOL, get_field('partner_vip_type', 'option'));
-                                                            
-                                                            foreach ($partner_vip_type as $value) {
-                                                                $value = trim($value);
-                                                                $selected = ($value==$_POST['partner_vip'])?"selected":"";
-                                                                if ($value) {
-                                                                    echo '<option value="' . $value . '" ' . $selected . '>' . $value . '</option>';
-                                                                }
-                                                            }
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Số điện thoại', 'qlcv'); ?></div>
-                                                    <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="phone_number"></div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Địa chỉ', 'qlcv'); ?></div>
-                                                    <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="address"></div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Quốc gia', 'qlcv'); ?></div>
-                                                    <div class="col-lg-6 col-12 mb-20">
-                                                        <select class="form-control select2-tags mb-20" name="country">
-                                                            <option value="">-- <?php _e('Chọn quốc gia') ?> --</option>
-                                                            <?php
-                                                                $list_country = explode(PHP_EOL, get_field('list_country', 'option'));
-                            
-                                                                if ($list_country) {
-                                                                    foreach ($list_country as $country) {
-                                                                        $country = trim($country);
-                                                                        echo "<option value='" . $country . "'>" . $country . "</option>";
-                                                                    }
-                                                                }
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Thành phố', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                                                    <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="city" value="<?php if(isset($_POST['city'])) echo $_POST['city']; ?>"></div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-lg-right"><?php _e('Đã có công ty tại Việt Nam?', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                                                    <div class="col-lg-6 col-12 mb-20">
-                                                        <div class="adomx-checkbox-radio-group">
-                                                            <label class="adomx-switch"><input type="checkbox" name="vietnam_company"> <i class="lever"></i></label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-lg-right"><?php _e('Phân loại đầu tư', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                                                    <div class="col-lg-6 col-12 mb-20">
-                                                        <div class="adomx-checkbox-radio-group inline">
-                                                            <?php 
-                                                                $options = [
-                                                                    0 => __('100% Việt Nam', 'qlcv'), 
-                                                                    1 => __('Có vốn đầu tư nước ngoài (FDI)', 'qlcv')
-                                                                ];
-                                                                
-                                                                foreach ($options as $key => $value) {
-                                                                    echo '<label class="adomx-radio-2"><input type="radio" name="fdi" value="' . $key . '"> <i class="icon"></i> ' . $value . '</label>';
-                                                                }
-                                                            ?>
-                                                        </div>
-                                                        <div style="display: none; margin-top: 15px;" id="fdi">
-                                                            <small>Tại nước nào?</small>
-                                                            <select class="form-control select2-tags mb-20" multiple="" name="fdi_countries[]">
-                                                                <?php
-                                                                $list_country = explode(PHP_EOL, get_field('list_country', 'option'));
-                                                                
-                                                                if ($list_country) {
-                                                                    foreach ($list_country as $country) {
-                                                                        $country = trim($country);
-                                                                        echo "<option value='" . $country . "'>" . $country . "</option>";
-                                                                    }
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Ngôn ngữ giao tiếp', 'qlcv'); ?></div>
-                                                    <div class="col-lg-6 col-12 mb-20">
-                                                        <select class="form-control select2-tags mb-20" multiple="" name="languages[]">
-                                                            <?php
-                                                                $languages = explode(PHP_EOL, get_field('languages', 'option'));
-                                                                
-                                                                if ($languages) {
-                                                                    foreach ($languages as $language) {
-                                                                        $language = trim($language);
-                                                                        echo "<option value='" . $language . "'>" . $language . "</option>";
-                                                                    }
-                                                                }
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Ghi chú', 'qlcv'); ?></div>
-                                                    <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"></textarea></div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <div class="col-lg-3 form_title text-lg-right"><?php _e('Loại tài khoản', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                                                    <div class="col-lg-6 col-12 mb-20">
-                                                        <div class="adomx-checkbox-radio-group inline">
-                                                            <?php 
-                                                                $options = [
-                                                                    0 => __('Cá nhân', 'qlcv'), 
-                                                                    1 => __('Tổ chức', 'qlcv')
-                                                                ];
-                                                                
-                                                                foreach ($options as $key => $value) {
-                                                                    echo '<label class="adomx-radio-2"><input type="radio" name="phan_loai" value="' . $key . '"> <i class="icon"></i> ' . $value . '</label>';
-                                                                }
-                                                            ?>
-                                                        </div>
-                                                        <div style="display: none; margin-top: 15px;" id="phanloai">
-                                                            <small>Thêm danh sách thành viên công ty vào ô dưới đây</small>
-                                                            <select class="form-control select2-tags mb-20" multiple="" name="staffs[]">
-                                                                <?php
-                                                                $args   = array(
-                                                                    'role__in'      => array('partner', 'foreign_partner'),
-                                                                );
-                                                                $query = get_users($args);
-                            
-                                                                if ($query) {
-                                                                    foreach ($query as $user) {
-                                                                        echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
-                                                                    }
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3"></div>
-
-                                                    <?php
-                                                    wp_nonce_field('post_nonce', 'post_nonce_field');
-                                                    ?>
-                                                    <input type="hidden" name="role" value="foreign_partner">
-
-                                                    <div class="col-lg-3"></div>
-                                                    <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Tạo mới', 'qlcv'); ?>"></div>
-
-                                                </form>
+                                                <?php 
+                                                    # add new foreign partner form
+                                                    form_addnew_partner('foreign_partner');
+                                                ?>
                                             </div>
                                         </div>
                                     </div>
@@ -888,8 +397,42 @@ if (isset($_GET['type'])) {
                                             ?>
                                         </select>
 
+                                        <!-- Chọn người cùng quản lý, có thể chọn nhiều -->
+                                        <h4 style="margin-top: 30px;"><?php _e('Chọn người cùng quản lý', 'qlcv'); ?></h4>
+                                        <select class="form-control select2-tags mb-20" multiple="" name="co_manager">
+                                            <?php
+                                            $args   = array(
+                                                'role'      => 'contributor', /*subscriber, contributor, author*/
+                                            );
+                                            $query = get_users($args);
+
+                                            if ($query) {
+                                                foreach ($query as $user) {
+                                                    echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+
                                         <h4 style="margin-top: 30px;"><?php _e('Chọn người thực hiện', 'qlcv'); ?></h4>
                                         <select class="form-control select2-tags mb-20" name="member">
+                                            <?php
+                                            $args   = array(
+                                                'role__in'      => array('member', 'contributor'), /*subscriber, contributor, author*/
+                                            );
+                                            $query = get_users($args);
+
+                                            if ($query) {
+                                                foreach ($query as $user) {
+                                                    echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+
+                                        <!-- Chọn người cùng thực hiện, có thể chọn nhiều -->
+                                        <h4 style="margin-top: 30px;"><?php _e('Chọn người cùng thực hiện', 'qlcv'); ?></h4>
+                                        <select class="form-control select2-tags mb-20" multiple="" name="co_member">
                                             <?php
                                             $args   = array(
                                                 'role__in'      => array('member', 'contributor'), /*subscriber, contributor, author*/

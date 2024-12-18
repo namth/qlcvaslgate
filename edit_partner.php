@@ -12,6 +12,30 @@ if (is_user_logged_in()) {
     } else {
         $this_user = wp_get_current_user();
     }
+    # get all data from $this_user
+    $_ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $this_user->ID);
+    $_so_dien_thoai  = get_field('so_dien_thoai', 'user_' . $this_user->ID);
+    $_dia_chi        = get_field('dia_chi', 'user_' . $this_user->ID);
+    $_quoc_gia       = get_field('quoc_gia', 'user_' . $this_user->ID);
+    $_city           = get_field('city' , 'user_' . $this_user->ID);
+    $_is_company     = get_field('is_company' , 'user_' . $this_user->ID);
+    $_staffs         = get_field('staffs' , 'user_' . $this_user->ID);
+    $_vietnam_company= get_field('vietnam_company' , 'user_' . $this_user->ID);
+    $_languages      = get_field('languages' , 'user_' . $this_user->ID);
+    $_document       = get_field('document', 'user_' . $this_user->ID);
+    $_partner_code   = get_field('partner_code', 'user_' . $this_user->ID);
+    $_email_cc       = get_field('email_cc', 'user_' . $this_user->ID);
+    $_email_bcc      = get_field('email_bcc', 'user_' . $this_user->ID);
+    $_type_of_client = get_field('type_of_client', 'user_' . $this_user->ID);
+    $_detail_client_type = get_field('detail_client_type', 'user_' . $this_user->ID);
+    $_partner_vip    = get_field('vip', 'user_' . $this_user->ID);
+    $_worked         = get_field('worked', 'user_' . $this_user->ID);
+    $_fdi            = get_field('fdi', 'user_' . $this_user->ID);
+    $_fdi_countries  = get_field('fdi_countries', 'user_' . $this_user->ID);
+    $_source         = get_field('source', 'user_' . $this_user->ID);
+
+    # get user website from user meta
+    $_website = get_user_meta($this_user->ID, 'website', true);
 
     # if it have edit action then update user info
     if (
@@ -19,6 +43,8 @@ if (is_user_logged_in()) {
         wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')
     ) {
 
+        # init changed label array
+        $changed_label = array();
         # get data from the form
         $user_company   = $_POST['user_company'];
         $partner_code   = $_POST['partner_code'];
@@ -27,6 +53,7 @@ if (is_user_logged_in()) {
         $first_name     = $_POST['first_name'];
         $last_name      = $_POST['last_name'];
         $user_email     = $_POST['user_email'];
+        $user_website   = $_POST['user_website'];
         $phone_number   = $_POST['phone_number'];
         $address        = $_POST['address'];
         $country        = $_POST['country'];
@@ -95,29 +122,112 @@ if (is_user_logged_in()) {
                     $theUser->remove_role( $value );
                 }
             }
-            
-            update_field('field_607a4fb37b7e0', $partner_code, 'user_' . $new_partner); # partner code
-            update_field('field_600d31f4060eb', $user_company, 'user_' . $new_partner); # user_company
-            update_field('field_60a3cbacb1330', $type_of_client, 'user_' . $new_partner); # type_of_client
-            update_field('field_61cd79951653e', $partner_vip, 'user_' . $new_partner); # partner_vip
-            update_field('field_600d3211060ec', $phone_number, 'user_' . $new_partner); # phone number
-            update_field('field_600d323d060ee', $address, 'user_' . $new_partner); # address
-            update_field('field_6037200ec98cc', $country, 'user_' . $new_partner); # country
-            update_field('field_65a5625b5eb0e', $city, 'user_' . $new_partner); # city
-            update_field('field_65a562035eb0c', $vietnam_company, 'user_' . $new_partner); # $vietnam_company
-            update_field('field_65a4acb5db9c6', $phan_loai, 'user_' . $new_partner); # $có phải là cty hay không
-            update_field('field_65a4acebdb9c7', $staffs, 'user_' . $new_partner); # $update người trong công ty
-            if($languages) update_field('field_65a5622f5eb0d', $languages, 'user_' . $new_partner); # $languages
-            update_field('field_6039b28e2ba07', $email_cc, 'user_' . $new_partner); # email_cc
-            update_field('field_609a038489e8c', $email_bcc, 'user_' . $new_partner); # email_bcc
-            update_field('field_61cd79bf1653f', $worked, 'user_' . $new_partner); # đã chốt hoặc tiềm năng
-            update_field('field_65de936686343', $nguon_dau_viec, 'user_' . $new_partner); # nguồn đến từ đâu
-            update_field('field_65dcc97fa77b9', $detail_client_type, 'user_' . $new_partner); # chuyên ngành đối tác
-            update_field('field_65ddcd2141e6f', $fdi, 'user_' . $new_partner); # có vốn fdi không
+            # check if website is changed, then update new website to this user
+            if ($_website != $user_website) {
+                update_user_meta($new_partner, 'website', $user_website);
+                $changed_label[] = __('website', 'qlcv');
+            }
+            # check if partner code is changed, then update new partner code to this user
+            if ($_partner_code != $partner_code) {
+                update_field('field_607a4fb37b7e0', $partner_code, 'user_' . $new_partner); # partner code
+                $changed_label[] = __('mã đối tác', 'qlcv');
+            }
+            # check if user company is changed, then update new user company to this user
+            if ($_ten_cong_ty != $user_company) {
+                update_field('field_600d31f4060eb', $user_company, 'user_' . $new_partner); # user_company
+                $changed_label[] = __('tên công ty', 'qlcv');
+            }
+            # check if type of client is changed, then update new type of client to this user
+            if ($_type_of_client != $type_of_client) {
+                update_field('field_60a3cbacb1330', $type_of_client, 'user_' . $new_partner); # type_of_client
+                $changed_label[] = __('phân loại chính', 'qlcv');
+            }
+            # check if partner vip is changed, then update new partner vip to this user
+            if ($_partner_vip != $partner_vip) {
+                update_field('field_61cd79951653e', $partner_vip, 'user_' . $new_partner); # partner_vip
+                $changed_label[] = __('thành cấp độ ', 'qlcv') . '"' . $partner_vip . '"';
+            }
+            # check if phone number is changed, then update new phone number to this user
+            if ($_so_dien_thoai != $phone_number) {
+                update_field('field_600d3211060ec', $phone_number, 'user_' . $new_partner); # phone number
+                $changed_label[] = __('số điện thoại', 'qlcv');
+            }
+            # check if address is changed, then update new address to this user
+            if ($_dia_chi != $address) {
+                update_field('field_600d323d060ee', $address, 'user_' . $new_partner); # address
+                $changed_label[] = __('địa chỉ', 'qlcv');
+            }
+            # check if country is changed, then update new country to this user
+            if ($_quoc_gia != $country) {
+                update_field('field_6037200ec98cc', $country, 'user_' . $new_partner); # country
+                $changed_label[] = __('quốc gia', 'qlcv');
+            }
+            # check if city is changed, then update new city to this user
+            if ($_city != $city) {
+                update_field('field_65a5625b5eb0e', $city, 'user_' . $new_partner); # city
+                $changed_label[] = __('thành phố', 'qlcv');
+            }
+            # check if vietnam company is changed, then update new vietnam company to this user
+            if ($_vietnam_company != $vietnam_company) {
+                update_field('field_65a562035eb0c', $vietnam_company, 'user_' . $new_partner); # $vietnam_company
+                $changed_label[] = __('có công ty tại Việt Nam', 'qlcv');
+            }
+            # check if languages is changed, then update new languages to this user
+            if ($languages && ($_languages != $languages)) {
+                update_field('field_65a5622f5eb0d', $languages, 'user_' . $new_partner); # $languages
+                $changed_label[] = __('ngôn ngữ giao tiếp', 'qlcv');
+            }
+            # check if email cc is changed, then update new email cc to this user
+            if ($_email_cc != $email_cc) {
+                update_field('field_6039b28e2ba07', $email_cc, 'user_' . $new_partner); # email_cc
+                $changed_label[] = __('email CC', 'qlcv');
+            }
+            # check if email bcc is changed, then update new email bcc to this user
+            if ($_email_bcc != $email_bcc) {
+                update_field('field_609a038489e8c', $email_bcc, 'user_' . $new_partner); # email_bcc
+                $changed_label[] = __('email BCC', 'qlcv');
+            }
+            # check if worked is changed, then update new worked to this user
+            if ($_worked != $worked) {
+                update_field('field_61cd79bf1653f', $worked, 'user_' . $new_partner); # đã chốt hoặc tiềm năng
+                $changed_label[] = __('trạng thái', 'qlcv');
+            }
+            # check if nguon dau viec is changed, then update new nguon dau viec to this user
+            if ($_source != $nguon_dau_viec) {
+                update_field('field_65de936686343', $nguon_dau_viec, 'user_' . $new_partner); # nguồn đến từ đâu
+                $changed_label[] = __('nguồn đầu việc', 'qlcv');
+            }
+            # check if detail client type is changed, then update new detail client type to this user
+            if ($_detail_client_type != $detail_client_type) {
+                update_field('field_65dcc97fa77b9', $detail_client_type, 'user_' . $new_partner); # chuyên ngành đối tác
+                $changed_label[] = __('chuyên ngành đối tác', 'qlcv');
+            }
+            # check if fdi is changed, then update new fdi to this user
+            if (($_fdi != $fdi)) {
+                update_field('field_65ddcd2141e6f', $fdi, 'user_' . $new_partner); # có vốn fdi không
+                $changed_label[] = __('vốn fdi', 'qlcv');
+            }
             if ($fdi && $fdi_countries) {
                 update_field('field_65ddcd7941e70', $fdi_countries, 'user_' . $new_partner); # quốc gia đầu tư
+                $changed_label[] = __('quốc gia đầu tư', 'qlcv');
+            }
+            # check if phan loai is changed, then update new phan loai to this user
+            if ($_is_company != $phan_loai) {
+                update_field('field_65a4acb5db9c6', $phan_loai, 'user_' . $new_partner); # phân loại
+                $changed_label[] = __('loại tài khoản', 'qlcv');
+            }
+            # check if staffs is changed, then update new staffs to this user
+            if ($_staffs != $staffs) {
+                update_field('field_65a4acebdb9c7', $staffs, 'user_' . $new_partner); # staffs
+                $changed_label[] = __('danh sách thành viên công ty', 'qlcv');
             }
 
+            # if $change_label is not empty, create log, change partner info
+            if (!empty($changed_label)) {
+                $content_log = __('Đã sửa thông tin ', 'qlcv') . implode(", ", $changed_label);
+                asl_create_log($content_log, null, $new_partner);
+            }
+            
             $thongbao = '<div class="alert alert-success" role="alert">
                                 <i class="fa fa-check"></i> ' . __('Đã sửa thông tin thành công', 'qlcv') . '
                             </div>';
@@ -161,25 +271,7 @@ get_sidebar();
                     }
 
                     // print_r($this_user);
-                    $ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $this_user->ID);
-                    $so_dien_thoai  = get_field('so_dien_thoai', 'user_' . $this_user->ID);
-                    $dia_chi        = get_field('dia_chi', 'user_' . $this_user->ID);
-                    $quoc_gia       = get_field('quoc_gia', 'user_' . $this_user->ID);
-                    $city           = get_field('city' , 'user_' . $this_user->ID);
-                    $is_company     = get_field('is_company' , 'user_' . $this_user->ID);
-                    $staffs         = get_field('staffs' , 'user_' . $this_user->ID);
-                    $vietnam_company= get_field('vietnam_company' , 'user_' . $this_user->ID);
-                    $languages      = get_field('languages' , 'user_' . $this_user->ID);
-                    $document       = get_field('document', 'user_' . $this_user->ID);
-                    $partner_code   = get_field('partner_code', 'user_' . $this_user->ID);
-                    $email_cc       = get_field('email_cc', 'user_' . $this_user->ID);
-                    $email_bcc      = get_field('email_bcc', 'user_' . $this_user->ID);
-                    $type_of_client = get_field('type_of_client', 'user_' . $this_user->ID);
-                    $partner_vip    = get_field('vip', 'user_' . $this_user->ID);
-                    $worked         = get_field('worked', 'user_' . $this_user->ID);
-                    $fdi            = get_field('fdi', 'user_' . $this_user->ID);
-                    $fdi_countries  = get_field('fdi_countries', 'user_' . $this_user->ID);
-                    $source         = get_field('source', 'user_' . $this_user->ID);
+                    
 
                     $role_list      = array(
                         'partner' => 'Đối tác',
@@ -189,16 +281,39 @@ get_sidebar();
                     ?>
                     <div>
                         <form action="#" method="POST" class="row">
+                            <div class="col-lg-3 form_title text-left text-lg-right"><?php _e('Loại tài khoản', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                            <div class="col-lg-6 col-12 mb-20">
+                                <div class="adomx-checkbox-radio-group inline">
+                                    <?php 
+                                        $options = [
+                                            0 => __('Cá nhân', 'qlcv'), 
+                                            1 => __('Tổ chức', 'qlcv')
+                                        ];
+                                        $style = $_is_company?'display: block;':'display: none;';
+
+                                        foreach ($options as $key => $value) {
+                                            $checked = ($key==$_is_company)?"checked":"";
+                                            echo '<label class="adomx-radio-2"><input type="radio" name="phan_loai" value="' . $key . '" ' . $checked . '> <i class="icon"></i> ' . $value . '</label>';
+                                        }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-lg-3"></div>
+
                             <div class="col-lg-3 form_title lh45 text-lg-right">Email <span class="text-danger">*</span></div>
                             <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_email" value="<?php echo $this_user->user_email; ?>"></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Tên công ty/tổ chức', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_company" value="<?php echo $ten_cong_ty; ?>"></div>
-                            <div class="col-lg-3"></div>
+                            <div class="col-lg-3 form_title lh45 text-lg-right phanloai"><?php _e('Tên công ty/tổ chức', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                            <div class="col-lg-6 col-12 mb-20 phanloai"><input type="text" class="form-control" name="user_company" value="<?php echo $_ten_cong_ty; ?>"></div>
+                            <div class="col-lg-3 phanloai"></div>
+
+                            <div class="col-lg-3 form_title lh45 text-lg-right phanloai"><?php _e('Trang web', 'qlcv'); ?></div>
+                            <div class="col-lg-6 col-12 mb-20 phanloai"><input type="text" class="form-control" name="user_website" value="<?php echo $_website; ?>"></div>
+                            <div class="col-lg-3 phanloai"></div>
 
                             <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Mã đối tác', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="partner_code" value="<?php echo $partner_code; ?>"></div>
+                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="partner_code" value="<?php echo $_partner_code; ?>"></div>
                             <div class="col-lg-3"></div>
 
                             <div class="col-lg-3 form_title text-lg-right"><?php _e('Vai trò', 'qlcv'); ?> <span class="text-danger">*</span></div>
@@ -225,8 +340,8 @@ get_sidebar();
                             <div class="col-lg-3 form_title mb-10 mt-10 text-lg-right"><?php _e('Trạng thái', 'qlcv'); ?></div>
                             <div class="col-lg-3 col-12 mb-20 mt-10">
                                 <div class="adomx-checkbox-radio-group inline">
-                                    <label class="adomx-radio-2"><input type="radio" name="worked" value="1" <?php if ($worked) echo "checked"; ?>> <i class="icon"></i> <?php _e('Đã chốt', 'qlcv'); ?></label>
-                                    <label class="adomx-radio-2"><input type="radio" name="worked" value="0" <?php if (!$worked) echo "checked"; ?>> <i class="icon"></i> <?php _e('Tiềm năng', 'qlcv'); ?></label>
+                                    <label class="adomx-radio-2"><input type="radio" name="worked" value="1" <?php if ($_worked) echo "checked"; ?>> <i class="icon"></i> <?php _e('Đã chốt', 'qlcv'); ?></label>
+                                    <label class="adomx-radio-2"><input type="radio" name="worked" value="0" <?php if (!$_worked) echo "checked"; ?>> <i class="icon"></i> <?php _e('Tiềm năng', 'qlcv'); ?></label>
                                 </div>
                             </div>
                             <div class="col-lg-6"></div>
@@ -241,7 +356,7 @@ get_sidebar();
                                         ));
                                         
                                         foreach ($terms as $value) {
-                                            $checked = ($value->name==$source)?"checked":"";
+                                            $checked = ($value->name==$_source)?"checked":"";
                                             echo '<label class="adomx-radio-2"><input type="radio" name="nguon_dau_viec" value="' . $value->name . '" ' . $checked . '> <i class="icon"></i> ' . $value->name . '</label>';
                                         }
                                     ?>
@@ -253,8 +368,8 @@ get_sidebar();
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control mb-20" name="type_of_client">
                                     <?php
-                                    if ($type_of_client) {
-                                        echo '<option value="' . $type_of_client . '">' . $type_of_client . '</option>';
+                                    if ($_type_of_client) {
+                                        echo '<option value="' . $_type_of_client . '">' . $_type_of_client . '</option>';
                                     } else {
                                         echo '<option value="">-- ' . __('Phân loại', 'qlcv') . ' --</option>';
                                     }
@@ -295,8 +410,8 @@ get_sidebar();
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control mb-20" name="partner_vip">
                                     <?php
-                                    if ($partner_vip) {
-                                        echo '<option value="' . $partner_vip . '">' . $partner_vip . '</option>';
+                                    if ($_partner_vip) {
+                                        echo '<option value="' . $_partner_vip . '">' . $_partner_vip . '</option>';
                                     } else {
                                         echo '<option value="">-- ' . __('Phân loại VIP', 'qlcv') . ' --</option>';
                                     }
@@ -306,7 +421,7 @@ get_sidebar();
 
                                     foreach ($partner_vip_type as $value) {
                                         $value = trim($value);
-                                        if ($value) {
+                                        if ($value && $value != $_partner_vip) {
                                             echo '<option value="' . $value . '">' . $value . '</option>';
                                         }
                                     }
@@ -317,11 +432,11 @@ get_sidebar();
                             <div class="col-lg-3"></div>
 
                             <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Số điện thoại', 'qlcv'); ?></div>
-                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="phone_number" value="<?php echo $so_dien_thoai; ?>"></div>
+                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="phone_number" value="<?php echo $_so_dien_thoai; ?>"></div>
                             <div class="col-lg-3"></div>
 
                             <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Địa chỉ', 'qlcv'); ?></div>
-                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="address" value="<?php echo $dia_chi; ?>"></div>
+                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="address" value="<?php echo $_dia_chi; ?>"></div>
                             <div class="col-lg-3"></div>
 
                             <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Quốc gia', 'qlcv'); ?> <span class="text-danger">*</span></div>
@@ -334,7 +449,7 @@ get_sidebar();
                                         if ($list_country) {
                                             foreach ($list_country as $country) {
                                                 $country = trim($country);
-                                                $selected = ($country == $quoc_gia)?"selected":"";
+                                                $selected = ($country == $_quoc_gia)?"selected":"";
                                                 echo "<option value='" . $country . "' " . $selected . ">" . $country . "</option>";
                                             }
                                         }
@@ -345,7 +460,7 @@ get_sidebar();
 
                             <div class="col-lg-3 form_title lh45 text-lg-right"><?php _e('Thành phố', 'qlcv'); ?> <span class="text-danger">*</span></div>
                             <div class="col-lg-6 col-12 mb-20">
-                                <input type="text" class="form-control" name="city" value="<?php echo $city; ?>">
+                                <input type="text" class="form-control" name="city" value="<?php echo $_city; ?>">
                             </div>
                             <div class="col-lg-3"></div>
 
@@ -353,7 +468,7 @@ get_sidebar();
                             <div class="col-lg-6 col-12 mb-20">
                                 <div class="adomx-checkbox-radio-group">
                                     <?php 
-                                        $checked = $vietnam_company?"checked":"";
+                                        $checked = $_vietnam_company?"checked":"";
                                     ?>
                                     <label class="adomx-switch"><input type="checkbox" name="vietnam_company" <?php echo $checked; ?>> <i class="lever"></i></label>
                                 </div>
@@ -368,10 +483,10 @@ get_sidebar();
                                             0 => __('100% Việt Nam', 'qlcv'), 
                                             1 => __('Có vốn đầu tư nước ngoài (FDI)', 'qlcv')
                                         ];
-                                        $style = $fdi?'display: block;':'display: none;';
+                                        $style = $_fdi?'display: block;':'display: none;';
 
                                         foreach ($options as $key => $value) {
-                                            $checked = ($key==$fdi)?"checked":"";
+                                            $checked = ($key==$_fdi)?"checked":"";
                                             echo '<label class="adomx-radio-2"><input type="radio" name="fdi" value="' . $key . '" ' . $checked . '> <i class="icon"></i> ' . $value . '</label>';
                                         }
                                     ?>
@@ -381,7 +496,7 @@ get_sidebar();
                                     <select class="form-control select2-tags mb-20" multiple="" name="fdi_countries[]">
                                         <?php
                                         $list_country = explode(PHP_EOL, get_field('list_country', 'option'));
-                                        $list_selected = explode(", ", $fdi_countries);
+                                        $list_selected = explode(", ", $_fdi_countries);
     
                                         if ($list_country) {
                                             foreach ($list_country as $country) {
@@ -401,7 +516,7 @@ get_sidebar();
                                 <select class="form-control select2-tags mb-20" multiple="" name="languages[]">
                                     <?php
                                         $list_languages = explode(PHP_EOL, get_field('languages', 'option'));
-                                        $list_selected = explode(", ", $languages);
+                                        $list_selected = explode(", ", $_languages);
                                         
                                         if ($list_languages) {
                                             foreach ($list_languages as $language) {
@@ -417,12 +532,12 @@ get_sidebar();
                             <div class="col-lg-3"></div>
 
                             <div class="col-lg-3 form_title lh45 text-lg-right">Email CC</div>
-                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="email_cc" value="<?php echo $email_cc; ?>"></div>
+                            <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="email_cc" value="<?php echo $_email_cc; ?>"></div>
                             <div class="col-lg-3"></div>
 
                             <div class="col-lg-3 form_title lh45 text-lg-right">Email BCC</div>
                             <div class="col-lg-6 col-12 mb-20">
-                                <input type="text" class="form-control" name="email_bcc" value="<?php echo $email_bcc; ?>">
+                                <input type="text" class="form-control" name="email_bcc" value="<?php echo $_email_bcc; ?>">
                                 <span class="form-help-text"><?php _e('Mỗi email cách nhau dấu ","', 'qlcv'); ?></span>
                             </div>
                             <div class="col-lg-3"></div>
@@ -431,23 +546,9 @@ get_sidebar();
                             <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"><?php echo get_user_meta($this_user->ID, 'description', true); ?></textarea></div>
                             <div class="col-lg-3"></div>
 
-                            <div class="col-lg-3 form_title text-lg-right"><?php _e('Loại tài khoản', 'qlcv'); ?> <span class="text-danger">*</span></div>
-                            <div class="col-lg-6 col-12 mb-20">
-                                <div class="adomx-checkbox-radio-group inline">
-                                    <?php 
-                                        $options = [
-                                            0 => __('Cá nhân', 'qlcv'), 
-                                            1 => __('Tổ chức', 'qlcv')
-                                        ];
-                                        $style = $is_company?'display: block;':'display: none;';
-
-                                        foreach ($options as $key => $value) {
-                                            $checked = ($key==$is_company)?"checked":"";
-                                            echo '<label class="adomx-radio-2"><input type="radio" name="phan_loai" value="' . $key . '" ' . $checked . '> <i class="icon"></i> ' . $value . '</label>';
-                                        }
-                                    ?>
-                                </div>
-                                <div style="<?php echo $is_company?"":"display: none;"; ?> margin-top: 15px;" id="phanloai">
+                            <div class="col-lg-3 form_title text-lg-right phanloai mt-20 lh45"><?php _e('Thành viên tổ chức', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                            <div class="col-lg-6 col-12 mb-20 phanloai">
+                                <div style="<?php echo $_is_company?"":"display: none;"; ?> margin-top: 15px;" id="phanloai">
                                     <small>Thêm danh sách thành viên công ty vào ô dưới đây</small>
                                     <select class="form-control select2-tags mb-20" multiple="" name="staffs[]">
                                         <?php
@@ -457,7 +558,7 @@ get_sidebar();
                                         $query = get_users($args);
     
                                         if ($query) {
-                                            $staff_arr = explode("|", $staffs);
+                                            $staff_arr = explode("|", $_staffs);
                                             foreach ($query as $user) {
                                                 $selected = in_array($user->ID, $staff_arr)?"selected":"";
                                                 echo "<option value='" . $user->ID . "' " . $selected . ">" . $user->display_name . " (" . $user->user_email . ")</option>";
@@ -467,7 +568,7 @@ get_sidebar();
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-3"></div>
+                            <div class="col-lg-3 phanloai"></div>
 
                             <?php
                             echo '<input type="hidden" name="history_link" value="' . $history_link . '">';

@@ -46,6 +46,7 @@ if (
             $receiver = get_field('receiver', 'user_' . $current_user->ID);
             $manager = get_field('manager', $postid);
             create_notification($postid, $content_notif, $manager['ID'], $receiver);
+            asl_create_log($content_notif, $postid);
 
             # đợi 3 giây và chuyển trang
             sleep(3);
