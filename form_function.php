@@ -433,7 +433,11 @@ function process_addnew_partner($input) {
         $error_message = __("<b>Chưa chọn vai trò</b>", 'qlcv');
     } else {
         # pop one role name from array
-        $role_name = array_pop($role);
+        if (is_array($role)) {
+            $role_name = array_pop($role);
+        } else {
+            $role_name = $role;
+        }
     }
 
     # data processing before insert to database
@@ -473,7 +477,7 @@ function process_addnew_partner($input) {
     $new_partner = wp_insert_user($args);
 
     # if have role, then add role to user
-    if (!empty($role)) {
+    if (is_array($role) && !empty($role)) {
         # add role to user
         foreach ($role as $role_name) {
             $user = new WP_User($new_partner);

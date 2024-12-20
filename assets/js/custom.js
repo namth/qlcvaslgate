@@ -3,6 +3,7 @@ jQuery(document).ready(function ($) {
   $('#create_partner input[type="submit"]').click(function () {
     // lấy dữ liệu từ form và mã hoá thành chuỗi
     var $data = $("#create_partner form").serialize();
+    console.log($data);
     $.ajax({
       type: "POST",
       url: AJAX.ajax_url,
