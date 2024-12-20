@@ -390,7 +390,7 @@ get_sidebar();
                             $query = new WP_Query($args);
                             // print_r($args);
                             if ($query->have_posts()) {
-                ?>
+                            ?>
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>

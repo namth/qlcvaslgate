@@ -348,4 +348,19 @@ jQuery(document).ready(function ($) {
 
     return false;
   });
+
+  /* form_function.php
+  * Switch chuyển user_code_select sang 1 thì sẽ hiện #user_code_select và ẩn #user_code_input
+  */
+  $('input[name="user_code_select"]').change(function () {
+    var val = $(this).val();
+    if (val == 1) {
+      $("#user_code_select").show(300);
+      $("#user_code_input").hide(300);
+    } else {
+      $("#user_code_select").hide(300);
+      $("#user_code_input").show(300);
+    }
+  });
+  
 });

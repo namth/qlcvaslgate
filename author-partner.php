@@ -151,10 +151,19 @@
                                                     <?php
                                                     if ($staffs) {
                                                         $staff_array = explode("|", $staffs);
-                                                        foreach ($staff_array as $starffID) {
-                                                            $staff = get_user_by("ID", $starffID);
-
+                                                        $new_staffs = array();
+                                                        foreach ($staff_array as $staffID) {
+                                                            $staff = get_user_by("ID", $staffID);
+                                                            # if staff is not exists, skip
+                                                            if (!$staff) continue;
+                                                            # add staffID to new_staffs array
+                                                            $new_staffs[] = $staffID;
                                                             echo "<div><a href='" . get_author_posts_url($staff->ID) . "'><i class='ti-user'></i> " . $staff->display_name . " (" . $staff->user_email . ")</a></div>";
+                                                        }
+
+                                                        # if cound $new_staffs is not equal to $staff_array, update $staffs
+                                                        if (count($new_staffs) != count($staff_array)) {
+                                                            update_field('field_65a4acebdb9c7', implode("|", $new_staffs), 'user_' . $this_user->ID);
                                                         }
                                                     }
                                                     echo "</div></li>";

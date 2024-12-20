@@ -1,6 +1,5 @@
 <?php 
   get_header();
-  $background = ot_get_option('background');
 ?>
   <!-- BEGIN OF page cover -->
   <div class="page-cover">

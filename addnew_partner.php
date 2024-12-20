@@ -20,6 +20,8 @@ if (
         'company_name'  => $_POST['user_company'],
         'company_website' => $_POST['user_website'],
         'user_code'     => $_POST['user_code'],
+        'user_code_select'  => $_POST['user_code_select'],
+        'user_code_exists'  => $_POST['user_code_exists'],
         'user_email'    => $_POST['user_email'],
         'phone_number'  => $_POST['phone_number'],
         'address'       => $_POST['address'],
@@ -52,6 +54,9 @@ if (
         if ($history_link) {
             wp_redirect( $history_link );
             exit;
+        } else {
+            # redirect to author page
+            wp_redirect( get_author_posts_url( $result['user_id'] ) );
         }
     } else {
         $thongbao = '<div class="alert alert-danger">Có lỗi gì đó, hãy kiểm tra lại</div>';
