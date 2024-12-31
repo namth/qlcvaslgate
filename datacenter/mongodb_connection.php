@@ -908,6 +908,11 @@ function export_mysql_job($paged) {
                 $agency_hn = in_array('ha-noi', $brand)?1:0;
                 $agency_hcm = in_array('ho-chi-minh', $brand)?1:0;
             }
+
+            # if $data_arr['type'] = 'Law' and $phan_loai is empty, set $phan_loai = 'Việc khác'
+            if ($data_arr['type'] == 'Law' && empty($phan_loai)) {
+                $phan_loai = 'Việc khác';
+            }
             
             $job = [
                 'jobid'             => get_the_ID(),

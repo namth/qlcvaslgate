@@ -340,6 +340,8 @@ $current_user = wp_get_current_user();
                         -- Nếu là admin --
                         * Nếu có set người quản lý thì search theo người quản lý
                         * Nếu có set người thực hiện thì search theo người thực hiện 
+                        ** Bổ sung
+                        * Search thêm trường người đồng quản lý và người đồng thực hiện (co_member, co_manager)
                     */
                 if (!in_array('administrator', $current_user->roles)) {
                     if ($manager) {
@@ -372,7 +374,9 @@ $current_user = wp_get_current_user();
                         }
                     } else {
                         if ($member) {
+                            # nếu có set người thực hiện thì ưu tiên lọc theo người thực hiện trước
                             if ($member != $current_user->ID) {
+                                # nếu có set người thực hiện mà không phải là current user thì search theo người quản lý
                                 $args['meta_query'][] = array(
                                     array(
                                         'key'       => 'member',
@@ -386,6 +390,7 @@ $current_user = wp_get_current_user();
                                     ),
                                 );
                             } else {
+                                # nếu có set người thực hiện mà trùng với current user thì search thẳng luôn
                                 $args['meta_query'][] = array(
                                     array(
                                         'key'       => 'member',
@@ -395,6 +400,8 @@ $current_user = wp_get_current_user();
                                 );
                             }
                         } else {
+                            # nếu không set gì thì search theo current user cả 2 vị trí
+                            # search thêm trường người đồng quản lý và người đồng thực hiện (co_member, co_manager)
                             $args['meta_query'][] = array(
                                 'relation' => 'OR',
                                 array(
@@ -406,6 +413,16 @@ $current_user = wp_get_current_user();
                                     'key'       => 'manager',
                                     'value'     => $current_user->ID,
                                     'compare'   => '=',
+                                ),
+                                array(
+                                    'key'       => 'co_member',
+                                    'value'     => $current_user->ID,
+                                    'compare'   => 'LIKE',
+                                ),
+                                array(
+                                    'key'       => 'co_manager',
+                                    'value'     => $current_user->ID,
+                                    'compare'   => 'LIKE',
                                 ),
                             );
                         }
