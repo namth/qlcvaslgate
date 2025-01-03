@@ -10,6 +10,7 @@ function all_my_hooks(){
     require_once( $dir . '/form_function.php');
     // require_once ($dir . '/datacenter/secret.php');
     require_once ($dir . '/datacenter/mongodb_connection.php');
+    require_once ($dir . '/api_qlcv.php');
 }
 
 register_nav_menus(array('main-menu' => esc_html__('Main Menu', 'blankslate')));
