@@ -91,9 +91,33 @@ function api_data_table($params) {
         $where = "";
     }
 
+    # if have order params then get order
+    # order = field ASC|DESC
+    # orderby = field
+    if (isset($params['orderby']) && $params['orderby']) {
+        $order = " ORDER BY " . $params['orderby'];
+        if (isset($params['order']) && $params['order']) {
+            $order .= " " . $params['order'];
+        }
+    } else {
+        $order = "";
+    }
+
+    # if have limit params then get limit
+    if (isset($params['limit']) && $params['limit']) {
+        $limit = " LIMIT " . $params['limit'];
+    } else {
+        $limit = "";
+    }
+
+    # if have offset params then get offset
+    if (isset($params['offset']) && $params['offset']) {
+        $limit .= " OFFSET " . $params['offset'];
+    }
+
     $table = $wpdb->prefix . $table;
 
-    $data = $wpdb->get_results("SELECT $field FROM $table $where", ARRAY_A);
+    $data = $wpdb->get_results("SELECT $field FROM $table $where $order $limit", ARRAY_A);
 
     return $data;
 }
@@ -106,10 +130,19 @@ function api_columns_table($params) {
     $table = $wpdb->prefix . $table;
 
     # get oly column name
-    $data = $wpdb->get_results("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table'", ARRAY_A);
+    $data = $wpdb->get_results("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table'");
 
     # get name and put to array
     $data = array_column($data, 'COLUMN_NAME');
+
+    # if have not field then get all
+    if (isset($params['field']) && $params['field']) {
+        $fields = $params['field'];
+        $list_field = explode(',', $fields);
+
+        # get duplicate item in 2 array and put to new array
+        $data = array_intersect($data, $list_field);
+    } 
 
     return $data;
 }
