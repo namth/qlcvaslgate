@@ -15505,3 +15505,27 @@ body.skin-dark .cus-radio.light .icon::before {
 .phanloai {
   display: none;
 }
+.list-attachments {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-direction: column;
+  padding: 0;
+  margin: 10px 0 0;
+}
+.list-attachments li{
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+  align-items: center;
+}
+.list-attachments li a{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.list-attachments li .remove-attachment{
+  color: red;
+  cursor: pointer;
+  font-size: 20px;
+}

@@ -1332,3 +1332,16 @@ function CreateDatabaseQlcv()
 }
 add_action('after_switch_theme', 'CreateDatabaseQlcv');
 
+
+add_action('wp_ajax_remove_attachment', 'remove_attachment');
+function remove_attachment() {
+    $url = $_POST['url'];
+    unlink($url);
+    // echo "Đã xóa file $url thành công.";
+
+    # update to email attachment
+    $attachment = explode('|', $_POST['attachment']);
+    $id_email = $_POST['id_email'];
+    update_field('field_67add7781ca67', implode(PHP_EOL, $attachment), $id_email);
+    exit;
+}

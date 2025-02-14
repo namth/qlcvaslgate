@@ -181,7 +181,7 @@ jQuery(document).ready(function ($) {
     var $total_value    = $('form#finance input[name="total_value"]').val();
     var $paid           = $('form#finance input[name="paid"]').val();
 
-    console.log($data_supervisor.join("|"));
+    // console.log($data_supervisor.join("|"));
     //khởi tạo đối tượng form data
     var form_data = new FormData($data_job);
 
@@ -200,7 +200,7 @@ jQuery(document).ready(function ($) {
     form_data.append("paid", $paid);
 
 
-    console.log(form_data);
+    // console.log(form_data);
 
     $.ajax({
       type: "POST",
@@ -363,5 +363,44 @@ jQuery(document).ready(function ($) {
       $("#user_code_input").show(300);
     }
   });
-  
+
+  /* 
+  * approval_task.php
+  * When user click on .remove-attachment, remove li's parents of this tag
+  * Then get all value of url in .list-attachments and put to hidden input with name is current_attachments
+  */
+  $('.remove-attachment').click(function() {
+    var id_email = $('input[name="id_email"]').val();
+    var url = $(this).parent().find('a').attr('href');
+    // remove li's parents of this tag
+    $(this).parent().remove();
+    // get all value of url in .list-attachments and put to hidden input with name is current_attachments
+    var list_attachments = [];
+    $('.list-attachments li a').each(function() {
+      list_attachments.push($(this).attr('href'));
+    });
+    var attachment = list_attachments.join("|");
+    $('input[name="current_attachments"]').val(attachment);
+    
+    console.log(url);
+    // call ajax to remove attachment
+    $.ajax({
+      type: "POST",
+      url: AJAX.ajax_url,
+      data: {
+        action: "remove_attachment",
+        url: url,
+        attachment: attachment,
+        id_email: id_email
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        console.log(xhr.status);
+        console.log(xhr.responseText);
+        console.log(thrownError);
+      },
+      success: function (resp) {
+        console.log(resp);
+      },
+    });
+  });
 });
