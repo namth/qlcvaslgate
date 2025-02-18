@@ -297,7 +297,7 @@ if ($id_email) {
                     <div class="col-lg-7 col-12 mb-20">
                         <input type="file" id="attachments" class="form-control" name="attachments[]" multiple>
                         <?php 
-                        if ($attachments) {
+                        if (is_array($attachments) && count($attachments) > 0) {
                             echo '<ul class="list-attachments">';
                             foreach ($attachments as $file) {
                                 echo '<li>
@@ -309,9 +309,14 @@ if ($id_email) {
                                     </li>';
                             }
                             echo '</ul>';
+
+                            $attach_string = implode('|', $attachments);
+                        } else {
+                            $attach_string = '';
                         }
+                        
+                        echo '<input type="hidden" name="current_attachments" value="' . $attach_string . '">';
                         ?>
-                        <input type="hidden" name="current_attachments" value="<?php echo implode('|', $attachments); ?>">
                         <input type="hidden" name="id_email" value="<?php echo $id_email; ?>">
                     </div>
                     <div class="col-lg-3"></div>
