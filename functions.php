@@ -1329,6 +1329,32 @@ function CreateDatabaseQlcv()
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 
+    # table 12
+    $aslTable = $wpdb->prefix . 'asljobtodocument';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `jobid` bigint(20) UNSIGNED NOT NULL,
+        `job_title` varchar(255) NOT NULL,
+        `our_ref` varchar(50) NULL,
+        `trademark_txt` varchar(255) NULL,
+        `trademark_img` varchar(255) NULL,
+        `trademark_class` varchar(255) NULL,
+        `trademark_totalclass` varchar(255) NULL,
+        `trademark_fillingid` varchar(255) NULL,
+        `trademark_fillingdate` varchar(255) NULL,
+        `partner_name` varchar(255) NULL,
+        `partner_code` varchar(20) NULL,
+        `partner_companyName` varchar(255) NULL,
+        `partner_country` varchar(255) NULL,
+        `partner_address` varchar(255) NULL,
+        `partner_city` varchar(255) NULL,
+        `partner_phone` varchar(20) NULL,
+        `partner_email` varchar(255) NULL,
+        `partner_email_cc` varchar(255) NULL,
+        `partner_email_bcc` varchar(255) NULL,
+        PRIMARY KEY (`jobid`)
+    ) {$charsetCollate};";
+    dbDelta($createAslTable);
+
 }
 add_action('after_switch_theme', 'CreateDatabaseQlcv');
 

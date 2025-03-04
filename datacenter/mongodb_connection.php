@@ -726,6 +726,7 @@ function export_mysql_job($paged) {
     $aslSupervisor = $wpdb->prefix . 'aslsupervisor';
     $aslGroup = $wpdb->prefix . 'asljobgroup';
     $aslCountry = $wpdb->prefix . 'asljobcountry';
+    $aslJobDocument = $wpdb->prefix . 'asljobtodocument';
     $posts_per_page = 20;
     $args   = array(
         'post_type'     => 'job',
@@ -913,6 +914,49 @@ function export_mysql_job($paged) {
             if ($data_arr['type'] == 'Law' && empty($phan_loai)) {
                 $phan_loai = 'Việc khác';
             }
+
+            $logo           = get_field('logo', $jobID);
+            $ten_nhan_hieu  = get_field('ten_nhan_hieu', $jobID);
+            $nhom           = get_field('nhom', $jobID);
+            $so_luong_nhom  = get_field('so_luong_nhom', $jobID);
+            $our_ref        = get_field('our_ref', $jobID);
+            $so_don         = get_field('so_don', $jobID);
+            $ngay_nop_don   = get_field('ngay_nop_don', $jobID);
+            $so_dien_thoai  = get_field('so_dien_thoai' , 'user_' . $partner_2['ID']);
+            $dia_chi        = get_field('dia_chi' , 'user_' . $partner_2['ID']);
+            $quoc_gia       = get_field('quoc_gia' , 'user_' . $partner_2['ID']);
+            $email_cc       = get_field('email_cc' , 'user_' . $partner_2['ID']);
+            $email_bcc      = get_field('email_bcc' , 'user_' . $partner_2['ID']);
+            $partner_code   = get_field('partner_code' , 'user_' . $partner_2['ID']);
+            $ten_cong_ty    = get_field('ten_cong_ty' , 'user_' . $partner_2['ID']);
+            $city           = get_field('city' , 'user_' . $partner_2['ID']);
+
+            $jobdoc = [
+                'jobid'     => $jobID,
+                'job_title' => get_the_title(),
+                'our_ref'   => $our_ref,
+                'trademark_txt' => $ten_nhan_hieu,
+                'trademark_img' => $logo,
+                'trademark_class' => $nhom,
+                'trademark_totalclass' => $so_luong_nhom,
+                'trademark_fillingid' => $so_don,
+                'trademark_fillingdate' => $ngay_nop_don,
+                'partner_name' => $partner_2['display_name'],
+                'partner_code' => $partner_code,
+                'partner_companyName' => $ten_cong_ty,
+                'partner_country' => $quoc_gia,
+                'partner_address' => $dia_chi,
+                'partner_city' => $city,
+                'partner_phone' => $so_dien_thoai,
+                'partner_email' => $partner_2['user_email'],
+                'partner_email_cc' => $email_cc,
+                'partner_email_bcc' => $email_bcc
+            ];
+
+            $wpdb->insert(
+                $aslJobDocument,
+                $jobdoc
+            );
             
             $job = [
                 'jobid'             => get_the_ID(),
