@@ -1282,7 +1282,7 @@ function CreateDatabaseQlcv()
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `supervisorid` bigint(20) UNSIGNED NOT NULL,
-        PRIMARY KEY (`jobid`)
+        `name` varchar(255) NULL
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 

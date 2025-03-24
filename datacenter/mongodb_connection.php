@@ -832,7 +832,46 @@ function export_mysql_job($paged) {
                     foreach ($supervisors as $supervisor) {
                         $data_arr = [
                             'jobid' => $jobID,
-                            'supervisorid' => $supervisor
+                            'supervisorid' => $supervisor,
+                            'name'  => 'Người giám sát'
+                        ];
+
+                        $wpdb->insert(
+                            $aslSupervisor,
+                            $data_arr
+                        );
+                    }
+                }
+            }
+            # save co_manager to export
+            $data_co_manager = get_field('co_manager');
+            if ( $data_co_manager ) {
+                $co_managers = explode("|", $data_co_manager);
+                if(!empty($co_managers)){
+                    foreach ($co_managers as $co_manager) {
+                        $data_arr = [
+                            'jobid' => $jobID,
+                            'supervisorid' => $co_manager,
+                            'name'  => 'Người đồng quản lý'
+                        ];
+
+                        $wpdb->insert(
+                            $aslSupervisor,
+                            $data_arr
+                        );
+                    }
+                }
+            }
+            # save co_member to export
+            $data_co_member = get_field('co_member');
+            if ( $data_co_member ) {
+                $co_members = explode("|", $data_co_member);
+                if(!empty($co_members)){
+                    foreach ($co_members as $co_member) {
+                        $data_arr = [
+                            'jobid' => $jobID,
+                            'supervisorid' => $co_member,
+                            'name'  => 'Người đồng thực hiện'
                         ];
 
                         $wpdb->insert(
