@@ -302,6 +302,21 @@ get_sidebar();
                                         'value'     => $member,
                                         'compare'   => '=',
                                     ),
+                                    array(
+                                        'key'       => 'co_manager',
+                                        'value'     => $member,
+                                        'compare'   => 'LIKE',
+                                    ),
+                                    array(
+                                        'key'       => 'co_member',
+                                        'value'     => $member,
+                                        'compare'   => 'LIKE',
+                                    ),
+                                    array(
+                                        'key'       => 'supervisor',
+                                        'value'     => $member,
+                                        'compare'   => 'LIKE',
+                                    ),
                                 );
                             }
 

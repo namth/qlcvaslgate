@@ -139,6 +139,7 @@ $current_user = wp_get_current_user();
         }
 
         if (!in_array('administrator', $current_user->roles)) {
+            $member = $current_user->ID; // Define $member as the current user's ID
             $args['meta_query'][] = array(
                 'relation' => 'OR',
                 array(
@@ -150,6 +151,21 @@ $current_user = wp_get_current_user();
                     'key'       => 'manager',
                     'value'     => $member,
                     'compare'   => '=',
+                ),
+                array(
+                    'key'       => 'co_manager',
+                    'value'     => $member,
+                    'compare'   => 'LIKE',
+                ),
+                array(
+                    'key'       => 'co_member',
+                    'value'     => $member,
+                    'compare'   => 'LIKE',
+                ),
+                array(
+                    'key'       => 'supervisor',
+                    'value'     => $member,
+                    'compare'   => 'LIKE',
                 ),
             );
         }
