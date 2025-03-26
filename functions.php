@@ -38,8 +38,20 @@ function time_elapsed_string($datetime, $full = false)
     $ago->setTimestamp($datetime);
     $diff = $now->diff($ago);
 
-    $diff->w = floor($diff->d / 7);
-    $diff->d -= $diff->w * 7;
+    // Create a new array to store our values
+    $values = [
+        'y' => $diff->y,
+        'm' => $diff->m,
+        'd' => $diff->d,
+        'h' => $diff->h,
+        'i' => $diff->i,
+        's' => $diff->s,
+        'w' => 0,
+    ];
+    
+    // Calculate weeks from days
+    $values['w'] = floor($values['d'] / 7);
+    $values['d'] -= $values['w'] * 7;
 
     $string = array(
         'y' => __('năm', 'qlcv'),
@@ -51,8 +63,8 @@ function time_elapsed_string($datetime, $full = false)
         's' => __('giây', 'qlcv'),
     );
     foreach ($string as $k => &$v) {
-        if ($diff->$k) {
-            $v = $diff->$k . ' ' . $v;
+        if ($values[$k]) {
+            $v = $values[$k] . ' ' . $v;
         } else {
             unset($string[$k]);
         }

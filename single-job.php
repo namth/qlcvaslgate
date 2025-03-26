@@ -127,7 +127,7 @@ while (have_posts()) {
                         <h3 class="mb-10"><?php the_title(); ?> </h3>
                         <!-- <span class="badge badge-primary"><?php echo $phan_loai; ?></span> -->
                         <?php
-                        if (in_array('administrator', $current_user->roles)) {
+                        if (in_array('administrator', $current_user->roles) || in_array('contributor', $current_user->roles)) {
                             $rand_color = $color[array_rand($color)];
                             echo "<span class='badge " . $rand_color . "'>" . $tagname . "</span> ";
                         }
@@ -575,7 +575,7 @@ while (have_posts()) {
                     echo '<div class="box-body">';
                     echo '<ul class="timeline-list">';
                     foreach ($logs as $log) {
-                        $timestamp = $log->date;
+                        $timestamp = strtotime($log->date); // Convert date string to numeric timestamp
                         echo '<li>';
                         echo '<span class="icon">';
                         echo "<img src='" . get_avatar_url($log->userid) . "' style='border-radius:40px;'/>";
@@ -584,7 +584,7 @@ while (have_posts()) {
                         echo '<h5 class="title">';
                         echo get_the_author_meta('display_name', $log->userid);
                         echo '</h5>';
-                        echo '<span class="time">' . $timestamp . '</span>';
+                        echo '<span class="time">' . time_elapsed_string($timestamp) . '</span>';
                         echo '<div class="content">';
                         echo '<p>';
                         echo $log->content;
