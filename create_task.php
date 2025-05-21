@@ -45,6 +45,8 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
 
             # nếu update thành công thì update history
             if ($inserted) {
+                global $wpdb;
+                
                 # xử lý chuỗi ngày tháng từ dạng DD/MM/YYYY sang YYYYMMDD để phù hợp với format của ACF custom field
                 $deadline_arr   = explode('/', $_POST['deadline']);
                 $temp_date      = array_reverse($deadline_arr);
@@ -81,6 +83,57 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 );
 
                 add_row('field_6010e02533119', $row_update, $inserted);
+                
+                # Update MySQL tables for task data
+                
+                # 1. Update asltask table
+                $aslTable = $wpdb->prefix . 'asltask';
+                // $user_arr = get_user_by('ID', $member);
+                $manager_arr = get_user_by('ID', $manager);
+                $customer = get_field('customer', $job);
+                $partner_2 = get_field('partner_2', $job);
+                
+                # Convert deadline
+                $deadline = DateTime::createFromFormat('Ymd', $new_deadline);
+                $deadline_mysql = $deadline ? $deadline->format('Y-m-d H:i:s') : NULL;
+                
+                # Convert time to response if exists
+                $time_to_response = NULL;
+                if (get_field('time_to_response', $inserted)) {
+                    $tmp = DateTime::createFromFormat('d/m/Y', get_field('time_to_response', $inserted));
+                    $time_to_response = $tmp->format('Y-m-d H:i:s');
+                }
+                
+                # Insert into asltask table
+                $wpdb->insert(
+                    $aslTable,
+                    array(
+                        'taskid'     => $inserted,
+                        'jobid'      => $job,
+                        'memberid'   => $member,
+                        'managerid'  => $manager,
+                        'customerid' => $customer ? $customer->ID : NULL,
+                        'partnerid'  => $partner_2 ? $partner_2['ID'] : NULL,
+                        'title'      => $taskname,
+                        'status'     => "Mới",
+                        'deadline'   => $deadline_mysql,
+                        'time_to_response' => $time_to_response,
+                        'miss_deadline' => 0,
+                        'date'       => current_time('mysql', 1)
+                    )
+                );
+                
+                # 2. Update asltaskhistory table - Add initial history record
+                $aslHistory = $wpdb->prefix . 'asltaskhistory';
+                $wpdb->insert(
+                    $aslHistory,
+                    array(
+                        'taskid'     => $inserted,
+                        'userid'     => $current_user->ID,
+                        'content'    => $noi_dung,
+                        'date'       => current_time('mysql', 1)
+                    )
+                );
 
                 # send email notification
                 $email_admin = get_field('email_admin', 'option');
@@ -94,8 +147,8 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
     
                     $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
                     $headers[] = 'Cc: ' . $email_admin;
-                    if ($manager_arr['user_email']) {
-                        $headers[] = 'Cc: ' . $manager_arr['user_email'];
+                    if ($manager_arr->user_email) {
+                        $headers[] = 'Cc: ' . $manager_arr->user_email;
                     }
     
                     $sent = wp_mail($to, $email_title, $email_content, $headers);

@@ -384,6 +384,7 @@ function form_addnew_partner($role=null){
 *  partner_vip
 */
 function process_addnew_partner($input) {
+    global $wpdb;
     # initialize variables
     $error_partner_code = false;
 
@@ -479,9 +480,9 @@ function process_addnew_partner($input) {
     # if have role, then add role to user
     if (is_array($role) && !empty($role)) {
         # add role to user
-        foreach ($role as $role_name) {
+        foreach ($role as $_role_name) {
             $user = new WP_User($new_partner);
-            $user->add_role($role_name);
+            $user->add_role($_role_name);
         }
     }
 
@@ -522,6 +523,51 @@ function process_addnew_partner($input) {
         if ($fdi && $fdi_countries) {
             update_field('field_65ddcd7941e70', $fdi_countries, 'user_' . $new_partner); # quốc gia đầu tư
         }
+
+        # Update aslpartner table
+        $aslTable = $wpdb->prefix . 'aslpartner';
+        $tinh_trang = $worked ? "Đã chốt" : "Tiềm năng";
+        
+        # display user role name
+        $role_partner__in = $role_partner__out = 0;
+        if (!empty($role) && is_array($role)) {
+            $role_partner__in = in_array('partner', $role) ? 1 : 0;
+            $role_partner__out = in_array('foreign_partner', $role) ? 1 : 0;
+        } else {
+            $role_partner__in = ($role_name == 'partner') ? 1 : 0;
+            $role_partner__out = ($role_name == 'foreign_partner') ? 1 : 0;
+        }
+
+        $wpdb->insert(
+            $aslTable,
+            array(
+                'partnerid'     => $new_partner,
+                'name'          => $display_name,
+                'partner_code'  => $user_code,
+                'companyName'   => $company_name,
+                'country'       => $country,
+                'address'       => $address,
+                'city'          => $city,
+                'is_company'    => $phan_loai,
+                'staffs'        => $staffs,
+                'vn_company'    => $vietnam_company,
+                'languages'     => $languages,
+                'email_cc'      => $email_cc,
+                'email_bcc'     => $email_bcc,
+                'type_of_client'=> $type_of_client,
+                'vip'           => $partner_vip,
+                'status'        => $tinh_trang,
+                'fdi'           => $fdi,
+                'fdi_from'      => $fdi_countries,
+                'client_type'   => $detail_client_type,
+                'source'        => $nguon_dau_viec,
+                'phone'         => $phone_number,
+                'email'         => $user_email,
+                'role_partner__in' => $role_partner__in,
+                'role_partner__out'=> $role_partner__out,
+                'date'          => current_time('mysql', 1)
+            )
+        );
 
         $data['status'] = 'success';
         $data['user_id'] = $new_partner;

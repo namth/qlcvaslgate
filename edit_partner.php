@@ -42,6 +42,7 @@ if (is_user_logged_in()) {
         isset($_POST['post_nonce_field']) &&
         wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')
     ) {
+        global $wpdb;
 
         # init changed label array
         $changed_label = array();
@@ -256,18 +257,70 @@ if (is_user_logged_in()) {
             if (!empty($changed_label)) {
                 $content_log = __('Đã sửa thông tin ', 'qlcv') . implode(", ", $changed_label);
                 asl_create_log($content_log, null, $new_partner);
+                
+                # Update aslpartner table
+                $aslTable = $wpdb->prefix . 'aslpartner';
+                
+                # Display user role name
+                $role_partner__in = $role_partner__out = 0;
+                if (!empty($theUser->roles) && is_array($theUser->roles)) {
+                    foreach ($theUser->roles as $role) {
+                        if ($role == 'partner') {
+                            $role_partner__in = 1;
+                        } elseif ($role == 'foreign_partner') {
+                            $role_partner__out = 1;
+                        }
+                    }
+                }
+                
+                # Convert boolean/checkbox fields to tinyint
+                $is_company_int = intval($phan_loai);
+                $vietnam_company_int = !empty($vietnam_company) ? 1 : 0;
+                $fdi_int = intval($fdi);
+                $worked_int = intval($worked);
+
+                # Update the partner record in the database
+                $wpdb->update(
+                    $aslTable,
+                    array(
+                        'name' => $display_name,
+                        'partner_code' => $partner_code,
+                        'companyName' => $user_company,
+                        'country' => $country,
+                        'address' => $address,
+                        'city' => $city,
+                        'is_company' => $is_company_int,
+                        'staffs' => $staffs,
+                        'vn_company' => $vietnam_company_int,
+                        'languages' => $languages,
+                        'email_cc' => $email_cc,
+                        'email_bcc' => $email_bcc,
+                        'type_of_client' => $type_of_client,
+                        'vip' => $partner_vip,
+                        'status' => ($worked_int == 1) ? 'Đã chốt' : 'Tiềm năng',
+                        'fdi' => $fdi_int,
+                        'fdi_from' => $fdi_countries,
+                        'client_type' => $detail_client_type,
+                        'source' => $nguon_dau_viec,
+                        'phone' => $phone_number,
+                        'email' => $user_email,
+                        'role_partner__in' => $role_partner__in,
+                        'role_partner__out' => $role_partner__out
+                    ),
+                    array('partnerid' => $this_user->ID)
+                );
             }
             
             $thongbao = '<div class="alert alert-success" role="alert">
-                                <i class="fa fa-check"></i> ' . __('Đã sửa thông tin thành công', 'qlcv') . '
-                            </div>';
-            
+                            <i class="fa fa-check"></i> ' . __('Đã sửa thông tin thành công', 'qlcv') . '
+                        </div>';
+        
             wp_redirect( $history_link );
             exit;
         } else {
             $thongbao = '<div class="alert alert-danger" role="alert">
-                                <i class="zmdi zmdi-info"></i> ' . __('Có lỗi xảy ra, xin vui lòng kiểm tra lại.','qlcv') . ' '. $error_message .'
-                            </div>';
+                            <i class="zmdi zmdi-info"></i> ' . __('Có lỗi xảy ra, xin vui lòng kiểm tra lại.','qlcv') . ' '. $error_message .'
+                        </div>';
         }
     }
 }

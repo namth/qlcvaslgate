@@ -155,6 +155,8 @@ function list_task_by_date()
 add_action('wp_ajax_add_customer', 'add_new_customer');
 function add_new_customer()
 {
+    global $wpdb;
+    
     # get data from the form
     $data = parse_str($_POST['data'], $output);
 
@@ -187,6 +189,22 @@ function add_new_customer()
         update_field('field_600d323d060ee', $address, $inserted); # address
         update_field('field_6037200ec98cc', $country, $inserted); # country
         update_field('field_6010f85bfcf55', $link_onedrive, $inserted); # link_onedrive
+
+        # Update aslcustomer table
+        $aslTable = $wpdb->prefix . 'aslcustomer';
+        
+        $wpdb->insert(
+            $aslTable,
+            array(
+                'customerid'    => $inserted,
+                'name'          => $customer_name,
+                'companyName'   => $customer_name,
+                'country'       => $country,
+                'phone'         => $phone_number,
+                'email'         => $user_email,
+                'date'          => current_time('mysql', 1)
+            )
+        );
 
         $data['status'] = 'success';
         if ($user_email) {
@@ -293,6 +311,8 @@ function copy_customer_from_partner()
 add_action('wp_ajax_add_new_job', 'add_new_job');
 function add_new_job()
 {
+    global $wpdb;
+    
     # get data from the form
     // $file_upload            = $_FILE['file_upload'];
     $data_partner           = $_POST['data_partner'];
@@ -511,6 +531,226 @@ function add_new_job()
 
             # notification 
             create_notification($inserted, $email_title, $manager_arr->ID, $user_arr->ID);
+            
+            # Update MySQL tables for job data
+            
+            # 1. Update asljob table
+            $aslTable = $wpdb->prefix . 'asljob';
+            $foreign_partner_id = is_array($data_foreign_partner) ? $data_foreign_partner['ID'] : NULL;
+            
+            # Get information about agency for the job
+            $brand = array();
+            $agency_terms = get_the_terms($inserted, 'agency');
+            if($agency_terms) {
+                foreach ($agency_terms as $id_chi_nhanh) {
+                    $term = get_term($id_chi_nhanh);
+                    $brand[] = $term->slug;
+                }
+            }
+            
+            $agency_hn = in_array('ha-noi', $brand) ? 1 : 0;
+            $agency_hcm = in_array('ho-chi-minh', $brand) ? 1 : 0;
+            
+            # Get contract sign date
+            $contract_sign_date = '';
+            if (get_field('contract_sign_date', $inserted)) {
+                $tmp = DateTime::createFromFormat('d/m/Y', get_field('contract_sign_date', $inserted));
+                $contract_sign_date = $tmp->format('Y-m-d H:i:s');
+            }
+            
+            # Get tags as source
+            $tags_obj = get_the_tags($inserted);
+            $tagname_arr = array();
+            if ($tags_obj) {
+                foreach ($tags_obj as $key => $value) {
+                    $tagname_arr[] = $value->name;
+                }
+            }
+            
+            # Determine job type and flag
+            $job_type = $danh_muc;
+            $job_type_group = '';
+            $job_flag = $tiem_nang ? 'Tiềm năng' : 'Đã chốt';
+            $potential = '';
+            
+            # Get groups
+            $groups = get_the_terms($inserted, 'group');
+            if($groups) {
+                foreach ($groups as $group) {
+                    if ($group->slug == 'tiem-nang') {
+                        $potential = $group->name;
+                    }
+                    
+                    # Determine if IP or Law type
+                    $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu'];
+                    if (in_array($group->slug, $list_ip)) {
+                        $job_type_group = "IP";
+                    } elseif($job_type_group == '') {
+                        $job_type_group = "Law";
+                    }
+                    
+                    # Get potential type if applicable
+                    $all_child = get_term_children(11, 'group'); // 11 is ID of "Tiềm năng" category
+                    if (in_array($group->term_id, $all_child)) {
+                        $potential = $group->name;
+                    }
+                }
+            }
+            
+            # Insert into asljob table
+            $wpdb->insert(
+                $aslTable,
+                array(
+                    'jobid'             => $inserted,
+                    'customerid'        => $data_customer,
+                    'first_partnerid'   => $partner_1,
+                    'partnerid'         => $data_partner,
+                    'partner_out_id'    => $foreign_partner_id,
+                    'memberid'          => $data_member,
+                    'managerid'         => $data_manager,
+                    'title'             => $job_name,
+                    'type'              => $job_type,
+                    'type_group'        => $job_type_group,
+                    'flag'              => $job_flag,
+                    'potential'         => $potential,
+                    'our_ref'           => $our_ref,
+                    'currency'          => $currency,
+                    'total_value'       => $total_value,
+                    'paid'              => $paid,
+                    'remainning'        => $remaining,
+                    'currency_out'      => get_field('currency_out', $inserted),
+                    'total_cost'        => get_field('total_cost', $inserted),
+                    'advance_money'     => get_field('advance_money', $inserted),
+                    'debt'              => get_field('debt', $inserted),
+                    'payment_status'    => get_field('payment_status', $inserted),
+                    'source'            => implode(",", $tagname_arr),
+                    'date'              => current_time('mysql', 1),
+                    'contract_sign_date' => $contract_sign_date,
+                    'agency_hn'         => $agency_hn,
+                    'agency_hcm'        => $agency_hcm
+                )
+            );
+            
+            # 3. Update aslsupervisor table
+            $aslSupervisor = $wpdb->prefix . 'aslsupervisor';
+            
+            # Add supervisors if any
+            if ($data_supervisor) {
+                $supervisors = explode("|", $data_supervisor);
+                if(!empty($supervisors)){
+                    foreach ($supervisors as $supervisor) {
+                        $wpdb->insert(
+                            $aslSupervisor,
+                            array(
+                                'jobid'        => $inserted,
+                                'supervisorid' => $supervisor,
+                                'name'         => 'Người giám sát'
+                            )
+                        );
+                    }
+                }
+            }
+            
+            # Add co-managers if any
+            if ($data_co_manager) {
+                $co_managers = explode("|", $data_co_manager);
+                if(!empty($co_managers)){
+                    foreach ($co_managers as $co_manager) {
+                        $wpdb->insert(
+                            $aslSupervisor,
+                            array(
+                                'jobid'        => $inserted,
+                                'supervisorid' => $co_manager,
+                                'name'         => 'Người đồng quản lý'
+                            )
+                        );
+                    }
+                }
+            }
+            
+            # Add co-members if any
+            if ($data_co_member) {
+                $co_members = explode("|", $data_co_member);
+                if(!empty($co_members)){
+                    foreach ($co_members as $co_member) {
+                        $wpdb->insert(
+                            $aslSupervisor,
+                            array(
+                                'jobid'        => $inserted,
+                                'supervisorid' => $co_member,
+                                'name'         => 'Người đồng thực hiện'
+                            )
+                        );
+                    }
+                }
+            }
+            
+            # 4. Update asljobgroup table
+            $aslGroup = $wpdb->prefix . 'asljobgroup';
+            $wpdb->insert(
+                $aslGroup,
+                array(
+                    'jobid'      => $inserted,
+                    'customerid' => $data_customer,
+                    'partnerid'  => $data_partner,
+                    'memberid'   => $data_member,
+                    'managerid'  => $data_manager,
+                    'groupname'  => $danh_muc,
+                    'flag'       => $job_flag,
+                    'type'       => $job_type_group,
+                    'date'       => current_time('mysql', 1)
+                )
+            );
+            
+            # 5. Update asljobcountry table
+            $aslCountry = $wpdb->prefix . 'asljobcountry';
+            $countries = explode(',', $country);
+            foreach ($countries as $single_country) {
+                $wpdb->insert(
+                    $aslCountry,
+                    array(
+                        'jobid'      => $inserted,
+                        'customerid' => $data_customer,
+                        'partnerid'  => $data_partner,
+                        'memberid'   => $data_member,
+                        'managerid'  => $data_manager,
+                        'country'    => trim($single_country),
+                        'date'       => current_time('mysql', 1)
+                    )
+                );
+            }
+            
+            # 6. Update asljobtodocument table
+            $aslJobDocument = $wpdb->prefix . 'asljobtodocument';
+            $partner = get_user_by('ID', $data_partner);
+            $so_don = get_field('so_don', $inserted);
+            $ngay_nop_don = get_field('ngay_nop_don', $inserted);
+            
+            $wpdb->insert(
+                $aslJobDocument,
+                array(
+                    'jobid'                 => $inserted,
+                    'job_title'             => $job_name,
+                    'our_ref'               => $our_ref,
+                    'trademark_txt'         => $brand_name,
+                    'trademark_img'         => $kdang_pic,
+                    'trademark_class'       => $brand_group,
+                    'trademark_totalclass'  => $brand_number_group,
+                    'trademark_fillingid'   => $so_don,
+                    'trademark_fillingdate' => $ngay_nop_don,
+                    'partner_name'          => $partner->display_name,
+                    'partner_code'          => get_field('partner_code', 'user_' . $data_partner),
+                    'partner_companyName'   => get_field('ten_cong_ty', 'user_' . $data_partner),
+                    'partner_country'       => get_field('quoc_gia', 'user_' . $data_partner),
+                    'partner_address'       => get_field('dia_chi', 'user_' . $data_partner),
+                    'partner_city'          => get_field('city', 'user_' . $data_partner),
+                    'partner_phone'         => get_field('so_dien_thoai', 'user_' . $data_partner),
+                    'partner_email'         => $partner->user_email,
+                    'partner_email_cc'      => get_field('email_cc', 'user_' . $data_partner),
+                    'partner_email_bcc'     => get_field('email_bcc', 'user_' . $data_partner)
+                )
+            );
+            
             $data['status'] = 'success';
             $data['notification'] = '<div class="alert alert-success" role="alert">
                                         <i class="fa fa-check"></i> ' . __('Đã tạo công việc mới thành công', 'qlcv') . '
@@ -1040,6 +1280,8 @@ function wp_reading_excel($tmp_name)
 }
 
 function update_job_history( $mota, $ngaythang, $postid ) {
+    global $wpdb;
+
     $logs = get_field('lich_su_cong_viec', $postid);
     $finish_update = array(
         'mo_ta'         => $mota,
@@ -1049,7 +1291,22 @@ function update_job_history( $mota, $ngaythang, $postid ) {
     if ($logs) {
         array_push($logs, $finish_update);
         update_field('field_606ed4e802a6a', $logs, $postid);
-    } else add_row('field_606ed4e802a6a', $finish_update, $postid);
+    } else {
+        add_row('field_606ed4e802a6a', $finish_update, $postid);
+    }
+    
+    // 2. Update MySQL asljobhistory table
+    $aslHistory = $wpdb->prefix . 'asljobhistory';
+    
+    // Insert new history record
+    $wpdb->insert(
+        $aslHistory,
+        array(
+            'jobid' => $postid,
+            'name'  => $mota,
+            'date'  => current_time('mysql', 1)
+        )
+    );
 }
 
 function check_finish_job($jobid) {

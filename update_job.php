@@ -20,6 +20,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         isset($_POST['post_nonce_field']) &&
         wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')
     ) {
+        global $wpdb;
 
         # Lấy dữ liệu từ form
         #partner
@@ -130,6 +131,213 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         if($agency){
             wp_set_object_terms($postid, $agency, 'agency');
         }
+
+        # Update MySQL tables
+        
+        # 1. Update asljob table
+        $aslTable = $wpdb->prefix . 'asljob';
+        $foreign_partner_id = is_array($foreign_partner) ? $foreign_partner['ID'] : NULL;
+        
+        # Get information about agency for the job
+        $brand = array();
+        $agency_terms = get_the_terms($postid, 'agency');
+        if($agency_terms) {
+            foreach ($agency_terms as $id_chi_nhanh) {
+                $term = get_term($id_chi_nhanh);
+                $brand[] = $term->slug;
+            }
+        }
+        
+        $agency_hn = in_array('ha-noi', $brand) ? 1 : 0;
+        $agency_hcm = in_array('ho-chi-minh', $brand) ? 1 : 0;
+        
+        # Get contract sign date
+        $contract_sign_date = '';
+        if (get_field('contract_sign_date', $postid)) {
+            $tmp = DateTime::createFromFormat('d/m/Y', get_field('contract_sign_date', $postid));
+            $contract_sign_date = $tmp->format('Y-m-d H:i:s');
+        }
+        
+        # Get tags as source
+        $tags_obj = get_the_tags($postid);
+        $tagname_arr = array();
+        if ($tags_obj) {
+            foreach ($tags_obj as $key => $value) {
+                $tagname_arr[] = $value->name;
+            }
+        }
+        
+        # Determine job type and flag
+        $terms = get_the_terms($postid, 'group');
+        $term_names = wp_list_pluck($terms, 'name');
+        $job_type_group = '';
+        $job_flag = in_array('Tiềm năng', $term_names) ? 'Tiềm năng' : 'Đã chốt';
+        $potential = '';
+        
+        # Get groups for job type
+        if($terms) {
+            foreach ($terms as $group) {
+                # Determine if IP or Law type
+                $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu'];
+                if (in_array($group->slug, $list_ip)) {
+                    $job_type_group = "IP";
+                } elseif($job_type_group == '') {
+                    $job_type_group = "Law";
+                }
+                
+                # Get potential type if applicable
+                $all_child = get_term_children(11, 'group'); // 11 is ID of "Tiềm năng" category
+                if (in_array($group->term_id, $all_child)) {
+                    $potential = $group->name;
+                }
+            }
+        }
+
+        $customer = get_field('customer', $postid);
+        $partner_1 = get_field('partner_1', $postid);
+        $our_ref = get_field('our_ref', $postid);
+        $payment_status = get_field('payment_status', $postid);
+
+        # Update asljob table
+        $wpdb->update(
+            $aslTable,
+            array(
+                'customerid'         => $customer->ID,
+                'first_partnerid'    => is_array($partner_1) ? $partner_1['ID'] : $partner_1,
+                'partnerid'          => $partner,
+                'partner_out_id'     => $foreign_partner_id,
+                'memberid'           => $member,
+                'managerid'          => $manager,
+                'title'              => $jobname,
+                'type'               => $phan_loai,
+                'type_group'         => $job_type_group,
+                'flag'               => $job_flag,
+                'potential'          => $potential,
+                'our_ref'            => $our_ref,
+                'currency'           => $currency,
+                'total_value'        => $total_value,
+                'paid'               => $paid,
+                'remainning'         => $remainning,
+                'currency_out'       => $currency_out,
+                'total_cost'         => $total_cost,
+                'advance_money'      => $advance_money,
+                'debt'               => $debt,
+                'payment_status'     => $payment_status,
+                'source'             => implode(",", $tagname_arr),
+                'contract_sign_date' => $contract_sign_date,
+                'agency_hn'          => $agency_hn,
+                'agency_hcm'         => $agency_hcm
+            ),
+            array('jobid' => $postid)
+        );
+
+        # 2. Update aslsupervisor table - First delete existing records
+        $aslSupervisor = $wpdb->prefix . 'aslsupervisor';
+        $wpdb->delete(
+            $aslSupervisor,
+            array('jobid' => $postid)
+        );
+
+        # Add supervisors
+        if ($supervisor) {
+            $supervisors = explode("|", $supervisor);
+            if(!empty($supervisors)){
+                foreach ($supervisors as $sup) {
+                    $wpdb->insert(
+                        $aslSupervisor,
+                        array(
+                            'jobid'        => $postid,
+                            'supervisorid' => $sup,
+                            'name'         => 'Người giám sát'
+                        )
+                    );
+                }
+            }
+        }
+
+        # Add co-managers
+        if ($co_manager) {
+            $co_managers = explode("|", $co_manager);
+            if(!empty($co_managers)){
+                foreach ($co_managers as $cm) {
+                    $wpdb->insert(
+                        $aslSupervisor,
+                        array(
+                            'jobid'        => $postid,
+                            'supervisorid' => $cm,
+                            'name'         => 'Người đồng quản lý'
+                        )
+                    );
+                }
+            }
+        }
+
+        # Add co-members
+        if ($co_member) {
+            $co_members = explode("|", $co_member);
+            if(!empty($co_members)){
+                foreach ($co_members as $cm) {
+                    $wpdb->insert(
+                        $aslSupervisor,
+                        array(
+                            'jobid'        => $postid,
+                            'supervisorid' => $cm,
+                            'name'         => 'Người đồng thực hiện'
+                        )
+                    );
+                }
+            }
+        }
+
+        # 3. Update asljobgroup table
+        $aslGroup = $wpdb->prefix . 'asljobgroup';
+        $wpdb->update(
+            $aslGroup,
+            array(
+                'customerid' => $customer->ID,
+                'partnerid'  => $partner,
+                'memberid'   => $member,
+                'managerid'  => $manager,
+                'groupname'  => $phan_loai,
+                'flag'       => $job_flag,
+                'type'       => $job_type_group
+            ),
+            array('jobid' => $postid)
+        );
+
+        # 4. Update asljobtodocument table
+        $aslJobDocument = $wpdb->prefix . 'asljobtodocument';
+        $partner_obj = get_user_by('ID', $partner);
+        
+        $logo = get_field('logo', $postid);
+        $ten_nhan_hieu = get_field('ten_nhan_hieu', $postid);
+        $nhom = get_field('nhom', $postid);
+        $so_luong_nhom = get_field('so_luong_nhom', $postid);
+        
+        $wpdb->update(
+            $aslJobDocument,
+            array(
+                'job_title'             => $jobname,
+                'our_ref'               => $our_ref,
+                'trademark_txt'         => $ten_nhan_hieu,
+                'trademark_img'         => $logo,
+                'trademark_class'       => $nhom,
+                'trademark_totalclass'  => $so_luong_nhom,
+                'trademark_fillingid'   => $so_don,
+                'trademark_fillingdate' => $ngay_nop_don,
+                'partner_name'          => $partner_obj->display_name,
+                'partner_code'          => get_field('partner_code', 'user_' . $partner),
+                'partner_companyName'   => get_field('ten_cong_ty', 'user_' . $partner),
+                'partner_country'       => get_field('quoc_gia', 'user_' . $partner),
+                'partner_address'       => get_field('dia_chi', 'user_' . $partner),
+                'partner_city'          => get_field('city', 'user_' . $partner),
+                'partner_phone'         => get_field('so_dien_thoai', 'user_' . $partner),
+                'partner_email'         => $partner_obj->user_email,
+                'partner_email_cc'      => get_field('email_cc', 'user_' . $partner),
+                'partner_email_bcc'     => get_field('email_bcc', 'user_' . $partner)
+            ),
+            array('jobid' => $postid)
+        );
 
         switch ($phan_loai) {
             case 'Nhãn hiệu':

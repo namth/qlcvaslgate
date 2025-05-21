@@ -19,6 +19,7 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
         isset($_POST['post_nonce_field']) &&
         wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')
     ) {
+        global $wpdb;
 
         $current_user = wp_get_current_user();
         $current_time = current_time('timestamp', 7);
@@ -31,7 +32,7 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
 
         # update đối tác luôn không cần thông báo
         $foreign_partner = $_POST['foreign_partner'];
-        update_field('field_60c2432b28405', $foreign_partner, $inserted); # đối tác nhận việc
+        update_field('field_60c2432b28405', $foreign_partner, $postid); # đối tác nhận việc
 
         # nếu người thực hiện có thay đổi thì thông báo
         if ($member['ID'] != $post_member) {
@@ -190,6 +191,58 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
             $receiver = get_field('receiver', 'user_' . $current_user->ID);
             $manager = get_field('manager', $postid);
             create_notification($postid, $content_notif, $manager['ID'], $receiver);
+            
+            # Update MySQL tables for task data
+            
+            # 1. Update asltask table
+            $aslTable = $wpdb->prefix . 'asltask';
+            $customer = get_field('customer', $job);
+            $partner_2 = get_field('partner_2', $job);
+            
+            # Format deadline for MySQL
+            $deadline_mysql = NULL;
+            if (isset($new_deadline)) {
+                $deadline = DateTime::createFromFormat('Ymd', $new_deadline);
+                if ($deadline) {
+                    $deadline_mysql = $deadline->format('Y-m-d H:i:s');
+                }
+            }
+            
+            # Format response time for MySQL
+            $response_mysql = NULL;
+            if (isset($new_respone)) {
+                $response = DateTime::createFromFormat('Ymd', $new_respone);
+                if ($response) {
+                    $response_mysql = $response->format('Y-m-d H:i:s');
+                }
+            }
+            
+            # Update asltask table
+            $wpdb->update(
+                $aslTable,
+                array(
+                    'memberid'   => $post_member,
+                    'managerid'  => $post_manager,
+                    'customerid' => $customer ? $customer->ID : NULL,
+                    'partnerid'  => $partner_2 ? $partner_2['ID'] : NULL,
+                    'title'      => $taskname,
+                    'deadline'   => $deadline_mysql,
+                    'time_to_response' => $response_mysql
+                ),
+                array('taskid' => $postid)
+            );
+            
+            # 2. Update asltaskhistory table with new history record
+            $aslHistory = $wpdb->prefix . 'asltaskhistory';
+            $wpdb->insert(
+                $aslHistory,
+                array(
+                    'taskid'     => $postid,
+                    'userid'     => $current_user->ID,
+                    'content'    => $noi_dung,
+                    'date'       => current_time('mysql', 1)
+                )
+            );
 
             # đợi 3 giây và chuyển trang
             sleep(3);

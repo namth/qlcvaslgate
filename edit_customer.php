@@ -17,6 +17,7 @@ if (is_user_logged_in()) {
         isset($_POST['post_nonce_field']) &&
         wp_verify_nonce($_POST['post_nonce_field'], 'post_nonce')
     ) {
+        global $wpdb;
 
         # get data from the form
         $user_email     = $_POST['user_email'];
@@ -40,9 +41,24 @@ if (is_user_logged_in()) {
             update_field('field_600d31f4060eb', $customer_company, $new_partner); # tên công ty
             update_field('field_600d3211060ec', $phone_number, $new_partner); # phone number
             update_field('field_600d323d060ee', $address, $new_partner); # address
-            update_field('field_600d3235060ed', $user_email, $inserted); # email liên hệ
+            update_field('field_600d3235060ed', $user_email, $new_partner); # email liên hệ
             update_field('field_6037200ec98cc', $country, $new_partner); # country
             update_field('field_6010f85bfcf55', $link_onedrive, $new_partner); # link_onedrive
+
+            # Update record in aslcustomer table
+            $aslTable = $wpdb->prefix . 'aslcustomer';
+            
+            $wpdb->update(
+                $aslTable,
+                array(
+                    'name'          => $customer_name,
+                    'companyName'   => $customer_company,
+                    'country'       => $country,
+                    'phone'         => $phone_number,
+                    'email'         => $user_email
+                ),
+                array('customerid' => $customer_id)
+            );
 
             $thongbao = '<div class="alert alert-success" role="alert">
                                 <i class="fa fa-check"></i> ' . __('Đã sửa thông tin thành công', 'qlcv') . '

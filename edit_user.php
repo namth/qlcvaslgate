@@ -18,6 +18,8 @@ if ( is_user_logged_in() ) {
     if ( isset( $_POST['post_nonce_field'] ) && 
         wp_verify_nonce( $_POST['post_nonce_field'], 'post_nonce' ) ) {
 
+        global $wpdb;
+
         # get data from the form
         $first_name     = $_POST['first_name'];
         $last_name      = $_POST['last_name'];
@@ -44,6 +46,79 @@ if ( is_user_logged_in() ) {
             update_field('field_600d3211060ec', $phone_number, 'user_' . $new_partner ); # phone number
             update_field('field_600d323d060ee', $address, 'user_' . $new_partner ); # address
             update_field('field_6037200ec98cc', $country, 'user_' . $new_partner ); # country
+            
+            # Update record in aslmember table
+            $aslTable = $wpdb->prefix . 'aslmember';
+            
+            # Get user work groups and branches
+            $chi_nhanh = get_field('chi_nhanh', 'user_' . $new_partner);
+            $nhom_cong_viec = get_field('nhom_cong_viec', 'user_' . $new_partner);
+            
+            $work_group = array();
+            $brand = array();
+
+            # Process work groups
+            if (!empty($nhom_cong_viec)) {
+                foreach ($nhom_cong_viec as $id_cong_viec) {
+                    $term = get_term($id_cong_viec);
+                    $work_group[] = $term->slug;
+                }
+            }
+
+            # Process branches
+            if (!empty($chi_nhanh)) {
+                foreach ($chi_nhanh as $id_chi_nhanh) {
+                    $term = get_term($id_chi_nhanh);
+                    $brand[] = $term->slug;
+                }
+            }
+
+            # Set group flags
+            $group_trademark = in_array('nhan-hieu', $work_group) ? 1 : 0;
+            $group_patent = in_array('sang-che', $work_group) ? 1 : 0;
+            $group_design = in_array('kieu-dang', $work_group) ? 1 : 0;
+            $group_franchise = in_array('franchise', $work_group) ? 1 : 0;
+            $group_copyright = in_array('ban-quyen', $work_group) ? 1 : 0;
+            $group_others = in_array('viec-khac', $work_group) ? 1 : 0;
+            $group_potential = in_array('tiem-nang', $work_group) ? 1 : 0;
+
+            # Set agency flags
+            $agency_hn = in_array('ha-noi', $brand) ? 1 : 0;
+            $agency_hcm = in_array('ho-chi-minh', $brand) ? 1 : 0;
+
+            # Set role flags
+            $theUser = new WP_User($new_partner);
+            $role_admin = in_array('administrator', $theUser->roles) ? 1 : 0;
+            $role_manager = in_array('contributor', $theUser->roles) ? 1 : 0;
+            $role_member = in_array('member', $theUser->roles) ? 1 : 0;
+            $role_law_manager = in_array('law_manager', $theUser->roles) ? 1 : 0;
+            $role_ip_manager = in_array('ip_manager', $theUser->roles) ? 1 : 0;
+
+            # Update the member record in the database
+            $wpdb->update(
+                $aslTable,
+                array(
+                    'name' => $display_name,
+                    'address' => $address,
+                    'phone' => $phone_number,
+                    'email' => $this_user->user_email,
+                    'agency_hn' => $agency_hn,
+                    'agency_hcm' => $agency_hcm,
+                    'group_trademark' => $group_trademark,
+                    'group_patent' => $group_patent,
+                    'group_design' => $group_design,
+                    'group_franchise' => $group_franchise,
+                    'group_copyright' => $group_copyright,
+                    'group_others' => $group_others,
+                    'group_potential' => $group_potential,
+                    'role_admin' => $role_admin,
+                    'role_manager' => $role_manager,
+                    'role_member' => $role_member,
+                    'role_law_manager' => $role_law_manager,
+                    'role_ip_manager' => $role_ip_manager
+                ),
+                array('memberid' => $this_user->ID)
+            );
                
             $thongbao = '<div class="alert alert-success" role="alert">
                             <i class="fa fa-check"></i> ' . __('Đã sửa thông tin thành công', 'qlcv') . '

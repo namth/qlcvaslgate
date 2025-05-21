@@ -1,4 +1,4 @@
-  <?php 
+<?php 
 /*
     Template Name: Thêm mới khách hàng
 */
@@ -29,11 +29,28 @@
         # if it's success create new user,
         # add more info throught custom fields
         if ( !$error ) {
+            global $wpdb;
+            
             update_field('field_600d31f4060eb', $customer_company, $inserted ); # tên công ty
             update_field('field_600d3235060ed', $user_email, $inserted ); # email liên hệ
             update_field('field_600d3211060ec', $phone_number, $inserted ); # phone number
             update_field('field_600d323d060ee', $address, $inserted ); # address
             update_field('field_6037200ec98cc', $country, $inserted ); # country
+            
+            # Update aslcustomer table
+            $aslTable = $wpdb->prefix . 'aslcustomer';
+            $wpdb->insert(
+                $aslTable,
+                array(
+                    'customerid'    => $inserted,
+                    'name'          => $customer_name,
+                    'companyName'   => $customer_company,
+                    'country'       => $country,
+                    'phone'         => $phone_number,
+                    'email'         => $user_email,
+                    'date'          => current_time('mysql', 1)
+                )
+            );
 
             $thongbao = '<div class="alert alert-success" role="alert">
                             <i class="fa fa-check"></i> '. __('Đã tạo tài khoản thành công', 'qlcv') . '
