@@ -306,7 +306,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         );
 
         # 4. Update asljobtodocument table
-        $aslJobDocument = 'wp_asljobtodocument';
+        $aslJobDocument = $wpdb->prefix . 'asljobtodocument';
         $partner_obj = get_user_by('ID', $partner);
         
         $logo = get_field('logo', $postid);

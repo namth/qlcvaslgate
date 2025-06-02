@@ -726,7 +726,7 @@ function export_mysql_job($paged) {
     $aslSupervisor = 'wp_aslsupervisor';
     $aslGroup = 'wp_asljobgroup';
     $aslCountry = 'wp_asljobcountry';
-    $aslJobDocument = 'wp_asljobtodocument';
+    $aslJobDocument = $wpdb->prefix . 'asljobtodocument';
     $posts_per_page = 20;
     $args   = array(
         'post_type'     => 'job',
