@@ -721,7 +721,7 @@ function add_new_job()
             }
             
             # 6. Update asljobtodocument table
-            $aslJobDocument = $wpdb->prefix . 'asljobtodocument';
+            $aslJobDocument = 'wp_asljobtodocument';
             $partner = get_user_by('ID', $data_partner);
             $so_don = get_field('so_don', $inserted);
             $ngay_nop_don = get_field('ngay_nop_don', $inserted);
@@ -1599,7 +1599,7 @@ function CreateDatabaseQlcv()
     dbDelta($createAslTable);
 
     # table 12
-    $aslTable = $wpdb->prefix . 'asljobtodocument';
+    $aslTable = 'wp_asljobtodocument';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `job_title` varchar(255) NOT NULL,
