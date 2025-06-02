@@ -78,7 +78,7 @@ function run_export_mongo(){
             $total_page = $query->max_num_pages;
             $function   = 'insert_customer';
             # delete all data before insert
-            $aslTable = $wpdb->prefix . 'aslcustomer';
+            $aslTable = 'wp_aslcustomer';
             delete_mysql_table($aslTable);
             break;
 
@@ -95,7 +95,7 @@ function run_export_mongo(){
             $total_page = ceil(count($partner_number)/$posts_per_page);
             $function   = 'insert_partner';
             # delete all data before insert
-            // $aslTable = $wpdb->prefix . 'aslpartner';
+            // $aslTable = 'wp_aslpartner';
             // delete_mysql_table($aslTable);
             break;
 
@@ -112,7 +112,7 @@ function run_export_mongo(){
             $total_page = ceil(count($member_number)/$posts_per_page);
             $function   = 'insert_member';
             # delete all data before insert
-            $aslTable = $wpdb->prefix . 'aslmember';
+            $aslTable = 'wp_aslmember';
             delete_mysql_table($aslTable);
             break;
 
@@ -129,15 +129,15 @@ function run_export_mongo(){
             $total_page = $query->max_num_pages;
             $function   = 'insert_job';
             # delete all data before insert
-            $aslTable = $wpdb->prefix . 'asljob';
+            $aslTable = 'wp_asljob';
             delete_mysql_table($aslTable);
-            $aslTable = $wpdb->prefix . 'asljobhistory';
+            $aslTable = 'wp_asljobhistory';
             delete_mysql_table($aslTable);
-            $aslTable = $wpdb->prefix . 'aslsupervisor';
+            $aslTable = 'wp_aslsupervisor';
             delete_mysql_table($aslTable);
-            $aslTable = $wpdb->prefix . 'asljobgroup';
+            $aslTable = 'wp_asljobgroup';
             delete_mysql_table($aslTable);
-            $aslTable = $wpdb->prefix . 'asljobcountry';
+            $aslTable = 'wp_asljobcountry';
             delete_mysql_table($aslTable);
             break;
         
@@ -154,9 +154,9 @@ function run_export_mongo(){
             $total_page = $query->max_num_pages;
             $function   = 'insert_task';
             # delete all data before insert
-            $aslTable = $wpdb->prefix . 'asltask';
+            $aslTable = 'wp_asltask';
             delete_mysql_table($aslTable);
-            $aslTable = $wpdb->prefix . 'asltaskhistory';
+            $aslTable = 'wp_asltaskhistory';
             delete_mysql_table($aslTable);
             break;
         
@@ -237,7 +237,7 @@ function js_export(){
 function export_mysql_customer($paged) {
     global $wpdb;
 
-    $aslTable = $wpdb->prefix . 'aslcustomer';
+    $aslTable = 'wp_aslcustomer';
     $posts_per_page = 20;
 
     $args   = array(
@@ -344,7 +344,7 @@ function export_customer($paged) {
 function export_mysql_partner($current_page) {
     global $wpdb;
 
-    $aslTable = $wpdb->prefix . 'aslpartner';
+    $aslTable = 'wp_aslpartner';
     $users_per_page = 20;
     $offset = $users_per_page * ($current_page - 1);
 
@@ -537,7 +537,7 @@ function export_partner($current_page) {
 function export_mysql_member($current_page) {
     global $wpdb;
 
-    $aslTable = $wpdb->prefix . 'aslmember';
+    $aslTable = 'wp_aslmember';
 
     $users_per_page = 20;
     $offset = $users_per_page * ($current_page - 1);
@@ -721,12 +721,12 @@ function export_member($current_page) {
 function export_mysql_job($paged) {
     global $wpdb;
 
-    $aslTable = $wpdb->prefix . 'asljob';
-    $aslHistory = $wpdb->prefix . 'asljobhistory';
-    $aslSupervisor = $wpdb->prefix . 'aslsupervisor';
-    $aslGroup = $wpdb->prefix . 'asljobgroup';
-    $aslCountry = $wpdb->prefix . 'asljobcountry';
-    $aslJobDocument = $wpdb->prefix . 'asljobtodocument';
+    $aslTable = 'wp_asljob';
+    $aslHistory = 'wp_asljobhistory';
+    $aslSupervisor = 'wp_aslsupervisor';
+    $aslGroup = 'wp_asljobgroup';
+    $aslCountry = 'wp_asljobcountry';
+    $aslJobDocument = 'wp_asljobtodocument';
     $posts_per_page = 20;
     $args   = array(
         'post_type'     => 'job',
@@ -1136,8 +1136,8 @@ function export_job($paged) {
 function export_mysql_task($paged) {
     global $wpdb;
 
-    $aslTable = $wpdb->prefix . 'asltask';
-    $aslHistory = $wpdb->prefix . 'asltaskhistory';
+    $aslTable = 'wp_asltask';
+    $aslHistory = 'wp_asltaskhistory';
     $posts_per_page = 20;
 
     $args   = array(
@@ -1278,7 +1278,7 @@ function setup_page_number(){
     # connect to database
     global $wpdb;
     $limit = 20;
-    $aslTable = $wpdb->prefix . 'aslpartner';
+    $aslTable = 'wp_aslpartner';
 
     $count_sql  = "SELECT COUNT(*) FROM $aslTable";
     $rowcount   = $wpdb->get_var($count_sql);
@@ -1296,7 +1296,7 @@ function update_data_with_page(){
     # connect to database
     global $wpdb;
 
-    $aslTable = $wpdb->prefix . 'aslpartner';
+    $aslTable = 'wp_aslpartner';
     
     $limit = 20;
     $page = $_POST['page'];

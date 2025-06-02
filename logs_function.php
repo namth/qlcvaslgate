@@ -12,7 +12,7 @@ function asl_create_log($log, $postid, $edituser=null, $timestamp=null){
         $timestamp = current_time('mysql');
     }
 
-    $log_table = $wpdb->prefix . 'asllogs';
+    $log_table = 'wp_asllogs';
     $wpdb->insert(
         $log_table,
         array(
@@ -29,7 +29,7 @@ function asl_get_logs($postid){
     global $wpdb;
 
     $postid = intval($postid);
-    $log_table = $wpdb->prefix . 'asllogs';
+    $log_table = 'wp_asllogs';
     $logs = $wpdb->get_results(
         $wpdb->prepare(
             "SELECT * FROM $log_table WHERE postid = %d ORDER BY date DESC",

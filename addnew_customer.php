@@ -36,9 +36,8 @@
             update_field('field_600d3211060ec', $phone_number, $inserted ); # phone number
             update_field('field_600d323d060ee', $address, $inserted ); # address
             update_field('field_6037200ec98cc', $country, $inserted ); # country
-            
-            # Update aslcustomer table
-            $aslTable = $wpdb->prefix . 'aslcustomer';
+              # Update aslcustomer table
+            $aslTable = 'wp_aslcustomer';
             $wpdb->insert(
                 $aslTable,
                 array(

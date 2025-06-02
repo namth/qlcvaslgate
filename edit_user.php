@@ -48,7 +48,7 @@ if ( is_user_logged_in() ) {
             update_field('field_6037200ec98cc', $country, 'user_' . $new_partner ); # country
             
             # Update record in aslmember table
-            $aslTable = $wpdb->prefix . 'aslmember';
+            $aslTable = 'wp_aslmember';
             
             # Get user work groups and branches
             $chi_nhanh = get_field('chi_nhanh', 'user_' . $new_partner);

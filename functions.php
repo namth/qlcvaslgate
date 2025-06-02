@@ -191,7 +191,7 @@ function add_new_customer()
         update_field('field_6010f85bfcf55', $link_onedrive, $inserted); # link_onedrive
 
         # Update aslcustomer table
-        $aslTable = $wpdb->prefix . 'aslcustomer';
+        $aslTable = 'wp_aslcustomer';
         
         $wpdb->insert(
             $aslTable,
@@ -535,7 +535,7 @@ function add_new_job()
             # Update MySQL tables for job data
             
             # 1. Update asljob table
-            $aslTable = $wpdb->prefix . 'asljob';
+            $aslTable = 'wp_asljob';
             $foreign_partner_id = is_array($data_foreign_partner) ? $data_foreign_partner['ID'] : NULL;
             
             # Get information about agency for the job
@@ -632,7 +632,7 @@ function add_new_job()
             );
             
             # 3. Update aslsupervisor table
-            $aslSupervisor = $wpdb->prefix . 'aslsupervisor';
+            $aslSupervisor = 'wp_aslsupervisor';
             
             # Add supervisors if any
             if ($data_supervisor) {
@@ -686,7 +686,7 @@ function add_new_job()
             }
             
             # 4. Update asljobgroup table
-            $aslGroup = $wpdb->prefix . 'asljobgroup';
+            $aslGroup = 'wp_asljobgroup';
             $wpdb->insert(
                 $aslGroup,
                 array(
@@ -703,7 +703,7 @@ function add_new_job()
             );
             
             # 5. Update asljobcountry table
-            $aslCountry = $wpdb->prefix . 'asljobcountry';
+            $aslCountry = 'wp_asljobcountry';
             $countries = explode(',', $country);
             foreach ($countries as $single_country) {
                 $wpdb->insert(
@@ -721,7 +721,7 @@ function add_new_job()
             }
             
             # 6. Update asljobtodocument table
-            $aslJobDocument = $wpdb->prefix . 'asljobtodocument';
+            $aslJobDocument = 'wp_asljobtodocument';
             $partner = get_user_by('ID', $data_partner);
             $so_don = get_field('so_don', $inserted);
             $ngay_nop_don = get_field('ngay_nop_don', $inserted);
@@ -1296,7 +1296,7 @@ function update_job_history( $mota, $ngaythang, $postid ) {
     }
     
     // 2. Update MySQL asljobhistory table
-    $aslHistory = $wpdb->prefix . 'asljobhistory';
+    $aslHistory = 'wp_asljobhistory';
     
     // Insert new history record
     $wpdb->insert(
@@ -1400,7 +1400,7 @@ function CreateDatabaseQlcv()
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     
     # table 1
-    $aslTable = $wpdb->prefix . 'aslcustomer';
+    $aslTable = 'wp_aslcustomer';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `customerid` bigint(20) UNSIGNED NOT NULL,
         `name` varchar(255) NOT NULL,
@@ -1414,7 +1414,7 @@ function CreateDatabaseQlcv()
     dbDelta($createAslTable);
 
     # table 2
-    $aslTable = $wpdb->prefix . 'aslpartner';
+    $aslTable = 'wp_aslpartner';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `partnerid` bigint(20) UNSIGNED NOT NULL,
         `name` varchar(255) NOT NULL,
@@ -1446,7 +1446,7 @@ function CreateDatabaseQlcv()
     dbDelta($createAslTable);
 
     # table 3
-    $aslTable = $wpdb->prefix . 'aslmember';
+    $aslTable = 'wp_aslmember';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `memberid` bigint(20) UNSIGNED NOT NULL,
         `name` varchar(255) NOT NULL,
@@ -1473,7 +1473,7 @@ function CreateDatabaseQlcv()
     dbDelta($createAslTable);
 
     # table 4
-    $aslTable = $wpdb->prefix . 'asljob';
+    $aslTable = 'wp_asljob';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `customerid` bigint(20) UNSIGNED NULL,
@@ -1507,7 +1507,7 @@ function CreateDatabaseQlcv()
     dbDelta($createAslTable);
 
     # table 5
-    $aslTable = $wpdb->prefix . 'asltask';
+    $aslTable = 'wp_asltask';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `taskid` bigint(20) UNSIGNED NOT NULL,
         `jobid` bigint(20) UNSIGNED NOT NULL,
@@ -1526,7 +1526,7 @@ function CreateDatabaseQlcv()
     dbDelta($createAslTable);
 
     # table 6
-    $aslTable = $wpdb->prefix . 'asljobhistory';
+    $aslTable = 'wp_asljobhistory';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `name` varchar(255) NOT NULL,
@@ -1536,7 +1536,7 @@ function CreateDatabaseQlcv()
     dbDelta($createAslTable);
 
     # table 7
-    $aslTable = $wpdb->prefix . 'asltaskhistory';
+    $aslTable = 'wp_asltaskhistory';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `taskid` bigint(20) UNSIGNED NOT NULL,
         `userid` bigint(20) UNSIGNED NOT NULL,
@@ -1547,7 +1547,7 @@ function CreateDatabaseQlcv()
     dbDelta($createAslTable);
 
     # table 8
-    $aslTable = $wpdb->prefix . 'aslsupervisor';
+    $aslTable = 'wp_aslsupervisor';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `supervisorid` bigint(20) UNSIGNED NOT NULL,
@@ -1556,7 +1556,7 @@ function CreateDatabaseQlcv()
     dbDelta($createAslTable);
 
     # table 9
-    $aslTable = $wpdb->prefix . 'asljobcountry';
+    $aslTable = 'wp_asljobcountry';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `customerid` bigint(20) UNSIGNED NULL,
@@ -1570,7 +1570,7 @@ function CreateDatabaseQlcv()
     dbDelta($createAslTable);
 
     # table 10
-    $aslTable = $wpdb->prefix . 'asljobgroup';
+    $aslTable = 'wp_asljobgroup';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `customerid` bigint(20) UNSIGNED NULL,
@@ -1586,7 +1586,7 @@ function CreateDatabaseQlcv()
     dbDelta($createAslTable);
 
     # table 11
-    $aslTable = $wpdb->prefix . 'asllogs';
+    $aslTable = 'wp_asllogs';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `logid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
         `userid` bigint(20) UNSIGNED NOT NULL,
@@ -1599,7 +1599,7 @@ function CreateDatabaseQlcv()
     dbDelta($createAslTable);
 
     # table 12
-    $aslTable = $wpdb->prefix . 'asljobtodocument';
+    $aslTable = 'wp_asljobtodocument';
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `job_title` varchar(255) NOT NULL,

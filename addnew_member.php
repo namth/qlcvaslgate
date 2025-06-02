@@ -52,7 +52,7 @@ if (
         update_field('field_6037200ec98cc', $country, 'user_' . $new_partner); # country
         
         # Update aslmember table
-        $aslTable = $wpdb->prefix . 'aslmember';
+        $aslTable = 'wp_aslmember';
         
         # Initialize role values
         $role_admin = $role_manager = $role_member = $role_law_manager = $role_ip_manager = 0;

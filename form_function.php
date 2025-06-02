@@ -525,7 +525,7 @@ function process_addnew_partner($input) {
         }
 
         # Update aslpartner table
-        $aslTable = $wpdb->prefix . 'aslpartner';
+        $aslTable = 'wp_aslpartner';
         $tinh_trang = $worked ? "Đã chốt" : "Tiềm năng";
         
         # display user role name

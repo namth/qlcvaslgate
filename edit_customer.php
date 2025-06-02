@@ -43,10 +43,8 @@ if (is_user_logged_in()) {
             update_field('field_600d323d060ee', $address, $new_partner); # address
             update_field('field_600d3235060ed', $user_email, $new_partner); # email liên hệ
             update_field('field_6037200ec98cc', $country, $new_partner); # country
-            update_field('field_6010f85bfcf55', $link_onedrive, $new_partner); # link_onedrive
-
-            # Update record in aslcustomer table
-            $aslTable = $wpdb->prefix . 'aslcustomer';
+            update_field('field_6010f85bfcf55', $link_onedrive, $new_partner); # link_onedrive            # Update record in aslcustomer table
+            $aslTable = 'wp_aslcustomer';
             
             $wpdb->update(
                 $aslTable,

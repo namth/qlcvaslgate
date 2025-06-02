@@ -135,7 +135,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         # Update MySQL tables
         
         # 1. Update asljob table
-        $aslTable = $wpdb->prefix . 'asljob';
+        $aslTable = 'wp_asljob';
         $foreign_partner_id = is_array($foreign_partner) ? $foreign_partner['ID'] : NULL;
         
         # Get information about agency for the job
@@ -232,7 +232,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         );
 
         # 2. Update aslsupervisor table - First delete existing records
-        $aslSupervisor = $wpdb->prefix . 'aslsupervisor';
+        $aslSupervisor = 'wp_aslsupervisor';
         $wpdb->delete(
             $aslSupervisor,
             array('jobid' => $postid)
@@ -290,7 +290,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         }
 
         # 3. Update asljobgroup table
-        $aslGroup = $wpdb->prefix . 'asljobgroup';
+        $aslGroup = 'wp_asljobgroup';
         $wpdb->update(
             $aslGroup,
             array(
@@ -306,7 +306,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         );
 
         # 4. Update asljobtodocument table
-        $aslJobDocument = $wpdb->prefix . 'asljobtodocument';
+        $aslJobDocument = 'wp_asljobtodocument';
         $partner_obj = get_user_by('ID', $partner);
         
         $logo = get_field('logo', $postid);

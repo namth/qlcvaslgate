@@ -259,7 +259,7 @@ if (is_user_logged_in()) {
                 asl_create_log($content_log, null, $new_partner);
                 
                 # Update aslpartner table
-                $aslTable = $wpdb->prefix . 'aslpartner';
+                $aslTable = 'wp_aslpartner';
                 
                 # Display user role name
                 $role_partner__in = $role_partner__out = 0;

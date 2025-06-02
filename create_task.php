@@ -87,7 +87,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 # Update MySQL tables for task data
                 
                 # 1. Update asltask table
-                $aslTable = $wpdb->prefix . 'asltask';
+                $aslTable = 'wp_asltask';
                 // $user_arr = get_user_by('ID', $member);
                 $manager_arr = get_user_by('ID', $manager);
                 $customer = get_field('customer', $job);
@@ -124,7 +124,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 );
                 
                 # 2. Update asltaskhistory table - Add initial history record
-                $aslHistory = $wpdb->prefix . 'asltaskhistory';
+                $aslHistory = 'wp_asltaskhistory';
                 $wpdb->insert(
                     $aslHistory,
                     array(

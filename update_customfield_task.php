@@ -195,7 +195,7 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
             # Update MySQL tables for task data
             
             # 1. Update asltask table
-            $aslTable = $wpdb->prefix . 'asltask';
+            $aslTable = 'wp_asltask';
             $customer = get_field('customer', $job);
             $partner_2 = get_field('partner_2', $job);
             
@@ -233,7 +233,7 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
             );
             
             # 2. Update asltaskhistory table with new history record
-            $aslHistory = $wpdb->prefix . 'asltaskhistory';
+            $aslHistory = 'wp_asltaskhistory';
             $wpdb->insert(
                 $aslHistory,
                 array(
