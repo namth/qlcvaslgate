@@ -115,7 +115,7 @@ function api_data_table($params) {
         $limit .= " OFFSET " . $params['offset'];
     }
 
-    $table = 'wp_' . $table;
+    // $table = 'wp_' . $table;
 
     $data = $wpdb->get_results("SELECT $field FROM $table $where $order $limit", ARRAY_A);
 
@@ -127,7 +127,7 @@ function api_data_table($params) {
 function api_columns_table($params) {
     global $wpdb;
     $table = $params['table'];
-    $table = 'wp_' . $table;
+    // $table = 'wp_' . $table;
 
     # get oly column name
     $data = $wpdb->get_results("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table'");
