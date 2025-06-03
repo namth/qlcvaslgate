@@ -26,7 +26,13 @@ add_action('rest_api_init', function (){
         'permission_callback' => 'check_access',
     ));
 
-
+    # get data from table with POST method
+    # route: /wp-json/qlcv/v1/aslpostdata
+    register_rest_route('qlcv/v1', 'aslpostdata', array(
+        'methods'   => 'POST',
+        'callback'  => 'api_post_data_table',
+        'permission_callback' => 'check_access',
+    ));
 });
 
 /* 
@@ -122,6 +128,64 @@ function api_data_table($params) {
     return $data;
 }
 
+/* Hàm lấy dữ liệu từ bảng qua POST method */
+function api_post_data_table(WP_REST_Request $request) {
+    global $wpdb;
+    
+    # get table name from POST data
+    $table = $request->get_param('table');
+    if (!$table) {
+        return new WP_Error('missing_table', 'Tên bảng là bắt buộc.', array('status' => 400));
+    }
+
+    # if have not field then get all
+    $field = $request->get_param('field');
+    if (!$field) {
+        $field = "*";
+    }
+
+    # if have where params then get where
+    $where_param = $request->get_param('where');
+    if ($where_param) {
+        $where = " WHERE " . $where_param;
+    } else {
+        $where = "";
+    }
+
+    # if have order params then get order
+    # order = field ASC|DESC
+    # orderby = field
+    $orderby_param = $request->get_param('orderby');
+    if ($orderby_param) {
+        $order = " ORDER BY " . $orderby_param;
+        $order_param = $request->get_param('order');
+        if ($order_param) {
+            $order .= " " . $order_param;
+        }
+    } else {
+        $order = "";
+    }
+
+    # if have limit params then get limit
+    $limit_param = $request->get_param('limit');
+    if ($limit_param) {
+        $limit = " LIMIT " . $limit_param;
+    } else {
+        $limit = "";
+    }
+
+    # if have offset params then get offset
+    $offset_param = $request->get_param('offset');
+    if ($offset_param) {
+        $limit .= " OFFSET " . $offset_param;
+    }
+
+    // $table = 'wp_' . $table;
+
+    $data = $wpdb->get_results("SELECT $field FROM $table $where $order $limit", ARRAY_A);
+
+    return $data;
+}
 
 /* Hàm lấy danh sách cột của bảng */
 function api_columns_table($params) {
@@ -146,3 +210,17 @@ function api_columns_table($params) {
 
     return $data;
 }
+
+/* Hàm thêm dữ liệu vào bảng */
+// function api_post_data_table($params) {
+//     global $wpdb;
+//     $table = $params['table'];
+
+//     # get data
+//     $data = $params['data'];
+
+//     # insert data
+//     $result = $wpdb->insert( $table, $data );
+
+//     return $result;
+// }
