@@ -144,12 +144,35 @@ function api_post_data_table(WP_REST_Request $request) {
         $field = "*";
     }
 
-    # if have where params then get where
-    $where_param = $request->get_param('where');
-    if ($where_param) {
-        $where = " WHERE " . $where_param;
+    # check if search param exists, prioritize search over where
+    $search_param = $request->get_param('search');
+    if ($search_param) {
+        # get searchable columns (text-based columns only)
+        $columns = $wpdb->get_results($wpdb->prepare("
+            SELECT COLUMN_NAME 
+            FROM INFORMATION_SCHEMA.COLUMNS 
+            WHERE TABLE_SCHEMA = DATABASE() 
+            AND TABLE_NAME = %s
+            AND DATA_TYPE IN ('varchar', 'text', 'longtext', 'mediumtext', 'tinytext', 'char')
+        ", $table));
+        
+        if (!empty($columns)) {
+            $conditions = [];
+            foreach($columns as $col) {
+                $conditions[] = $col->COLUMN_NAME . " LIKE '%" . esc_sql($search_param) . "%'";
+            }
+            $where = " WHERE " . implode(' OR ', $conditions);
+        } else {
+            $where = "";
+        }
     } else {
-        $where = "";
+        # if have where params then get where
+        $where_param = $request->get_param('where');
+        if ($where_param) {
+            $where = " WHERE " . $where_param;
+        } else {
+            $where = "";
+        }
     }
 
     # if have order params then get order
