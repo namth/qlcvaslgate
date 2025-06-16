@@ -16,7 +16,7 @@ $current_user = wp_get_current_user();
         <!-- Page Heading Start -->
         <div class="col-12 col-lg-auto mb-20">
             <div class="page-heading">
-                <h3><?php _e('Kết quả tìm kiếm cho:', 'qlcv'); ?> "<?php echo $s; ?>"</h3>
+                <h3><?php printf(__('Kết quả tìm kiếm cho: "%s"', 'qlcv'), $s); ?></h3>
             </div>
         </div><!-- Page Heading End -->
 
@@ -82,10 +82,10 @@ $current_user = wp_get_current_user();
                                     # if it have respone date, shown it, if not, show deadline
                                     if ($trang_thai == "Chờ phản hồi") {
                                         $deadline_label = $time_to_response;
-                                    } else if ($trang_thai != "Hoàn thành") {
+                                    } else if ($trang_thai != __("Hoàn thành", "qlcv")) {
                                         $deadline_label = $deadline;
                                     } else {
-                                        $deadline_label = "Xong";
+                                        $deadline_label = __("Xong", "qlcv");
                                     }
 
 
@@ -98,7 +98,7 @@ $current_user = wp_get_current_user();
                                                     <div class="progress-bar" role="progressbar" style="width: ' . $work_percent . '%" aria-valuenow="' . $work_percent . '" aria-valuemin="0" aria-valuemax="100">' . $deadline_label . '</div>
                                                     </div>
                                                   </td>';
-                                    echo "<td>" . $trang_thai . "</td>";
+                                    echo "<td>" . __($trang_thai, 'qlcv') . "</td>";
                                     echo "</tr>";
                                 }
                                 wp_reset_postdata();
@@ -274,7 +274,7 @@ $current_user = wp_get_current_user();
                             <th>#</th>
                             <th><?php _e('Tên nhân sự', 'qlcv'); ?></th>
                             <th><?php _e('Số điện thoại', 'qlcv'); ?></th>
-                            <th>Email</th>
+                            <th><?php _e('Email', 'qlcv'); ?></th>
                             <th><?php _e('Vai trò', 'qlcv'); ?></th>
                         </tr>
                     </thead>
@@ -291,7 +291,7 @@ $current_user = wp_get_current_user();
                             echo "<td><a href='" . get_author_posts_url($user->ID) . "'>" . $user->display_name . "</a></td>";
                             if ($so_dien_thoai) {
                                 echo "<td>" . $so_dien_thoai . "</td>";
-                            } else echo "<td>Chưa có</td>";
+                            } else echo "<td>" . __('Chưa có', 'qlcv') . "</td>";
                             echo "<td>" . $user->user_email . "</td>";
 
                             # display user role name
@@ -339,7 +339,7 @@ $current_user = wp_get_current_user();
                                 <th><?php _e('Mã code', 'qlcv'); ?></th>
                                 <th><?php _e('Tên đối tác / cty', 'qlcv'); ?></th>
                                 <th><?php _e('Số điện thoại', 'qlcv'); ?></th>
-                                <th>Email</th>
+                                <th><?php _e('Email', 'qlcv'); ?></th>
                                 <th><?php _e('Vai trò', 'qlcv'); ?></th>
                             </tr>
                         </thead>
@@ -359,7 +359,7 @@ $current_user = wp_get_current_user();
                                 echo "<td><a href='" . get_author_posts_url($user->ID) . "'>" . $ten_cong_ty . "</a></td>";
                                 if ($so_dien_thoai) {
                                     echo "<td>" . $so_dien_thoai . "</td>";
-                                } else echo "<td>Chưa có</td>";
+                                } else echo "<td>" . __('Chưa có', 'qlcv') . "</td>";
                                 echo "<td>" . $user->user_email . "</td>";
 
                                 # display user role name

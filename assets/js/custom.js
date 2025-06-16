@@ -304,14 +304,14 @@ jQuery(document).ready(function ($) {
   /* addnew_partner.php
     Switch chuyển phân loại sang công ty thì sẽ hiện ô nhập danh sách thành viên
   */
-  function switch_is_company() {
-    var val = $('input[name="phan_loai"]:checked').val();
+  function switch_is_company(phan_loai_selector = 'input[name="phan_loai"]:checked', phanloai_selector = '.phanloai, #phanloai') {
+    var val = $(phan_loai_selector).val();
+    
     if (val == 1) {
-      $(".phanloai").show(300);
-      $("#phanloai").show(300);
+      $(phanloai_selector).show(300);
     } else {
-      $(".phanloai").hide(300);
-      $("#phanloai").hide(300);
+      $(phanloai_selector).hide(300);
+      $('.companytype').hide(300);
     }
   }
   /* when load page, read input["phan_loai"] and switch to right type */
@@ -319,6 +319,17 @@ jQuery(document).ready(function ($) {
   /* when change input["phan_loai"], switch to right type */
   $('input[name="phan_loai"]').change(function() {
     switch_is_company();
+  });
+
+  /* when change input["vietnam_company"], switch to right type */
+  $('input[name="vietnam_company"]').change(function() {
+    var val = $('input[name="vietnam_company"]:checked').val();
+    
+    if (val == 'on') {
+      $('.companytype').show(300);
+    } else {
+      $('.companytype').hide(300);
+    }
   });
 
   /* addnew_partner.php

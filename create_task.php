@@ -75,7 +75,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                     update_job_history($other_work_process, $other_work_date, $job);
                 }
 
-                $noi_dung = $current_user->display_name . " đã tạo nhiệm vụ mới";
+                $noi_dung = $current_user->display_name . " " . __("đã tạo nhiệm vụ mới", "qlcv");
                 $row_update = array(
                     'nguoi_thuc_hien'   => $current_user,
                     'noi_dung'          => $noi_dung,
@@ -405,7 +405,7 @@ $phan_loai  = get_field('phan_loai', $job);
                         </div>
                         <div class="col-lg-3"></div>
 
-                        <div class="col-lg-3 form_title lh45">Deadline <span class="text-danger">*</span></div>
+                        <div class="col-lg-3 form_title lh45"><?php _e('Deadline', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-3 col-12 mb-20">
                             <input type="text" class="form-control input-date-single" value="" name="deadline" data-mask="99/99/9999">
                             <span class="form-help-text">"dd/mm/yyyy"</span>
@@ -424,7 +424,7 @@ $phan_loai  = get_field('phan_loai', $job);
                         ?>
 
                         <div class="col-lg-3"></div>
-                        <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Cập nhật', 'qlcv'); ?>"> <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a></div>
+                        <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Cập nhật', 'qlcv'); ?>"> <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a></div>
                     </div>
                 <?php
                 }

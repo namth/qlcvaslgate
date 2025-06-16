@@ -85,7 +85,7 @@ while (have_posts()) {
         # chuyển đối tác sang trạng thái đã chốt
         update_field('field_61cd79bf1653f', 1, 'user_' . $partner['ID']);
         # create log, switch job status to official
-        $log = "Chuyển công việc tiềm năng sang công việc chính thức";
+        $log = __("Chuyển công việc tiềm năng sang công việc chính thức", 'qlcv');
         asl_create_log($log, get_the_ID());
     }
 
@@ -102,11 +102,11 @@ while (have_posts()) {
             wp_add_object_terms(get_the_ID(), $other_potential, 'group');
 
             # create log, add child term of potential
-            $log = "Chuyển công việc tiềm năng sang phân loại \"" . $other_potential . "\"";
+            $log = sprintf(__('Chuyển công việc tiềm năng sang phân loại "%s"', 'qlcv'), $other_potential);
             asl_create_log($log, get_the_ID());
         } else {
             # create log, remove all child term of potential
-            $log = "Hủy các phân loại con của công việc tiềm năng";
+            $log = __("Hủy các phân loại con của công việc tiềm năng", 'qlcv');
             asl_create_log($log, get_the_ID());
         }
     }
@@ -143,9 +143,9 @@ while (have_posts()) {
                         }
 
                         if ($deadline) {
-                            echo '<span class="badge badge-info">' . $trang_thai . '</span> ';
+                            echo '<span class="badge badge-info">' . __($trang_thai, 'qlcv') . '</span> ';
                             echo '<span class="badge badge-outline badge-danger">';
-                            echo "Deadline: " . $deadline;
+                            echo __("Deadline:", 'qlcv') . " " . $deadline;
                             echo '</span>';
                         }
                         ?>
@@ -213,21 +213,21 @@ while (have_posts()) {
                                     echo __("Số REF của đối tác: ", 'qlcv') . $partner_ref . "<br>";
                                 }
                                 if ($our_ref) {
-                                    echo __("Số REF của mình: ", 'qlcv') . $our_ref . "<br>";
+                                    echo __("Số REF của mình:", 'qlcv') . " " . $our_ref . "<br>";
                                 }
                                 if ($so_don) {
-                                    echo __("Số đơn: ", 'qlcv') . $so_don . "<br>";
+                                    echo __("Số đơn:", 'qlcv') . " " . $so_don . "<br>";
                                 }
                                 if ($ngay_nop_don) {
-                                    echo __("Ngày nộp đơn: ", 'qlcv') . $ngay_nop_don . "<br>";
+                                    echo __("Ngày nộp đơn:", 'qlcv') . " " . $ngay_nop_don . "<br>";
                                 }
                                 if ($so_bang) {
-                                    echo __("Số bằng: ", 'qlcv') . $so_bang . "<br>";
+                                    echo __("Số bằng:", 'qlcv') . " " . $so_bang . "<br>";
                                 }
                                 if ($ngay_cap_bang) {
-                                    echo __("Ngày cấp bằng: ", 'qlcv') . $ngay_cap_bang . "<br>";
+                                    echo __("Ngày cấp bằng:", 'qlcv') . " " . $ngay_cap_bang . "<br>";
                                 }
-                                if ($country) echo __("Quốc gia nộp: ", 'qlcv') . $country . "<br>";
+                                if ($country) echo __("Quốc gia nộp:", 'qlcv') . " " . $country . "<br>";
 
 
                                 $content = get_the_content();
@@ -269,7 +269,7 @@ while (have_posts()) {
                             <form action="" method="post">
                                 <!-- <input type="hidden" name="post_id" value="<?php echo get_the_ID(); ?>"> -->
                                 <select class="form-control select2-tags mb-20" name="other_potential">
-                                    <option value=""> -- Chọn phân loại tiềm năng -- </option>
+                                    <option value=""> -- <?php _e('Chọn phân loại tiềm năng', 'qlcv'); ?> -- </option>
                                     <?php 
                                         $list_other_jobs = get_term_children(11, 'group');
                                         foreach ($list_other_jobs as $jobid) {
@@ -277,10 +277,10 @@ while (have_posts()) {
                                             echo "<option value='" . $term->name . "'>" . $term->name . "</option>";
                                         }
                                     ?>
-                                    <option value="Tiềm năng">Hủy các phân loại con</option>
+                                    <option value="Tiềm năng"><?php _e('Hủy các phân loại con', 'qlcv'); ?></option>
                                 </select>
-                                <input class="button button-outlook" type="submit" value="Chọn">
-                                <button class="button button-rss cancel">Hủy</button>
+                                <input class="button button-outlook" type="submit" value="<?php _e('Chọn', 'qlcv'); ?>">
+                                <button class="button button-rss cancel"><?php _e('Hủy', 'qlcv'); ?></button>
                             </form>
                         </div> 
                     <?php 
@@ -318,7 +318,7 @@ while (have_posts()) {
                                             echo '<a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-box button-rss" id="quick_update"><i class="fa fa-calendar"></i><span>' . __('Sửa deadline', 'qlcv') . '</span></a>';
                                         }
                                     }
-                                    echo '<a href="' . get_bloginfo('url') . '/tao-phieu-thu-chi/?jobid=' . get_the_ID() . '" class="button button-box button-outlook" id="quick_update"><i class="zmdi zmdi-money"></i><span>' . __('Sửa deadline', 'qlcv') . '</span></a>';
+                                    echo '<a href="' . get_bloginfo('url') . '/tao-phieu-thu-chi/?jobid=' . get_the_ID() . '" class="button button-box button-outlook" id="quick_update"><i class="zmdi zmdi-money"></i><span>' . __('Tạo phiếu thu chi', 'qlcv') . '</span></a>';
                                     ?>
                                 </div>
                             </div>
@@ -341,7 +341,7 @@ while (have_posts()) {
                                         $status_arr = explode(PHP_EOL, $list_status);
                                         foreach ($status_arr as $status) {
                                             if ($print_status) {
-                                                echo '<a href="?stt=' . $status . '" class="button button-sm button-rss"><span><i class="zmdi zmdi-label-heart"></i>' . $status . '</span></a>';
+                                                echo '<a href="?stt=' . $status . '" class="button button-sm button-rss"><span><i class="zmdi zmdi-label-heart"></i>' . __($status, 'qlcv') . '</span></a>';
                                             }
                                             if (strtolower(trim($status)) == strtolower($trang_thai)) {
                                                 $print_status = true;
@@ -482,7 +482,7 @@ while (have_posts()) {
                                     <tr>
                                         <th><?php _e('Nhiệm vụ', 'qlcv'); ?></th>
                                         <th><?php _e('Trạng thái', 'qlcv'); ?></th>
-                                        <th>Deadline</th>
+                                        <th><?php _e('Deadline', 'qlcv'); ?></th>
                                         <th></th>
                                     </tr>
                                 </thead><!-- Table Head End -->
@@ -534,14 +534,14 @@ while (have_posts()) {
                                             } else if ($trang_thai != "Hoàn thành") {
                                                 $deadline_label = $deadline;
                                             } else {
-                                                $deadline_label = "Xong";
+                                                $deadline_label = __("Xong", "qlcv");
                                             }
 
                                             // $deadline_label = $work_percent=='100'?"100%":$deadline;
 
                                             echo "<tr>";
                                             echo '<td class="fw-600"><a href=' . get_permalink() . '>' . get_the_title() . '</a></td>';
-                                            echo '<td>' . $trangthai . '</td>';
+                                            echo '<td>' . __($trangthai, 'qlcv') . '</td>';
                                             echo '<td><div class="progress" style="height: 24px;">
                                                             <div class="progress-bar" role="progressbar" style="width: ' . $work_percent . '%" aria-valuenow="' . $work_percent . '" aria-valuemin="0" aria-valuemax="100">' . $deadline . '</div>
                                                             </div>
@@ -549,7 +549,7 @@ while (have_posts()) {
                                             echo '<td>
                                                             <a href="' . get_bloginfo('url') . '/sua-noi-dung-nhiem-vu/?taskid=' . get_the_ID() . '" class="button button-xs button-box button-android" data-tippy-content="' . __('Sửa nội dung nhiệm vụ', 'qlcv') . '"><i class="fa fa-pencil-square-o"></i></a>
                                                             <a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-xs button-box button-rss" id="quick_update" data-tippy-content="' . __('Sửa deadline và người xử lý', 'qlcv') . '"><i class="zmdi zmdi-assignment"></i></a>
-                                                            <a href="' . get_permalink( ) . '?stt=Huỷ" class="button button-xs button-box button-reddit" data-tippy-content="Huỷ"><i class="fa fa-trash" onclick="return confirm(\'' . __('Bạn chắc chắn muốn hủy công việc này chứ?', 'qlcv') . '\')"></i></a>
+                                                            <a href="' . get_permalink( ) . '?stt=Huỷ" class="button button-xs button-box button-reddit" data-tippy-content="' . __('Huỷ', 'qlcv') . '"><i class="fa fa-trash" onclick="return confirm(\'' . __('Bạn chắc chắn muốn hủy công việc này chứ?', 'qlcv') . '\')"></i></a>
                                                             </td>';
                                             echo "</tr>";
                                         }

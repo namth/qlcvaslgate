@@ -248,7 +248,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                         array(
                             'jobid'        => $postid,
                             'supervisorid' => $sup,
-                            'name'         => 'Người giám sát'
+                            'name'         => __('Người giám sát', 'qlcv')
                         )
                     );
                 }
@@ -265,7 +265,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                         array(
                             'jobid'        => $postid,
                             'supervisorid' => $cm,
-                            'name'         => 'Người đồng quản lý'
+                            'name'         => __('Người đồng quản lý', 'qlcv')
                         )
                     );
                 }
@@ -282,7 +282,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                         array(
                             'jobid'        => $postid,
                             'supervisorid' => $cm,
-                            'name'         => 'Người đồng thực hiện'
+                            'name'         => __('Người đồng thực hiện', 'qlcv')
                         )
                     );
                 }
@@ -398,7 +398,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         }
 
         # create log, save history of this job
-        $log = "Cập nhật công việc";
+        $log = __("Cập nhật công việc", 'qlcv');
         asl_create_log($log,$postid);
 
         wp_redirect($history_link);
@@ -720,7 +720,7 @@ $agency     = get_the_terms($postid, 'agency');
                             $so_luong_yeu_cau_bao_ho_doc_lap = get_field('so_luong_yeu_cau_bao_ho_doc_lap', $postid);
                         ?>
                         <div class="box-head">
-                            <h2 class="title"><?php _e('Thông tin kiểu dáng', 'qlcv'); ?></h2>
+                            <h2 class="title"><?php _e('Thông tin sáng chế', 'qlcv'); ?></h2>
                         </div>
                         <div class="box-body">
                             <div class="row mbn-20">

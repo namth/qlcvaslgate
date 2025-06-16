@@ -16,7 +16,7 @@
                 <!-- Page Heading Start -->
                 <div class="col-12 col-lg-auto mb-20">
                     <div class="page-heading">
-                        <h3 class="title"><?php _e('Hồ sơ nhân sự', 'qlcv'); ?></h3>
+                        <h3 class="title"><?php _e('Hồ sơ khách hàng', 'qlcv'); ?></h3>
                     </div>
                 </div><!-- Page Heading End -->
 
@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="info mb-20">
                                     <h5><?php the_title(); ?></h5>
-                                    <span><?php echo 'Khách hàng'; ?></span>
+                                    <span><?php echo __('Khách hàng', 'qlcv'); ?></span>
                                     <a href="#" class="edit"><i class="zmdi zmdi-edit"></i></a>
                                 </div>
                             </div>
@@ -73,7 +73,7 @@
                                                 <span> <?php echo $customer_company; ?></span>
                                             </li>
                                             <li>
-                                                <span><i class="ti-email"></i> Email</span>
+                                                <span><i class="ti-email"></i> <?php _e('Email', 'qlcv'); ?></span>
                                                 <span> <?php echo $email; ?></span>
                                             </li>
                                             <li>

@@ -401,12 +401,11 @@ get_sidebar();
                             <div class="col-lg-6"></div>
                         <?php
                         }
-                        echo '<input type="hidden" name="history_link" value="' . $history_link . '">';
                         wp_nonce_field('post_nonce', 'post_nonce_field');
+                        echo '<input type="hidden" name="history_link" value="' . $history_link . '">';
                         ?>
-
-                        <div class="col-lg-3"></div>
-                        <div class="col-lg-6 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Cập nhật', 'qlcv'); ?>"> <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a></div>
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-7 col-12 mb-20"><input type="submit" class="button button-primary" value="<?php _e('Cập nhật', 'qlcv'); ?>"> <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a></div>
                     </div>
                 <?php
                 }

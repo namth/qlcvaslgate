@@ -65,22 +65,22 @@ $current_user = wp_get_current_user();
                         <?php 
                             switch ($role) {
                                 case 'partner':
-                                    $role_name = 'đối tác';
+                                    $role_name = __('đối tác', 'qlcv');
                                     $_create_link = '/them-doi-tac-moi/';
                                     break;
                                     
                                 case 'foreign_partner':
-                                    $role_name = 'đối tác nhận việc';
+                                    $role_name = __('đối tác nhận việc', 'qlcv');
                                     $_create_link = '/them-doi-tac-moi/';
                                     break;
                                     
                                 case 'contributor':
-                                    $role_name = 'quản lý';
+                                    $role_name = __('quản lý', 'qlcv');
                                     $_create_link = '/them-nhan-su-moi/';
                                     break;
 
                                 default:
-                                    $role_name = 'nhân sự';
+                                    $role_name = __('nhân sự', 'qlcv');
                                     $_create_link = '/them-nhan-su-moi/';
                                     break;
                             }

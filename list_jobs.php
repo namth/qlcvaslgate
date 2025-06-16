@@ -568,7 +568,7 @@ $current_user = wp_get_current_user();
                                         echo "<td>" . get_the_date('d/m/Y') . "</td>";
                                         echo "<td class='action_cell'>
                                                 <a href='" . get_permalink() . "'>" . get_the_title() . "</a>
-                                                <a class='hidden_link' href='" . get_bloginfo('url') . "/duplicate-job/?jobid=" . get_the_ID() . "'  onclick=\"return confirm('Bạn có chắc muốn nhân đôi việc này?')\"><i class='fa fa-clone'></i> Duplicate This</a>    
+                                                <a class='hidden_link' href='" . get_bloginfo('url') . "/duplicate-job/?jobid=" . get_the_ID() . "'  onclick=\"return confirm('" . __('Bạn có chắc muốn nhân đôi việc này?', 'qlcv') . "')\"><i class='fa fa-clone'></i> " . __('Duplicate This', 'qlcv') . "</a>    
                                             </td>";
                                         echo "<td>" . end($work_history) . "</td>";
                                         if (!$type || ($type == 'tiem-nang')) {

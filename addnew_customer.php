@@ -100,31 +100,35 @@
                             ?>
                             <div>
                                 <form action="#" method="POST" class="row">
-                                    <div class="col-lg-3 form_title lh45"><?php _e('Họ và tên', 'qlcv'); ?></div>
+                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Họ và tên', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="customer_name"></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45"><?php _e('Công ty', 'qlcv'); ?></div>
-                                    <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="customer_company"></div>
+                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Công ty', 'qlcv'); ?> <span class="text-danger">*</span></div>
+                                    <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_company"></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45"><?php _e('Email', 'qlcv'); ?></div>
+                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Mã khách hàng', 'qlcv'); ?></div>
+                                    <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_code"></div>
+                                    <div class="col-lg-3"></div>
+
+                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Email', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="user_email"></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45"><?php _e('Số điện thoại', 'qlcv'); ?></div>
+                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Số điện thoại', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="phone_number"></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45"><?php _e('Địa chỉ', 'qlcv'); ?></div>
+                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Địa chỉ', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="address"></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45"><?php _e('Quốc gia', 'qlcv'); ?></div>
+                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Quốc gia', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><input type="text" class="form-control" name="country"></div>
                                     <div class="col-lg-3"></div>
 
-                                    <div class="col-lg-3 form_title lh45"><?php _e('Ghi chú', 'qlcv'); ?></div>
+                                    <div class="col-lg-3 form_title text-left text-lg-right lh45"><?php _e('Ghi chú', 'qlcv'); ?></div>
                                     <div class="col-lg-6 col-12 mb-20"><textarea class="form-control" placeholder="<?php _e('Thông tin bổ sung', 'qlcv'); ?>" name="note"></textarea></div>
                                     <div class="col-lg-3"></div>
 

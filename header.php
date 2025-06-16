@@ -222,6 +222,22 @@ $logo = get_field('logo', 'option');
 
                                     </li>
 
+                                    <!--Language Switcher-->
+                                    <?php
+                                    if (in_array('administrator', $current_user->roles)) {
+                                        if (function_exists('pll_the_languages')) {
+                                            $languages = pll_the_languages(array(
+                                                'dropdown' => 0,
+                                                'show_names' => 0,
+                                                'show_flags' => 1,
+                                                'hide_current' => 1,
+                                                'echo' => 0
+                                            ));
+                                            echo $languages;
+                                        }
+                                    }
+                                    ?>
+                                    
                                     <!--User-->
                                     <li class="adomx-dropdown col-auto">
                                         <a class="toggle" href="#">

@@ -43,7 +43,7 @@ while (have_posts()) {
         if (is_user_logged_in()) {
 
             $new_stt = $_GET['stt'];
-            $noi_dung = __("đã thay đổi trạng thái thành", 'qlcv') . " " . $new_stt;
+            $noi_dung = __("đã thay đổi trạng thái thành", 'qlcv') . " " . __($new_stt, 'qlcv');
 
             $current_time = current_time('timestamp', 7);
 
@@ -107,11 +107,11 @@ while (have_posts()) {
                 <div class="box">
                     <div class="page-heading box-head">
                         <h3 class="mb-10"><?php the_title(); ?> </h3>
-                        <span class="badge badge-primary"><?php echo $trang_thai; ?></span>
+                        <span class="badge badge-primary"><?php echo __($trang_thai, 'qlcv'); ?></span>
                         <?php
                         if ($deadline) {
                             echo '<span class="badge badge-outline badge-danger">';
-                            echo "Deadline: " . $deadline;
+                            echo __("Deadline:", 'qlcv') . " " . $deadline;
                             echo '</span>';
                         }
                         ?>
@@ -179,7 +179,7 @@ while (have_posts()) {
                                     $status_arr = explode(PHP_EOL, $list_status);
                                     foreach ($status_arr as $status) {
                                         if ($print_status) {
-                                            echo '<a href="?stt=' . $status . '" class="button button-sm button-rss"><span><i class="zmdi zmdi-label-heart"></i>' . $status . '</span></a>';
+                                            echo '<a href="?stt=' . $status . '" class="button button-sm button-rss"><span><i class="zmdi zmdi-label-heart"></i>' . __($status, 'qlcv') . '</span></a>';
                                         }
                                         if (strtolower(trim($status)) == strtolower($trang_thai)) {
                                             $print_status = true;
@@ -263,7 +263,7 @@ while (have_posts()) {
                 <div class="box mb-20">
                     <div class="page-heading box-head">
                         <h3 class="mb-10"><?php _e('Thông tin công việc', 'qlcv'); ?></h3>
-                        <span class="badge badge-primary"><?php echo $phan_loai; ?></span>
+                        <span class="badge badge-primary"><?php echo __($phan_loai, 'qlcv'); ?></span>
                     </div>
                     <div class="box-body">
                         <div class="d-flex justify-content-between row mbn-20">

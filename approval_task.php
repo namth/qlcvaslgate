@@ -21,7 +21,7 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
     if (!$thong_bao) {
         # chuyển trạng thái là Hoàn thành
         update_field('field_600fde92f9be9', 'Hoàn thành', $postid);
-        $noi_dung = "nhiệm vụ đã được phê duyệt";
+        $noi_dung = __("nhiệm vụ đã được phê duyệt", "qlcv");
         # lưu lịch sử 
         $row_update = array(
             'nguoi_thuc_hien'   => $current_user,
@@ -36,9 +36,9 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
         } else add_row('field_6010e02533119', $row_update, $postid);
 
         # push notification
-        $content_notif = $noi_dung . " về việc <b>" . get_the_title($postid) . "</b>";
+        $content_notif = $noi_dung . " " . __("về việc", "qlcv") . " <b>" . get_the_title($postid) . "</b>";
         if ($job) {
-            $content_notif .= " của " . get_the_title($job);
+            $content_notif .= " " . __("của", "qlcv") . " " . get_the_title($job);
         }
 
         $receiver = get_field('receiver', 'user_' . $current_user->ID);
@@ -90,12 +90,12 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
                         $attachments[] = $upload_results['file']; // Đường dẫn đến file đã tải lên
                     } else {
                         // Xử lý lỗi tải lên
-                        echo 'Lỗi tải lên tệp: ' . $upload_results['error'];
+                        echo __('Lỗi tải lên tệp:', 'qlcv') . ' ' . $upload_results['error'];
                         exit; // Dừng nếu có lỗi
                     }
                 } else {
                     // Xử lý các lỗi upload khác (ví dụ: dung lượng quá lớn)
-                    echo '<p style=\'color:red;\'>Lỗi tải lên tệp: Mã lỗi ' . $files['error'][$key] . '</p>';
+                    echo '<p style=\'color:red;\'>' . __('Lỗi tải lên tệp: Mã lỗi ', 'qlcv') . $files['error'][$key] . '</p>';
                     exit; // Dừng nếu có lỗi
                 }
             }
@@ -167,7 +167,7 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
             update_field('field_600fde92f9be9', 'Quản lý đã phê duyệt', $postid);
         }
 
-        $noi_dung = "nhiệm vụ đã được phê duyệt.";
+        $noi_dung = __("nhiệm vụ đã được phê duyệt.", "qlcv");
         # lưu lịch sử 
         $row_update = array(
             'nguoi_thuc_hien'   => $current_user,
@@ -246,7 +246,7 @@ if ($id_email) {
         );
         $email_content  = replace_content($replace_arr, $email_post->post_content);
     }
-    $email_title    = "Thông báo cập nhật mới cho công việc: " . get_the_title($job);
+    $email_title    = __("Thông báo cập nhật mới cho công việc:", "qlcv") . " " . get_the_title($job);
 }
 ?>
 
@@ -260,7 +260,7 @@ if ($id_email) {
         <div class="col-12 col-lg-12 mb-20">
             <div class="page-heading">
                 <?php
-                echo '<h3 class="title">Phê duyệt và gửi mail cho đối tác</h3>';
+                echo '<h3 class="title">' . __('Phê duyệt và gửi mail cho đối tác', 'qlcv') . '</h3>';
                 ?>
             </div>
         </div><!-- Page Heading End -->
@@ -270,30 +270,30 @@ if ($id_email) {
         <div class="row">
             <div class="col-12 col-lg-12 mb-20">
                 <div class="row mbn-20">
-                    <div class="col-lg-2 form_title lh45">Người nhận: </div>
+                    <div class="col-lg-2 form_title lh45"><?php _e('Người nhận:', 'qlcv'); ?> </div>
                     <div class="col-lg-7 col-12 mb-20">
                         <input type="text" value="<?php echo $to; ?>" class="form-control" name="email_to">
                     </div>
                     <div class="col-lg-3"></div>
 
-                    <div class="col-lg-2 form_title lh45">Email CC: </div>
+                    <div class="col-lg-2 form_title lh45"><?php _e('Email CC:', 'qlcv'); ?> </div>
                     <div class="col-lg-7 col-12 mb-20"><input type="text" class="form-control" name="email_cc" value="<?php echo $email_cc; ?>"></div>
                     <div class="col-lg-3"></div>
 
-                    <div class="col-lg-2 form_title">Email BCC: </div>
+                    <div class="col-lg-2 form_title"><?php _e('Email BCC:', 'qlcv'); ?> </div>
                     <div class="col-lg-7 col-12 mb-20">
                         <input type="text" class="form-control" name="email_bcc" value="<?php echo $email_bcc; ?>">
-                        <span class="form-help-text">Các email cách nhau bởi dấu ",".</span>
+                        <span class="form-help-text"><?php _e('Các email cách nhau bởi dấu ",".', 'qlcv'); ?></span>
                     </div>
                     <div class="col-lg-3"></div>
 
-                    <div class="col-lg-2 form_title">Tiêu đề: </div>
+                    <div class="col-lg-2 form_title"><?php _e('Tiêu đề:', 'qlcv'); ?> </div>
                     <div class="col-lg-7 col-12 mb-20">
                         <input type="text" class="form-control" name="email_title" value="<?php echo $email_title; ?>">
                     </div>
                     <div class="col-lg-3"></div>
 
-                    <div class="col-lg-2 form_title">File đính kèm: </div>
+                    <div class="col-lg-2 form_title"><?php _e('File đính kèm:', 'qlcv'); ?> </div>
                     <div class="col-lg-7 col-12 mb-20">
                         <input type="file" id="attachments" class="form-control" name="attachments[]" multiple>
                         <?php 
@@ -321,7 +321,7 @@ if ($id_email) {
                     </div>
                     <div class="col-lg-3"></div>
 
-                    <div class="col-lg-2 form_title">Nội dung: </div>
+                    <div class="col-lg-2 form_title"><?php _e('Nội dung:', 'qlcv'); ?> </div>
                     <div class="col-lg-9 col-12 mb-20">
                         <?php //wp_editor($email_content, 'email_content');  ?>
                         <textarea class="summernote" name="email_content"><?php echo $email_content; ?></textarea>
@@ -333,10 +333,10 @@ if ($id_email) {
 
                     if (in_array('contributor', $current_user->roles)) {
                     ?>
-                        <div class="col-lg-2 form_title">Hành động </div>
+                        <div class="col-lg-2 form_title"><?php _e('Hành động', 'qlcv'); ?> </div>
                         <div class="col-lg-7 col-12 mb-20">
-                            <label class="inline"><input type="radio" name="action" value="0" checked="">Gửi giám đốc duyệt</label>
-                            <label class="inline"><input type="radio" name="action" value="1">Gửi trực tiếp cho khách</label>
+                            <label class="inline"><input type="radio" name="action" value="0" checked=""><?php _e('Gửi giám đốc duyệt', 'qlcv'); ?></label>
+                            <label class="inline"><input type="radio" name="action" value="1"><?php _e('Gửi trực tiếp cho khách', 'qlcv'); ?></label>
                         </div>
                         <div class="col-lg-3"></div>
                     <?php
@@ -347,8 +347,8 @@ if ($id_email) {
 
                     <div class="col-lg-2"></div>
                     <div class="col-lg-7 col-12 mb-20">
-                        <input type="submit" class="button button-primary" value="Hoàn thành">
-                        <a href="javascript:history.go(-1)" class="button button-wikipedia">Huỷ bỏ</a>
+                        <input type="submit" class="button button-primary" value="<?php _e('Hoàn thành', 'qlcv'); ?>">
+                        <a href="javascript:history.go(-1)" class="button button-wikipedia"><?php _e('Huỷ bỏ', 'qlcv'); ?></a>
                     </div>
                 </div>
             </div>

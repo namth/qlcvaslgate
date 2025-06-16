@@ -48,7 +48,7 @@ if (
 
     # check if add new partner success
     if ($result['status'] == 'success') {
-        $thongbao = '<div class="alert alert-success">Thêm mới partner thành công</div>';
+        $thongbao = '<div class="alert alert-success">' . __('Thêm mới partner thành công', 'qlcv') . '</div>';
 
         # redirect to history link
         if ($history_link) {
@@ -59,7 +59,7 @@ if (
             wp_redirect( get_author_posts_url( $result['user_id'] ) );
         }
     } else {
-        $thongbao = '<div class="alert alert-danger">Có lỗi gì đó, hãy kiểm tra lại</div>';
+        $thongbao = '<div class="alert alert-danger">' . __('Có lỗi gì đó, hãy kiểm tra lại', 'qlcv') . '</div>';
     }
 }
 

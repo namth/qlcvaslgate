@@ -51,7 +51,7 @@ get_sidebar();
                             <div class="col-lg-3 form_title lh45"><?php _e('Phân loại:', 'qlcv'); ?> </div>
                             <div class="col-lg-6 col-12 mb-20">
                                 <select class="form-control select2-tags mb-20" name="jtype">
-                                    <option value="">Tất cả</option>
+                                    <option value=""><?php _e('Tất cả', 'qlcv'); ?></option>
                                     <?php
                                     $terms = get_terms(array(
                                         'taxonomy' => 'group',
@@ -60,7 +60,7 @@ get_sidebar();
                                       
                                     foreach ($terms as $key => $value) {
                                         $selected = ($value->name == $type) ? "selected" : "";
-                                        echo "<option value='" . $value->name . "' " . $selected . ">" . $value->name . "</option>";
+                                        echo "<option value='" . $value->name . "' " . $selected . ">" . __($value->name, 'qlcv') . "</option>";
                                     }    
                                     ?>    
                                 </select>
@@ -72,12 +72,12 @@ get_sidebar();
                                 <select class="form-control select2-tags mb-20" name="data_type">
                                     <?php
                                     $data_arr = array(
-                                        'job'               => 'Công việc',
-                                        'task'              => 'Nhiệm vụ',
-                                        'partner'           => 'Đối tác',
-                                        'foreign_partner'   => 'Đối tác nước ngoài',
-                                        'customer'          => 'Khách hàng',
-                                        'member'            => 'Nhân sự',
+                                        'job'               => __('Công việc', 'qlcv'),
+                                        'task'              => __('Nhiệm vụ', 'qlcv'),
+                                        'partner'           => __('Đối tác', 'qlcv'),
+                                        'foreign_partner'   => __('Đối tác nước ngoài', 'qlcv'),
+                                        'customer'          => __('Khách hàng', 'qlcv'),
+                                        'member'            => __('Nhân sự', 'qlcv'),
                                     );    
                                     foreach ($data_arr as $key => $value) {
                                         $selected = ($data_type == $key) ? "selected" : "";
@@ -443,7 +443,7 @@ get_sidebar();
                                             echo "<td><a href='" . get_author_posts_url($partner_2['ID']) . "'>" . $partner_2['display_name'] . "</a></td>";
                                             if ($member) {
                                                 echo "<td><a href='" . get_author_posts_url($member['ID']) . "'>" . $member['display_name'] . "</a></td>";
-                                            } else echo "<td>Chưa có</td>";
+                                            } else echo "<td>" . __('Chưa có', 'qlcv') . "</td>";
                                             echo "<td><a href='" . get_author_posts_url($manager['ID']) . "'>" . $manager['display_name'] . "</a></td>";
                                             echo "</tr>";
                                         }
@@ -537,10 +537,10 @@ get_sidebar();
                                             # if it have respone date, shown it, if not, show deadline
                                             if ($trang_thai == "Chờ phản hồi") {
                                                 $deadline_label = $time_to_response;
-                                            } else if ($trang_thai != "Hoàn thành") {
+                                            } else if ($trang_thai != __("Hoàn thành", "qlcv")) {
                                                 $deadline_label = $deadline;
                                             } else {
-                                                $deadline_label = "Xong";
+                                                $deadline_label = __("Xong", "qlcv");
                                             }
 
 
@@ -553,7 +553,7 @@ get_sidebar();
                                                                 <div class="progress-bar" role="progressbar" style="width: ' . $work_percent . '%" aria-valuenow="' . $work_percent . '" aria-valuemin="0" aria-valuemax="100">' . $deadline_label . '</div>
                                                                 </div>
                                                               </td>';
-                                            echo "<td>" . $trang_thai . "</td>";
+                                            echo "<td>" . __($trang_thai, 'qlcv') . "</td>";
                                             echo "</tr>";
                                         }
                                         wp_reset_postdata();
@@ -602,9 +602,9 @@ get_sidebar();
                                         <tr>
                                             <th>#</th>
                                             <th><?php _e('Tên khách hàng', 'qlcv'); ?></th>
-                                            <th><?php _e('Tên công ty ', 'qlcv'); ?></th>
+                                            <th><?php _e('Tên công ty', 'qlcv'); ?></th>
                                             <th><?php _e('Số điện thoại', 'qlcv'); ?></th>
-                                            <th>Email</th>
+                                            <th><?php _e('Email', 'qlcv'); ?></th>
                                             <th><?php _e('Quốc gia', 'qlcv'); ?></th>
                                         </tr>
                                     </thead>
@@ -628,13 +628,13 @@ get_sidebar();
                                             } else echo "<td></td>";
                                             if ($so_dien_thoai) {
                                                 echo "<td>" . $so_dien_thoai . "</td>";
-                                            } else echo "<td>Chưa có</td>";
+                                            } else echo "<td>" . __('Chưa có', 'qlcv') . "</td>";
                                             if ($email) {
                                                 echo "<td>" . $email . "</td>";
-                                            } else echo "<td>Chưa có</td>";
+                                            } else echo "<td>" . __('Chưa có', 'qlcv') . "</td>";
                                             if ($quoc_gia) {
                                                 echo "<td>" . $quoc_gia . "</td>";
-                                            } else echo "<td>Chưa có</td>";
+                                            } else echo "<td>" . __('Chưa có', 'qlcv') . "</td>";
                                             echo "</tr>";
                                         }
                                         wp_reset_postdata();
@@ -643,7 +643,7 @@ get_sidebar();
                                 </table>
                             <?php
                             } else {
-                                echo "<tr><td colspan=6 class='text-center'>Không có dữ liệu.</td></tr>";
+                                echo "<tr><td colspan=6 class='text-center'>" . __('Không có dữ liệu.', 'qlcv') . "</td></tr>";
                             }
                             break;
 
@@ -725,7 +725,7 @@ get_sidebar();
                                             <th><?php _e('Họ và tên', 'qlcv'); ?></th>
                                             <th><?php _e('Công ty', 'qlcv'); ?></th>
                                             <th><?php _e('Số điện thoại', 'qlcv'); ?></th>
-                                            <th>Email</th>
+                                            <th><?php _e('Email', 'qlcv'); ?></th>
                                             <th><?php _e('Địa chỉ', 'qlcv'); ?></th>
                                         </tr>
                                     </thead>
@@ -747,7 +747,7 @@ get_sidebar();
                                             echo "<td>" . $ten_cong_ty . "</td>";
                                             if ($so_dien_thoai) {
                                                 echo "<td>" . $so_dien_thoai . "</td>";
-                                            } else echo "<td>Chưa có</td>";
+                                            } else echo "<td>" . __('Chưa có', 'qlcv') . "</td>";
                                             echo "<td>" . $user->user_email . "</td>";
                                             echo "<td>" . $dia_chi . "</td>";
 

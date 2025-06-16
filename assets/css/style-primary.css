@@ -15502,7 +15502,7 @@ body.skin-dark .cus-radio.light .icon::before {
 #change_cat form .selection > span{
   padding-right: 40px;
 }
-.phanloai {
+.phanloai, .companytype {
   display: none;
 }
 .list-attachments {

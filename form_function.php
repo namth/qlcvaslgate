@@ -49,8 +49,8 @@ function form_addnew_partner($role=null){
             </div>
             <div class="col-lg-3 phanloai"></div>
 
-            <div class="col-lg-3 form_title text-lg-right phanloai"><?php _e('Phân loại đầu tư', 'qlcv'); ?> <span class="text-danger">*</span></div>
-            <div class="col-lg-6 col-12 mb-20 phanloai">
+            <div class="col-lg-3 form_title text-lg-right companytype"><?php _e('Phân loại đầu tư', 'qlcv'); ?> <span class="text-danger">*</span></div>
+            <div class="col-lg-6 col-12 mb-20 companytype">
                 <div class="adomx-checkbox-radio-group inline">
                     <?php 
                         $options = [
@@ -84,7 +84,7 @@ function form_addnew_partner($role=null){
                     </select>
                 </div>
             </div>
-            <div class="col-lg-3 phanloai"></div>
+            <div class="col-lg-3 companytype"></div>
 
             <div class="col-lg-3 form_title text-lg-right phanloai mt-20 lh45"><?php _e('Thành viên tổ chức', 'qlcv'); ?> </div>
             <div class="col-lg-6 col-12 mb-20 phanloai">

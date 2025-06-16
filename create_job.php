@@ -161,12 +161,12 @@ if (isset($_GET['type'])) {
                                                         </div>
                                                         <div class="tab-pane fade <?php echo $class_otherip; ?>" id="otherip">
                                                             <span class="form-help-text"><?php _e('Nhập deadline cho công việc này', 'qlcv'); ?></span>
-                                                            <input type="text" class="form-control" value="" name="deadline" placeholder="Deadline: dd/mm/yyyy" data-mask="99/99/9999">
+                                                            <input type="text" class="form-control" value="" name="deadline" placeholder="<?php _e('Deadline: dd/mm/yyyy', 'qlcv'); ?>" data-mask="99/99/9999">
                                                             <span class="form-help-text text-danger"><?php _e('Lưu ý: nếu là đầu việc lớn có nhiều nhiệm vụ con thì bỏ qua trường thông tin này.', 'qlcv'); ?></span>
                                                         </div>
                                                         <div class="tab-pane fade <?php echo $class_viec_khac; ?>" id="vieckhac">
                                                             <select class="form-control select2-tags mb-20" name="other_job">
-                                                                <option value=""> -- Chọn phân loại công việc -- </option>
+                                                                <option value=""> -- <?php _e('Chọn phân loại công việc', 'qlcv'); ?> -- </option>
                                                                 <?php 
                                                                     $list_other_jobs = get_term_children(10, 'group');
                                                                     foreach ($list_other_jobs as $jobid) {
@@ -176,7 +176,7 @@ if (isset($_GET['type'])) {
                                                                 ?>
                                                             </select>
                                                             <span class="form-help-text"><?php _e('Nhập deadline cho công việc này', 'qlcv'); ?></span>
-                                                            <input type="text" class="form-control" value="" name="deadline" placeholder="Deadline: dd/mm/yyyy" data-mask="99/99/9999">
+                                                            <input type="text" class="form-control" value="" name="deadline" placeholder="<?php _e('Deadline: dd/mm/yyyy', 'qlcv'); ?>" data-mask="99/99/9999">
                                                             <span class="form-help-text text-danger"><?php _e('Lưu ý: nếu là đầu việc lớn có nhiều nhiệm vụ con thì bỏ qua trường thông tin này.', 'qlcv'); ?></span>
                                                         </div>
                                                     </div>
@@ -189,7 +189,7 @@ if (isset($_GET['type'])) {
                                             <div class="col-lg-1"></div>
 
                                             <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Lưu ý công việc', 'qlcv'); ?></div>
-                                            <div class="col-lg-8 col-12 mb-20"><textarea class="form-control summernote" placeholder="Lưu ý" name="mindful"></textarea></div>
+                                            <div class="col-lg-8 col-12 mb-20"><textarea class="form-control summernote" placeholder="<?php _e('Lưu ý', 'qlcv'); ?>" name="mindful"></textarea></div>
                                             <div class="col-lg-1"></div>
 
                                             <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Link file hồ sơ', 'qlcv'); ?></div>
