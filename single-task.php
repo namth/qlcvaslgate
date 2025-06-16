@@ -149,9 +149,9 @@ while (have_posts()) {
                                     echo '<button class="button button-box button-android" id="quick_update"><i class="fa fa-sort"></i><span>' . __('Cập nhật trạng thái', 'qlcv') . '</span></button>';
                                     echo '<a href="' . get_bloginfo('url') . '/sua-task/?taskid=' . get_the_ID() . '" class="button button-box button-rss" id="quick_update"><i class="zmdi zmdi-assignment"></i><span>' . __('Sửa deadline', 'qlcv') . '</span></a>';
                                 } else {
-                                    if ((($trang_thai == "Chờ phê duyệt")
+                                    if ((($trang_thai == __("Chờ phê duyệt", 'qlcv'))
                                         && (in_array('administrator', $current_user->roles) || in_array('contributor', $current_user->roles)))
-                                        || (($trang_thai == "Quản lý đã phê duyệt") && in_array('administrator', $current_user->roles))
+                                        || (($trang_thai == __("Quản lý đã phê duyệt", 'qlcv')) && in_array('administrator', $current_user->roles))
                                     ) {
                                         echo '<a href="' . get_bloginfo('url') . '/disapproval/?taskid=' . get_the_ID() . '" class="button button-wikipedia" id="quick_update"><i class="fa fa-times"></i><span>' . __('Không phê duyệt', 'qlcv') . '</span></a>';
                                         echo '<a href="' . get_bloginfo('url') . '/confirm/?taskid=' . get_the_ID() . '" class="button button-android" id="quick_update"><i class="fa fa-sort"></i><span>' . __('Hoàn thành', 'qlcv') . '</span></a>';
@@ -229,6 +229,7 @@ while (have_posts()) {
                                     $timestamp = strtotime($thoi_gian->format('d-m-Y H:i:s'));
                                     $iduser = get_sub_field('nguoi_thuc_hien');
                                     $nguoi_thuc_hien = get_user_by('ID', $iduser);
+                                    // print_r($thoi_gian);
                             ?>
                                     <li>
                                         <span class="icon">
@@ -283,9 +284,9 @@ while (have_posts()) {
                                         if (substr($logo, -1) != '/') {
                                             echo "<img src='" . $logo . "' width='160' class='mb-10'/><br>";
                                         }
-                                        echo __("Tên nhãn hiệu: ", 'qlcv') . $ten_nhan_hieu . "<br>";
-                                        echo __("Nhóm: ", 'qlcv') . $nhom . "<br>";
-                                        echo __("Số lượng nhóm: ", 'qlcv') . $so_luong_nhom . "<br>";
+                                        echo __("Tên nhãn hiệu:", 'qlcv') . " " . $ten_nhan_hieu . "<br>";
+                                        echo __("Nhóm:", 'qlcv') . " " . $nhom . "<br>";
+                                        echo __("Số lượng nhóm:", 'qlcv') . " " . $so_luong_nhom . "<br>";
                                         break;
 
                                     case 'Sáng chế':
@@ -294,9 +295,9 @@ while (have_posts()) {
 
                                         $ban_mo_ta_sang_che                 = auto_url(get_field('ban_mo_ta_sang_che', $id_job));
 
-                                        echo __("Bản mô tả sáng chế: ", 'qlcv') . $ban_mo_ta_sang_che . "<br>";
-                                        echo __("Số lượng yêu cầu bảo hộ: ", 'qlcv') . $so_luong_yeu_cau_bao_ho . "<br>";
-                                        echo __("Số lượng yêu cầu bảo hộ độc lập: ", 'qlcv') . $so_luong_yeu_cau_bao_ho_doc_lap . "<br>";
+                                        echo __("Bản mô tả sáng chế:", 'qlcv') . " " . $ban_mo_ta_sang_che . "<br>";
+                                        echo __("Số lượng yêu cầu bảo hộ:", 'qlcv') . " " . $so_luong_yeu_cau_bao_ho . "<br>";
+                                        echo __("Số lượng yêu cầu bảo hộ độc lập:", 'qlcv') . " " . $so_luong_yeu_cau_bao_ho_doc_lap . "<br>";
                                         break;
 
                                     case 'Kiểu dáng':
@@ -304,9 +305,9 @@ while (have_posts()) {
                                         $ban_mo_ta_cua_bo_anh   = auto_url(get_field('ban_mo_ta_cua_bo_anh', $id_job));
                                         $so_luong_phuong_an     = get_field('so_luong_phuong_an', $id_job);
 
-                                        echo __("Bộ ảnh: ", 'qlcv') . $bo_anh . "<br>";
-                                        echo __("Bản mô tả của bộ ảnh: ", 'qlcv') . $ban_mo_ta_cua_bo_anh . "<br>";
-                                        echo __("Số lượng phương án: ", 'qlcv') . $so_luong_phuong_an . "<br>";
+                                        echo __("Bộ ảnh:", 'qlcv') . " " . $bo_anh . "<br>";
+                                        echo __("Bản mô tả của bộ ảnh:", 'qlcv') . " " . $ban_mo_ta_cua_bo_anh . "<br>";
+                                        echo __("Số lượng phương án:", 'qlcv') . " " . $so_luong_phuong_an . "<br>";
                                         break;
                                 }
 

@@ -198,6 +198,10 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         $our_ref = get_field('our_ref', $postid);
         $payment_status = get_field('payment_status', $postid);
 
+        # Get current date value to preserve it
+        $current_job = $wpdb->get_row($wpdb->prepare("SELECT date FROM {$aslTable} WHERE jobid = %d", $postid));
+        $current_date = $current_job ? $current_job->date : current_time('mysql', 1);
+
         # Update asljob table
         $wpdb->update(
             $aslTable,
@@ -226,7 +230,8 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 'source'             => implode(",", $tagname_arr),
                 'contract_sign_date' => $contract_sign_date,
                 'agency_hn'          => $agency_hn,
-                'agency_hcm'         => $agency_hcm
+                'agency_hcm'         => $agency_hcm,
+                'date'               => $current_date
             ),
             array('jobid' => $postid)
         );
