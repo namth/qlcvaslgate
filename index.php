@@ -27,12 +27,12 @@
                     <table>
                         <tr>
                             <td>
-                                <a href="<?php echo get_bloginfo('url'); ?>/danh-sach-nhiem-vu/" class="button button-steam full-box">
+                                <a href="<?php echo get_bloginfo('url'); ?>/<?php echo __('danh-sach-nhiem-vu', 'qlcv'); ?>/" class="button button-steam full-box">
                                     <i class="zmdi zmdi-collection-item"></i><span><?php _e('Danh sách nhiệm vụ', 'qlcv'); ?></span>
                                 </a>
                             </td>
                             <td>
-                                <a href="<?php echo get_bloginfo('url'); ?>/danh-sach-cong-viec/" class="button button-steam full-box">
+                                <a href="<?php echo get_bloginfo('url'); ?>/<?php echo __('danh-sach-cong-viec', 'qlcv'); ?>/" class="button button-steam full-box">
                                     <i class="zmdi zmdi-card-travel"></i><span><?php _e('Danh sách công việc', 'qlcv'); ?></span>
                                 </a>
                             </td>
@@ -41,12 +41,12 @@
                                 
                             ?>                                  
                             <td>
-                                <a href="<?php echo get_bloginfo('url'); ?>/danh-sach-khach-hang/" class="button button-steam full-box">
+                                <a href="<?php echo get_bloginfo('url'); ?>/<?php echo __('danh-sach-khach-hang', 'qlcv'); ?>/" class="button button-steam full-box">
                                     <i class="zmdi zmdi-assignment-account"></i><span><?php _e('Danh sách khách hàng', 'qlcv'); ?></span>
                                 </a>
                             </td>                                        
                             <td>
-                                <a href="<?php echo get_bloginfo('url'); ?>/danh-sach-nhan-su/?role=partner" class="button button-steam full-box">
+                                <a href="<?php echo get_bloginfo('url'); ?>/<?php echo __('danh-sach-nhan-su', 'qlcv'); ?>/?role=partner" class="button button-steam full-box">
                                     <i class="zmdi zmdi-accounts-outline"></i><span><?php _e('Danh sách đối tác', 'qlcv'); ?></span>
                                 </a>
                             </td>
@@ -54,24 +54,24 @@
                                 }
                             ?>                                  
                             <td>
-                                <a href="<?php echo get_bloginfo('url'); ?>/danh-sach-nhan-su/?role=member" class="button button-steam full-box">
+                                <a href="<?php echo get_bloginfo('url'); ?>/<?php echo __('danh-sach-nhan-su', 'qlcv'); ?>/?role=member" class="button button-steam full-box">
                                     <i class="zmdi zmdi-steam"></i><span><?php _e('Danh sách nhân viên', 'qlcv'); ?></span>
                                 </a>
                             </td>
                         </tr>
                         <tr>                                       
                             <td>
-                                <a href="<?php echo get_bloginfo('url'); ?>/tao-dau-viec-moi/" class="button button-css3 full-box">
+                                <a href="<?php echo get_bloginfo('url'); ?>/<?php echo __('tao-dau-viec-moi', 'qlcv'); ?>/" class="button button-css3 full-box">
                                     <i class="zmdi zmdi-plus-circle-o-duplicate"></i><span><?php _e('Tạo đầu công việc mới', 'qlcv'); ?></span>
                                 </a>
                             </td>                                        
                             <td>
-                                <a href="" class="button button-css3 full-box">
+                                <a href="<?php echo get_bloginfo('url'); ?>/<?php echo __('tao-khach-hang-moi', 'qlcv'); ?>/" class="button button-css3 full-box">
                                     <i class="zmdi zmdi-account-box-mail"></i><span><?php _e('Tạo khách hàng mới', 'qlcv'); ?></span>
                                 </a>
                             </td>                                        
                             <td>
-                                <a href="<?php echo get_bloginfo('url'); ?>/them-doi-tac-moi/" class="button button-css3 full-box">
+                                <a href="<?php echo get_bloginfo('url'); ?>/<?php echo __('them-doi-tac-moi', 'qlcv'); ?>/" class="button button-css3 full-box">
                                     <i class="zmdi zmdi-account-add"></i><span><?php _e('Tạo đối tác mới', 'qlcv'); ?></span>
                                 </a>
                             </td>                                        
@@ -80,14 +80,14 @@
                                 
                             ?>
                                 <td>
-                                    <a href="<?php echo get_bloginfo('url'); ?>/them-nhan-su-moi/" class="button button-css3 full-box">
+                                    <a href="<?php echo get_bloginfo('url'); ?>/<?php echo __('them-nhan-su-moi', 'qlcv'); ?>/" class="button button-css3 full-box">
                                         <i class="zmdi zmdi-account-o"></i><span><?php _e('Tạo nhân sự mới', 'qlcv'); ?></span>
                                     </a>
                                 </td>
                             </tr>
                             <tr>    
                                 <td>
-                                    <a href="<?php echo get_bloginfo('url'); ?>/bao-cao/" class="button button-skype full-box">
+                                    <a href="<?php echo get_bloginfo('url'); ?>/<?php echo __('bao-cao', 'qlcv'); ?>/" class="button button-skype full-box">
                                         <i class="zmdi zmdi-shape"></i><span><?php _e('Báo cáo', 'qlcv'); ?></span>
                                     </a>
                                 </td>
@@ -97,7 +97,7 @@
                                 }
                             ?>
                             <td>                                        
-                                <a href="<?php echo get_bloginfo('url'); ?>/author/qlcv/" class="button button-skype full-box">
+                                <a href="<?php echo get_bloginfo('url'); ?>/<?php echo __('author/qlcv', 'qlcv'); ?>/" class="button button-skype full-box">
                                     <i class="zmdi zmdi-settings"></i><span><?php _e('Hồ sơ của bạn', 'qlcv'); ?></span>
                                 </a>
                             </td>

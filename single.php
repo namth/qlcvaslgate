@@ -2,7 +2,7 @@
   get_header();
   while ( have_posts() ) {
     the_post();
-    $background = ot_get_option('background');
+    // $background = ot_get_option('background');
 ?>
   <!-- BEGIN OF page cover -->
   <div class="page-cover" style="opacity: 0.5">
