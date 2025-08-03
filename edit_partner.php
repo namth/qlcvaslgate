@@ -14,6 +14,9 @@ if (is_user_logged_in()) {
     }
     # get all data from $this_user
     $_ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $this_user->ID);
+    $_mst            = get_field('field_688ef666d820a', 'user_' . $this_user->ID);
+    $_nguoi_dai_dien_phap_luat = get_field('field_688ef675d820b', 'user_' . $this_user->ID);
+    $_chuc_vu        = get_field('field_688ef6b4d820c', 'user_' . $this_user->ID);
     $_so_dien_thoai  = get_field('so_dien_thoai', 'user_' . $this_user->ID);
     $_dia_chi        = get_field('dia_chi', 'user_' . $this_user->ID);
     $_quoc_gia       = get_field('quoc_gia', 'user_' . $this_user->ID);
@@ -48,6 +51,9 @@ if (is_user_logged_in()) {
         $changed_label = array();
         # get data from the form
         $user_company   = $_POST['user_company'];
+        $mst            = $_POST['mst'];
+        $nguoi_dai_dien_phap_luat = $_POST['nguoi_dai_dien_phap_luat'];
+        $chuc_vu        = $_POST['chuc_vu'];
         $partner_code   = $_POST['partner_code'];
         $user_code_select = $_POST['user_code_select'];
         $user_code_exists = $_POST['user_code_exists'];
@@ -168,6 +174,21 @@ if (is_user_logged_in()) {
                 update_field('field_600d31f4060eb', $user_company, 'user_' . $new_partner); # user_company
                 $changed_label[] = __('tên công ty', 'qlcv');
             }
+            # check if MST is changed, then update new MST to this user
+            if ($_mst != $mst) {
+                update_field('field_688ef666d820a', $mst, 'user_' . $new_partner); # MST
+                $changed_label[] = __('MST', 'qlcv');
+            }
+            # check if nguoi dai dien phap luat is changed, then update new nguoi dai dien phap luat to this user
+            if ($_nguoi_dai_dien_phap_luat != $nguoi_dai_dien_phap_luat) {
+                update_field('field_688ef675d820b', $nguoi_dai_dien_phap_luat, 'user_' . $new_partner); # nguoi_dai_dien_phap_luat
+                $changed_label[] = __('người đại diện pháp luật', 'qlcv');
+            }
+            # check if chuc vu is changed, then update new chuc vu to this user
+            if ($_chuc_vu != $chuc_vu) {
+                update_field('field_688ef6b4d820c', $chuc_vu, 'user_' . $new_partner); # chuc_vu
+                $changed_label[] = __('chức vụ', 'qlcv');
+            }
             # check if type of client is changed, then update new type of client to this user
             if ($_type_of_client != $type_of_client) {
                 update_field('field_60a3cbacb1330', $type_of_client, 'user_' . $new_partner); # type_of_client
@@ -286,6 +307,9 @@ if (is_user_logged_in()) {
                         'name' => $display_name,
                         'partner_code' => $partner_code,
                         'companyName' => $user_company,
+                        'mst' => $mst,
+                        'nguoi_dai_dien_phap_luat' => $nguoi_dai_dien_phap_luat,
+                        'chuc_vu' => $chuc_vu,
                         'country' => $country,
                         'address' => $address,
                         'city' => $city,
@@ -385,6 +409,18 @@ get_sidebar();
 
                             <div class="col-lg-3 form_title lh45 text-lg-right phanloai"><?php _e('Tên công ty/tổ chức', 'qlcv'); ?> <span class="text-danger">*</span></div>
                             <div class="col-lg-6 col-12 mb-20 phanloai"><input type="text" class="form-control" name="user_company" value="<?php echo $_ten_cong_ty; ?>"></div>
+                            <div class="col-lg-3 phanloai"></div>
+
+                            <div class="col-lg-3 form_title lh45 text-lg-right phanloai"><?php _e('MST', 'qlcv'); ?></div>
+                            <div class="col-lg-6 col-12 mb-20 phanloai"><input type="text" class="form-control" name="mst" value="<?php echo $_mst; ?>"></div>
+                            <div class="col-lg-3 phanloai"></div>
+
+                            <div class="col-lg-3 form_title lh45 text-lg-right phanloai"><?php _e('Người đại diện pháp luật', 'qlcv'); ?></div>
+                            <div class="col-lg-6 col-12 mb-20 phanloai"><input type="text" class="form-control" name="nguoi_dai_dien_phap_luat" value="<?php echo $_nguoi_dai_dien_phap_luat; ?>"></div>
+                            <div class="col-lg-3 phanloai"></div>
+
+                            <div class="col-lg-3 form_title lh45 text-lg-right phanloai"><?php _e('Chức vụ', 'qlcv'); ?></div>
+                            <div class="col-lg-6 col-12 mb-20 phanloai"><input type="text" class="form-control" name="chuc_vu" value="<?php echo $_chuc_vu; ?>"></div>
                             <div class="col-lg-3 phanloai"></div>
 
                             <div class="col-lg-3 form_title text-lg-right phanloai"><?php _e('Đã có công ty tại Việt Nam?', 'qlcv'); ?> <span class="text-danger">*</span></div>

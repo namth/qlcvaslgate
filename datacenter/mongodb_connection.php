@@ -362,6 +362,9 @@ function export_mysql_partner($current_page) {
             $so_dien_thoai  = get_field('so_dien_thoai', 'user_' . $user->ID);
             $partner_code   = get_field('partner_code', 'user_' . $user->ID);
             $ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $user->ID);
+            $mst            = get_field('field_688ef666d820a', 'user_' . $user->ID);
+            $nguoi_dai_dien_phap_luat = get_field('field_688ef675d820b', 'user_' . $user->ID);
+            $chuc_vu        = get_field('field_688ef6b4d820c', 'user_' . $user->ID);
             $is_company     = get_field('is_company' , 'user_' . $user->ID);
             $author_link    = get_author_posts_url($user->ID);
             $dia_chi        = get_field('dia_chi' , 'user_' . $user->ID);
@@ -396,6 +399,9 @@ function export_mysql_partner($current_page) {
                 'name'          => $user->display_name,
                 'partner_code'  => $partner_code,
                 'companyName'   => $ten_cong_ty,
+                'mst'           => $mst,
+                'nguoi_dai_dien_phap_luat' => $nguoi_dai_dien_phap_luat,
+                'chuc_vu'       => $chuc_vu,
                 'country'       => $quoc_gia,
                 'address'       => $dia_chi,
                 'city'          => $city,

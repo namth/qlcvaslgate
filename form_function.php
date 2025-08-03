@@ -38,6 +38,18 @@ function form_addnew_partner($role=null){
             <div class="col-lg-6 col-12 mb-20 phanloai"><input type="text" class="form-control" name="user_company" value="<?php if(isset($_POST['user_company'])) echo $_POST['user_company']; ?>"></div>
             <div class="col-lg-3 phanloai"></div>
 
+            <div class="col-lg-3 form_title text-left text-lg-right lh45 phanloai"><?php _e('MST', 'qlcv'); ?></div>
+            <div class="col-lg-6 col-12 mb-20 phanloai"><input type="text" class="form-control" name="mst" value="<?php if(isset($_POST['mst'])) echo $_POST['mst']; ?>"></div>
+            <div class="col-lg-3 phanloai"></div>
+
+            <div class="col-lg-3 form_title text-left text-lg-right lh45 phanloai"><?php _e('Người đại diện pháp luật', 'qlcv'); ?></div>
+            <div class="col-lg-6 col-12 mb-20 phanloai"><input type="text" class="form-control" name="nguoi_dai_dien_phap_luat" value="<?php if(isset($_POST['nguoi_dai_dien_phap_luat'])) echo $_POST['nguoi_dai_dien_phap_luat']; ?>"></div>
+            <div class="col-lg-3 phanloai"></div>
+
+            <div class="col-lg-3 form_title text-left text-lg-right lh45 phanloai"><?php _e('Chức vụ', 'qlcv'); ?></div>
+            <div class="col-lg-6 col-12 mb-20 phanloai"><input type="text" class="form-control" name="chuc_vu" value="<?php if(isset($_POST['chuc_vu'])) echo $_POST['chuc_vu']; ?>"></div>
+            <div class="col-lg-3 phanloai"></div>
+
             <div class="col-lg-3 form_title text-lg-right phanloai"><?php _e('Đã có công ty tại Việt Nam?', 'qlcv'); ?> <span class="text-danger">*</span></div>
             <div class="col-lg-6 col-12 mb-20 phanloai">
                 <div class="adomx-checkbox-radio-group">
@@ -358,6 +370,9 @@ function form_addnew_partner($role=null){
 /*  Process add new partner 
 *  @param $args: array of data from form with following keys:
 *  company_name
+*  mst
+*  nguoi_dai_dien_phap_luat
+*  chuc_vu
 *  company_website
 *  user_code
 *  first_name
@@ -417,6 +432,11 @@ function process_addnew_partner($input) {
 
     $phan_loai      = $input['phan_loai'];
     $fdi            = $input['fdi'];
+
+    # new fields
+    $mst            = $input['mst'];
+    $nguoi_dai_dien_phap_luat = $input['nguoi_dai_dien_phap_luat'];
+    $chuc_vu        = $input['chuc_vu'];
 
     # if user_code_select is 1, get from user_code_exists
     if ($user_code_select) {
@@ -491,6 +511,9 @@ function process_addnew_partner($input) {
     # add more info throught custom fields
     if (!is_wp_error($new_partner) && !$error_partner_code) {
         update_field('field_600d31f4060eb', $company_name, 'user_' . $new_partner); # company_name
+        update_field('field_688ef666d820a', $mst, 'user_' . $new_partner); # MST
+        update_field('field_688ef675d820b', $nguoi_dai_dien_phap_luat, 'user_' . $new_partner); # Người đại diện pháp luật
+        update_field('field_688ef6b4d820c', $chuc_vu, 'user_' . $new_partner); # Chức vụ
         update_field('field_607a4fb37b7e0', $user_code, 'user_' . $new_partner); # user_code
         update_field('field_600d3211060ec', $phone_number, 'user_' . $new_partner); # phone number
         update_field('field_600d323d060ee', $address, 'user_' . $new_partner); # address
@@ -545,6 +568,9 @@ function process_addnew_partner($input) {
                 'name'          => $display_name,
                 'partner_code'  => $user_code,
                 'companyName'   => $company_name,
+                'mst'           => $mst,
+                'nguoi_dai_dien_phap_luat' => $nguoi_dai_dien_phap_luat,
+                'chuc_vu'       => $chuc_vu,
                 'country'       => $country,
                 'address'       => $address,
                 'city'          => $city,
