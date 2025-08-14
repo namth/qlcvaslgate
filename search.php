@@ -30,6 +30,11 @@ $current_user = wp_get_current_user();
             'posts_per_page' => '-1',
             's'              => $s,
         );
+        
+        // Polylang: Hiển thị tất cả ngôn ngữ thay vì chỉ ngôn ngữ hiện tại
+        if (function_exists('pll_languages_list')) {
+            $args['lang'] = '';  // Hiển thị tất cả ngôn ngữ
+        }
         $query = new WP_Query($args);
 
         if ($query->have_posts()) {
@@ -117,6 +122,11 @@ $current_user = wp_get_current_user();
             'post_type'     => 'job',
             'posts_per_page' => '-1',
         );
+
+        // Polylang: Hiển thị tất cả ngôn ngữ thay vì chỉ ngôn ngữ hiện tại
+        if (function_exists('pll_languages_list')) {
+            $args['lang'] = '';  // Hiển thị tất cả ngôn ngữ
+        }
 
         if ($s) {
             $keyword = '%' . $wpdb->esc_like($s) . '%';

@@ -8,6 +8,7 @@ function all_my_hooks(){
     require_once( $dir . '/ajax_filter.php');
     require_once( $dir . '/logs_function.php');
     require_once( $dir . '/form_function.php');
+    require_once( $dir . '/commission-helper.php');
     // require_once ($dir . '/datacenter/secret.php');
     require_once ($dir . '/datacenter/mongodb_connection.php');
     require_once ($dir . '/api_qlcv.php');
@@ -15,6 +16,26 @@ function all_my_hooks(){
 
 register_nav_menus(array('main-menu' => esc_html__('Main Menu', 'blankslate')));
 add_theme_support('title-tag');
+
+// Polylang: Auto-include all languages for job and task post types
+add_action('pre_get_posts', 'include_all_languages_for_job_task');
+function include_all_languages_for_job_task($query) {
+    // Only run on frontend, not in admin
+    if (is_admin() || !function_exists('pll_languages_list')) {
+        return;
+    }
+    
+    // Check if it's a query for job or task post types
+    $post_type = $query->get('post_type');
+    if (is_array($post_type)) {
+        $has_job_or_task = array_intersect($post_type, ['job', 'task']);
+        if (!empty($has_job_or_task)) {
+            $query->set('lang', '');
+        }
+    } elseif (in_array($post_type, ['job', 'task'])) {
+        $query->set('lang', '');
+    }
+}
 
 add_action('wp_enqueue_scripts', 'blankslate_load_scripts');
 function blankslate_load_scripts()
@@ -1627,6 +1648,25 @@ function CreateDatabaseQlcv()
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 
+    # table 13 - Commission Management
+    $aslTable = 'wp_aslcommission';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        `jobid` bigint(20) UNSIGNED NOT NULL,
+        `userid` bigint(20) UNSIGNED NOT NULL,
+        `role_type` varchar(50) NOT NULL,
+        `commission_percent` decimal(5,2) NOT NULL,
+        `commission_amount` bigint(20) UNSIGNED NULL,
+        `currency` varchar(5) NULL,
+        `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        `updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`),
+        KEY `jobid` (`jobid`),
+        KEY `userid` (`userid`),
+        UNIQUE KEY `unique_job_user_role` (`jobid`, `userid`, `role_type`)
+    ) {$charsetCollate};";
+    dbDelta($createAslTable);
+
 }
 add_action('after_switch_theme', 'CreateDatabaseQlcv');
 
@@ -1641,5 +1681,123 @@ function remove_attachment() {
     $attachment = explode('|', $_POST['attachment']);
     $id_email = $_POST['id_email'];
     update_field('field_67add7781ca67', implode(PHP_EOL, $attachment), $id_email);
+    exit;
+}
+
+add_action('wp_ajax_save_commission', 'save_commission_data');
+function save_commission_data() {
+    global $wpdb;
+    
+    // Verify nonce and permissions
+    if (!is_user_logged_in()) {
+        echo json_encode(array('status' => 'error', 'message' => 'Bạn cần đăng nhập để thực hiện thao tác này.'));
+        exit;
+    }
+    
+    $job_id = intval($_POST['job_id']);
+    $commissions = $_POST['commissions'];
+    
+    if (!$job_id || !$commissions) {
+        echo json_encode(array('status' => 'error', 'message' => 'Dữ liệu không hợp lệ.'));
+        exit;
+    }
+    
+    // Verify job exists
+    $job = get_post($job_id);
+    if (!$job || $job->post_type !== 'job') {
+        echo json_encode(array('status' => 'error', 'message' => 'Công việc không tồn tại.'));
+        exit;
+    }
+    
+    // Calculate total percentage
+    $total_percent = 0;
+    foreach ($commissions as $commission) {
+        if (isset($commission['commission_percent']) && $commission['commission_percent'] > 0) {
+            $total_percent += floatval($commission['commission_percent']);
+        }
+    }
+    
+    // Check if total exceeds 100%
+    if ($total_percent > 100) {
+        echo json_encode(array('status' => 'error', 'message' => 'Tổng tỷ lệ phân chia không được vượt quá 100%.'));
+        exit;
+    }
+    
+    $success_count = 0;
+    $error_count = 0;
+    
+    // Process each commission
+    foreach ($commissions as $commission) {
+        $userid = intval($commission['userid']);
+        $role_type = sanitize_text_field($commission['role_type']);
+        $commission_percent = floatval($commission['commission_percent']);
+        $commission_amount = intval($commission['commission_amount']);
+        $currency = sanitize_text_field($commission['currency']);
+        
+        // Skip if no percentage set
+        if ($commission_percent <= 0) {
+            continue;
+        }
+        
+        // Check if record exists
+        $existing = $wpdb->get_row($wpdb->prepare(
+            "SELECT id FROM wp_aslcommission WHERE jobid = %d AND userid = %d AND role_type = %s",
+            $job_id, $userid, $role_type
+        ));
+        
+        if ($existing) {
+            // Update existing record
+            $result = $wpdb->update(
+                'wp_aslcommission',
+                array(
+                    'commission_percent' => $commission_percent,
+                    'commission_amount' => $commission_amount,
+                    'currency' => $currency,
+                    'updated_date' => current_time('mysql', 1)
+                ),
+                array(
+                    'id' => $existing->id
+                ),
+                array('%f', '%d', '%s', '%s'),
+                array('%d')
+            );
+        } else {
+            // Insert new record
+            $result = $wpdb->insert(
+                'wp_aslcommission',
+                array(
+                    'jobid' => $job_id,
+                    'userid' => $userid,
+                    'role_type' => $role_type,
+                    'commission_percent' => $commission_percent,
+                    'commission_amount' => $commission_amount,
+                    'currency' => $currency,
+                    'created_date' => current_time('mysql', 1),
+                    'updated_date' => current_time('mysql', 1)
+                ),
+                array('%d', '%d', '%s', '%f', '%d', '%s', '%s', '%s')
+            );
+        }
+        
+        if ($result !== false) {
+            $success_count++;
+        } else {
+            $error_count++;
+        }
+    }
+    
+    // Prepare response message
+    if ($success_count > 0 && $error_count == 0) {
+        $message = "Đã lưu thành công phân chia hoa hồng cho {$success_count} người.";
+        $status = 'success';
+    } elseif ($success_count > 0 && $error_count > 0) {
+        $message = "Đã lưu thành công {$success_count} bản ghi, {$error_count} bản ghi lỗi.";
+        $status = 'warning';
+    } else {
+        $message = "Có lỗi xảy ra khi lưu dữ liệu.";
+        $status = 'error';
+    }
+    
+    echo json_encode(array('status' => $status, 'message' => $message));
     exit;
 }

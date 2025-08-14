@@ -147,6 +147,11 @@ if ( isset($_POST['post_nonce_field']) &&
                                     'post_type'     => 'job',
                                     'posts_per_page' => -1,
                                 );
+                                
+                                // Polylang: Hiển thị tất cả ngôn ngữ thay vì chỉ ngôn ngữ hiện tại
+                                if (function_exists('pll_languages_list')) {
+                                    $args['lang'] = '';  // Hiển thị tất cả ngôn ngữ
+                                }
                                 $i = 0;
 
                                 foreach ($partner_list as $partner_1) {

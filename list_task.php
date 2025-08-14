@@ -112,6 +112,11 @@ if (isset($_SESSION['list_task'])) {
                     'paged'         => $paged,
                     'posts_per_page' => 10,
                 );
+                
+                // Polylang: Hiển thị tất cả ngôn ngữ thay vì chỉ ngôn ngữ hiện tại
+                if (function_exists('pll_languages_list')) {
+                    $args['lang'] = '';  // Hiển thị tất cả ngôn ngữ
+                }
                 if ($member) {
                     $args['meta_query'][] = array(
                         'relation' => 'OR',

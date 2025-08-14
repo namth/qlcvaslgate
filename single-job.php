@@ -467,6 +467,17 @@ while (have_posts()) {
                             </div>
                             <div class="col-lg-auto">
                                 <a href="<?php echo get_bloginfo('url'); ?>/tao-nhiem-vu-moi/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-primary"><span><i class="fa fa-tasks"></i><?php _e('Thêm nhiệm vụ', 'qlcv'); ?></span></a>
+                                <?php
+                                // Kiểm tra quyền để hiển thị nút chia tỷ lệ %
+                                $current_user = wp_get_current_user();
+                                $job_author = get_post_field('post_author', get_the_ID());
+                                $is_job_creator = ($current_user->ID == $job_author);
+                                $is_admin = in_array('administrator', $current_user->roles);
+                                
+                                if ($is_job_creator || $is_admin) {
+                                    echo '<a href="' . get_bloginfo('url') . '/chia-ty-le-hoa-hong/?job_id=' . get_the_ID() . '" class="button button-sm button-success" data-tippy-content="' . __('Quản lý phân chia hoa hồng', 'qlcv') . '"><span><i class="fa fa-percentage"></i>' . __('Chia tỷ lệ %', 'qlcv') . '</span></a>';
+                                }
+                                ?>
                                 <a href="<?php echo get_bloginfo('url'); ?>/sua-cong-viec/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-android" data-tippy-content="<?php _e('Cập nhật nội dung', 'qlcv'); ?>"><i class="fa fa-pencil-square-o"></i></a>
                                 <a href="<?php echo get_bloginfo('url'); ?>/tao-phieu-thu-chi/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-outlook" id="quick_update" data-tippy-content="<?php _e('Tạo phiếu thu chi', 'qlcv'); ?>"><i class="zmdi zmdi-money"></i></a>
                                 <a href="<?php echo get_bloginfo('url'); ?>/renewal_post_api/?jobid=<?php echo get_the_ID(); ?>" class="button button-sm button-box button-skype" data-tippy-content="<?php _e('Chuyển dữ liệu sang renewal', 'qlcv'); ?>"><i class="fa fa-telegram"></i></a>
@@ -502,6 +513,11 @@ while (have_posts()) {
                                             ),
                                         ),
                                     );
+                                    
+                                    // Polylang: Hiển thị tất cả ngôn ngữ thay vì chỉ ngôn ngữ hiện tại
+                                    if (function_exists('pll_languages_list')) {
+                                        $args['lang'] = '';  // Hiển thị tất cả ngôn ngữ
+                                    }
                                     $query = new WP_Query($args);
 
                                     // print_r($query);
@@ -594,6 +610,128 @@ while (have_posts()) {
                         echo '</li>';
                     }
                     echo '</ul>';
+                    echo '</div>';
+                    echo '</div>';
+                }
+                
+                // Commission display section
+                global $wpdb;
+                $commissions = $wpdb->get_results($wpdb->prepare(
+                    "SELECT * FROM wp_aslcommission WHERE jobid = %d ORDER BY role_type, userid",
+                    get_the_ID()
+                ));
+                
+                if ($commissions) {
+                    $job_author = get_post_field('post_author', get_the_ID());
+                    $is_job_creator = ($current_user->ID == $job_author);
+                    $is_admin = in_array('administrator', $current_user->roles);
+                    $can_manage = $is_job_creator || $is_admin;
+                    
+                    echo '<div class="box" style="margin-top:20px;">';
+                    echo '<div class="box-head">';
+                    echo '<div class="row justify-content-between">';
+                    echo '<div class="col-lg-auto">';
+                    echo '<h4 class="title">' . __('Phân chia hoa hồng', 'qlcv') . '</h4>';
+                    echo '</div>';
+                    if ($can_manage) {
+                        echo '<div class="col-lg-auto">';
+                        echo '<a href="' . get_bloginfo('url') . '/chia-ty-le-hoa-hong/?job_id=' . get_the_ID() . '" class="button button-sm button-success">';
+                        echo '<i class="fa fa-percentage"></i> ' . __('Quản lý chia %', 'qlcv');
+                        echo '</a>';
+                        echo '</div>';
+                    }
+                    echo '</div>';
+                    echo '</div>';
+                    echo '<div class="box-body">';
+                    
+                    $total_value = get_field('total_value', get_the_ID());
+                    $currency = get_field('currency', get_the_ID()) ?: 'VND';
+                    $total_percent = 0;
+                    $total_amount = 0;
+                    
+                    foreach ($commissions as $commission) {
+                        $user_info = get_userdata($commission->userid);
+                        $role_name = '';
+                        
+                        switch ($commission->role_type) {
+                            case 'manager':
+                                $role_name = __('Người quản lý', 'qlcv');
+                                break;
+                            case 'member':
+                                $role_name = __('Thành viên thực hiện', 'qlcv');
+                                break;
+                            case 'co_manager':
+                                $role_name = __('Đồng quản lý', 'qlcv');
+                                break;
+                            case 'co_member':
+                                $role_name = __('Đồng thành viên', 'qlcv');
+                                break;
+                            case 'supervisor':
+                                $role_name = __('Người giám sát', 'qlcv');
+                                break;
+                        }
+                        
+                        // Check if current user can see this commission
+                        $can_view = $can_manage || ($current_user->ID == $commission->userid);
+                        
+                        if ($can_view) {
+                            $percent = floatval($commission->commission_percent);
+                            $amount = floatval($commission->commission_amount);
+                            
+                            // Format percent display
+                            $display_percent = ($percent == intval($percent)) ? intval($percent) : $percent;
+                            
+                            echo '<div class="row commission-display-row" style="padding: 10px; margin-bottom: 5px; border-left: 3px solid #007bff; background-color: #f8f9fa;">';
+                            echo '<div class="col-md-4">';
+                            echo '<strong>' . esc_html($user_info->display_name) . '</strong>';
+                            echo '<br><small class="text-muted">' . $role_name . '</small>';
+                            echo '</div>';
+                            echo '<div class="col-md-3">';
+                            echo '<span class="badge badge-success">' . $display_percent . '%</span>';
+                            echo '</div>';
+                            echo '<div class="col-md-3">';
+                            echo '<strong>' . number_format($amount) . ' ' . esc_html($currency) . '</strong>';
+                            echo '</div>';
+                            echo '<div class="col-md-2">';
+                            if ($current_user->ID == $commission->userid) {
+                                echo '<small class="text-primary"><i class="fa fa-user"></i> ' . __('Của bạn', 'qlcv') . '</small>';
+                            }
+                            echo '</div>';
+                            echo '</div>';
+                            
+                            if ($can_manage) {
+                                $total_percent += $percent;
+                                $total_amount += $amount;
+                            }
+                        }
+                    }
+                    
+                    // Show total only for job creator and admin
+                    if ($can_manage && $total_percent > 0) {
+                        $display_total_percent = ($total_percent == intval($total_percent)) ? intval($total_percent) : $total_percent;
+                        
+                        echo '<hr>';
+                        echo '<div class="row" style="background-color: #e9ecef; padding: 10px; border-radius: 5px;">';
+                        echo '<div class="col-md-4"><strong>' . __('Tổng cộng:', 'qlcv') . '</strong></div>';
+                        echo '<div class="col-md-3"><strong><span class="badge badge-primary">' . $display_total_percent . '%</span></strong></div>';
+                        echo '<div class="col-md-3"><strong>' . number_format($total_amount) . ' ' . esc_html($currency) . '</strong></div>';
+                        echo '<div class="col-md-2"></div>';
+                        echo '</div>';
+                        
+                        // Show validation message if not 100%
+                        if ($total_percent != 100) {
+                            if ($total_percent > 100) {
+                                echo '<div class="row" style="padding: 5px 10px;">';
+                                echo '<div class="col-12"><small class="text-danger"><i class="fa fa-exclamation-triangle"></i> ' . __('Cảnh báo: Tổng tỷ lệ vượt quá 100%!', 'qlcv') . '</small></div>';
+                                echo '</div>';
+                            } else {
+                                echo '<div class="row" style="padding: 5px 10px;">';
+                                echo '<div class="col-12"><small class="text-warning"><i class="fa fa-exclamation-triangle"></i> ' . __('Chưa phân chia hết 100%', 'qlcv') . '</small></div>';
+                                echo '</div>';
+                            }
+                        }
+                    }
+                    
                     echo '</div>';
                     echo '</div>';
                 }

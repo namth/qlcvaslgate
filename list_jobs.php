@@ -222,6 +222,11 @@ $current_user = wp_get_current_user();
                     'posts_per_page' => 20,
                 );
 
+                // Polylang: Hiển thị tất cả ngôn ngữ thay vì chỉ ngôn ngữ hiện tại
+                if (function_exists('pll_languages_list')) {
+                    $args['lang'] = '';  // Hiển thị tất cả ngôn ngữ
+                }
+
                 $nhom_cong_viec = get_field('nhom_cong_viec', 'user_' . $current_user->ID);
                 if (isset($type) && ($type != '') && ($type != 'tiem-nang')) {
                     if (is_array($nhom_cong_viec)) {

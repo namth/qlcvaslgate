@@ -105,6 +105,11 @@ if ( isset($_POST['post_nonce_field']) &&
                                     'posts_per_page'=> $post_per_page,
                                 );
 
+                                // Polylang: Hiển thị tất cả ngôn ngữ thay vì chỉ ngôn ngữ hiện tại
+                                if (function_exists('pll_languages_list')) {
+                                    $args['lang'] = '';  // Hiển thị tất cả ngôn ngữ
+                                }
+
                                 if ( isset($f_worked) && ($f_worked != '0') ){
                                     if ($f_worked == '1') {
                                         $args['tax_query'] = array(
