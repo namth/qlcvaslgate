@@ -47,21 +47,21 @@ if (
 
         # lấy tiền ở trong ví ra và lưu lại địa chỉ ví
         if ($finance_currency == "USD") {
-            $total_wallet = get_field('total_usd', 'option');
+            $total_wallet = floatval(get_field('total_usd', 'option'));
             $wallet = 'field_60bb2f7cf9156';
         } else {
-            $total_wallet = get_field('total_vnd', 'option');
+            $total_wallet = floatval(get_field('total_vnd', 'option'));
             $wallet = 'field_60bb2f98f9157';
         }
 
         # cập nhật số dư mới
         if ($finance_type == "Thu") {
             # tính tổng trong ví
-            $total_value = $total_wallet + $finance_value;
+            $total_value = floatval($total_wallet) + floatval($finance_value);
 
             # tính toán trong job đó
-            $job_paid       = get_field('paid', $finance_job) + $finance_value;
-            $job_remainning = get_field('remainning', $finance_job) - $finance_value;
+            $job_paid       = floatval(get_field('paid', $finance_job)) + floatval($finance_value);
+            $job_remainning = floatval(get_field('remainning', $finance_job)) - floatval($finance_value);
 
             # update 
             update_field('field_60a231d395f2e', $job_paid, $finance_job);
@@ -73,11 +73,11 @@ if (
             }
         } else if ($finance_type == "Chi") {
             # tính tổng trong ví
-            $total_value = $total_wallet - $finance_value;
+            $total_value = floatval($total_wallet) - floatval($finance_value);
 
             # tính toán trong job đó
-            $job_advance    = get_field('advance_money', $finance_job) + $finance_value;
-            $job_debt       = get_field('debt', $finance_job) - $finance_value;
+            $job_advance    = floatval(get_field('advance_money', $finance_job)) + floatval($finance_value);
+            $job_debt       = floatval(get_field('debt', $finance_job)) - floatval($finance_value);
 
             # update 
             update_field('field_60afaeb8cfd6a', $job_advance, $finance_job);
@@ -121,6 +121,15 @@ if (
 get_header();
 
 get_sidebar();
+
+// Lấy parameters từ GET
+$get_jobid = isset($_GET['jobid']) ? intval($_GET['jobid']) : '';
+$get_type = isset($_GET['type']) ? sanitize_text_field($_GET['type']) : '';
+
+// Validate type parameter
+if ($get_type && !in_array($get_type, ['Thu', 'Chi'])) {
+    $get_type = '';
+}
 
 if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
     # lấy dữ liệu bài viết
@@ -175,95 +184,166 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                         <div class="col-lg-3 form_title lh45"><?php _e('Phân loại', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-6 col-12 mb-20">
                             <div class="form-group">
-                                <label class="inline lh45">
-                                    <input type="radio" name="finance_type" value="Thu" checked><?php _e('Thu', 'qlcv'); ?></label>
-                                <label class="inline lh45">
-                                    <input type="radio" name="finance_type" value="Chi"><?php _e('Chi', 'qlcv'); ?></label>
+                                <?php if ($get_type): ?>
+                                    <!-- Type được cố định từ GET parameter -->
+                                    <input type="hidden" name="finance_type" value="<?php echo esc_attr($get_type); ?>">
+                                    <div class="form-control-static" style="padding: 10px; border: 1px solid #ddd; background-color: #f9f9f9;">
+                                        <strong><?php echo esc_html($get_type); ?></strong>
+                                        <small class="text-muted">(<?php _e('Được thiết lập tự động', 'qlcv'); ?>)</small>
+                                    </div>
+                                <?php else: ?>
+                                    <!-- Cho phép chọn type -->
+                                    <label class="inline lh45">
+                                        <input type="radio" name="finance_type" value="Thu" checked><?php _e('Thu', 'qlcv'); ?></label>
+                                    <label class="inline lh45">
+                                        <input type="radio" name="finance_type" value="Chi"><?php _e('Chi', 'qlcv'); ?></label>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="col-lg-3"></div>
 
                         <div class="col-lg-3 form_title lh45"><?php _e('Công việc', 'qlcv'); ?></div>
                         <div class="col-lg-6 col-12 mb-20">
-                            <select class="form-control select2-tags mb-20" name="finance_job">
-                                <?php
-                                if ($jobid) {
-                                    $email = get_field('email', $jobid);
+                            <?php if ($get_jobid): ?>
+                                <!-- Job được cố định từ GET parameter -->
+                                <input type="hidden" name="finance_job" value="<?php echo esc_attr($get_jobid); ?>">
+                                <div class="form-control-static" style="padding: 10px; border: 1px solid #ddd; background-color: #f9f9f9;">
+                                    <strong><?php echo esc_html(get_the_title($get_jobid)); ?></strong>
+                                    <?php 
+                                    $job_email = get_field('email', $get_jobid);
+                                    if ($job_email): ?>
+                                        <small class="text-muted"> (<?php echo esc_html($job_email); ?>)</small>
+                                    <?php endif; ?>
+                                    <br><small class="text-muted">(<?php _e('Được thiết lập tự động', 'qlcv'); ?>)</small>
+                                </div>
+                            <?php else: ?>
+                                <!-- Cho phép chọn job -->
+                                <select class="form-control select2-tags mb-20" name="finance_job">
+                                    <?php
+                                    if ($jobid) {
+                                        $email = get_field('email', $jobid);
 
-                                    echo "<option value='" . $jobid . "'>" . get_the_title($jobid);
-                                    if ($email) {
-                                        echo " (" . $email . ")";
-                                    }
-                                    echo "</option>";
-                                } else {
-                                    echo '<option value="">-- ' . __('Chọn công việc liên quan', 'qlcv') . ' --</option>';
-                                }
-
-                                $args   = array(
-                                    'post_type'     => 'job',
-                                );
-                                $query = new WP_Query($args);
-
-                                if ($query->have_posts()) {
-                                    while ($query->have_posts()) {
-                                        $query->the_post();
-
-                                        $cty = get_field('ten_cong_ty');
-                                        $email = get_field('email');
-
-                                        echo "<option value='" . get_the_ID() . "'>" . get_the_title();
+                                        echo "<option value='" . $jobid . "'>" . get_the_title($jobid);
                                         if ($email) {
                                             echo " (" . $email . ")";
                                         }
                                         echo "</option>";
+                                    } else {
+                                        echo '<option value="">-- ' . __('Chọn công việc liên quan', 'qlcv') . ' --</option>';
                                     }
-                                }
-                                ?>
-                            </select>
+
+                                    $args   = array(
+                                        'post_type'     => 'job',
+                                    );
+                                    $query = new WP_Query($args);
+
+                                    if ($query->have_posts()) {
+                                        while ($query->have_posts()) {
+                                            $query->the_post();
+
+                                            $cty = get_field('ten_cong_ty');
+                                            $email = get_field('email');
+
+                                            echo "<option value='" . get_the_ID() . "'>" . get_the_title();
+                                            if ($email) {
+                                                echo " (" . $email . ")";
+                                            }
+                                            echo "</option>";
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            <?php endif; ?>
                         </div>
                         <div class="col-lg-3"></div>
 
                         <div class="col-lg-3 form_title lh45"><?php _e('Người nhận phiếu', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-6 col-12 mb-20">
-                            <select class="form-control select2-tags mb-20" name="finance_user">
-                                <?php
-                                if ($jobid) {
-                                    $partner_1      = get_field('partner_1', $jobid);
-                                    $partner_2      = get_field('partner_2', $jobid);
-                                    $foreign_partner = get_field('foreign_partner', $jobid);
+                            <?php if ($get_jobid): ?>
+                                <!-- Cho phép chọn giữa các đối tác của job với partner_2 là mặc định -->
+                                <select class="form-control select2-tags mb-20" name="finance_user">
+                                    <?php 
+                                    $job_partner_1 = get_field('partner_1', $get_jobid);
+                                    $job_partner_2 = get_field('partner_2', $get_jobid);
+                                    $job_foreign_partner = get_field('foreign_partner', $get_jobid);
+                                    
+                                    // Lấy thông tin công ty cho từng đối tác
+                                    $company_1 = $job_partner_1 ? get_field('ten_cong_ty', 'user_' . $job_partner_1['ID']) : '';
+                                    $company_2 = $job_partner_2 ? get_field('ten_cong_ty', 'user_' . $job_partner_2['ID']) : '';
+                                    $company_foreign = $job_foreign_partner ? get_field('ten_cong_ty', 'user_' . $job_foreign_partner['ID']) : '';
+                                    
+                                    // Partner 1
+                                    if ($job_partner_1 && isset($job_partner_1['ID'])): ?>
+                                        <option value="<?php echo esc_attr($job_partner_1['ID']); ?>">
+                                            <?php echo esc_html($job_partner_1['display_name']); ?>
+                                            <?php if ($company_1): ?> (<?php echo esc_html($company_1); ?>)<?php endif; ?>
+                                            - <?php _e('Đối tác gửi việc', 'qlcv'); ?>
+                                        </option>
+                                    <?php endif;
+                                    
+                                    // Partner 2 (default selected)
+                                    if ($job_partner_2 && isset($job_partner_2['ID']) && $job_partner_2['ID'] != $job_partner_1['ID']): ?>
+                                        <option value="<?php echo esc_attr($job_partner_2['ID']); ?>" selected>
+                                            <?php echo esc_html($job_partner_2['display_name']); ?>
+                                            <?php if ($company_2): ?> (<?php echo esc_html($company_2); ?>)<?php endif; ?>
+                                            - <?php _e('Đối tác nhận việc', 'qlcv'); ?>
+                                        </option>
+                                    <?php endif;
+                                    
+                                    // Foreign Partner
+                                    if ($job_foreign_partner && isset($job_foreign_partner['ID'])): ?>
+                                        <option value="<?php echo esc_attr($job_foreign_partner['ID']); ?>">
+                                            <?php echo esc_html($job_foreign_partner['display_name']); ?>
+                                            <?php if ($company_foreign): ?> (<?php echo esc_html($company_foreign); ?>)<?php endif; ?>
+                                            - <?php _e('Đối tác nước ngoài', 'qlcv'); ?>
+                                        </option>
+                                    <?php endif; ?>
+                                    
+                                    <?php if (!$job_partner_1 && !$job_partner_2 && !$job_foreign_partner): ?>
+                                        <option value=""><?php _e('Không có đối tác nào được thiết lập', 'qlcv'); ?></option>
+                                    <?php endif; ?>
+                                </select>
+                            <?php else: ?>
+                                <!-- Form bình thường khi không có GET jobid -->
+                                <select class="form-control select2-tags mb-20" name="finance_user">
+                                    <?php
+                                    if ($jobid) {
+                                        $partner_1      = get_field('partner_1', $jobid);
+                                        $partner_2      = get_field('partner_2', $jobid);
+                                        $foreign_partner = get_field('foreign_partner', $jobid);
 
-                                    $cty_1  = get_field('ten_cong_ty', 'user_' . $partner_1['ID']);
-                                    $cty_2  = get_field('ten_cong_ty', 'user_' . $partner_2['ID']);
-                                    $cty_nn = get_field('ten_cong_ty', 'user_' . $foreign_partner['ID']);
+                                        $cty_1  = get_field('ten_cong_ty', 'user_' . $partner_1['ID']);
+                                        $cty_2  = get_field('ten_cong_ty', 'user_' . $partner_2['ID']);
+                                        $cty_nn = get_field('ten_cong_ty', 'user_' . $foreign_partner['ID']);
 
-                                    if ($partner_1["ID"]) {
-                                        echo "<option value='" . $partner_1['ID'] . "'>" . $partner_1['display_name'] . " (" . $cty_1 . ")</option>";
-                                    }
-                                    if ($partner_2["ID"] && ($partner_1["ID"] != $partner_2["ID"])) {
-                                        echo "<option value='" . $partner_2['ID'] . "'>" . $partner_2['display_name'] . " (" . $cty_2 . ")</option>";
-                                    }
-                                    if ($foreign_partner["ID"]) {
-                                        echo "<option value='" . $foreign_partner['ID'] . "'>" . $foreign_partner['display_name'] . " (" . $cty_nn . ")</option>";
-                                    }
-                                } else {
-                                    echo "<option value='" . $current_user->ID . "'>-- Chọn người nhận phiếu --</option>";
+                                        if ($partner_1["ID"]) {
+                                            echo "<option value='" . $partner_1['ID'] . "'>" . $partner_1['display_name'] . " (" . $cty_1 . ") - " . __('Đối tác gửi việc', 'qlcv') . "</option>";
+                                        }
+                                        if ($partner_2["ID"] && ($partner_1["ID"] != $partner_2["ID"])) {
+                                            echo "<option value='" . $partner_2['ID'] . "' selected>" . $partner_2['display_name'] . " (" . $cty_2 . ") - " . __('Đối tác nhận việc', 'qlcv') . "</option>";
+                                        }
+                                        if ($foreign_partner["ID"]) {
+                                            echo "<option value='" . $foreign_partner['ID'] . "'>" . $foreign_partner['display_name'] . " (" . $cty_nn . ") - " . __('Đối tác nước ngoài', 'qlcv') . "</option>";
+                                        }
+                                    } else {
+                                        echo "<option value='" . $current_user->ID . "'>-- Chọn người nhận phiếu --</option>";
 
-                                    $query = get_users(
-                                        array(
-                                            'role__in' => array('partner', 'foreign_partner', 'subscriber'),
-                                        )
-                                    );
+                                        $query = get_users(
+                                            array(
+                                                'role__in' => array('partner', 'foreign_partner', 'subscriber'),
+                                            )
+                                        );
 
-                                    if ($query) {
-                                        foreach ($query as $user) {
-                                            $ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $user->ID);
-                                            echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $ten_cong_ty . ")</option>";
+                                        if ($query) {
+                                            foreach ($query as $user) {
+                                                $ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $user->ID);
+                                                echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $ten_cong_ty . ")</option>";
+                                            }
                                         }
                                     }
-                                }
-                                ?>
-                            </select>
-
+                                    ?>
+                                </select>
+                            <?php endif; ?>
                         </div>
                         <div class="col-lg-3"></div>
 

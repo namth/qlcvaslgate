@@ -975,6 +975,9 @@ function export_mysql_job($paged) {
             $partner_code   = get_field('partner_code' , 'user_' . $partner_2['ID']);
             $ten_cong_ty    = get_field('ten_cong_ty' , 'user_' . $partner_2['ID']);
             $city           = get_field('city' , 'user_' . $partner_2['ID']);
+            $mst            = get_field('mst' , 'user_' . $partner_2['ID']);
+            $nguoi_dai_dien_phap_luat = get_field('nguoi_dai_dien_phap_luat' , 'user_' . $partner_2['ID']);
+            $chuc_vu        = get_field('chuc_vu' , 'user_' . $partner_2['ID']);
 
             $jobdoc = [
                 'jobid'     => $jobID,
@@ -995,7 +998,10 @@ function export_mysql_job($paged) {
                 'partner_phone' => $so_dien_thoai,
                 'partner_email' => $partner_2['user_email'],
                 'partner_email_cc' => $email_cc,
-                'partner_email_bcc' => $email_bcc
+                'partner_email_bcc' => $email_bcc,
+                'partner_tax_number' => $mst,
+                'partner_legal_representative' => $nguoi_dai_dien_phap_luat,
+                'partner_position' => $chuc_vu
             ];
 
             $wpdb->insert(

@@ -191,21 +191,14 @@ if ( isset($_POST['post_nonce_field']) &&
                                                     $customer = get_field('customer');
                                                     $partner_2 = get_field('partner_2');
                                                     // print_r($customer);
-                                                    $total_value    = get_field('total_value');
-                                                    $remainning     = get_field('remainning');
-                                                    $paid           = get_field('paid');
+                                                    $total_value    = intval(get_field('total_value'));
+                                                    $remainning     = intval(get_field('remainning'));
+                                                    $paid           = intval(get_field('paid'));
                                                     $currency       = get_field('currency');
-                                                    $total_cost     = get_field('total_cost');
-                                                    $debt           = get_field('debt');
+                                                    $total_cost     = intval(get_field('total_cost'));
+                                                    $debt           = intval(get_field('debt'));
                                                     $currency_out   = get_field('currency_out');
-                                                    $advance_money  = get_field('advance_money');
-
-                                                    $money['Thu'][$currency]        += $total_value;
-                                                    $money['Đã thu'][$currency]     += $paid;
-                                                    $money['Cần thu'][$currency]    += $remainning;
-                                                    $money['Chi'][$currency_out]    += $total_cost;
-                                                    $money['Đã chi'][$currency_out] += $advance_money;
-                                                    $money['Cần chi'][$currency_out]+= $debt;
+                                                    $advance_money  = intval(get_field('advance_money'));
 
                                                     echo "<tr>";
                                                     echo "<td>" . $our_ref . "</td>";
@@ -253,34 +246,6 @@ if ( isset($_POST['post_nonce_field']) &&
                                             'total'     => $query->max_num_pages,
                                             'type'      => 'list',
                                         ) );
-                                    ?>
-                                </div>
-                                <div>
-                                    <?php 
-                                        if ($post_per_page = 200) {
-                                            echo "<h3>Tổng kết</h3>";
-                                            // print_r($money);
-                                            $money["Đã thu - đã chi"]['USD'] = $money["Đã thu"]["USD"] - $money["Đã chi"]["USD"];
-                                            $money["Đã thu - đã chi"]['VND'] = $money["Đã thu"]["VND"] - $money["Đã chi"]["VND"];
-
-                                            echo "<table class='table'>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td><b>USD</b></td>
-                                                        <td><b>VND</b></td>
-                                                    </tr>";
-
-                                            foreach ($money as $key => $value) {
-                                                echo "<tr>";
-                                                echo "<td><b>" . $key . ": </b></td>";
-
-                                                foreach ($value as $currency => $cash) {
-                                                    echo "<td>" . $cash . "</td>";
-                                                }
-                                                echo "</tr>";
-                                            }
-                                            echo "</table>";
-                                        }
                                     ?>
                                 </div>
                             </div>

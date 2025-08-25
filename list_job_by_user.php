@@ -107,13 +107,32 @@ if ( isset($_POST['post_nonce_field']) &&
 
 
                 <?php
+                // Xử lý pagination cho partners
+                $partners_per_page = 10;
+                $current_page = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
+                
                 if (isset($_POST['partner']) && ($_POST['partner'] != "")) {
                     $partner_list = array($_POST['partner']);
                     $detail = true;
+                    $total_partners = 1;
+                } else {
+                    // Tính tổng số partners và phân trang
+                    $total_partners = count($partner_list);
+                    $offset = ($current_page - 1) * $partners_per_page;
+                    $partner_list = array_slice($partner_list, $offset, $partners_per_page);
                 }
                 ?>
 
                 <div class="row justify-content-between">
+                    <?php if (!isset($_POST['partner']) || empty($_POST['partner'])) : ?>
+                        <div class="col-12 mb-3">
+                            <div class="alert alert-info">
+                                <i class="fa fa-info-circle"></i>
+                                <?php printf(__('Hiển thị %d đối tác mỗi trang. Chọn đối tác cụ thể để xem báo cáo chi tiết.', 'qlcv'), $partners_per_page); ?>
+                                <strong><?php printf(__('Tổng cộng: %d đối tác', 'qlcv'), $total_partners); ?></strong>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                     <div class="col-lg-auto mb-10">
                         <h3>Thống kê <?php 
                         echo get_field('ten_cong_ty', 'user_' . $_POST['partner']) . " ";
@@ -141,11 +160,12 @@ if ( isset($_POST['post_nonce_field']) &&
                             <tbody>
                                 <?php
                                 $current_user = wp_get_current_user();
-                                $total_value = array();
 
                                 $args   = array(
                                     'post_type'     => 'job',
-                                    'posts_per_page' => -1,
+                                    'posts_per_page' => 500, // Giới hạn số posts thay vì -1
+                                    'fields'        => 'ids', // Chỉ lấy ID để giảm memory
+                                    'no_found_rows' => true,  // Tắt pagination count để tăng tốc
                                 );
                                 
                                 // Polylang: Hiển thị tất cả ngôn ngữ thay vì chỉ ngôn ngữ hiện tại
@@ -155,11 +175,20 @@ if ( isset($_POST['post_nonce_field']) &&
                                 $i = 0;
 
                                 foreach ($partner_list as $partner_1) {
+                                    // Kiểm tra memory usage để tránh exhausted
+                                    if (memory_get_usage() > 200 * 1024 * 1024) { // 200MB limit
+                                        echo "<tr><td colspan='8' class='text-warning'>";
+                                        echo "<i class='fa fa-exclamation-triangle'></i> ";
+                                        echo __('Dữ liệu quá lớn, vui lòng thu hẹp bộ lọc hoặc chọn đối tác cụ thể', 'qlcv');
+                                        echo "</td></tr>";
+                                        break;
+                                    }
 
                                     $i++;
                                     $partner_code = get_field('partner_code', 'user_' . $partner_1);
                                     $partner_name = get_field('ten_cong_ty', 'user_' . $partner_1);
                                     $partner_value = array();
+                                    $detail_job = array();
                                     $total_job = 0;
 
                                     $args['meta_query'] = array(
@@ -222,31 +251,37 @@ if ( isset($_POST['post_nonce_field']) &&
                                     $partner_value = array();
 
                                     if ($query->have_posts()) {
-                                        while ($query->have_posts()) {
-                                            $query->the_post();
-
-                                            $currency = get_field('currency');
+                                        $posts = $query->get_posts();
+                                        
+                                        foreach ($posts as $post_id) {
+                                            // Lấy trực tiếp từ post ID thay vì setup post data
+                                            $currency = get_field('currency', $post_id);
                                             if ($currency) {
-                                                // $temp = get_field('total_value');
-                                                $total          = get_field('total_value');
-                                                $remainning     = get_field('remainning');
-                                                $paid           = get_field('paid');
-                                                $currency       = get_field('currency');
+                                                $total = intval(get_field('total_value', $post_id));
+                                                $remainning = intval(get_field('remainning', $post_id));
+                                                $paid = intval(get_field('paid', $post_id));
 
                                                 if ($total) {
+                                                    // Initialize arrays if they don't exist
+                                                    if (!isset($partner_value['Tổng thu'][$currency])) {
+                                                        $partner_value['Tổng thu'][$currency] = 0;
+                                                    }
+                                                    if (!isset($partner_value['Đã thu'][$currency])) {
+                                                        $partner_value['Đã thu'][$currency] = 0;
+                                                    }
+                                                    if (!isset($partner_value['Cần thu'][$currency])) {
+                                                        $partner_value['Cần thu'][$currency] = 0;
+                                                    }
+                                                    
                                                     $partner_value['Tổng thu'][$currency] += $total;
                                                     $partner_value['Đã thu'][$currency] += $paid;
                                                     $partner_value['Cần thu'][$currency] += $remainning;
-                                                    // $total_value[$currency] += $temp;
-                                                    $money['Thu'][$currency]        += $total;
-                                                    $money['Đã thu'][$currency]     += $paid;
-                                                    $money['Cần thu'][$currency]    += $remainning;
-                                                    $detail_job[] = get_the_title() . " (" . ($temp) . " " . $currency . ")";
+                                                    $detail_job[] = get_the_title($post_id) . " (" . $total . " " . $currency . ")";
                                                 }
                                             }
                                             $total_job++;
                                         }
-                                        wp_reset_postdata();
+                                        // Không cần wp_reset_postdata() vì không dùng the_post()
                                     }
 
                                     if ($total_job) {
@@ -279,39 +314,85 @@ if ( isset($_POST['post_nonce_field']) &&
                                 ?>
                             </tbody>
                         </table>
-                        <h4><?php _e('Tổng', 'qlcv'); ?></h4>
-                        <?php 
-                            echo "<table class='table'>
-                                    <tr>
-                                        <td></td>
-                                        <td><b>USD</b></td>
-                                        <td><b>VND</b></td>
-                                    </tr>";
-
-                            foreach ($money as $key => $value) {
-                                echo "<tr>";
-                                echo "<td><b>" . $key . ": </b></td>";
-
-                                foreach ($value as $currency => $cash) {
-                                    echo "<td>" . $cash . "</td>";
-                                }
-                                echo "</tr>";
-                            }
-                            echo "</table>";
-                        ?>
                     </div>
                     <div class="col-12">
                         <div class="pagination justify-content-center">
                             <?php
-                            $big = 999999999; // need an unlikely integer
-
-                            echo paginate_links(array(
-                                'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-                                'format'    => '?paged=%#%',
-                                'current'   => max(1, get_query_var('paged')),
-                                'total'     => $query->max_num_pages,
-                                'type'      => 'list',
-                            ));
+                            if (!isset($_POST['partner']) || empty($_POST['partner'])) {
+                                // Chỉ hiển thị pagination khi không filter partner cụ thể
+                                $total_pages = ceil($total_partners / $partners_per_page);
+                                
+                                if ($total_pages > 1) {
+                                    // Tạo base URL với các filter hiện tại
+                                    $current_url = $_SERVER['REQUEST_URI'];
+                                    $url_parts = parse_url($current_url);
+                                    $base_url = $url_parts['path'];
+                                    
+                                    // Giữ lại các GET parameters hiện có (trừ paged)
+                                    $query_params = array();
+                                    if (isset($url_parts['query'])) {
+                                        parse_str($url_parts['query'], $query_params);
+                                        unset($query_params['paged']);
+                                    }
+                                    
+                                    $base_url .= !empty($query_params) ? '?' . http_build_query($query_params) : '';
+                                    $separator = empty($query_params) ? '?' : '&';
+                                    
+                                    echo '<nav aria-label="Partners pagination">';
+                                    echo '<ul class="pagination">';
+                                    
+                                    // Previous button
+                                    if ($current_page > 1) {
+                                        echo '<li class="page-item"><a class="page-link" href="' . $base_url . $separator . 'paged=' . ($current_page - 1) . '">';
+                                        echo '<i class="fa fa-chevron-left"></i> ' . __('Trước', 'qlcv') . '</a></li>';
+                                    }
+                                    
+                                    // Page numbers
+                                    $start_page = max(1, $current_page - 2);
+                                    $end_page = min($total_pages, $current_page + 2);
+                                    
+                                    if ($start_page > 1) {
+                                        echo '<li class="page-item"><a class="page-link" href="' . $base_url . $separator . 'paged=1">1</a></li>';
+                                        if ($start_page > 2) {
+                                            echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                        }
+                                    }
+                                    
+                                    for ($p = $start_page; $p <= $end_page; $p++) {
+                                        $active_class = ($p == $current_page) ? ' active' : '';
+                                        echo '<li class="page-item' . $active_class . '">';
+                                        if ($p == $current_page) {
+                                            echo '<span class="page-link">' . $p . '</span>';
+                                        } else {
+                                            echo '<a class="page-link" href="' . $base_url . $separator . 'paged=' . $p . '">' . $p . '</a>';
+                                        }
+                                        echo '</li>';
+                                    }
+                                    
+                                    if ($end_page < $total_pages) {
+                                        if ($end_page < $total_pages - 1) {
+                                            echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                        }
+                                        echo '<li class="page-item"><a class="page-link" href="' . $base_url . $separator . 'paged=' . $total_pages . '">' . $total_pages . '</a></li>';
+                                    }
+                                    
+                                    // Next button
+                                    if ($current_page < $total_pages) {
+                                        echo '<li class="page-item"><a class="page-link" href="' . $base_url . $separator . 'paged=' . ($current_page + 1) . '">';
+                                        echo __('Sau', 'qlcv') . ' <i class="fa fa-chevron-right"></i></a></li>';
+                                    }
+                                    
+                                    echo '</ul>';
+                                    echo '</nav>';
+                                    
+                                    // Hiển thị thông tin trang
+                                    $start_item = ($current_page - 1) * $partners_per_page + 1;
+                                    $end_item = min($current_page * $partners_per_page, $total_partners);
+                                    echo '<div class="pagination-info text-center mt-3">';
+                                    echo sprintf(__('Hiển thị %d-%d trong tổng số %d đối tác', 'qlcv'), $start_item, $end_item, $total_partners);
+                                    echo '</div>';
+                                }
+                            }
                             ?>
                         </div>
                     </div>

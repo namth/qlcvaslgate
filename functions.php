@@ -768,7 +768,10 @@ function add_new_job()
                     'partner_phone'         => get_field('so_dien_thoai', 'user_' . $data_partner),
                     'partner_email'         => $partner->user_email,
                     'partner_email_cc'      => get_field('email_cc', 'user_' . $data_partner),
-                    'partner_email_bcc'     => get_field('email_bcc', 'user_' . $data_partner)
+                    'partner_email_bcc'     => get_field('email_bcc', 'user_' . $data_partner),
+                    'partner_tax_number'    => get_field('mst', 'user_' . $data_partner),
+                    'partner_legal_representative' => get_field('nguoi_dai_dien_phap_luat', 'user_' . $data_partner),
+                    'partner_position'      => get_field('chuc_vu', 'user_' . $data_partner)
                 )
             );
             
@@ -1644,6 +1647,9 @@ function CreateDatabaseQlcv()
         `partner_email` varchar(255) NULL,
         `partner_email_cc` varchar(255) NULL,
         `partner_email_bcc` varchar(255) NULL,
+        `partner_tax_number` varchar(255) NULL,
+        `partner_legal_representative` varchar(255) NULL,
+        `partner_position` varchar(255) NULL,
         PRIMARY KEY (`jobid`)
     ) {$charsetCollate};";
     dbDelta($createAslTable);
@@ -1669,6 +1675,155 @@ function CreateDatabaseQlcv()
 
 }
 add_action('after_switch_theme', 'CreateDatabaseQlcv');
+
+// Add migration for partner fields in job document table
+function migrate_partner_fields_to_job_document() {
+    global $wpdb;
+    
+    $table_name = 'wp_asljobtodocument';
+    
+    // Check if the new columns exist
+    $columns = $wpdb->get_results("DESCRIBE {$table_name}");
+    $column_names = array_column($columns, 'Field');
+    
+    // Add partner_tax_number column if it doesn't exist
+    if (!in_array('partner_tax_number', $column_names)) {
+        $wpdb->query("ALTER TABLE `{$table_name}` ADD COLUMN `partner_tax_number` varchar(255) NULL AFTER `partner_email_bcc`");
+    }
+    
+    // Add partner_legal_representative column if it doesn't exist
+    if (!in_array('partner_legal_representative', $column_names)) {
+        $wpdb->query("ALTER TABLE `{$table_name}` ADD COLUMN `partner_legal_representative` varchar(255) NULL AFTER `partner_tax_number`");
+    }
+    
+    // Add partner_position column if it doesn't exist
+    if (!in_array('partner_position', $column_names)) {
+        $wpdb->query("ALTER TABLE `{$table_name}` ADD COLUMN `partner_position` varchar(255) NULL AFTER `partner_legal_representative`");
+    }
+}
+add_action('after_switch_theme', 'migrate_partner_fields_to_job_document');
+
+// Export single member to wp_aslmember table
+function export_single_member_to_table($user_id) {
+    global $wpdb;
+    
+    $user = get_user_by('ID', $user_id);
+    if (!$user) {
+        return false;
+    }
+    
+    // Check if user has member-related roles
+    $member_roles = ['contributor', 'administrator', 'member', 'law_manager', 'ip_manager'];
+    $has_member_role = false;
+    foreach ($member_roles as $role) {
+        if (in_array($role, $user->roles)) {
+            $has_member_role = true;
+            break;
+        }
+    }
+    
+    if (!$has_member_role) {
+        return false;
+    }
+    
+    $aslTable = 'wp_aslmember';
+    
+    // Get user custom fields
+    $so_dien_thoai  = get_field('so_dien_thoai', 'user_' . $user->ID);
+    $dia_chi        = get_field('dia_chi', 'user_' . $user->ID);
+    $chi_nhanh      = get_field('chi_nhanh', 'user_' . $user->ID);
+    $nhom_cong_viec = get_field('nhom_cong_viec', 'user_' . $user->ID);
+    
+    $work_group = array();
+    $brand = array();
+
+    // Process work groups
+    if ($nhom_cong_viec && is_array($nhom_cong_viec)) {
+        foreach ($nhom_cong_viec as $id_cong_viec) {
+            $term = get_term($id_cong_viec);
+            if ($term && !is_wp_error($term)) {
+                $work_group[] = $term->slug;
+            }
+        }
+    }
+
+    // Process agencies
+    if ($chi_nhanh && is_array($chi_nhanh)) {
+        foreach ($chi_nhanh as $id_chi_nhanh) {
+            $term = get_term($id_chi_nhanh);
+            if ($term && !is_wp_error($term)) {
+                $brand[] = $term->slug;
+            }
+        }
+    }
+
+    // Set work group flags
+    $group_trademark = in_array('nhan-hieu', $work_group) ? 1 : 0;
+    $group_patent = in_array('sang-che', $work_group) ? 1 : 0;
+    $group_design = in_array('kieu-dang', $work_group) ? 1 : 0;
+    $group_franchise = in_array('franchise', $work_group) ? 1 : 0;
+    $group_copyright = in_array('ban-quyen', $work_group) ? 1 : 0;
+    $group_others = in_array('viec-khac', $work_group) ? 1 : 0;
+    $group_potential = in_array('tiem-nang', $work_group) ? 1 : 0;
+
+    // Set agency flags
+    $agency_hn = in_array('ha-noi', $brand) ? 1 : 0;
+    $agency_hcm = in_array('ho-chi-minh', $brand) ? 1 : 0;
+
+    // Set role flags
+    $role_admin = in_array('administrator', $user->roles) ? 1 : 0;
+    $role_manager = in_array('contributor', $user->roles) ? 1 : 0;
+    $role_member = in_array('member', $user->roles) ? 1 : 0;
+    $role_law_manager = in_array('law_manager', $user->roles) ? 1 : 0;
+    $role_ip_manager = in_array('ip_manager', $user->roles) ? 1 : 0;
+
+    // Prepare data array
+    $member_data = array(
+        'memberid'          => $user->ID,
+        'name'              => $user->display_name,
+        'address'           => $dia_chi ?: '',
+        'phone'             => $so_dien_thoai ?: '',
+        'email'             => $user->user_email,
+        'date'              => $user->user_registered,
+        'agency_hn'         => $agency_hn,
+        'agency_hcm'        => $agency_hcm,
+        'group_trademark'   => $group_trademark,
+        'group_patent'      => $group_patent,
+        'group_design'      => $group_design,
+        'group_franchise'   => $group_franchise,
+        'group_copyright'   => $group_copyright,
+        'group_others'      => $group_others,
+        'group_potential'   => $group_potential,
+        'role_admin'        => $role_admin,
+        'role_manager'      => $role_manager,
+        'role_member'       => $role_member,
+        'role_law_manager'  => $role_law_manager,
+        'role_ip_manager'   => $role_ip_manager,
+    );
+
+    // Check if member already exists
+    $existing = $wpdb->get_row($wpdb->prepare(
+        "SELECT * FROM {$aslTable} WHERE memberid = %d",
+        $user->ID
+    ));
+
+    if ($existing) {
+        // Update existing record
+        $result = $wpdb->update(
+            $aslTable,
+            $member_data,
+            array('memberid' => $user->ID)
+        );
+    } else {
+        // Insert new record
+        $result = $wpdb->insert(
+            $aslTable,
+            $member_data
+        );
+    }
+
+    return $result !== false;
+}
 
 
 add_action('wp_ajax_remove_attachment', 'remove_attachment');

@@ -614,6 +614,175 @@ while (have_posts()) {
                     echo '</div>';
                 }
                 
+                // Finance records section
+                echo '<div class="box" style="margin-top:20px;">';
+                echo '<div class="box-head">';
+                echo '<div class="row justify-content-between">';
+                echo '<div class="col-lg-auto">';
+                echo '<h4 class="title">' . __('Danh sách phiếu thu chi', 'qlcv') . '</h4>';
+                echo '</div>';
+                echo '</div>';
+                echo '</div>';
+                echo '<div class="box-body">';
+                
+                // Query finance records for this job
+                $finance_args = array(
+                    'post_type'     => 'finance',
+                    'posts_per_page' => -1,
+                    'meta_query'    => array(
+                        array(
+                            'key'       => 'finance_job',
+                            'value'     => get_the_ID(),
+                            'compare'   => '='
+                        )
+                    ),
+                    'orderby'       => 'date',
+                    'order'         => 'DESC'
+                );
+                
+                // Polylang: Hiển thị tất cả ngôn ngữ
+                if (function_exists('pll_languages_list')) {
+                    $finance_args['lang'] = '';
+                }
+                
+                $finance_query = new WP_Query($finance_args);
+                
+                if ($finance_query->have_posts()) {
+                    echo '<div class="table-responsive">';
+                    echo '<table class="table table-striped">';
+                    echo '<thead>';
+                    echo '<tr>';
+                    echo '<th>' . __('Ngày', 'qlcv') . '</th>';
+                    echo '<th>' . __('Loại', 'qlcv') . '</th>';
+                    echo '<th>' . __('Người nhận', 'qlcv') . '</th>';
+                    echo '<th>' . __('Số tiền', 'qlcv') . '</th>';
+                    echo '<th>' . __('Lý do', 'qlcv') . '</th>';
+                    echo '<th>' . __('Hành động', 'qlcv') . '</th>';
+                    echo '</tr>';
+                    echo '</thead>';
+                    echo '<tbody>';
+                    
+                    while ($finance_query->have_posts()) {
+                        $finance_query->the_post();
+                        
+                        $finance_date = get_field('finance_date');
+                        $finance_type = get_field('finance_type');
+                        $finance_user = get_field('finance_user');
+                        $finance_value = get_field('finance_value');
+                        $finance_currency = get_field('finance_currency');
+                        
+                        // Format date
+                        if ($finance_date) {
+                            $date_formatted = DateTime::createFromFormat('Ymd', $finance_date);
+                            $display_date = $date_formatted ? $date_formatted->format('d/m/Y') : $finance_date;
+                        } else {
+                            $display_date = get_the_date('d/m/Y');
+                        }
+                        
+                        // Get user info
+                        $user_name = $finance_user ? $finance_user['display_name'] : __('Không xác định', 'qlcv');
+                        $user_company = $finance_user ? get_field('ten_cong_ty', 'user_' . $finance_user['ID']) : '';
+                        
+                        // Type styling
+                        $type_class = ($finance_type == 'Thu') ? 'badge-success' : 'badge-danger';
+                        
+                        echo '<tr>';
+                        echo '<td>' . esc_html($display_date) . '</td>';
+                        echo '<td><span class="badge ' . $type_class . '">' . esc_html(__($finance_type, 'qlcv')) . '</span></td>';
+                        echo '<td style="display: flex;flex-direction: column;">';
+                        echo '<strong>' . esc_html($user_name) . '</strong>';
+                        if ($user_company) {
+                            echo '<small class="text-muted">' . esc_html($user_company) . '</small>';
+                        }
+                        echo '</td>';
+                        echo '<td>';
+                        if ($finance_value && $finance_currency) {
+                            echo '<strong>' . number_format($finance_value) . ' ' . esc_html($finance_currency) . '</strong>';
+                        }
+                        echo '</td>';
+                        echo '<td>' . esc_html(get_the_title()) . '</td>';
+                        echo '<td>';
+                        echo '<a href="' . get_permalink() . '" class="button button-xs button-primary" data-tippy-content="' . __('Xem chi tiết', 'qlcv') . '">';
+                        echo '<i class="fa fa-eye"></i>';
+                        echo '</a>';
+                        echo '</td>';
+                        echo '</tr>';
+                    }
+                    
+                    echo '</tbody>';
+                    echo '</table>';
+                    echo '</div>';
+                    
+                    // Summary section
+                    wp_reset_postdata();
+                    
+                    // Calculate totals
+                    $total_income = 0;
+                    $total_expense = 0;
+                    $currencies = array();
+                    
+                    $finance_query->rewind_posts();
+                    while ($finance_query->have_posts()) {
+                        $finance_query->the_post();
+                        
+                        $finance_type = get_field('finance_type');
+                        $finance_value = floatval(get_field('finance_value'));
+                        $finance_currency = get_field('finance_currency');
+                        
+                        if ($finance_value && $finance_currency) {
+                            if (!isset($currencies[$finance_currency])) {
+                                $currencies[$finance_currency] = array('thu' => 0, 'chi' => 0);
+                            }
+                            
+                            if ($finance_type == 'Thu') {
+                                $currencies[$finance_currency]['thu'] += $finance_value;
+                            } else {
+                                $currencies[$finance_currency]['chi'] += $finance_value;
+                            }
+                        }
+                    }
+                    
+                    // Display summary
+                    if (!empty($currencies)) {
+                        echo '<hr>';
+                        echo '<div class="row">';
+                        echo '<div class="col-12">';
+                        echo '<h5>' . __('Tổng kết:', 'qlcv') . '</h5>';
+                        
+                        foreach ($currencies as $currency => $amounts) {
+                            $balance = $amounts['thu'] - $amounts['chi'];
+                            $balance_class = $balance >= 0 ? 'text-primary' : 'text-danger';
+                            
+                            echo '<div class="row mb-2">';
+                            echo '<div class="col-md-3"><strong>' . esc_html($currency) . ':</strong></div>';
+                            echo '<div class="col-md-3">';
+                            echo '<span class="text-primary">' . __('Thu:', 'qlcv') . ' ' . number_format($amounts['thu']) . '</span>';
+                            echo '</div>';
+                            echo '<div class="col-md-3">';
+                            echo '<span class="text-danger">' . __('Chi:', 'qlcv') . ' ' . number_format($amounts['chi']) . '</span>';
+                            echo '</div>';
+                            echo '<div class="col-md-3">';
+                            echo '<span class="' . $balance_class . '">' . __('Tổng:', 'qlcv') . ' ' . number_format($balance) . '</span>';
+                            echo '</div>';
+                            echo '</div>';
+                        }
+                        
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                    
+                    wp_reset_postdata();
+                } else {
+                    echo '<div class="text-center py-4">';
+                    echo '<i class="fa fa-info-circle text-muted" style="font-size: 48px;"></i>';
+                    echo '<h5 class="text-muted mt-3">' . __('Chưa có phiếu thu chi nào', 'qlcv') . '</h5>';
+                    echo '<p class="text-muted">' . __('Bấm vào nút "Thu" hoặc "Chi" để tạo phiếu mới', 'qlcv') . '</p>';
+                    echo '</div>';
+                }
+                
+                echo '</div>';
+                echo '</div>';
+                
                 // Commission display section
                 global $wpdb;
                 $commissions = $wpdb->get_results($wpdb->prepare(

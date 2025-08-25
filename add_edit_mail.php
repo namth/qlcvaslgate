@@ -122,6 +122,9 @@ get_sidebar();
                     <li><span>{partner_email}</span> <span><?php _e('Email đối tác', 'qlcv'); ?></span></li>
                     <li><span>{partner_name}</span> <span><?php _e('Tên người liên hệ', 'qlcv'); ?></span></li>
                     <li><span>{partner_ref}</span> <span><?php _e('Số REF của đối tác', 'qlcv'); ?></span></li>
+                    <li><span>{partner_tax_number}</span> <span><?php _e('Mã số thuế đối tác', 'qlcv'); ?></span></li>
+                    <li><span>{partner_legal_representative}</span> <span><?php _e('Người đại diện pháp luật', 'qlcv'); ?></span></li>
+                    <li><span>{partner_position}</span> <span><?php _e('Chức vụ', 'qlcv'); ?></span></li>
                     <li><span>{our_ref}</span> <span><?php _e('Số REF của mình', 'qlcv'); ?></span></li>
                     <li><span>{customer_name}</span> <span><?php _e('Tên khách hàng', 'qlcv'); ?></span></li>
                     <li><span>{customer_address}</span> <span><?php _e('Địa chỉ khách hàng', 'qlcv'); ?></span></li>
