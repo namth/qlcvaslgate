@@ -224,7 +224,7 @@ $logo = get_field('logo', 'option');
 
                                     <!--Language Switcher-->
                                     <?php
-                                    if (in_array('administrator', $current_user->roles)) {
+                                    // if (in_array('administrator', $current_user->roles)) {
                                         if (function_exists('pll_the_languages')) {
                                             $languages = pll_the_languages(array(
                                                 'dropdown' => 0,
@@ -235,7 +235,7 @@ $logo = get_field('logo', 'option');
                                             ));
                                             echo $languages;
                                         }
-                                    }
+                                    // }
                                     ?>
                                     
                                     <!--User-->

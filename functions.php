@@ -1389,7 +1389,8 @@ function show_pagination($current_page, $total_page){
         # hiển thị nút trang trước
         if ($current_page != 1) {
             $previous_page = $current_page - 1;
-            $temp = '<li><a class="prev page-numbers" href="#" data-page="' . $previous_page . '">« Trang trước</a></li>' . $temp;
+            $prev_text = __('« Trang trước', 'qlcv');
+            $temp = '<li><a class="prev page-numbers" href="#" data-page="' . $previous_page . '">' . $prev_text . '</a></li>' . $temp;
         }
 
         # tính toán hiện số trang sau trang hiện tại
@@ -1408,7 +1409,8 @@ function show_pagination($current_page, $total_page){
         # hiển thị nút trang sau
         if ($current_page != $total_page) {
             $next_page = $current_page + 1;
-            $temp .= '<li><a href="#" class="next page-numbers" data-page="' . $next_page . '">Trang sau »</a></li>';
+            $next_text = __('Trang sau »', 'qlcv');
+            $temp .= '<li><a href="#" class="next page-numbers" data-page="' . $next_page . '">' . $next_text . '</a></li>';
         }
             
         $pagination .= $temp . '</ul>';

@@ -35,6 +35,11 @@ function ajax_filter_jobs()
         'posts_per_page' => 20,
     );
 
+    // Polylang: Hiển thị tất cả ngôn ngữ thay vì chỉ ngôn ngữ hiện tại
+    if (function_exists('pll_languages_list')) {
+        $args['lang'] = '';  // Hiển thị tất cả ngôn ngữ
+    }
+
     $nhom_cong_viec = get_field('nhom_cong_viec', 'user_' . $current_user->ID);
     if (isset($type) && ($type != '') && ($type != 'tiem-nang')) {
         if (is_array($nhom_cong_viec)) {
@@ -431,6 +436,11 @@ function ajax_filter_tasks()
                     'paged'         => $paged,
                     'posts_per_page' => $post_per_page,
                 );
+                
+                // Polylang: Hiển thị tất cả ngôn ngữ thay vì chỉ ngôn ngữ hiện tại
+                if (function_exists('pll_languages_list')) {
+                    $args['lang'] = '';  // Hiển thị tất cả ngôn ngữ
+                }
                 if ($member) {
                     $args['meta_query'][] = array(
                         'relation' => 'OR',

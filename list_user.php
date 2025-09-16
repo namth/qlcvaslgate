@@ -204,6 +204,15 @@ $current_user = wp_get_current_user();
                         <div class="pagination justify-content-center">
                             <?php
                             $big = 999999999; // need an unlikely integer
+                            
+                            // Get current URL for Polylang compatibility
+                            $current_url = get_pagenum_link(1);
+                            $current_url = remove_query_arg('paged', $current_url);
+                            
+                            // Add role parameter if exists
+                            if (!empty($role)) {
+                                $current_url = add_query_arg('role', $role, $current_url);
+                            }
 
                             echo paginate_links(array(
                                 'base'      => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
@@ -211,6 +220,9 @@ $current_user = wp_get_current_user();
                                 'current'   => max(1, get_query_var('paged')),
                                 'total'     => $total_pages,
                                 'type'      => 'list',
+                                'prev_text' => __('« Trang trước', 'qlcv'),
+                                'next_text' => __('Trang sau »', 'qlcv'),
+                                'add_args'  => array('role' => $role), // Preserve role parameter
                             ));
                             ?>
                         </div>
