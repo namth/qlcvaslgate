@@ -88,12 +88,11 @@ if (
                 update_field('field_60afafbccfd6c', $finance_currency, $finance_job);
             }
         }
-        $finance_content .= "<br>Số dư hiện tại là: " . ($total_value) . $finance_currency . ".";
 
         # tạo phiếu thu / chi 
         $inserted = wp_insert_post(array(
             'post_title'    => $finance_title,
-            'post_content'  => $finance_content,
+            'post_content'  => $finance_title,
             'post_status'   => 'publish',
             'post_type'     => 'finance',
         ));
@@ -109,6 +108,20 @@ if (
             update_field('field_60bb0da4ad595', $finance_job, $inserted); # job
             update_field('field_60bb0e2fad596', $finance_value, $inserted); # value
             update_field('field_60bb0e38ad597', $finance_currency, $inserted); # currency
+
+            # Log to finance history table
+            log_finance_history(
+                $inserted,          // finance_post_id
+                $finance_job,       // jobid
+                $finance_user,      // userid
+                $finance_type,      // finance_type
+                $finance_value,     // finance_value
+                $finance_currency,  // finance_currency
+                $finance_date,      // finance_date
+                $finance_title,     // finance_title
+                $finance_content,   // finance_content
+                'create'            // action_type
+            );
 
             # update vào job 
 

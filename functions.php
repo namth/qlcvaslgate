@@ -1416,6 +1416,230 @@ function show_pagination($current_page, $total_page){
     }
 }
 
+// Log finance history to wp_aslfinancehistory table
+function log_finance_history($finance_post_id, $jobid, $userid, $finance_type, $finance_value, $finance_currency, $finance_date, $finance_title, $finance_content, $action_type = 'create') {
+    global $wpdb;
+    
+    $current_user = wp_get_current_user();
+    $created_by = $current_user->ID;
+    
+    $table_name = 'wp_aslfinancehistory';
+    
+    $result = $wpdb->insert(
+        $table_name,
+        array(
+            'finance_post_id'   => $finance_post_id,
+            'jobid'             => $jobid,
+            'userid'            => $userid,
+            'finance_type'      => $finance_type,
+            'finance_value'     => $finance_value,
+            'finance_currency'  => $finance_currency,
+            'finance_date'      => $finance_date,
+            'finance_title'     => $finance_title,
+            'finance_content'   => $finance_content,
+            'action_type'       => $action_type,
+            'created_by'        => $created_by
+        ),
+        array(
+            '%d', // finance_post_id
+            '%d', // jobid
+            '%d', // userid
+            '%s', // finance_type
+            '%f', // finance_value
+            '%s', // finance_currency
+            '%s', // finance_date
+            '%s', // finance_title
+            '%s', // finance_content
+            '%s', // action_type
+            '%d'  // created_by
+        )
+    );
+    
+    return $result !== false;
+}
+
+// Delete finance record and its history
+function delete_finance_record($finance_post_id) {
+    global $wpdb;
+    
+    // Check if the finance post exists
+    $finance_post = get_post($finance_post_id);
+    if (!$finance_post || $finance_post->post_type !== 'finance') {
+        return false;
+    }
+    
+    // Get finance data before deletion for reverting wallet/job calculations
+    $finance_type = get_field('finance_type', $finance_post_id);
+    $finance_value = floatval(get_field('finance_value', $finance_post_id));
+    $finance_currency = get_field('finance_currency', $finance_post_id);
+    $finance_job = get_field('finance_job', $finance_post_id);
+    
+    // Revert wallet balance
+    if ($finance_currency == "USD") {
+        $total_wallet = floatval(get_field('total_usd', 'option'));
+        $wallet_field = 'field_60bb2f7cf9156';
+    } else {
+        $total_wallet = floatval(get_field('total_vnd', 'option'));
+        $wallet_field = 'field_60bb2f98f9157';
+    }
+    
+    // Reverse the wallet operation
+    if ($finance_type == "Thu") {
+        $new_wallet_total = $total_wallet - $finance_value;
+        
+        // Reverse job calculations
+        $job_paid = floatval(get_field('paid', $finance_job)) - $finance_value;
+        $job_remainning = floatval(get_field('remainning', $finance_job)) + $finance_value;
+        
+        update_field('field_60a231d395f2e', $job_paid, $finance_job);
+        update_field('field_60a231d3961b0', $job_remainning, $finance_job);
+    } else if ($finance_type == "Chi") {
+        $new_wallet_total = $total_wallet + $finance_value;
+        
+        // Reverse job calculations
+        $job_advance = floatval(get_field('advance_money', $finance_job)) - $finance_value;
+        $job_debt = floatval(get_field('debt', $finance_job)) + $finance_value;
+        
+        update_field('field_60afaeb8cfd6a', $job_advance, $finance_job);
+        update_field('field_60afaf50cfd6b', $job_debt, $finance_job);
+    }
+    
+    // Update wallet
+    update_field($wallet_field, $new_wallet_total, 'option');
+    
+    // Delete from finance history table
+    $table_name = 'wp_aslfinancehistory';
+    $wpdb->delete(
+        $table_name,
+        array('finance_post_id' => $finance_post_id),
+        array('%d')
+    );
+    
+    // Delete the WordPress post
+    $deleted = wp_delete_post($finance_post_id, true);
+    
+    return $deleted !== false;
+}
+
+// AJAX handler for deleting finance record
+add_action('wp_ajax_delete_finance_record', 'ajax_delete_finance_record');
+function ajax_delete_finance_record() {
+    // Verify nonce
+    if (!wp_verify_nonce($_POST['nonce'], 'delete_finance_nonce')) {
+        wp_die('Security check failed');
+    }
+    
+    $finance_post_id = intval($_POST['finance_id']);
+    $job_id = intval($_POST['job_id']);
+    
+    // Check permissions
+    $current_user = wp_get_current_user();
+    $job_author = get_post_field('post_author', $job_id);
+    $is_job_creator = ($current_user->ID == $job_author);
+    $is_admin = in_array('administrator', $current_user->roles);
+    
+    if (!$is_job_creator && !$is_admin) {
+        wp_die('You do not have permission to delete this record');
+    }
+    
+    $result = delete_finance_record($finance_post_id);
+    
+    if ($result) {
+        wp_send_json_success(array('message' => __('Đã xóa phiếu thu chi thành công', 'qlcv')));
+    } else {
+        wp_send_json_error(array('message' => __('Không thể xóa phiếu thu chi', 'qlcv')));
+    }
+}
+
+// Get finance history for a specific job
+function get_finance_history($jobid, $limit = 50) {
+    global $wpdb;
+    
+    $table_name = 'wp_aslfinancehistory';
+    
+    $results = $wpdb->get_results($wpdb->prepare(
+        "SELECT fh.*, u.display_name as user_name, u2.display_name as created_by_name, 
+                uc.ten_cong_ty as user_company
+         FROM {$table_name} fh
+         LEFT JOIN {$wpdb->users} u ON fh.userid = u.ID
+         LEFT JOIN {$wpdb->users} u2 ON fh.created_by = u2.ID
+         LEFT JOIN {$wpdb->usermeta} uc ON fh.userid = uc.user_id AND uc.meta_key = 'ten_cong_ty'
+         WHERE fh.jobid = %d
+         ORDER BY fh.created_date DESC
+         LIMIT %d",
+        $jobid,
+        $limit
+    ));
+    
+    return $results;
+}
+
+// Get finance history for all jobs (with pagination)
+function get_all_finance_history($page = 1, $per_page = 20, $filters = array()) {
+    global $wpdb;
+    
+    $table_name = 'wp_aslfinancehistory';
+    $offset = ($page - 1) * $per_page;
+    
+    $where_conditions = array('1=1');
+    $where_values = array();
+    
+    // Add filters
+    if (!empty($filters['jobid'])) {
+        $where_conditions[] = 'fh.jobid = %d';
+        $where_values[] = $filters['jobid'];
+    }
+    
+    if (!empty($filters['finance_type'])) {
+        $where_conditions[] = 'fh.finance_type = %s';
+        $where_values[] = $filters['finance_type'];
+    }
+    
+    if (!empty($filters['date_from']) && !empty($filters['date_to'])) {
+        $where_conditions[] = 'fh.finance_date BETWEEN %s AND %s';
+        $where_values[] = $filters['date_from'];
+        $where_values[] = $filters['date_to'];
+    }
+    
+    $where_clause = implode(' AND ', $where_conditions);
+    
+    // Get total count
+    $count_query = "SELECT COUNT(*) FROM {$table_name} fh WHERE {$where_clause}";
+    if (!empty($where_values)) {
+        $total_items = $wpdb->get_var($wpdb->prepare($count_query, $where_values));
+    } else {
+        $total_items = $wpdb->get_var($count_query);
+    }
+    
+    // Get results
+    $query = "SELECT fh.*, u.display_name as user_name, u2.display_name as created_by_name,
+                     uc.ten_cong_ty as user_company, p.post_title as job_title
+              FROM {$table_name} fh
+              LEFT JOIN {$wpdb->users} u ON fh.userid = u.ID
+              LEFT JOIN {$wpdb->users} u2 ON fh.created_by = u2.ID
+              LEFT JOIN {$wpdb->usermeta} uc ON fh.userid = uc.user_id AND uc.meta_key = 'ten_cong_ty'
+              LEFT JOIN {$wpdb->posts} p ON fh.jobid = p.ID
+              WHERE {$where_clause}
+              ORDER BY fh.created_date DESC
+              LIMIT %d OFFSET %d";
+    
+    $all_values = array_merge($where_values, array($per_page, $offset));
+    
+    if (!empty($all_values)) {
+        $results = $wpdb->get_results($wpdb->prepare($query, $all_values));
+    } else {
+        $query_no_prepare = str_replace(array('%d', '%s'), '', $query);
+        $results = $wpdb->get_results($query_no_prepare);
+    }
+    
+    return array(
+        'results' => $results,
+        'total_items' => $total_items,
+        'total_pages' => ceil($total_items / $per_page),
+        'current_page' => $page
+    );
+}
+
 
 function CreateDatabaseQlcv()
 {
@@ -1670,6 +1894,31 @@ function CreateDatabaseQlcv()
         KEY `jobid` (`jobid`),
         KEY `userid` (`userid`),
         UNIQUE KEY `unique_job_user_role` (`jobid`, `userid`, `role_type`)
+    ) {$charsetCollate};";
+    dbDelta($createAslTable);
+
+    # table 14 - Finance History
+    $aslTable = 'wp_aslfinancehistory';
+    $createAslTable = "CREATE TABLE `{$aslTable}` (
+        `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        `finance_post_id` bigint(20) UNSIGNED NOT NULL,
+        `jobid` bigint(20) UNSIGNED NOT NULL,
+        `userid` bigint(20) UNSIGNED NOT NULL,
+        `finance_type` varchar(10) NOT NULL,
+        `finance_value` decimal(15,2) NOT NULL,
+        `finance_currency` varchar(5) NOT NULL,
+        `finance_date` varchar(8) NOT NULL,
+        `finance_title` text NOT NULL,
+        `finance_content` longtext NULL,
+        `action_type` varchar(10) DEFAULT 'create',
+        `created_by` bigint(20) UNSIGNED NOT NULL,
+        `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`),
+        KEY `finance_post_id` (`finance_post_id`),
+        KEY `jobid` (`jobid`),
+        KEY `userid` (`userid`),
+        KEY `finance_type` (`finance_type`),
+        KEY `finance_date` (`finance_date`)
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 

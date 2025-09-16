@@ -3,6 +3,65 @@ get_header();
 
 get_sidebar();
 
+// Handle delete finance record at the beginning of page
+if (isset($_GET['delete_finance']) && isset($_GET['finance_id']) && isset($_GET['job_id'])) {
+    $finance_id = intval($_GET['finance_id']);
+    $job_id = intval($_GET['job_id']);
+    $current_user = wp_get_current_user();
+    
+    // Check permissions
+    $job_author = get_post_field('post_author', $job_id);
+    $is_job_creator = ($current_user->ID == $job_author);
+    $is_admin = in_array('administrator', $current_user->roles);
+    
+    if ($is_job_creator || $is_admin) {
+        // Verify nonce for security
+        if (isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'delete_finance_' . $finance_id)) {
+            // Call the delete function
+            if (function_exists('delete_finance_record')) {
+                $result = delete_finance_record($finance_id, $job_id);
+                if ($result) {
+                    // Redirect to same page with success message
+                    $redirect_url = add_query_arg(array(
+                        'finance_deleted' => '1',
+                        'message' => urlencode(__('Đã xóa phiếu thu chi thành công', 'qlcv'))
+                    ), get_permalink($job_id));
+                    
+                    wp_redirect($redirect_url);
+                    exit;
+                } else {
+                    // Add error message to URL
+                    $redirect_url = add_query_arg(array(
+                        'finance_error' => '1',
+                        'message' => urlencode(__('Có lỗi xảy ra khi xóa phiếu thu chi', 'qlcv'))
+                    ), get_permalink($job_id));
+                    
+                    wp_redirect($redirect_url);
+                    exit;
+                }
+            }
+        } else {
+            // Add permission error to URL
+            $redirect_url = add_query_arg(array(
+                'finance_error' => '1',
+                'message' => urlencode(__('Không có quyền thực hiện hành động này', 'qlcv'))
+            ), get_permalink($job_id));
+            
+            wp_redirect($redirect_url);
+            exit;
+        }
+    } else {
+        // Add permission error to URL
+        $redirect_url = add_query_arg(array(
+            'finance_error' => '1',
+            'message' => urlencode(__('Bạn không có quyền xóa phiếu thu chi này', 'qlcv'))
+        ), get_permalink($job_id));
+        
+        wp_redirect($redirect_url);
+        exit;
+    }
+}
+
 $color = [
     'button-primary',
     'button-secondary',
@@ -114,6 +173,29 @@ while (have_posts()) {
 
     <!-- Content Body Start -->
     <div class="content-body">
+        
+        <?php
+        // Show success/error messages
+        if (isset($_GET['finance_deleted']) && $_GET['finance_deleted'] == '1') {
+            $message = isset($_GET['message']) ? urldecode($_GET['message']) : __('Đã xóa phiếu thu chi thành công', 'qlcv');
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">';
+            echo '<i class="fa fa-check-circle"></i> ' . esc_html($message);
+            echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+            echo '<span aria-hidden="true">&times;</span>';
+            echo '</button>';
+            echo '</div>';
+        }
+
+        if (isset($_GET['finance_error']) && $_GET['finance_error'] == '1') {
+            $message = isset($_GET['message']) ? urldecode($_GET['message']) : __('Có lỗi xảy ra', 'qlcv');
+            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+            echo '<i class="fa fa-exclamation-triangle"></i> ' . esc_html($message);
+            echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+            echo '<span aria-hidden="true">&times;</span>';
+            echo '</button>';
+            echo '</div>';
+        }
+        ?>
 
         <!-- Page Headings Start -->
         <div class="row justify-content-between mb-10">
@@ -621,6 +703,22 @@ while (have_posts()) {
                 echo '<div class="col-lg-auto">';
                 echo '<h4 class="title">' . __('Danh sách phiếu thu chi', 'qlcv') . '</h4>';
                 echo '</div>';
+                echo '<div class="col-lg-auto">';
+                // Quick action buttons for authorized users
+                $current_user = wp_get_current_user();
+                $job_author = get_post_field('post_author', get_the_ID());
+                $is_job_creator = ($current_user->ID == $job_author);
+                $is_admin = in_array('administrator', $current_user->roles);
+
+                if ($is_job_creator || $is_admin) {
+                    echo '<a href="' . get_bloginfo('url') . '/tao-phieu-thu-chi/?jobid=' . get_the_ID() . '&type=Thu" class="button button-sm button-success" style="margin-right: 5px;">';
+                    echo '<i class="fa fa-plus"></i> ' . __('Thu', 'qlcv');
+                    echo '</a>';
+                    echo '<a href="' . get_bloginfo('url') . '/tao-phieu-thu-chi/?jobid=' . get_the_ID() . '&type=Chi" class="button button-sm button-danger">';
+                    echo '<i class="fa fa-minus"></i> ' . __('Chi', 'qlcv');
+                    echo '</a>';
+                }
+                echo '</div>';
                 echo '</div>';
                 echo '</div>';
                 echo '<div class="box-body">';
@@ -646,6 +744,9 @@ while (have_posts()) {
                 }
                 
                 $finance_query = new WP_Query($finance_args);
+                
+                // Store the main job ID before entering the loop
+                $main_job_id = get_the_ID();
                 
                 if ($finance_query->have_posts()) {
                     echo '<div class="table-responsive">';
@@ -705,6 +806,30 @@ while (have_posts()) {
                         echo '<a href="' . get_permalink() . '" class="button button-xs button-primary" data-tippy-content="' . __('Xem chi tiết', 'qlcv') . '">';
                         echo '<i class="fa fa-eye"></i>';
                         echo '</a>';
+                        
+                        // Show delete button for job creator and admin
+                        $current_user = wp_get_current_user();
+                        $job_author = get_post_field('post_author', $main_job_id);
+                        $is_job_creator = ($current_user->ID == $job_author);
+                        $is_admin = in_array('administrator', $current_user->roles);
+                        $finance_post_id = get_the_ID(); // This is the current finance post ID in the loop
+                        
+                        if ($is_job_creator || $is_admin) {
+                            $delete_url = add_query_arg(array(
+                                'delete_finance' => '1',
+                                'finance_id' => $finance_post_id,
+                                'job_id' => $main_job_id,
+                                '_wpnonce' => wp_create_nonce('delete_finance_' . $finance_post_id)
+                            ), get_permalink($main_job_id));
+                            
+                            echo '<a href="' . esc_url($delete_url) . '" class="button button-xs button-danger" ';
+                            echo 'data-tippy-content="' . __('Xóa phiếu thu chi', 'qlcv') . '" ';
+                            echo 'style="margin-left: 5px;" ';
+                            echo 'onclick="return confirm(\'' . esc_js(__('Bạn có chắc chắn muốn xóa phiếu thu chi này? Hành động này không thể hoàn tác.', 'qlcv')) . '\')">';
+                            echo '<i class="fa fa-trash"></i>';
+                            echo '</a>';
+                        }
+                        
                         echo '</td>';
                         echo '</tr>';
                     }
@@ -776,7 +901,7 @@ while (have_posts()) {
                     echo '<div class="text-center py-4">';
                     echo '<i class="fa fa-info-circle text-muted" style="font-size: 48px;"></i>';
                     echo '<h5 class="text-muted mt-3">' . __('Chưa có phiếu thu chi nào', 'qlcv') . '</h5>';
-                    echo '<p class="text-muted">' . __('Bấm vào nút "Thu" hoặc "Chi" để tạo phiếu mới', 'qlcv') . '</p>';
+                    echo '<p class="text-muted">' . __('Bấm vào nút "Thu" hoặc "Chi" ở trên để tạo phiếu mới', 'qlcv') . '</p>';
                     echo '</div>';
                 }
                 
@@ -1090,7 +1215,6 @@ while (have_posts()) {
         </div><!-- Page Headings End -->
 
     </div><!-- Content Body End -->
-
 
 <?php
 }
