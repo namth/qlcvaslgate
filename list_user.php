@@ -9,8 +9,11 @@ if (isset($_GET['role']) && ($_GET['role'] != '')) {
     $role = $_GET['role'];
 } else $role = '';
 
+// Store original role for pagination to avoid variable override in loops
+$original_role = $role;
+
 // Handle member export
-if (isset($_GET['export_member']) && !empty($_GET['export_member']) && in_array($role, ['member', 'contributor', 'law_manager', 'ip_manager', 'administrator'])) {
+if (isset($_GET['export_member']) && !empty($_GET['export_member']) && in_array($original_role, ['member', 'contributor', 'law_manager', 'ip_manager', 'administrator'])) {
     $user_id = intval($_GET['export_member']);
     $export_result = export_single_member_to_table($user_id);
     
@@ -171,8 +174,8 @@ $current_user = wp_get_current_user();
 
                                         # display user role name
                                         if (!empty($user->roles) && is_array($user->roles)) {
-                                            foreach ($user->roles as $role)
-                                                $roles[] = translate_user_role($wp_roles->roles[$role]['name']);
+                                            foreach ($user->roles as $user_role)
+                                                $roles[] = translate_user_role($wp_roles->roles[$user_role]['name']);
                                         }
 
                                         if (in_array('contributor', $current_user->roles)) {
@@ -181,7 +184,7 @@ $current_user = wp_get_current_user();
                                             // Post to renewal system button (for all roles)
                                             echo '<a href="' . get_bloginfo('url') . '/post-to-renewal-system/?uid=' . $user->ID . '"><i class="fa fa-telegram"></i></a>';
                                             // Export button for member, contributor, law_manager, ip_manager, administrator roles
-                                            if (in_array($role, ['member', 'contributor', 'law_manager', 'ip_manager', 'administrator'])) {
+                                            if (in_array($original_role, ['member', 'contributor', 'law_manager', 'ip_manager', 'administrator'])) {
                                                 echo '<span style="margin-left: 20px;"></span>';
                                                 echo '<a href="' . $_SERVER['REQUEST_URI'] . '&export_member=' . $user->ID . '" title="' . __('Export to member table', 'qlcv') . '" onclick="return confirm(\'' . __('Bạn có chắc muốn export user này vào bảng wp_aslmember?', 'qlcv') . '\')"><i class="fa fa-share text-success"></i></a>';
                                             }
@@ -210,8 +213,8 @@ $current_user = wp_get_current_user();
                             $current_url = remove_query_arg('paged', $current_url);
                             
                             // Add role parameter if exists
-                            if (!empty($role)) {
-                                $current_url = add_query_arg('role', $role, $current_url);
+                            if (!empty($original_role)) {
+                                $current_url = add_query_arg('role', $original_role, $current_url);
                             }
 
                             echo paginate_links(array(
@@ -222,7 +225,7 @@ $current_user = wp_get_current_user();
                                 'type'      => 'list',
                                 'prev_text' => __('« Trang trước', 'qlcv'),
                                 'next_text' => __('Trang sau »', 'qlcv'),
-                                'add_args'  => array('role' => $role), // Preserve role parameter
+                                'add_args'  => array('role' => $original_role), // Preserve role parameter
                             ));
                             ?>
                         </div>
