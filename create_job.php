@@ -381,7 +381,7 @@ if (isset($_GET['type'])) {
                             <div id="step-3">
                                 <div class="row mbn-20">
                                     <div class="col-12 mb-20">
-                                        <h4><?php _e('Chọn người quản lý', 'qlcv'); ?></h4>
+                                        <h4><?php _e('Chọn người quản lý (A)', 'qlcv'); ?></h4>
                                         <select class="form-control select2-tags mb-20" name="manager">
                                             <?php
                                             $args   = array(
@@ -397,8 +397,8 @@ if (isset($_GET['type'])) {
                                             ?>
                                         </select>
 
-                                        <!-- Chọn người cùng quản lý, có thể chọn nhiều -->
-                                        <h4 style="margin-top: 30px;"><?php _e('Chọn người cùng quản lý', 'qlcv'); ?></h4>
+                                        <!-- Chọn người được tham vấn (C), có thể chọn nhiều -->
+                                        <h4 style="margin-top: 30px;"><?php _e('Chọn người được tham vấn (C)', 'qlcv'); ?></h4>
                                         <select class="form-control select2-tags mb-20" multiple="" name="co_manager">
                                             <?php
                                             $args   = array(
@@ -414,7 +414,7 @@ if (isset($_GET['type'])) {
                                             ?>
                                         </select>
 
-                                        <h4 style="margin-top: 30px;"><?php _e('Chọn người thực hiện', 'qlcv'); ?></h4>
+                                        <h4 style="margin-top: 30px;"><?php _e('Chọn người thực hiện (R)', 'qlcv'); ?></h4>
                                         <select class="form-control select2-tags mb-20" name="member">
                                             <?php
                                             $args   = array(
@@ -431,7 +431,7 @@ if (isset($_GET['type'])) {
                                         </select>
 
                                         <!-- Chọn người cùng thực hiện, có thể chọn nhiều -->
-                                        <h4 style="margin-top: 30px;"><?php _e('Chọn người cùng thực hiện', 'qlcv'); ?></h4>
+                                        <h4 style="margin-top: 30px;"><?php _e('Chọn người cùng thực hiện (R1)', 'qlcv'); ?></h4>
                                         <select class="form-control select2-tags mb-20" multiple="" name="co_member">
                                             <?php
                                             $args   = array(
@@ -448,7 +448,7 @@ if (isset($_GET['type'])) {
                                         </select>
 
                                         <!-- Chọn người giám sát -->
-                                        <h4 style="margin-top: 30px;"><?php _e('Chọn người giám sát', 'qlcv'); ?></h4>
+                                        <h4 style="margin-top: 30px;"><?php _e('Chọn người giám sát (I)', 'qlcv'); ?></h4>
                                         <select class="form-control select2-tags mb-20" multiple="" name="supervisor" >
                                             <?php
                                             $args   = array(

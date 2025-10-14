@@ -543,7 +543,7 @@ $agency     = get_the_terms($postid, 'agency');
 
                                 <div class="col-6 mb-20">
                                     <div class="mb-20">
-                                        <label for=""><b><?php _e('Người quản lý', 'qlcv'); ?></b></label>
+                                        <label for=""><b><?php _e('Người quản lý (A)', 'qlcv'); ?></b></label>
                                         <select class="form-control select2-tags mb-20" name="manager">
                                             <?php
                                             if ($manager["ID"]) {
@@ -566,7 +566,7 @@ $agency     = get_the_terms($postid, 'agency');
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b><?php _e('Người cùng quản lý', 'qlcv'); ?></b></label>
+                                        <label for=""><b><?php _e('Người được tham vấn (C)', 'qlcv'); ?></b></label>
                                         <select class="form-control select2-tags mb-20" multiple="" name="co_manager[]">
                                             <?php
                                             $args   = array(
@@ -585,7 +585,7 @@ $agency     = get_the_terms($postid, 'agency');
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b><?php _e('Người thực hiện', 'qlcv'); ?></b></label>
+                                        <label for=""><b><?php _e('Người thực hiện (R)', 'qlcv'); ?></b></label>
                                         <select class="form-control select2-tags mb-20" name='member'>
                                             <?php
                                             if ($member["ID"]) {
@@ -609,7 +609,7 @@ $agency     = get_the_terms($postid, 'agency');
 
                                     <!-- Người cùng thực hiện -->
                                     <div class="mb-20">
-                                        <label for=""><b><?php _e('Người cùng thực hiện', 'qlcv'); ?></b></label>
+                                        <label for=""><b><?php _e('Người cùng thực hiện (R1)', 'qlcv'); ?></b></label>
                                         <select class="form-control select2-tags mb-20" multiple="" name="co_member[]">
                                             <?php
                                             $args   = array(
@@ -628,7 +628,7 @@ $agency     = get_the_terms($postid, 'agency');
                                     </div>
 
                                     <div class="mb-20">
-                                        <label for=""><b><?php _e('Người giám sát', 'qlcv'); ?></b></label>
+                                        <label for=""><b><?php _e('Người giám sát (I)', 'qlcv'); ?></b></label>
                                         <select class="form-control select2-tags mb-20" multiple="" name="supervisor[]">
                                             <?php
                                             $args   = array(
