@@ -1009,6 +1009,8 @@ function export_mysql_job($paged) {
                 $jobdoc
             );
             
+            $level = get_field('level', $jobID);
+
             $job = [
                 'jobid'             => get_the_ID(),
                 'customerid'        => $customer->ID,
@@ -1036,7 +1038,8 @@ function export_mysql_job($paged) {
                 'date'          => get_the_date('Y-m-d H:i:s'),
                 'contract_sign_date' => $contract_sign_date,
                 'agency_hn'     => $agency_hn,
-                'agency_hcm'    => $agency_hcm
+                'agency_hcm'    => $agency_hcm,
+                'level'         => $level
             ];
 
             $sent = $wpdb->insert(

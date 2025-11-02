@@ -358,6 +358,7 @@ function add_new_job()
     $note           = $_POST['note'];
     $mindful        = $_POST['mindful'];
     $link_onedrive  = $_POST['link_onedrive'];
+    $level          = !empty($_POST['level']) ? $_POST['level'] : 'Đơn giản'; // độ khó, mặc định là Đơn giản
     # Nhãn hiệu
     $brand_name     = $_POST['brand_name'];
     $brand_group    = $_POST['brand_group'];
@@ -446,6 +447,7 @@ function add_new_job()
             update_field('field_6099f75a87258', $our_ref, $inserted); # Số REF của mình
             update_field('field_60a38cc126a5f', $link_onedrive, $inserted); # Link tài liệu
             update_field('field_60fceb18a736d', $mindful, $inserted); # Lưu ý công việc
+            update_field('field_69070e5d8880e', $level, $inserted); # Độ khó
             # if it's a simple job (has deadline), system will be updated history & status
             if ($new_deadline) {
                 update_field('field_600fde50f9be7', $new_deadline, $inserted); # deadline
@@ -648,7 +650,8 @@ function add_new_job()
                     'date'              => current_time('mysql', 1),
                     'contract_sign_date' => $contract_sign_date,
                     'agency_hn'         => $agency_hn,
-                    'agency_hcm'        => $agency_hcm
+                    'agency_hcm'        => $agency_hcm,
+                    'level'             => $level
                 )
             );
             
@@ -1755,6 +1758,7 @@ function CreateDatabaseQlcv()
         `contract_sign_date` timestamp NOT NULL,
         `agency_hn` tinyint(4) NOT NULL,
         `agency_hcm` tinyint(4) NOT NULL,
+        `level` varchar(50) NULL,
         PRIMARY KEY (`jobid`)
     ) {$charsetCollate};";
     dbDelta($createAslTable);

@@ -230,6 +230,19 @@ while (have_posts()) {
                             echo __("Deadline:", 'qlcv') . " " . $deadline;
                             echo '</span>';
                         }
+
+                        # Hiển thị độ khó
+                        $level = get_field('level');
+                        if ($level) {
+                            $level_colors = array(
+                                'Đơn giản' => 'badge-orange',
+                                'Trung Bình' => 'badge-secondary',
+                                'Khó' => 'badge-danger',
+                                'Rất khó' => 'badge-reddit'
+                            );
+                            $level_color = isset($level_colors[$level]) ? $level_colors[$level] : 'badge-secondary';
+                            echo " | <span class='badge " . $level_color . "'>" . __('Độ khó:', 'qlcv') . " " . $level . "</span> ";
+                        }
                         ?>
                     </div>
                     <div class="box-body full_height_scroll">

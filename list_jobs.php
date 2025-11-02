@@ -568,12 +568,26 @@ $current_user = wp_get_current_user();
 
                                         $agency = get_the_terms(get_the_ID(), 'agency');
 
+                                        // Get level (độ khó)
+                                        $level = get_field('level');
+                                        $level_badge = '';
+                                        if ($level) {
+                                            $level_colors = array(
+                                                'Đơn giản' => 'badge-orange',
+                                                'Trung Bình' => 'badge-secondary',
+                                                'Khó' => 'badge-danger',
+                                                'Rất khó' => 'badge-reddit'
+                                            );
+                                            $level_color = isset($level_colors[$level]) ? $level_colors[$level] : 'badge-secondary';
+                                            $level_badge = "<span class='badge " . $level_color . "'>" . $level . "</span> ";
+                                        }
+
                                         echo "<tr>";
                                         echo "<td>" . $our_ref . "</td>";
                                         echo "<td>" . get_the_date('d/m/Y') . "</td>";
                                         echo "<td class='action_cell'>
-                                                <a href='" . get_permalink() . "'>" . get_the_title() . "</a>
-                                                <a class='hidden_link' href='" . get_bloginfo('url') . "/duplicate-job/?jobid=" . get_the_ID() . "'  onclick=\"return confirm('" . __('Bạn có chắc muốn nhân đôi việc này?', 'qlcv') . "')\"><i class='fa fa-clone'></i> " . __('Duplicate This', 'qlcv') . "</a>    
+                                                <a href='" . get_permalink() . "'>" . $level_badge . get_the_title() . "</a>
+                                                <a class='hidden_link' href='" . get_bloginfo('url') . "/duplicate-job/?jobid=" . get_the_ID() . "'  onclick=\"return confirm('" . __('Bạn có chắc muốn nhân đôi việc này?', 'qlcv') . "')\"><i class='fa fa-clone'></i> " . __('Duplicate This', 'qlcv') . "</a>
                                             </td>";
                                         echo "<td>" . end($work_history) . "</td>";
                                         if (!$type || ($type == 'tiem-nang')) {

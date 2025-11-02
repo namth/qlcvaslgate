@@ -39,6 +39,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         } else $co_member = "";
         
         $agency         = $_POST['agency'];
+        $level          = $_POST['level']; // độ khó
         # job
         $jobname        = $_POST['jobname'];
         $so_don         = $_POST['so_don'];
@@ -94,6 +95,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
 
         update_field('field_60a38cc126a5f', $link_onedrive, $postid); # Link tài liệu
         update_field('field_60fceb18a736d', $mindful, $postid); # Lưu ý công việc
+        update_field('field_69070e5d8880e', $level, $postid); # Độ khó
         # partner
         update_field('field_602f7923c59bb', $partner, $postid); # save to partner_2 field
         update_field('field_609bf99f726ef', $foreign_partner, $postid); 
@@ -231,7 +233,8 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 'contract_sign_date' => $contract_sign_date,
                 'agency_hn'          => $agency_hn,
                 'agency_hcm'         => $agency_hcm,
-                'date'               => $current_date
+                'date'               => $current_date,
+                'level'              => $level
             ),
             array('jobid' => $postid)
         );
@@ -535,6 +538,21 @@ $agency     = get_the_terms($postid, 'agency');
                                                     $selected = ($agency[0]->slug == $value->slug) ? "selected" : "";
                                                     echo "<option value='" . $value->slug . "' " . $selected . ">" . $value->name . "</option>";
                                                 }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-20">
+                                        <label for=""><b><?php _e('Độ khó', 'qlcv'); ?></b></label>
+                                        <select class="form-control select2-tags mb-20" name='level'>
+                                            <option value="">-- <?php _e('Chọn độ khó', 'qlcv'); ?> --</option>
+                                            <?php
+                                            $current_level = get_field('level', $postid);
+                                            $level_options = array('Đơn giản', 'Trung Bình', 'Khó', 'Rất khó');
+                                            foreach ($level_options as $level_option) {
+                                                $selected = ($current_level == $level_option) ? "selected" : "";
+                                                echo "<option value='" . $level_option . "' " . $selected . ">" . __($level_option, 'qlcv') . "</option>";
                                             }
                                             ?>
                                         </select>

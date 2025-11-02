@@ -201,13 +201,24 @@ if (isset($_GET['type'])) {
                                                 <select class="form-control select2-tags mb-20" multiple="" name="country[]">
                                                     <?php
                                                         $list_country = explode(PHP_EOL, get_field('list_country', 'option'));
-                    
+
                                                         if ($list_country) {
                                                             foreach ($list_country as $country) {
                                                                 echo "<option value='" . $country . "'>" . $country . "</option>";
                                                             }
                                                         }
                                                     ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-3"></div>
+
+                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Độ khó', 'qlcv'); ?></div>
+                                            <div class="col-lg-6 col-12 mb-20">
+                                                <select class="form-control select2-tags mb-20" name="level">
+                                                    <option value="Đơn giản" selected><?php _e('Đơn giản', 'qlcv'); ?></option>
+                                                    <option value="Trung Bình"><?php _e('Trung Bình', 'qlcv'); ?></option>
+                                                    <option value="Khó"><?php _e('Khó', 'qlcv'); ?></option>
+                                                    <option value="Rất khó"><?php _e('Rất khó', 'qlcv'); ?></option>
                                                 </select>
                                             </div>
                                             <div class="col-lg-3"></div>
