@@ -143,6 +143,28 @@ while (have_posts()) {
         update_field('field_60ffc8f3d152b', $current_time->format('Ymd'));
         # chuyển đối tác sang trạng thái đã chốt
         update_field('field_61cd79bf1653f', 1, 'user_' . $partner['ID']);
+
+        # update contract_sign_date and flag in wp_asljob table
+        global $wpdb;
+        $wpdb->update(
+            'wp_asljob',
+            array(
+                'contract_sign_date' => $current_time->format('Y-m-d H:i:s'),
+                'flag'               => 'Đã chốt',
+                'potential'          => ''
+            ),
+            array('jobid' => get_the_ID())
+        );
+
+        # update flag in wp_asljobgroup table
+        $wpdb->update(
+            'wp_asljobgroup',
+            array(
+                'flag' => 'Đã chốt'
+            ),
+            array('jobid' => get_the_ID())
+        );
+
         # create log, switch job status to official
         $log = __("Chuyển công việc tiềm năng sang công việc chính thức", 'qlcv');
         asl_create_log($log, get_the_ID());

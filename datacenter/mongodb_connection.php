@@ -787,7 +787,7 @@ function export_mysql_job($paged) {
             if (get_field('contract_sign_date')) {
                 $tmp = DateTime::createFromFormat('d/m/Y', get_field('contract_sign_date'));
                 $contract_sign_date = $tmp->format('Y-m-d H:i:s');
-            } else $contract_sign_date = "";
+            } else $contract_sign_date = NULL;
 
             # save history to export
             $work_list  = get_field('lich_su_cong_viec');
@@ -796,7 +796,7 @@ function export_mysql_job($paged) {
                     if (preg_match("/^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/", $value['ngay_thang'])) {
                         $tmp = DateTime::createFromFormat('d/m/Y', $value['ngay_thang']);
                         $ngay_thang = $tmp->format('Y-m-d H:i:s');
-                    } else $ngay_thang = "";
+                    } else $ngay_thang = NULL;
                     $data_arr = [
                         'jobid' => $jobID,
                         'name'  => $value['mo_ta'],
@@ -903,38 +903,41 @@ function export_mysql_job($paged) {
             $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu'];
             $potential = "";
             
-            foreach ($groups as $group) {
-                $groupname = $group->name?$group->name:"";
+            if ($groups && !is_wp_error($groups)) {
+                foreach ($groups as $group) {
+                    $groupname = $group->name?$group->name:"";
 
-                # if $groupname has value, next process
-                if ($groupname) {
-                    # if job is potential, set type
-                    if ($group->slug == 'tiem-nang') {
-                        $data_arr['flag'] = $group->name;
-                    } else {
-                        # set groupname to $data_arr['groupname']
-                        $i++;
-                        if ($i==1) {
-                            $data_arr['groupname'] = $group->name;
-                            $data_arr['flag'] = "Đã chốt";
-                            if (in_array($group->slug, $list_ip)) {
-                                $data_arr['type'] = "IP";
-                            } else $data_arr['type'] = "Law";
+                    # if $groupname has value, next process
+                    if ($groupname) {
+                        # if job is potential, set type
+                        if ($group->slug == 'tiem-nang') {
+                            $data_arr['flag'] = $group->name;
                         } else {
-                            if ($group->slug != 'viec-khac') {
+                            # set groupname to $data_arr['groupname']
+                            $i++;
+                            if ($i==1) {
                                 $data_arr['groupname'] = $group->name;
+                                $data_arr['flag'] = "Đã chốt";
+                                if (in_array($group->slug, $list_ip)) {
+                                    $data_arr['type'] = "IP";
+                                } else $data_arr['type'] = "Law";
+                            } else {
+                                if ($group->slug != 'viec-khac') {
+                                    $data_arr['groupname'] = $group->name;
+                                }
                             }
-                        }
-                    }    
+                        }    
 
-                    # get all child of potential category, compare each ID with $term->term_id, if match, set $data_arr['potential']
-                    $all_child = get_term_children(11, 'group');
-                    if (in_array($group->term_id, $all_child)) {
-                        $potential = $groupname;
-                    }
-                    
-                }    
-            }    
+                        # get all child of potential category, compare each ID with $term->term_id, if match, set $data_arr['potential']
+                        $all_child = get_term_children(11, 'group');
+                        if (in_array($group->term_id, $all_child)) {
+                            $potential = $groupname;
+                        }
+                        
+                    }    
+                }
+            }
+
             # insert to database
             $wpdb->insert(
                 $aslGroup,
@@ -944,10 +947,11 @@ function export_mysql_job($paged) {
 
             $brand = array();
             $agency = get_the_terms(get_the_ID(), 'agency');
-            foreach ($agency as $id_chi_nhanh) {
-                $term = get_term($id_chi_nhanh);
-
-                $brand[] = $term->slug;
+            if ($agency && !is_wp_error($agency)) {
+                foreach ($agency as $id_chi_nhanh) {
+                    $term = get_term($id_chi_nhanh);
+                    $brand[] = $term->slug;
+                }
             }
 
             if (is_array($brand)) {

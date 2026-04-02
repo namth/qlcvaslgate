@@ -138,7 +138,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         
         # 1. Update asljob table
         $aslTable = 'wp_asljob';
-        $foreign_partner_id = is_array($foreign_partner) ? $foreign_partner['ID'] : NULL;
+        $foreign_partner_id = !empty($foreign_partner) ? $foreign_partner : NULL;
         
         # Get information about agency for the job
         $brand = array();
@@ -154,7 +154,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         $agency_hcm = in_array('ho-chi-minh', $brand) ? 1 : 0;
         
         # Get contract sign date
-        $contract_sign_date = '';
+        $contract_sign_date = NULL;
         if (get_field('contract_sign_date', $postid)) {
             $tmp = DateTime::createFromFormat('d/m/Y', get_field('contract_sign_date', $postid));
             $contract_sign_date = $tmp->format('Y-m-d H:i:s');

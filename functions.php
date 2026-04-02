@@ -388,6 +388,7 @@ function add_new_job()
     $total_value    = $_POST['total_value'];
     $paid           = $_POST['paid'];
     # tính toán số tiền còn lại
+    $remaining      = 0;
     if ($total_value) {
         # validate các số có null không, trước khi tính toán
         $remaining      = $paid?$total_value - $paid:$total_value;
@@ -559,7 +560,7 @@ function add_new_job()
             
             # 1. Update asljob table
             $aslTable = 'wp_asljob';
-            $foreign_partner_id = is_array($data_foreign_partner) ? $data_foreign_partner['ID'] : NULL;
+            $foreign_partner_id = !empty($data_foreign_partner) ? $data_foreign_partner : NULL;
             
             # Get information about agency for the job
             $brand = array();
@@ -575,7 +576,7 @@ function add_new_job()
             $agency_hcm = in_array('ho-chi-minh', $brand) ? 1 : 0;
             
             # Get contract sign date
-            $contract_sign_date = '';
+            $contract_sign_date = NULL;
             if (get_field('contract_sign_date', $inserted)) {
                 $tmp = DateTime::createFromFormat('d/m/Y', get_field('contract_sign_date', $inserted));
                 $contract_sign_date = $tmp->format('Y-m-d H:i:s');
@@ -1755,7 +1756,7 @@ function CreateDatabaseQlcv()
         `payment_status` varchar(255) NULL,
         `source` varchar(255) NULL,
         `date` timestamp NOT NULL,
-        `contract_sign_date` timestamp NOT NULL,
+        `contract_sign_date` timestamp NULL,
         `agency_hn` tinyint(4) NOT NULL,
         `agency_hcm` tinyint(4) NOT NULL,
         `level` varchar(50) NULL,
@@ -1787,8 +1788,7 @@ function CreateDatabaseQlcv()
     $createAslTable = "CREATE TABLE `{$aslTable}` (
         `jobid` bigint(20) UNSIGNED NOT NULL,
         `name` varchar(255) NOT NULL,
-        `date` timestamp NULL,
-        PRIMARY KEY (`jobid`)
+        `date` timestamp NULL
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 
@@ -1798,8 +1798,7 @@ function CreateDatabaseQlcv()
         `taskid` bigint(20) UNSIGNED NOT NULL,
         `userid` bigint(20) UNSIGNED NOT NULL,
         `content` varchar(255) NOT NULL,
-        `date` timestamp NOT NULL,
-        PRIMARY KEY (`taskid`)
+        `date` timestamp NOT NULL
     ) {$charsetCollate};";
     dbDelta($createAslTable);
 
@@ -1931,32 +1930,6 @@ function CreateDatabaseQlcv()
 }
 add_action('after_switch_theme', 'CreateDatabaseQlcv');
 
-// Add migration for partner fields in job document table
-function migrate_partner_fields_to_job_document() {
-    global $wpdb;
-    
-    $table_name = 'wp_asljobtodocument';
-    
-    // Check if the new columns exist
-    $columns = $wpdb->get_results("DESCRIBE {$table_name}");
-    $column_names = array_column($columns, 'Field');
-    
-    // Add partner_tax_number column if it doesn't exist
-    if (!in_array('partner_tax_number', $column_names)) {
-        $wpdb->query("ALTER TABLE `{$table_name}` ADD COLUMN `partner_tax_number` varchar(255) NULL AFTER `partner_email_bcc`");
-    }
-    
-    // Add partner_legal_representative column if it doesn't exist
-    if (!in_array('partner_legal_representative', $column_names)) {
-        $wpdb->query("ALTER TABLE `{$table_name}` ADD COLUMN `partner_legal_representative` varchar(255) NULL AFTER `partner_tax_number`");
-    }
-    
-    // Add partner_position column if it doesn't exist
-    if (!in_array('partner_position', $column_names)) {
-        $wpdb->query("ALTER TABLE `{$table_name}` ADD COLUMN `partner_position` varchar(255) NULL AFTER `partner_legal_representative`");
-    }
-}
-add_action('after_switch_theme', 'migrate_partner_fields_to_job_document');
 
 // Export single member to wp_aslmember table
 function export_single_member_to_table($user_id) {
