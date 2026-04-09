@@ -88,6 +88,22 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
          * ============================================================ */
         var PROGRESS_KEY = 'asl_export_progress';
 
+        /**
+         * Tách phần JSON thuần ra khỏi response có thể chứa HTML lỗi WordPress
+         * VD: "<div>...</div>{\"function\":...}" => "{\"function\":...}"
+         */
+        function extractJSON(resp) {
+            if (!resp) return null;
+            // Tìm vị trí '{' đầu tiên của JSON object
+            var idx = resp.indexOf('{');
+            if (idx === -1) return null;
+            var jsonStr = resp.substring(idx);
+            // Xóa mọi ký tự thừa sau dấu '}' cuối cùng
+            var lastIdx = jsonStr.lastIndexOf('}');
+            if (lastIdx === -1) return null;
+            return jsonStr.substring(0, lastIdx + 1);
+        }
+
         function saveProgress(dataType, functional, total_page, current_page, list_object) {
             var data = {
                 dataType: dataType,
@@ -128,13 +144,29 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                     current_page: current_page
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
-                    console.log(xhr.status);
-                    console.log(xhr.responseText);
-                    console.log(thrownError);
-                    /* lỗi mạng – giữ nguyên progress để có thể resume */
+                    console.error('[goto_import] Network error:', xhr.status, thrownError);
+                    $("#history").append('<br><span style="color:#e74c3c;">⚠ Lỗi mạng trang ' + current_page + ' – tiến trình đã được lưu, bạn có thể resume sau.</span>');
+                    /* giữ nguyên progress để có thể resume */
+                    $('.main form').find('input[type="submit"]').prop('disabled', false);
                 },
                 success: function(resp) {
-                    var obj = JSON.parse(resp);
+                    var obj;
+                    try {
+                        var jsonStr = extractJSON(resp);
+                        if (!jsonStr) throw new Error('No JSON found');
+                        obj = JSON.parse(jsonStr);
+                        /* Nếu server có in warning/error HTML, hiển thị nó nhưng không dừng */
+                        if (resp.indexOf('<') !== -1) {
+                            var htmlPart = resp.substring(0, resp.indexOf('{'));
+                            console.warn('[goto_import] Server warning on page ' + current_page + ':', htmlPart);
+                            $("#history").append('<br><span style="color:#e67e22;" title="' + htmlPart.replace(/"/g,"'") + '">⚠️ Cảnh báo trang ' + current_page + ' (xem console)</span>');
+                        }
+                    } catch (e) {
+                        console.error('[goto_import] Invalid JSON response:', resp);
+                        $("#history").append('<br><span style="color:#e74c3c;">⚠ Phản hồi không hợp lệ trang ' + current_page + ' – tiến trình đã lưu, bạn có thể resume.</span>');
+                        $('.main form').find('input[type="submit"]').prop('disabled', false);
+                        return;
+                    }
 
                     /* 
                     * check if current page less than total page then continue export
@@ -169,13 +201,22 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                     asl_data_type: asl_data_type
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
-                    console.log(xhr.status);
-                    console.log(xhr.responseText);
-                    console.log(thrownError);
+                    console.error('[run_export_ajax] Network error:', xhr.status, thrownError);
+                    $("#history").append('<br><span style="color:#e74c3c;">⚠ Không kết nối được server.</span>');
+                    $('.main form').find('input[type="submit"]').prop('disabled', false);
                 },
                 success: function(resp) {
-                    // console.log(resp);
-                    var obj = JSON.parse(resp);
+                    var obj;
+                    try {
+                        var jsonStr = extractJSON(resp);
+                        if (!jsonStr) throw new Error('No JSON found');
+                        obj = JSON.parse(jsonStr);
+                    } catch (e) {
+                        console.error('[run_export_ajax] Invalid JSON:', resp);
+                        $("#history").append('<br><span style="color:#e74c3c;">⚠ Phản hồi không hợp lệ từ server. Raw: ' + resp.substring(0, 200) + '</span>');
+                        $('.main form').find('input[type="submit"]').prop('disabled', false);
+                        return;
+                    }
                     $("input[name='total_page']").val(obj['total_page']);
 
                     goto_import(obj['function'], obj['total_page'], 1);
@@ -186,6 +227,7 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
 
             console.log(response);
         }
+
 
         /* 
         * function to check stack if has more data type then continue export
@@ -279,9 +321,12 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
             if (progress && progress.dataType === asl_data_type && progress.current_page < progress.total_page) {
                 showResumeModal(
                     progress,
-                    /* onContinue */ function() {
-                        $("#history").append('<br><em>▶ Tiếp tục từ trang ' + progress.current_page + '/' + progress.total_page + '...</em><br>');
+                    /* onContinue – dùng functional đã lưu, KHÔNG gọi run_export_mongo (không truncate bảng) */
+                    function() {
                         $('input[name="list_object"]').val(progress.list_object || '');
+                        $("#history").append('<br><em>▶ Tiếp tục từ trang ' + progress.current_page + '/' + progress.total_page + '...</em><br>');
+                        var calc = progress.current_page / progress.total_page * 100;
+                        $("#process").html(Math.round(calc * 100) / 100 + "%");
                         goto_import(progress.functional, progress.total_page, progress.current_page);
                     },
                     /* onRestart */ function() {
@@ -302,9 +347,12 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
             if (progress && progress.current_page < progress.total_page) {
                 showResumeModal(
                     progress,
-                    /* onContinue */ function() {
-                        $("#history").append('<br><em>▶ Tiếp tục từ trang ' + progress.current_page + '/' + progress.total_page + '...</em><br>');
+                    /* onContinue – dùng functional đã lưu, KHÔNG gọi run_export_mongo (không truncate bảng) */
+                    function() {
                         $('input[name="list_object"]').val(progress.list_object || '');
+                        $("#history").append('<br><em>▶ Tiếp tục từ trang ' + progress.current_page + '/' + progress.total_page + '...</em><br>');
+                        var calc = progress.current_page / progress.total_page * 100;
+                        $("#process").html(Math.round(calc * 100) / 100 + "%");
                         goto_import(progress.functional, progress.total_page, progress.current_page);
                     },
                     /* onRestart */ function() {
@@ -355,7 +403,14 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                     console.log(thrownError);
                 },
                 success: function(resp) {
-                    var obj = JSON.parse(resp);
+                    var obj;
+                    try {
+                        obj = JSON.parse(resp);
+                    } catch (e) {
+                        console.error('[update_data_with_page] Invalid JSON:', resp);
+                        $("#history").append('<br><span style="color:#e74c3c;">⚠ Phản hồi không hợp lệ trang ' + page + '</span>');
+                        return;
+                    }
 
                     if (obj['current_page'] <= total_page) {
                         update_data_with_page( total_page, obj['current_page'] );

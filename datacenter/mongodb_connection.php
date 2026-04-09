@@ -139,6 +139,8 @@ function run_export_mongo(){
             delete_mysql_table($aslTable);
             $aslTable = 'wp_asljobcountry';
             delete_mysql_table($aslTable);
+            $aslTable = 'wp_asljobtodocument';
+            delete_mysql_table($aslTable);
             break;
         
         case 'task':
@@ -263,15 +265,15 @@ function export_mysql_customer($paged) {
             $customer = [
                 'customerid'            => get_the_ID(),
                 'name'          => $name,
-                'companyName'   => $cong_ty,
-                'country'       => $quoc_gia,
-                'phone'         => $so_dien_thoai,
-                'email'         => $email,
+                'companyName'   => $cong_ty ?? '',
+                'country'       => $quoc_gia ?? '',
+                'phone'         => $so_dien_thoai ?? '',
+                'email'         => $email ?? '',
                 'date'          => get_the_date('Y-m-d H:i:s'),
             ];
             // print_r($customer);
 
-            $wpdb->insert(
+            $wpdb->replace(
                 $aslTable,
                 $customer
             );
@@ -425,7 +427,7 @@ function export_mysql_partner($current_page) {
                 'date'          => $user->user_registered,
             ];
 
-            $insert = $wpdb->insert(
+            $insert = $wpdb->replace(
                 $aslTable,
                 $partner
             );
@@ -626,7 +628,7 @@ function export_mysql_member($current_page) {
                 'role_ip_manager'   => $role_ip_manager,
             ];
 
-            $wpdb->insert(
+            $wpdb->replace(
                 $aslTable,
                 $partner
             );
@@ -803,7 +805,7 @@ function export_mysql_job($paged) {
                         'date'  => $ngay_thang
                     ];
 
-                    $wpdb->insert(
+                    $wpdb->replace(
                         $aslHistory,
                         $data_arr
                     );
@@ -816,15 +818,15 @@ function export_mysql_job($paged) {
             foreach ($list_country as $key => $value) {
                 $data_arr   = [
                     'jobid'         => $jobID,
-                    'customerid'    => $customer->ID,
-                    'partnerid'     => $partner_2['ID'],
-                    'memberid'      => $member['ID'],
-                    'managerid'     => $manager['ID'],
-                    'country'   => trim($value),
+                    'customerid'    => $customer->ID ?? 0,
+                    'partnerid'     => $partner_2['ID'] ?? 0,
+                    'memberid'      => $member['ID'] ?? 0,
+                    'managerid'     => $manager['ID'] ?? 0,
+                    'country'   => trim($value) ?? '',
                     'date'      => get_the_date('Y-m-d H:i:s'),
                 ];
 
-                $wpdb->insert(
+                $wpdb->replace(
                     $aslCountry,
                     $data_arr
                 );
@@ -837,7 +839,7 @@ function export_mysql_job($paged) {
                     'supervisorid' => $member['ID'],
                     'name'         => 'Người thực hiện'
                 ];
-                $wpdb->insert(
+                $wpdb->replace(
                     $aslSupervisor,
                     $data_arr
                 );
@@ -849,7 +851,7 @@ function export_mysql_job($paged) {
                     'supervisorid' => $manager['ID'],
                     'name'         => 'Người quản lý'
                 ];
-                $wpdb->insert(
+                $wpdb->replace(
                     $aslSupervisor,
                     $data_arr
                 );
@@ -866,7 +868,7 @@ function export_mysql_job($paged) {
                             'name'  => 'Người giám sát'
                         ];
 
-                        $wpdb->insert(
+                        $wpdb->replace(
                             $aslSupervisor,
                             $data_arr
                         );
@@ -885,7 +887,7 @@ function export_mysql_job($paged) {
                             'name'  => 'Người đồng quản lý'
                         ];
 
-                        $wpdb->insert(
+                        $wpdb->replace(
                             $aslSupervisor,
                             $data_arr
                         );
@@ -904,7 +906,7 @@ function export_mysql_job($paged) {
                             'name'  => 'Người đồng thực hiện'
                         ];
 
-                        $wpdb->insert(
+                        $wpdb->replace(
                             $aslSupervisor,
                             $data_arr
                         );
@@ -916,10 +918,10 @@ function export_mysql_job($paged) {
             $groups = get_the_terms(get_the_ID(), 'group');
             $data_arr = [
                 'jobid' => $jobID,
-                'customerid'        => $customer->ID,
-                'partnerid'         => $partner_2['ID'],
-                'memberid'          => $member['ID'],
-                'managerid'         => $manager['ID'],
+                'customerid'        => $customer->ID ?? 0,
+                'partnerid'         => $partner_2['ID'] ?? 0,
+                'memberid'          => $member['ID'] ?? 0,
+                'managerid'         => $manager['ID'] ?? 0,
                 'date'  => get_the_date('Y-m-d H:i:s'),
             ];
 
@@ -963,7 +965,7 @@ function export_mysql_job($paged) {
             }
 
             # insert to database
-            $wpdb->insert(
+            $wpdb->replace(
                 $aslGroup,
                 $data_arr
             );
@@ -1017,22 +1019,22 @@ function export_mysql_job($paged) {
                 'trademark_totalclass' => $so_luong_nhom,
                 'trademark_fillingid' => $so_don,
                 'trademark_fillingdate' => $ngay_nop_don,
-                'partner_name' => $partner_2['display_name'],
-                'partner_code' => $partner_code,
-                'partner_companyName' => $ten_cong_ty,
-                'partner_country' => $quoc_gia,
-                'partner_address' => $dia_chi,
-                'partner_city' => $city,
-                'partner_phone' => $so_dien_thoai,
-                'partner_email' => $partner_2['user_email'],
-                'partner_email_cc' => $email_cc,
-                'partner_email_bcc' => $email_bcc,
-                'partner_tax_number' => $mst,
-                'partner_legal_representative' => $nguoi_dai_dien_phap_luat,
-                'partner_position' => $chuc_vu
+                'partner_name' => $partner_2['display_name'] ?? '',
+                'partner_code' => $partner_code ?? '',
+                'partner_companyName' => $ten_cong_ty ?? '',
+                'partner_country' => $quoc_gia ?? '',
+                'partner_address' => $dia_chi ?? '',
+                'partner_city' => $city ?? '',
+                'partner_phone' => $so_dien_thoai ?? '',
+                'partner_email' => $partner_2['user_email'] ?? '',
+                'partner_email_cc' => $email_cc ?? '',
+                'partner_email_bcc' => $email_bcc ?? '',
+                'partner_tax_number' => $mst ?? '',
+                'partner_legal_representative' => $nguoi_dai_dien_phap_luat ?? '',
+                'partner_position' => $chuc_vu ?? ''
             ];
 
-            $wpdb->insert(
+            $wpdb->replace(
                 $aslJobDocument,
                 $jobdoc
             );
@@ -1041,36 +1043,36 @@ function export_mysql_job($paged) {
 
             $job = [
                 'jobid'             => get_the_ID(),
-                'customerid'        => $customer->ID,
-                'first_partnerid'   => $partner_1_id,
-                'partnerid'         => $partner_2['ID'],
-                'partner_out_id'    => $foreign_partner_id,
-                'memberid'          => $member['ID'],
-                'managerid'         => $manager['ID'],
-                'title'         => get_the_title(),
-                'type'          => $phan_loai,
-                'type_group'    => $data_arr['type'],
-                'flag'          => $data_arr['flag'],
-                'potential'     => $potential,
-                'our_ref'       => $our_ref,
-                'currency'      => $currency,
-                'total_value'   => $total_value,
-                'paid'          => $paid,
-                'remainning'    => $remainning,
-                'total_cost'    => $total_cost,
-                'currency_out'  => $currency_out,
-                'advance_money' => $advance_money,
-                'debt'          => $debt,
-                'payment_status'=> $payment_status,
+                'customerid'        => $customer->ID ?? 0,
+                'first_partnerid'   => $partner_1_id ?? NULL,
+                'partnerid'         => $partner_2['ID'] ?? 0,
+                'partner_out_id'    => $foreign_partner_id ?? NULL,
+                'memberid'          => $member['ID'] ?? 0,
+                'managerid'         => $manager['ID'] ?? 0,
+                'title'         => get_the_title() ?? '',
+                'type'          => $phan_loai ?? '',
+                'type_group'    => $data_arr['type'] ?? '',
+                'flag'          => $data_arr['flag'] ?? '',
+                'potential'     => $potential ?? '',
+                'our_ref'       => $our_ref ?? '',
+                'currency'      => $currency ?? '',
+                'total_value'   => $total_value ?? 0,
+                'paid'          => $paid ?? 0,
+                'remainning'    => $remainning ?? 0,
+                'total_cost'    => $total_cost ?? 0,
+                'currency_out'  => $currency_out ?? '',
+                'advance_money' => $advance_money ?? 0,
+                'debt'          => $debt ?? 0,
+                'payment_status'=> $payment_status ?? '',
                 'source'        => implode(",", $tagname_arr),
                 'date'          => get_the_date('Y-m-d H:i:s'),
-                'contract_sign_date' => $contract_sign_date,
-                'agency_hn'     => $agency_hn,
-                'agency_hcm'    => $agency_hcm,
-                'level'         => $level
+                'contract_sign_date' => $contract_sign_date ?? NULL,
+                'agency_hn'     => $agency_hn ?? 0,
+                'agency_hcm'    => $agency_hcm ?? 0,
+                'level'         => $level ?? ''
             ];
 
-            $sent = $wpdb->insert(
+            $sent = $wpdb->replace(
                 $aslTable,
                 $job
             );
@@ -1212,20 +1214,20 @@ function export_mysql_task($paged) {
 
             $task = [
                 'taskid'    => $taskid,
-                'title'     => get_the_title(),
-                'jobid'     => $jobID,
-                'memberid'  => $user_arr["ID"],
-                'managerid' => $manager["ID"],
-                'customerid'=> $customer->ID,
-                'partnerid' => $partner_2['ID'],
-                'status'    => $trang_thai,
-                'deadline'  => $deadline->format('Y-m-d H:i:s'),
-                'time_to_response'  => $time_to_response,
-                'miss_deadline'     => $miss_deadline,
+                'title'     => get_the_title() ?? '',
+                'jobid'     => $jobID ?? 0,
+                'memberid'  => $user_arr["ID"] ?? 0,
+                'managerid' => $manager["ID"] ?? 0,
+                'customerid'=> $customer->ID ?? 0,
+                'partnerid' => $partner_2['ID'] ?? 0,
+                'status'    => $trang_thai ?? '',
+                'deadline'  => ($deadline instanceof DateTime) ? $deadline->format('Y-m-d H:i:s') : '',
+                'time_to_response'  => $time_to_response ?? '',
+                'miss_deadline'     => $miss_deadline ?? 0,
                 'date'              => get_the_date('Y-m-d H:i:s'),
             ];
                 
-            $sent = $wpdb->insert(
+            $sent = $wpdb->replace(
                 $aslTable,
                 $task
             );
@@ -1245,7 +1247,7 @@ function export_mysql_task($paged) {
                         'date'      => $thoi_gian->format('Y-m-d H:i:s')
                     ];
 
-                    $sent = $wpdb->insert(
+                    $sent = $wpdb->replace(
                         $aslHistory,
                         $history_arr
                     );
