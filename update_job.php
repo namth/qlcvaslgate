@@ -249,6 +249,30 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
             array('jobid' => $postid)
         );
 
+        # Add member (Người thực hiện)
+        if ($member) {
+            $wpdb->insert(
+                $aslSupervisor,
+                array(
+                    'jobid'        => $postid,
+                    'supervisorid' => $member,
+                    'name'         => __('Người thực hiện', 'qlcv')
+                )
+            );
+        }
+
+        # Add manager (Người quản lý)
+        if ($manager) {
+            $wpdb->insert(
+                $aslSupervisor,
+                array(
+                    'jobid'        => $postid,
+                    'supervisorid' => $manager,
+                    'name'         => __('Người quản lý', 'qlcv')
+                )
+            );
+        }
+
         # Add supervisors
         if ($supervisor) {
             $supervisors = explode("|", $supervisor);

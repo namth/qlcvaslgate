@@ -659,6 +659,30 @@ function add_new_job()
             # 3. Update aslsupervisor table
             $aslSupervisor = 'wp_aslsupervisor';
             
+            # Add member (Người thực hiện)
+            if ($data_member) {
+                $wpdb->insert(
+                    $aslSupervisor,
+                    array(
+                        'jobid'        => $inserted,
+                        'supervisorid' => $data_member,
+                        'name'         => 'Người thực hiện'
+                    )
+                );
+            }
+            
+            # Add manager (Người quản lý)
+            if ($data_manager) {
+                $wpdb->insert(
+                    $aslSupervisor,
+                    array(
+                        'jobid'        => $inserted,
+                        'supervisorid' => $data_manager,
+                        'name'         => 'Người quản lý'
+                    )
+                );
+            }
+            
             # Add supervisors if any
             if ($data_supervisor) {
                 $supervisors = explode("|", $data_supervisor);

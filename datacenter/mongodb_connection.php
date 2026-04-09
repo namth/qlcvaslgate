@@ -830,6 +830,30 @@ function export_mysql_job($paged) {
                 );
             }
 
+            # save member to export (Người thực hiện)
+            if ( $member && isset($member['ID']) && $member['ID'] ) {
+                $data_arr = [
+                    'jobid'        => $jobID,
+                    'supervisorid' => $member['ID'],
+                    'name'         => 'Người thực hiện'
+                ];
+                $wpdb->insert(
+                    $aslSupervisor,
+                    $data_arr
+                );
+            }
+            # save manager to export (Người quản lý)
+            if ( $manager && isset($manager['ID']) && $manager['ID'] ) {
+                $data_arr = [
+                    'jobid'        => $jobID,
+                    'supervisorid' => $manager['ID'],
+                    'name'         => 'Người quản lý'
+                ];
+                $wpdb->insert(
+                    $aslSupervisor,
+                    $data_arr
+                );
+            }
             # save supervisor to export
             $data_supervisor = get_field('supervisor');
             if ( $data_supervisor ) {
