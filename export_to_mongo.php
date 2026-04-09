@@ -51,6 +51,20 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                 <input type="hidden" name="total_page" value="">
                 <input type="hidden" name="current_page" value="">
                 <input type="hidden" name="list_object" value="">
+
+                <!-- Resume Modal -->
+                <div id="resumeModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center;">
+                    <div style="background:#fff; border-radius:12px; padding:32px 36px; max-width:420px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.22); text-align:center;">
+                        <div style="font-size:2rem; margin-bottom:10px;">⚠️</div>
+                        <h3 style="margin:0 0 10px; color:#222;">Phát hiện tiến trình chưa hoàn thành</h3>
+                        <p id="resumeModalDesc" style="color:#555; margin-bottom:24px; font-size:0.97rem;"></p>
+                        <div style="display:flex; gap:12px; justify-content:center;">
+                            <button id="btnContinue" class="button button-primary" style="min-width:130px;">▶ Tiếp tục</button>
+                            <button id="btnRestart" class="button" style="min-width:130px; background:#e74c3c; color:#fff; border-color:#e74c3c;">🔄 Bắt đầu lại</button>
+                        </div>
+                    </div>
+                </div>
+
                 <b id="labelimport"></b>
                 <div id="process"></div>
                 <div id="result"></div>
@@ -69,10 +83,41 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
 <script>
     jQuery(document).ready(function($) {
 
+        /* ============================================================
+         * RESUME / PROGRESS HELPERS (localStorage)
+         * ============================================================ */
+        var PROGRESS_KEY = 'asl_export_progress';
+
+        function saveProgress(dataType, functional, total_page, current_page, list_object) {
+            var data = {
+                dataType: dataType,
+                functional: functional,
+                total_page: total_page,
+                current_page: current_page,
+                list_object: list_object,
+                savedAt: new Date().toISOString()
+            };
+            localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
+        }
+
+        function clearProgress() {
+            localStorage.removeItem(PROGRESS_KEY);
+        }
+
+        function loadProgress() {
+            var raw = localStorage.getItem(PROGRESS_KEY);
+            return raw ? JSON.parse(raw) : null;
+        }
+
         /* 
         * function to call ajax to start run export data to db with pagination
         */
         function goto_import(functional, total_page, current_page) {
+            /* lưu tiến trình trước mỗi lần gọi */
+            var dataType = $('select[name="asl_data_type"]').val();
+            var listObj  = $('input[name="list_object"]').val();
+            saveProgress(dataType, functional, total_page, current_page, listObj);
+
             $.ajax({
                 type: "POST",
                 url: AJAX.ajax_url,
@@ -86,6 +131,7 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                     console.log(xhr.status);
                     console.log(xhr.responseText);
                     console.log(thrownError);
+                    /* lỗi mạng – giữ nguyên progress để có thể resume */
                 },
                 success: function(resp) {
                     var obj = JSON.parse(resp);
@@ -165,7 +211,6 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                 $("#history").append("<br>Importing " + process_item + " ... ");
 
                 let color = $("#loading").data("color");
-                // alert(color);
                 if (color == 1) {
                     /* set color to loading bar */
                     const r1 = Math.floor(Math.random() * 256);
@@ -184,28 +229,103 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                 /* call function to process export data to db */
                 run_export_ajax(process_item);
             } else {
+                /* export xong toàn bộ – xóa progress */
+                clearProgress();
                 // enable button submit
                 $('.main form').find('input[type="submit"]').prop('disabled', false);
             }
             return false;
         }
 
+        /* ============================================================
+         * SHOW / HIDE RESUME MODAL
+         * ============================================================ */
+        function showResumeModal(progress, onContinue, onRestart) {
+            var savedAt = new Date(progress.savedAt);
+            var desc = 'Loại dữ liệu: <strong>' + progress.dataType + '</strong><br>'
+                     + 'Trang: <strong>' + progress.current_page + ' / ' + progress.total_page + '</strong><br>'
+                     + 'Lưu lúc: <strong>' + savedAt.toLocaleString('vi-VN') + '</strong>';
+            $('#resumeModalDesc').html(desc);
+            $('#resumeModal').css('display', 'flex');
+
+            $('#btnContinue').off('click').on('click', function() {
+                $('#resumeModal').hide();
+                onContinue();
+            });
+            $('#btnRestart').off('click').on('click', function() {
+                $('#resumeModal').hide();
+                onRestart();
+            });
+        }
+
+        /* ============================================================
+         * SUBMIT FORM – kiểm tra progress trước khi bắt đầu
+         * ============================================================ */
+        function startFresh(asl_data_type) {
+            clearProgress();
+            $("#history").html('');
+            $("#result").html('');
+            $("#process").html('');
+            const list_object = JSON.stringify([asl_data_type]);
+            $('input[name="list_object"]').val(list_object);
+            checkStack();
+        }
+
         $('.main form').submit(function(e) {
             e.preventDefault();
             var asl_data_type = $('select[name="asl_data_type"]').val();
-            const list_object = JSON.stringify([asl_data_type]);
-            $('input[name="list_object"]').val(list_object);
+            var progress = loadProgress();
 
-            checkStack();
+            if (progress && progress.dataType === asl_data_type && progress.current_page < progress.total_page) {
+                showResumeModal(
+                    progress,
+                    /* onContinue */ function() {
+                        $("#history").append('<br><em>▶ Tiếp tục từ trang ' + progress.current_page + '/' + progress.total_page + '...</em><br>');
+                        $('input[name="list_object"]').val(progress.list_object || '');
+                        goto_import(progress.functional, progress.total_page, progress.current_page);
+                    },
+                    /* onRestart */ function() {
+                        startFresh(asl_data_type);
+                    }
+                );
+            } else {
+                startFresh(asl_data_type);
+            }
 
             return false;
         });
 
         $('#importAll').click(function() {
-            list_object = JSON.stringify(["job", "task", "member", "partner", "customer"]);
-            $('input[name="list_object"]').val(list_object);
+            var progress = loadProgress();
+            var allTypes = ["job", "task", "member", "partner", "customer"];
 
-            checkStack();
+            if (progress && progress.current_page < progress.total_page) {
+                showResumeModal(
+                    progress,
+                    /* onContinue */ function() {
+                        $("#history").append('<br><em>▶ Tiếp tục từ trang ' + progress.current_page + '/' + progress.total_page + '...</em><br>');
+                        $('input[name="list_object"]').val(progress.list_object || '');
+                        goto_import(progress.functional, progress.total_page, progress.current_page);
+                    },
+                    /* onRestart */ function() {
+                        clearProgress();
+                        $("#history").html('');
+                        $("#result").html('');
+                        $("#process").html('');
+                        list_object = JSON.stringify(allTypes);
+                        $('input[name="list_object"]').val(list_object);
+                        checkStack();
+                    }
+                );
+            } else {
+                clearProgress();
+                $("#history").html('');
+                $("#result").html('');
+                $("#process").html('');
+                list_object = JSON.stringify(allTypes);
+                $('input[name="list_object"]').val(list_object);
+                checkStack();
+            }
             return false;
         });
 
