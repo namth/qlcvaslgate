@@ -34,12 +34,19 @@ if (!$job || $job->post_type !== 'job') {
 $job_title = get_the_title($job_id);
 $our_ref = get_field('our_ref', $job_id);
 $total_value = get_field('total_value', $job_id);
+$paid_value = get_field('paid', $job_id);
 $currency = get_field('currency', $job_id);
 
 // Ensure total_value is a valid number
 $total_value = floatval($total_value);
 if ($total_value <= 0) {
     $total_value = 0;
+}
+
+// Ensure paid_value is a valid number
+$paid_value = floatval($paid_value);
+if ($paid_value <= 0) {
+    $paid_value = 0;
 }
 
 // Set default currency if empty
@@ -85,7 +92,11 @@ foreach ($existing_commissions as $commission) {
                     <div class="job-info">
                         <p><strong><?php _e('Công việc:', 'qlcv'); ?></strong> <?php echo esc_html($job_title); ?></p>
                         <p><strong><?php _e('Số REF:', 'qlcv'); ?></strong> <?php echo esc_html($our_ref); ?></p>
-                        <p><strong><?php _e('Giá trị:', 'qlcv'); ?></strong> <?php echo number_format($total_value); ?> <?php echo esc_html($currency); ?></p>
+                        <p><strong><?php _e('Tổng giá trị:', 'qlcv'); ?></strong> <?php echo number_format($total_value); ?> <?php echo esc_html($currency); ?></p>
+                        <p><strong><?php _e('Thực nhận (Paid):', 'qlcv'); ?></strong> 
+                            <span style="color: #28a745; font-size: 1.05em;"><?php echo number_format($paid_value); ?> <?php echo esc_html($currency); ?></span>
+                            <small class="text-muted"> — <?php _e('Tỷ lệ % sẽ được tính dựa trên số tiền này', 'qlcv'); ?></small>
+                        </p>
                     </div>
                 </div>
                 
@@ -465,7 +476,9 @@ foreach ($existing_commissions as $commission) {
 
 <script>
 jQuery(document).ready(function($) {
-    const totalValue = <?php echo max(0, floatval($total_value)); ?>;
+    // Tính commission dựa trên thực nhận (paid), không phải tổng giá trị
+    const totalValue = <?php echo max(0, floatval($paid_value)); ?>;
+    const paidValue  = <?php echo max(0, floatval($paid_value)); ?>;
     
     // Function to calculate commission amounts
     function calculateCommissions() {

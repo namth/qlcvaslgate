@@ -1499,6 +1499,11 @@ function delete_finance_record($finance_post_id) {
         
         update_field('field_60a231d395f2e', $job_paid, $finance_job);
         update_field('field_60a231d3961b0', $job_remainning, $finance_job);
+        
+        // Cập nhật lại commission_amount khi paid giảm
+        if (function_exists('update_commission_amounts_by_paid')) {
+            update_commission_amounts_by_paid($finance_job, $job_paid);
+        }
     } else if ($finance_type == "Chi") {
         $new_wallet_total = $total_wallet + $finance_value;
         
@@ -2092,6 +2097,9 @@ function save_commission_data() {
         exit;
     }
     
+    // Lấy paid (thực nhận) từ DB để tính commission_amount
+    $paid_value = floatval(get_field('paid', $job_id));
+    
     // Calculate total percentage
     $total_percent = 0;
     foreach ($commissions as $commission) {
@@ -2114,13 +2122,15 @@ function save_commission_data() {
         $userid = intval($commission['userid']);
         $role_type = sanitize_text_field($commission['role_type']);
         $commission_percent = floatval($commission['commission_percent']);
-        $commission_amount = intval($commission['commission_amount']);
         $currency = sanitize_text_field($commission['currency']);
         
         // Skip if no percentage set
         if ($commission_percent <= 0) {
             continue;
         }
+        
+        // Tính commission_amount dựa trên paid (thực nhận), KHÔNG dùng total_value
+        $commission_amount = intval(round($paid_value * $commission_percent / 100));
         
         // Check if record exists
         $existing = $wpdb->get_row($wpdb->prepare(
@@ -2171,7 +2181,7 @@ function save_commission_data() {
     
     // Prepare response message
     if ($success_count > 0 && $error_count == 0) {
-        $message = "Đã lưu thành công phân chia hoa hồng cho {$success_count} người.";
+        $message = "Đã lưu thành công phân chia hoa hồng cho {$success_count} người" . ($paid_value > 0 ? " (dựa trên thực nhận: " . number_format($paid_value) . ")" : "") . ".";
         $status = 'success';
     } elseif ($success_count > 0 && $error_count > 0) {
         $message = "Đã lưu thành công {$success_count} bản ghi, {$error_count} bản ghi lỗi.";
@@ -2183,4 +2193,40 @@ function save_commission_data() {
     
     echo json_encode(array('status' => $status, 'message' => $message));
     exit;
+}
+
+/**
+ * Cập nhật lại commission_amount cho tất cả nhân sự của một job khi giá trị paid thay đổi.
+ * Hàm này được gọi sau khi update_job hoặc finance cập nhật paid.
+ */
+function update_commission_amounts_by_paid($job_id, $new_paid_value = null) {
+    global $wpdb;
+    
+    if ($new_paid_value === null) {
+        $new_paid_value = floatval(get_field('paid', $job_id));
+    }
+    
+    // Lấy tất cả commissions của job này
+    $commissions = $wpdb->get_results($wpdb->prepare(
+        "SELECT id, commission_percent FROM wp_aslcommission WHERE jobid = %d AND commission_percent > 0",
+        $job_id
+    ));
+    
+    if (empty($commissions)) {
+        return; // Không có commission nào, bỏ qua
+    }
+    
+    foreach ($commissions as $c) {
+        $new_amount = intval(round($new_paid_value * floatval($c->commission_percent) / 100));
+        $wpdb->update(
+            'wp_aslcommission',
+            array(
+                'commission_amount' => $new_amount,
+                'updated_date'      => current_time('mysql', 1)
+            ),
+            array('id' => $c->id),
+            array('%d', '%s'),
+            array('%d')
+        );
+    }
 }

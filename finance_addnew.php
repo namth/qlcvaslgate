@@ -123,6 +123,11 @@ if (
                 'create'            // action_type
             );
 
+            # Cập nhật lại commission_amount khi paid thay đổi
+            if ($finance_type == "Thu" && function_exists('update_commission_amounts_by_paid')) {
+                update_commission_amounts_by_paid($finance_job, $job_paid);
+            }
+
             # update vào job 
 
             # đợi 3 giây và chuyển trang

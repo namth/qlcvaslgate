@@ -28,7 +28,10 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         $foreign_partner= $_POST['foreign_partner'];
         $member         = $_POST['member'];
         $manager        = $_POST['manager'];
-        $supervisor     = implode("|", $_POST['supervisor']);
+        # if supervisor is array, then implode to string, else set it to empty
+        if (is_array($_POST['supervisor'])) {
+            $supervisor     = implode("|", $_POST['supervisor']);
+        } else $supervisor = "";
         # if co_manager is array, then implode to string, else set it to empty
         if (is_array($_POST['co_manager'])) {
             $co_manager     = implode("|", $_POST['co_manager']);
@@ -411,6 +414,11 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         # create log, save history of this job
         $log = __("Cập nhật công việc", 'qlcv');
         asl_create_log($log,$postid);
+
+        # Cập nhật lại commission_amount cho tất cả nhân sự dựa trên paid mới
+        if (function_exists('update_commission_amounts_by_paid')) {
+            update_commission_amounts_by_paid($postid, floatval($paid));
+        }
 
         wp_redirect($history_link);
     }
