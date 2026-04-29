@@ -787,7 +787,8 @@ function export_mysql_job($paged) {
             $payment_status = get_field('payment_status');
 
             if (get_field('contract_sign_date')) {
-                $tmp = DateTime::createFromFormat('d/m/Y', get_field('contract_sign_date'));
+                $tz = new DateTimeZone('Asia/Ho_Chi_Minh');
+                $tmp = DateTime::createFromFormat('d/m/Y', get_field('contract_sign_date'), $tz);
                 $contract_sign_date = $tmp->format('Y-m-d H:i:s');
             } else $contract_sign_date = NULL;
 
@@ -796,12 +797,14 @@ function export_mysql_job($paged) {
             if ($work_list) {
                 foreach ($work_list as $key => $value) {
                     if (preg_match("/^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/", $value['ngay_thang'])) {
-                        $tmp = DateTime::createFromFormat('d/m/Y', $value['ngay_thang']);
+                        $tz = new DateTimeZone('Asia/Ho_Chi_Minh');
+                        $tmp = DateTime::createFromFormat('d/m/Y', $value['ngay_thang'], $tz);
                         $ngay_thang = $tmp->format('Y-m-d H:i:s');
                     } else $ngay_thang = NULL;
+                    $clean_name = strip_tags(str_replace(array('<br>', '<br/>', '<br />'), ' ', $value['mo_ta']));
                     $data_arr = [
                         'jobid' => $jobID,
-                        'name'  => $value['mo_ta'],
+                        'name'  => $clean_name,
                         'date'  => $ngay_thang
                     ];
 

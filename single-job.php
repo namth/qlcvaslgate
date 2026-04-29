@@ -137,7 +137,8 @@ while (have_posts()) {
 
     if (isset($_GET['update']) && ($_GET['update'] == "Done")) {
         wp_remove_object_terms(get_the_ID(), 'tiem-nang', 'group');
-        $current_time = new DateTime();
+        $current_time_str = current_time('mysql', 1);
+        $current_time = new DateTime($current_time_str);
 
         # set contract signning date to job
         update_field('field_60ffc8f3d152b', $current_time->format('Ymd'));
@@ -149,7 +150,7 @@ while (have_posts()) {
         $wpdb->update(
             'wp_asljob',
             array(
-                'contract_sign_date' => $current_time->format('Y-m-d H:i:s'),
+                'contract_sign_date' => $current_time_str,
                 'flag'               => 'Đã chốt',
                 'potential'          => ''
             ),
@@ -484,7 +485,7 @@ while (have_posts()) {
                                         the_row();
 
                                         $thoi_gian = DateTime::createFromFormat('d/m/Y', get_sub_field('thoi_gian'));
-                                        $timestamp = strtotime($thoi_gian->format('d-m-Y H:i:s'));
+                                        $timestamp = strtotime($thoi_gian->format('d-m-Y H:i:s') . ' Asia/Ho_Chi_Minh');
                                         $iduser = get_sub_field('nguoi_thuc_hien');
                                         $nguoi_thuc_hien = get_user_by('ID', $iduser);
                                 ?>
@@ -587,11 +588,30 @@ while (have_posts()) {
                                 <?php
                                 // Kiểm tra quyền để hiển thị nút chia tỷ lệ %
                                 $current_user = wp_get_current_user();
-                                $job_author = get_post_field('post_author', get_the_ID());
+                                $job_id = get_the_ID();
+                                $job_author = get_post_field('post_author', $job_id);
                                 $is_job_creator = ($current_user->ID == $job_author);
                                 $is_admin = in_array('administrator', $current_user->roles);
                                 
-                                if ($is_job_creator || $is_admin) {
+                                # Lấy thông tin nhân sự tham gia để kiểm tra quyền
+                                $manager = get_field('manager', $job_id);
+                                $member = get_field('member', $job_id);
+                                $co_manager = get_field('co_manager', $job_id);
+                                $co_member = get_field('co_member', $job_id);
+                                
+                                $manager_id = isset($manager['ID']) ? $manager['ID'] : 0;
+                                $member_id = isset($member['ID']) ? $member['ID'] : 0;
+                                $co_manager_ids = $co_manager ? explode("|", $co_manager) : [];
+                                $co_member_ids = $co_member ? explode("|", $co_member) : [];
+                                
+                                $is_staff = (
+                                    ($current_user->ID == $manager_id) || 
+                                    ($current_user->ID == $member_id) || 
+                                    in_array($current_user->ID, $co_manager_ids) || 
+                                    in_array($current_user->ID, $co_member_ids)
+                                );
+
+                                if ($is_job_creator || $is_admin || $is_staff) {
                                     echo '<a href="' . get_bloginfo('url') . '/chia-ty-le-hoa-hong/?job_id=' . get_the_ID() . '" class="button button-sm button-success" data-tippy-content="' . __('Quản lý phân chia hoa hồng', 'qlcv') . '"><span><i class="fa fa-percentage"></i>' . __('Chia tỷ lệ %', 'qlcv') . '</span></a>';
                                 }
                                 ?>
@@ -708,7 +728,7 @@ while (have_posts()) {
                     echo '<div class="box-body">';
                     echo '<ul class="timeline-list">';
                     foreach ($logs as $log) {
-                        $timestamp = strtotime($log->date); // Convert date string to numeric timestamp
+                        $timestamp = strtotime($log->date . ' Asia/Ho_Chi_Minh'); // Convert date string to numeric timestamp with explicit timezone
                         echo '<li>';
                         echo '<span class="icon">';
                         echo "<img src='" . get_avatar_url($log->userid) . "' style='border-radius:40px;'/>";

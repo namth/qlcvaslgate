@@ -53,10 +53,11 @@ function blankslate_load_scripts()
 
 function time_elapsed_string($datetime, $full = false)
 {
-    date_default_timezone_set('Asia/Ho_Chi_Minh');
-    $now = new DateTime;
-    $ago = new DateTime;
+    $tz = new DateTimeZone('Asia/Ho_Chi_Minh');
+    $now = new DateTime('now', $tz);
+    $ago = new DateTime();
     $ago->setTimestamp($datetime);
+    $ago->setTimezone($tz);
     $diff = $now->diff($ago);
 
     // Create a new array to store our values
@@ -1351,11 +1352,12 @@ function update_job_history( $mota, $ngaythang, $postid ) {
     $aslHistory = 'wp_asljobhistory';
     
     // Insert new history record
+    $clean_mota = strip_tags(str_replace(array('<br>', '<br/>', '<br />'), ' ', $mota));
     $wpdb->insert(
         $aslHistory,
         array(
             'jobid' => $postid,
-            'name'  => $mota,
+            'name'  => $clean_mota,
             'date'  => current_time('mysql', 1)
         )
     );

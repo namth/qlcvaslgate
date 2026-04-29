@@ -159,7 +159,8 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         # Get contract sign date
         $contract_sign_date = NULL;
         if (get_field('contract_sign_date', $postid)) {
-            $tmp = DateTime::createFromFormat('d/m/Y', get_field('contract_sign_date', $postid));
+            $tz = new DateTimeZone('Asia/Ho_Chi_Minh');
+            $tmp = DateTime::createFromFormat('d/m/Y', get_field('contract_sign_date', $postid), $tz);
             $contract_sign_date = $tmp->format('Y-m-d H:i:s');
         }
         
