@@ -10,7 +10,7 @@ if (
 ) {
 
     $current_user = wp_get_current_user();
-    $current_time = current_time('timestamp', 7);
+    $current_time = current_time('timestamp');
 
     # Lấy dữ liệu từ form
     $fi_tmp_date        = $_POST['finance_date'];
@@ -95,6 +95,8 @@ if (
             'post_content'  => $finance_title,
             'post_status'   => 'publish',
             'post_type'     => 'finance',
+            'post_date'     => current_time('mysql'),
+            'post_date_gmt' => current_time('mysql', 1),
         ));
 
         # nếu update thành công thì update history
@@ -125,7 +127,7 @@ if (
 
             # Cập nhật lại commission_amount khi paid thay đổi
             if ($finance_type == "Thu" && function_exists('update_commission_amounts_by_paid')) {
-                update_commission_amounts_by_paid($finance_job, $job_paid);
+                update_commission_amounts_by_paid($finance_job, $job_paid, $finance_date);
             }
 
             # update vào job 
@@ -194,7 +196,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                     <div class="row mbn-20">
                         <div class="col-lg-3 form_title lh45"><?php _e('Ngày thu/chi', 'qlcv'); ?> <span class="text-danger">*</span></div>
                         <div class="col-lg-3 col-12 mb-20">
-                            <input type="text" class="form-control input-date-single" value="" name="finance_date" data-mask="99/99/9999">
+                            <input type="text" class="form-control input-date-single" value="<?php echo date('d/m/Y', current_time('timestamp')); ?>" name="finance_date" data-mask="99/99/9999">
                             <span class="form-help-text">"dd/mm/yyyy"</span>
                         </div>
                         <div class="col-lg-6"></div>

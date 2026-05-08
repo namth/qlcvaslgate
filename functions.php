@@ -224,7 +224,7 @@ function add_new_customer()
                 'country'       => $country,
                 'phone'         => $phone_number,
                 'email'         => $user_email,
-                'date'          => current_time('mysql', 1)
+                'date'          => current_time('mysql')
             )
         );
 
@@ -379,7 +379,7 @@ function add_new_job()
         $temp_date      = array_reverse($deadline_arr);
         $new_deadline   = implode('', $temp_date);
         $current_user   = wp_get_current_user();
-        $current_time   = current_time('timestamp', 7);
+        $current_time   = current_time('timestamp');
     }
     if($danh_muc == "Việc luật"){
         $danhmuckhac = $_POST['other_job'];
@@ -649,7 +649,7 @@ function add_new_job()
                     'debt'              => get_field('debt', $inserted),
                     'payment_status'    => get_field('payment_status', $inserted),
                     'source'            => implode(",", $tagname_arr),
-                    'date'              => current_time('mysql', 1),
+                    'date'              => current_time('mysql'),
                     'contract_sign_date' => $contract_sign_date,
                     'agency_hn'         => $agency_hn,
                     'agency_hcm'        => $agency_hcm,
@@ -748,7 +748,7 @@ function add_new_job()
                     'groupname'  => $danh_muc,
                     'flag'       => $job_flag,
                     'type'       => $job_type_group,
-                    'date'       => current_time('mysql', 1)
+                    'date'       => current_time('mysql')
                 )
             );
             
@@ -765,7 +765,7 @@ function add_new_job()
                         'memberid'   => $data_member,
                         'managerid'  => $data_manager,
                         'country'    => trim($single_country),
-                        'date'       => current_time('mysql', 1)
+                        'date'       => current_time('mysql')
                     )
                 );
             }
@@ -974,7 +974,7 @@ function sendmail_deadline_notification()
             $query->the_post();
 
             $start_time = strtotime(get_the_date('d-m-Y'));
-            $current_time = current_time('timestamp', 7);
+            $current_time = current_time('timestamp');
 
             $deadline = get_field('deadline');
             # nếu có trường deadline thì mới xử lý tiếp, không thì kết thúc.
@@ -1358,7 +1358,7 @@ function update_job_history( $mota, $ngaythang, $postid ) {
         array(
             'jobid' => $postid,
             'name'  => $clean_mota,
-            'date'  => current_time('mysql', 1)
+            'date'  => current_time('mysql')
         )
     );
 }
@@ -1470,7 +1470,8 @@ function log_finance_history($finance_post_id, $jobid, $userid, $finance_type, $
             'finance_title'     => $finance_title,
             'finance_content'   => $finance_content,
             'action_type'       => $action_type,
-            'created_by'        => $created_by
+            'created_by'        => $created_by,
+            'created_date'      => current_time('mysql')
         ),
         array(
             '%d', // finance_post_id
@@ -1483,7 +1484,8 @@ function log_finance_history($finance_post_id, $jobid, $userid, $finance_type, $
             '%s', // finance_title
             '%s', // finance_content
             '%s', // action_type
-            '%d'  // created_by
+            '%d', // created_by
+            '%s'  // created_date
         )
     );
     
@@ -2172,7 +2174,7 @@ function save_commission_data() {
                     'commission_percent' => $commission_percent,
                     'commission_amount' => $commission_amount,
                     'currency' => $currency,
-                    'updated_date' => current_time('mysql', 1)
+                    'updated_date' => current_time('mysql')
                 ),
                 array(
                     'id' => $existing->id
@@ -2191,8 +2193,8 @@ function save_commission_data() {
                     'commission_percent' => $commission_percent,
                     'commission_amount' => $commission_amount,
                     'currency' => $currency,
-                    'created_date' => current_time('mysql', 1),
-                    'updated_date' => current_time('mysql', 1)
+                    'created_date' => current_time('mysql'),
+                    'updated_date' => current_time('mysql')
                 ),
                 array('%d', '%d', '%s', '%f', '%d', '%s', '%s', '%s')
             );
@@ -2225,11 +2227,21 @@ function save_commission_data() {
  * Cập nhật lại commission_amount cho tất cả nhân sự của một job khi giá trị paid thay đổi.
  * Hàm này được gọi sau khi update_job hoặc finance cập nhật paid.
  */
-function update_commission_amounts_by_paid($job_id, $new_paid_value = null) {
+function update_commission_amounts_by_paid($job_id, $new_paid_value = null, $finance_date = null) {
     global $wpdb;
     
     if ($new_paid_value === null) {
         $new_paid_value = floatval(get_field('paid', $job_id));
+    }
+    
+    // Prepare update time (finance_date + current hour/min/sec)
+    $update_time = current_time('mysql');
+    if ($finance_date) {
+        // finance_date is in YYYYMMDD format
+        $date_obj = DateTime::createFromFormat('Ymd', $finance_date);
+        if ($date_obj) {
+            $update_time = $date_obj->format('Y-m-d') . ' ' . current_time('H:i:s');
+        }
     }
     
     // Lấy tất cả commissions của job này
@@ -2244,14 +2256,24 @@ function update_commission_amounts_by_paid($job_id, $new_paid_value = null) {
     
     foreach ($commissions as $c) {
         $new_amount = intval(round($new_paid_value * floatval($c->commission_percent) / 100));
+        
+        $update_data = array(
+            'commission_amount' => $new_amount,
+            'updated_date'      => $update_time
+        );
+        $update_format = array('%d', '%s');
+        
+        // Cập nhật cả created_date theo yêu cầu để đồng bộ với ngày thu/chi
+        if ($finance_date) {
+            $update_data['created_date'] = $update_time;
+            $update_format[] = '%s';
+        }
+
         $wpdb->update(
             'wp_aslcommission',
-            array(
-                'commission_amount' => $new_amount,
-                'updated_date'      => current_time('mysql', 1)
-            ),
+            $update_data,
             array('id' => $c->id),
-            array('%d', '%s'),
+            $update_format,
             array('%d')
         );
     }
