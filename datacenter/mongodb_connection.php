@@ -162,6 +162,23 @@ function run_export_mongo(){
             delete_mysql_table($aslTable);
             break;
         
+        case 'job_document':
+            $posts_per_page = 20;
+    
+            $args   = array(
+                'post_type'     => 'job',
+                'paged'         => 1,
+                'posts_per_page'=> $posts_per_page,
+            );
+
+            $query = new WP_Query( $args );
+            $total_page = $query->max_num_pages;
+            $function   = 'insert_job_document';
+            # delete all data before insert
+            $aslTable = 'wp_asljobtodocument';
+            delete_mysql_table($aslTable);
+            break;
+        
         default:
             # code...
             break;
@@ -215,6 +232,10 @@ function js_export(){
         case 'insert_task':
             // $export = export_task($current_page);
             $export = export_mysql_task($current_page);
+            break;
+        
+        case 'insert_job_document':
+            $export = export_mysql_job_document($current_page);
             break;
         
         default:
@@ -1428,4 +1449,81 @@ function update_data_with_page(){
     ]);
 
     exit;
+}
+function export_mysql_job_document($paged) {
+    global $wpdb;
+
+    $aslJobDocument = 'wp_asljobtodocument';
+    $posts_per_page = 20;
+    $args   = array(
+        'post_type'     => 'job',
+        'paged'         => $paged,
+        'posts_per_page'=> $posts_per_page,
+    );
+
+    $query = new WP_Query( $args );
+
+    if( $query->have_posts() ) {
+        while ( $query->have_posts() ) {
+            $query->the_post();
+
+            $jobID          = get_the_ID();
+            $our_ref        = get_field('our_ref');
+            $customer       = get_field('customer');
+            $partner_2      = get_field('partner_2');
+
+            $logo           = get_field('logo', $jobID);
+            $ten_nhan_hieu  = get_field('ten_nhan_hieu', $jobID);
+            $nhom           = get_field('nhom', $jobID);
+            $so_luong_nhom  = get_field('so_luong_nhom', $jobID);
+            $so_don         = get_field('so_don', $jobID);
+            $ngay_nop_don   = get_field('ngay_nop_don', $jobID);
+
+            $so_dien_thoai  = get_field('so_dien_thoai' , 'user_' . $partner_2['ID']);
+            $dia_chi        = get_field('dia_chi' , 'user_' . $partner_2['ID']);
+            $quoc_gia       = get_field('quoc_gia' , 'user_' . $partner_2['ID']);
+            $email_cc       = get_field('email_cc' , 'user_' . $partner_2['ID']);
+            $email_bcc      = get_field('email_bcc' , 'user_' . $partner_2['ID']);
+            $partner_code   = get_field('partner_code' , 'user_' . $partner_2['ID']);
+            $ten_cong_ty    = get_field('ten_cong_ty' , 'user_' . $partner_2['ID']);
+            $city           = get_field('city' , 'user_' . $partner_2['ID']);
+            $mst            = get_field('mst' , 'user_' . $partner_2['ID']);
+            $nguoi_dai_dien_phap_luat = get_field('nguoi_dai_dien_phap_luat' , 'user_' . $partner_2['ID']);
+            $chuc_vu        = get_field('chuc_vu' , 'user_' . $partner_2['ID']);
+
+            $jobdoc = [
+                'jobid'     => $jobID,
+                'job_title' => get_the_title(),
+                'our_ref'   => $our_ref,
+                'trademark_txt' => $ten_nhan_hieu,
+                'trademark_img' => $logo,
+                'trademark_class' => $nhom,
+                'trademark_totalclass' => $so_luong_nhom,
+                'trademark_fillingid' => $so_don,
+                'trademark_fillingdate' => $ngay_nop_don,
+                'partner_name' => $partner_2['display_name'] ?? '',
+                'partner_code' => $partner_code ?? '',
+                'partner_companyName' => $ten_cong_ty ?? '',
+                'partner_country' => $quoc_gia ?? '',
+                'partner_address' => $dia_chi ?? '',
+                'partner_city' => $city ?? '',
+                'partner_phone' => $so_dien_thoai ?? '',
+                'partner_email' => $partner_2['user_email'] ?? '',
+                'partner_email_cc' => $email_cc ?? '',
+                'partner_email_bcc' => $email_bcc ?? '',
+                'partner_tax_number' => $mst ?? '',
+                'partner_legal_representative' => $nguoi_dai_dien_phap_luat ?? '',
+                'partner_position' => $chuc_vu ?? '',
+                'customer_name' => get_the_title($customer->ID) ?? '',
+                'customer_companyName' => get_field('ten_cong_ty', $customer->ID) ?? '',
+                'customer_address' => get_field('dia_chi', $customer->ID) ?? ''
+            ];
+
+            $wpdb->replace(
+                $aslJobDocument,
+                $jobdoc
+            );
+        } 
+        wp_reset_postdata();
+    }
 }

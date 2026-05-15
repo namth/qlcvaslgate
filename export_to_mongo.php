@@ -24,6 +24,7 @@ require_once(__DIR__ . "/datacenter/mongodb_connection.php");
                             <option value="member">Nhân sự</option>
                             <option value="job">Jobs</option>
                             <option value="task">Tasks</option>
+                            <option value="job_document">Dành cho hệ thống documents</option>
                         </select>
                     </div>
                     <div class="col-lg-3"></div>
