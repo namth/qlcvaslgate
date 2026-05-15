@@ -800,7 +800,10 @@ function add_new_job()
                     'partner_email_bcc'     => get_field('email_bcc', 'user_' . $data_partner),
                     'partner_tax_number'    => get_field('mst', 'user_' . $data_partner),
                     'partner_legal_representative' => get_field('nguoi_dai_dien_phap_luat', 'user_' . $data_partner),
-                    'partner_position'      => get_field('chuc_vu', 'user_' . $data_partner)
+                    'partner_position'      => get_field('chuc_vu', 'user_' . $data_partner),
+                    'customer_name'         => get_the_title($data_customer),
+                    'customer_companyName'  => get_field('ten_cong_ty', $data_customer),
+                    'customer_address'      => get_field('dia_chi', $data_customer)
                 )
             );
             
@@ -1912,6 +1915,9 @@ function CreateDatabaseQlcv()
         `partner_tax_number` varchar(255) NULL,
         `partner_legal_representative` varchar(255) NULL,
         `partner_position` varchar(255) NULL,
+        `customer_name` varchar(255) NULL,
+        `customer_companyName` varchar(255) NULL,
+        `customer_address` varchar(255) NULL,
         PRIMARY KEY (`jobid`)
     ) {$charsetCollate};";
     dbDelta($createAslTable);

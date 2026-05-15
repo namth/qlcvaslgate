@@ -373,7 +373,10 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 'partner_email_bcc'     => get_field('email_bcc', 'user_' . $partner),
                 'partner_tax_number'    => get_field('mst', 'user_' . $partner),
                 'partner_legal_representative' => get_field('nguoi_dai_dien_phap_luat', 'user_' . $partner),
-                'partner_position'      => get_field('chuc_vu', 'user_' . $partner)
+                'partner_position'      => get_field('chuc_vu', 'user_' . $partner),
+                'customer_name'         => get_the_title($customer->ID),
+                'customer_companyName'  => get_field('ten_cong_ty', $customer->ID),
+                'customer_address'      => get_field('dia_chi', $customer->ID),
             ),
             array('jobid' => $postid)
         );

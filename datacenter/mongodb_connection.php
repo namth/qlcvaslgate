@@ -1034,7 +1034,10 @@ function export_mysql_job($paged) {
                 'partner_email_bcc' => $email_bcc ?? '',
                 'partner_tax_number' => $mst ?? '',
                 'partner_legal_representative' => $nguoi_dai_dien_phap_luat ?? '',
-                'partner_position' => $chuc_vu ?? ''
+                'partner_position' => $chuc_vu ?? '',
+                'customer_name' => get_the_title($customer->ID) ?? '',
+                'customer_companyName' => get_field('ten_cong_ty', $customer->ID) ?? '',
+                'customer_address' => get_field('dia_chi', $customer->ID) ?? ''
             ];
 
             $wpdb->replace(
