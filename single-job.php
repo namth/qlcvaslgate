@@ -280,6 +280,8 @@ while (have_posts()) {
                                         $ten_nhan_hieu  = get_field('ten_nhan_hieu');
                                         $nhom           = get_field('nhom');
                                         $so_luong_nhom  = get_field('so_luong_nhom');
+                                        $trademark_color = get_field('trademark_color');
+                                        $service_category = get_field('service_category');
 
                                         echo "<p>";
                                         if (substr($logo, -1) != '/') {
@@ -288,6 +290,12 @@ while (have_posts()) {
                                         echo __("Tên nhãn hiệu: ", 'qlcv') . $ten_nhan_hieu . "<br>";
                                         echo __("Nhóm: ", 'qlcv') . $nhom . "<br>";
                                         echo __("Số lượng nhóm: ", 'qlcv') . $so_luong_nhom . "<br>";
+                                        if ($trademark_color) {
+                                            echo __("Màu sắc: ", 'qlcv') . $trademark_color . "<br>";
+                                        }
+                                        if ($service_category) {
+                                            echo __("Danh mục sản phẩm dịch vụ: ", 'qlcv') . $service_category . "<br>";
+                                        }
                                         echo "</p>";
                                         break;
 

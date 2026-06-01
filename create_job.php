@@ -147,7 +147,39 @@ if (isset($_GET['type'])) {
                                                             <input type="text" placeholder="<?php _e('Tên nhãn hiệu', 'qlcv'); ?>" class="form-control mb-10" name="brand_name">
                                                             <input type="text" placeholder="<?php _e('Nhóm', 'qlcv'); ?>" class="form-control mb-10" name="brand_group">
                                                             <input type="text" placeholder="<?php _e('Số lượng nhóm', 'qlcv'); ?>" class="form-control mb-10" name="brand_number_group">
+                                                            <?php
+                                                            $list_color_text = get_field('list_color', 'option');
+                                                            $colors = [];
+                                                            if (!empty($list_color_text)) {
+                                                                $colors = array_filter(array_map('trim', explode("\n", $list_color_text)));
+                                                            }
+                                                            ?>
+                                                            <select name="trademark_color" id="trademark_color_select" class="form-control mb-10">
+                                                                <option value="">-- <?php _e('Chọn màu sắc', 'qlcv'); ?> --</option>
+                                                                <?php foreach ($colors as $color): ?>
+                                                                    <option value="<?php echo esc_attr($color); ?>"><?php echo esc_html($color); ?></option>
+                                                                <?php endforeach; ?>
+                                                                <option value="custom"><?php _e('Khác (Tự nhập)', 'qlcv'); ?></option>
+                                                            </select>
+                                                            <input type="text" name="trademark_color_custom" id="trademark_color_custom" placeholder="<?php _e('Nhập màu sắc mới', 'qlcv'); ?>" class="form-control mb-10" style="display: none;">
+                                                            <input type="text" placeholder="<?php _e('Danh mục sản phẩm dịch vụ', 'qlcv'); ?>" class="form-control mb-10" name="service_category">
                                                             <input class="dropify" type="file" name="file_upload">
+                                                            <script>
+                                                                document.addEventListener('DOMContentLoaded', function() {
+                                                                    var select = document.getElementById('trademark_color_select');
+                                                                    var customInput = document.getElementById('trademark_color_custom');
+                                                                    if (select && customInput) {
+                                                                        select.addEventListener('change', function() {
+                                                                            if (this.value === 'custom') {
+                                                                                customInput.style.display = 'block';
+                                                                            } else {
+                                                                                customInput.style.display = 'none';
+                                                                                customInput.value = '';
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+                                                            </script>
                                                         </div>
                                                         <div class="tab-pane fade <?php echo $class_kieu_dang; ?>" id="kieudang">
                                                             <input type="text" placeholder="<?php _e('Link tới bộ ảnh', 'qlcv'); ?>" class="form-control mb-10" name="kdang_pic">

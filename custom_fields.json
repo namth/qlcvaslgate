@@ -323,6 +323,27 @@
                 "maxlength": "",
                 "rows": "",
                 "new_lines": ""
+            },
+            {
+                "key": "field_6a101cf4326c5",
+                "label": "Danh sách màu",
+                "name": "list_color",
+                "aria-label": "",
+                "type": "textarea",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "translations": "translate",
+                "maxlength": "",
+                "rows": "",
+                "placeholder": "",
+                "new_lines": ""
             }
         ],
         "location": [
@@ -342,7 +363,7 @@
         "hide_on_screen": "",
         "active": true,
         "description": "",
-        "show_in_rest": false
+        "show_in_rest": 0
     },
     {
         "key": "group_600d30ac2f437",
@@ -1738,6 +1759,48 @@
                     }
                 ],
                 "rows_per_page": 20
+            },
+            {
+                "key": "field_6a1021b4f41fa",
+                "label": "Danh mục sản phẩm dịch vụ",
+                "name": "service_category",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "translations": "translate",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_6a10247280e68",
+                "label": "Màu sắc nhãn hiệu",
+                "name": "trademark_color",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "translations": "translate",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
             }
         ],
         "location": [
@@ -1762,7 +1825,7 @@
         "hide_on_screen": "",
         "active": true,
         "description": "",
-        "show_in_rest": false
+        "show_in_rest": 0
     },
     {
         "key": "group_608526e25d8f9",

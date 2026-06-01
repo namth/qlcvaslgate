@@ -36,20 +36,8 @@
             update_field('field_600d3211060ec', $phone_number, $inserted ); # phone number
             update_field('field_600d323d060ee', $address, $inserted ); # address
             update_field('field_6037200ec98cc', $country, $inserted ); # country
-              # Update aslcustomer table
-            $aslTable = 'wp_aslcustomer';
-            $wpdb->insert(
-                $aslTable,
-                array(
-                    'customerid'    => $inserted,
-                    'name'          => $customer_name,
-                    'companyName'   => $customer_company,
-                    'country'       => $country,
-                    'phone'         => $phone_number,
-                    'email'         => $user_email,
-                    'date'          => current_time('mysql', 1)
-                )
-            );
+            # Sync to aslcustomer table
+            asl_sync_customer_to_custom_table($inserted, true);
 
             $thongbao = '<div class="alert alert-success" role="alert">
                             <i class="fa fa-check"></i> '. __('Đã tạo tài khoản thành công', 'qlcv') . '

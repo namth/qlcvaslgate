@@ -43,20 +43,9 @@ if (is_user_logged_in()) {
             update_field('field_600d323d060ee', $address, $new_partner); # address
             update_field('field_600d3235060ed', $user_email, $new_partner); # email liên hệ
             update_field('field_6037200ec98cc', $country, $new_partner); # country
-            update_field('field_6010f85bfcf55', $link_onedrive, $new_partner); # link_onedrive            # Update record in aslcustomer table
-            $aslTable = 'wp_aslcustomer';
-            
-            $wpdb->update(
-                $aslTable,
-                array(
-                    'name'          => $customer_name,
-                    'companyName'   => $customer_company,
-                    'country'       => $country,
-                    'phone'         => $phone_number,
-                    'email'         => $user_email
-                ),
-                array('customerid' => $customer_id)
-            );
+            update_field('field_6010f85bfcf55', $link_onedrive, $new_partner); # link_onedrive
+            # Sync to aslcustomer table
+            asl_sync_customer_to_custom_table($customer_id, true);
 
             $thongbao = '<div class="alert alert-success" role="alert">
                                 <i class="fa fa-check"></i> ' . __('Đã sửa thông tin thành công', 'qlcv') . '

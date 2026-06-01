@@ -67,6 +67,29 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         $currency_out   = $_POST['currency_out'];
         $history_link   = $_POST['history_link'];
 
+        # Nhãn hiệu custom color & service category capture
+        $trademark_color = isset($_POST['trademark_color']) ? $_POST['trademark_color'] : '';
+        if ($trademark_color === 'custom' && !empty($_POST['trademark_color_custom'])) {
+            $custom_color = trim($_POST['trademark_color_custom']);
+            if (!empty($custom_color)) {
+                $first_char = mb_substr($custom_color, 0, 1, 'UTF-8');
+                $rest = mb_substr($custom_color, 1, null, 'UTF-8');
+                $trademark_color = mb_strtoupper($first_char, 'UTF-8') . $rest;
+
+                // Add to list_color option list if not already there
+                $list_color_text = get_field('list_color', 'option');
+                $colors = [];
+                if (!empty($list_color_text)) {
+                    $colors = array_filter(array_map('trim', explode("\n", $list_color_text)));
+                }
+                if (!in_array($trademark_color, $colors)) {
+                    $colors[] = $trademark_color;
+                    $new_list_color_text = implode("\n", $colors);
+                    update_field('field_6a101cf4326c5', $new_list_color_text, 'option');
+                }
+            }
+        }
+        $service_category = isset($_POST['service_category']) ? $_POST['service_category'] : '';
 
         # nếu jobname có thay đổi thì mới update
         if (($jobname != "") && ($current_post->post_title != $jobname)) {
@@ -238,7 +261,9 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 'agency_hn'          => $agency_hn,
                 'agency_hcm'         => $agency_hcm,
                 'date'               => $current_date,
-                'level'              => $level
+                'level'              => $level,
+                'trademark_color'    => $trademark_color,
+                'service_category'   => $service_category
             ),
             array('jobid' => $postid)
         );
@@ -387,7 +412,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 $ten_nhan_hieu  = $_POST['ten_nhan_hieu'];
                 $nhom           = $_POST['nhom'];
                 $so_luong_nhom  = $_POST['so_luong_nhom'];
-                
+
                 
                 if (isset($_FILES['file_upload'])) {
                     echo "Upload: <br>";
@@ -415,6 +440,8 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 update_field('field_600fd7db6154d', $ten_nhan_hieu, $postid);
                 update_field('field_600fd7ec6154e', $nhom, $postid);
                 update_field('field_600fd7f46154f', $so_luong_nhom, $postid);
+                update_field('field_6a10247280e68', $trademark_color, $postid);
+                update_field('field_6a1021b4f41fa', $service_category, $postid);
 
                 break;
 
@@ -731,6 +758,49 @@ $agency     = get_the_terms($postid, 'agency');
                                     <div class="mb-20">
                                         <label for=""><b><?php _e('Số lượng nhóm', 'qlcv'); ?></b></label>
                                         <input type="text" placeholder="<?php _e('Số lượng nhóm', 'qlcv'); ?>" class="form-control mb-10" name="so_luong_nhom" value="<?php echo $so_luong_nhom; ?>">
+                                    </div>
+                                    
+                                    <div class="mb-20">
+                                        <label for=""><b><?php _e('Màu sắc', 'qlcv'); ?></b></label>
+                                        <?php
+                                        $list_color_text = get_field('list_color', 'option');
+                                        $colors = [];
+                                        if (!empty($list_color_text)) {
+                                            $colors = array_filter(array_map('trim', explode("\n", $list_color_text)));
+                                        }
+                                        $selected_color = get_field('trademark_color', $postid);
+                                        $is_custom = !empty($selected_color) && !in_array($selected_color, $colors);
+                                        ?>
+                                        <select name="trademark_color" id="trademark_color_select" class="form-control mb-10">
+                                            <option value="">-- <?php _e('Chọn màu sắc', 'qlcv'); ?> --</option>
+                                            <?php foreach ($colors as $color): ?>
+                                                <option value="<?php echo esc_attr($color); ?>" <?php echo (!$is_custom && $selected_color === $color) ? 'selected' : ''; ?>><?php echo esc_html($color); ?></option>
+                                            <?php endforeach; ?>
+                                            <option value="custom" <?php echo $is_custom ? 'selected' : ''; ?>><?php _e('Khác (Tự nhập)', 'qlcv'); ?></option>
+                                        </select>
+                                        <input type="text" name="trademark_color_custom" id="trademark_color_custom" placeholder="<?php _e('Nhập màu sắc mới', 'qlcv'); ?>" class="form-control mb-10" value="<?php echo $is_custom ? esc_attr($selected_color) : ''; ?>" style="<?php echo $is_custom ? 'display: block;' : 'display: none;'; ?>">
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                var select = document.getElementById('trademark_color_select');
+                                                var customInput = document.getElementById('trademark_color_custom');
+                                                if (select && customInput) {
+                                                    select.addEventListener('change', function() {
+                                                        if (this.value === 'custom') {
+                                                            customInput.style.display = 'block';
+                                                        } else {
+                                                            customInput.style.display = 'none';
+                                                            customInput.value = '';
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        </script>
+                                    </div>
+
+                                    <div class="mb-20">
+                                        <label for=""><b><?php _e('Danh mục sản phẩm dịch vụ', 'qlcv'); ?></b></label>
+                                        <?php $service_category = get_field('service_category', $postid); ?>
+                                        <input type="text" placeholder="<?php _e('Danh mục sản phẩm dịch vụ', 'qlcv'); ?>" class="form-control mb-10" name="service_category" value="<?php echo esc_attr($service_category); ?>">
                                     </div>
                                     
                                 </div>

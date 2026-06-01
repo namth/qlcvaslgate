@@ -212,21 +212,8 @@ function add_new_customer()
         update_field('field_6037200ec98cc', $country, $inserted); # country
         update_field('field_6010f85bfcf55', $link_onedrive, $inserted); # link_onedrive
 
-        # Update aslcustomer table
-        $aslTable = 'wp_aslcustomer';
-        
-        $wpdb->insert(
-            $aslTable,
-            array(
-                'customerid'    => $inserted,
-                'name'          => $customer_name,
-                'companyName'   => $customer_name,
-                'country'       => $country,
-                'phone'         => $phone_number,
-                'email'         => $user_email,
-                'date'          => current_time('mysql')
-            )
-        );
+        # Sync to aslcustomer table
+        asl_sync_customer_to_custom_table($inserted, true);
 
         $data['status'] = 'success';
         if ($user_email) {
@@ -364,6 +351,28 @@ function add_new_job()
     $brand_name     = $_POST['brand_name'];
     $brand_group    = $_POST['brand_group'];
     $brand_number_group = $_POST['brand_number_group'];
+    $trademark_color = isset($_POST['trademark_color']) ? $_POST['trademark_color'] : '';
+    if ($trademark_color === 'custom' && !empty($_POST['trademark_color_custom'])) {
+        $custom_color = trim($_POST['trademark_color_custom']);
+        if (!empty($custom_color)) {
+            $first_char = mb_substr($custom_color, 0, 1, 'UTF-8');
+            $rest = mb_substr($custom_color, 1, null, 'UTF-8');
+            $trademark_color = mb_strtoupper($first_char, 'UTF-8') . $rest;
+
+            // Add to list_color option list if not already there
+            $list_color_text = get_field('list_color', 'option');
+            $colors = [];
+            if (!empty($list_color_text)) {
+                $colors = array_filter(array_map('trim', explode("\n", $list_color_text)));
+            }
+            if (!in_array($trademark_color, $colors)) {
+                $colors[] = $trademark_color;
+                $new_list_color_text = implode("\n", $colors);
+                update_field('field_6a101cf4326c5', $new_list_color_text, 'option');
+            }
+        }
+    }
+    $service_category = isset($_POST['service_category']) ? $_POST['service_category'] : '';
     # kiểu dáng
     $kdang_pic      = $_POST['kdang_pic'];
     $kdang_info     = $_POST['kdang_info'];
@@ -510,6 +519,8 @@ function add_new_job()
                     update_field('field_600fd7db6154d', $brand_name, $inserted);
                     update_field('field_600fd7ec6154e', $brand_group, $inserted);
                     update_field('field_600fd7f46154f', $brand_number_group, $inserted);
+                    update_field('field_6a10247280e68', $trademark_color, $inserted);
+                    update_field('field_6a1021b4f41fa', $service_category, $inserted);
 
                     break;
 
@@ -653,7 +664,9 @@ function add_new_job()
                     'contract_sign_date' => $contract_sign_date,
                     'agency_hn'         => $agency_hn,
                     'agency_hcm'        => $agency_hcm,
-                    'level'             => $level
+                    'level'             => $level,
+                    'trademark_color'   => $trademark_color,
+                    'service_category'  => $service_category
                 )
             );
             
@@ -1796,6 +1809,8 @@ function CreateDatabaseQlcv()
         `agency_hn` tinyint(4) NOT NULL,
         `agency_hcm` tinyint(4) NOT NULL,
         `level` varchar(50) NULL,
+        `trademark_color` varchar(255) NULL,
+        `service_category` text NULL,
         PRIMARY KEY (`jobid`)
     ) {$charsetCollate};";
     dbDelta($createAslTable);
@@ -2282,5 +2297,372 @@ function update_commission_amounts_by_paid($job_id, $new_paid_value = null, $fin
             $update_format,
             array('%d')
         );
+    }
+}
+
+/**
+ * Tu dong dong bo hoa thong tin user vao cac bang wp_aslmember va wp_aslpartner
+ * khi them moi hoac chinh sua user (trong wp-admin hoac o frontend)
+ */
+function asl_sync_user_to_custom_tables($user_id) {
+    global $wpdb;
+    
+    // Tranh viec lap vo han hoac chay nhieu lan trong cung mot request
+    static $synced_users = [];
+    if (isset($synced_users[$user_id])) {
+        return;
+    }
+    $synced_users[$user_id] = true;
+    
+    $user = get_user_by('ID', $user_id);
+    if (!$user) {
+        return;
+    }
+    
+    $aslMemberTable = 'wp_aslmember';
+    $aslPartnerTable = 'wp_aslpartner';
+    
+    // Check roles
+    $member_roles = ['contributor', 'administrator', 'member', 'law_manager', 'ip_manager'];
+    $partner_roles = ['partner', 'foreign_partner'];
+    
+    $is_member = false;
+    $is_partner = false;
+    
+    if (!empty($user->roles) && is_array($user->roles)) {
+        foreach ($user->roles as $role) {
+            if (in_array($role, $member_roles)) {
+                $is_member = true;
+            }
+            if (in_array($role, $partner_roles)) {
+                $is_partner = true;
+            }
+        }
+    }
+    
+    if ($is_member) {
+        // Prepare member data
+        $so_dien_thoai  = get_field('so_dien_thoai', 'user_' . $user->ID);
+        $dia_chi        = get_field('dia_chi', 'user_' . $user->ID);
+        $chi_nhanh      = get_field('chi_nhanh', 'user_' . $user->ID);
+        $nhom_cong_viec = get_field('nhom_cong_viec', 'user_' . $user->ID);
+        
+        $work_group = array();
+        $brand = array();
+        
+        if ($nhom_cong_viec && is_array($nhom_cong_viec)) {
+            foreach ($nhom_cong_viec as $id_cong_viec) {
+                $term = get_term($id_cong_viec);
+                if ($term && !is_wp_error($term)) {
+                    $work_group[] = $term->slug;
+                }
+            }
+        }
+        
+        if ($chi_nhanh && is_array($chi_nhanh)) {
+            foreach ($chi_nhanh as $id_chi_nhanh) {
+                $term = get_term($id_chi_nhanh);
+                if ($term && !is_wp_error($term)) {
+                    $brand[] = $term->slug;
+                }
+            }
+        }
+        
+        $group_trademark = in_array('nhan-hieu', $work_group) ? 1 : 0;
+        $group_patent    = in_array('sang-che', $work_group) ? 1 : 0;
+        $group_design    = in_array('kieu-dang', $work_group) ? 1 : 0;
+        $group_franchise = in_array('franchise', $work_group) ? 1 : 0;
+        $group_copyright = in_array('ban-quyen', $work_group) ? 1 : 0;
+        $group_others    = in_array('viec-khac', $work_group) ? 1 : 0;
+        $group_potential = in_array('tiem-nang', $work_group) ? 1 : 0;
+        
+        $agency_hn  = in_array('ha-noi', $brand) ? 1 : 0;
+        $agency_hcm = in_array('ho-chi-minh', $brand) ? 1 : 0;
+        
+        $role_admin       = in_array('administrator', $user->roles) ? 1 : 0;
+        $role_manager     = in_array('contributor', $user->roles) ? 1 : 0;
+        $role_member      = in_array('member', $user->roles) ? 1 : 0;
+        $role_law_manager = in_array('law_manager', $user->roles) ? 1 : 0;
+        $role_ip_manager  = in_array('ip_manager', $user->roles) ? 1 : 0;
+        
+        $member_data = array(
+            'memberid'          => $user->ID,
+            'name'              => $user->display_name ?: $user->user_email,
+            'address'           => $dia_chi ?: '',
+            'phone'             => $so_dien_thoai ?: '',
+            'email'             => $user->user_email,
+            'date'              => $user->user_registered ?: current_time('mysql', 1),
+            'agency_hn'         => $agency_hn,
+            'agency_hcm'        => $agency_hcm,
+            'group_trademark'   => $group_trademark,
+            'group_patent'      => $group_patent,
+            'group_design'      => $group_design,
+            'group_franchise'   => $group_franchise,
+            'group_copyright'   => $group_copyright,
+            'group_others'      => $group_others,
+            'group_potential'   => $group_potential,
+            'role_admin'        => $role_admin,
+            'role_manager'      => $role_manager,
+            'role_member'       => $role_member,
+            'role_law_manager'  => $role_law_manager,
+            'role_ip_manager'   => $role_ip_manager,
+        );
+        
+        $existing = $wpdb->get_row($wpdb->prepare(
+            "SELECT memberid FROM {$aslMemberTable} WHERE memberid = %d",
+            $user->ID
+        ));
+        
+        if ($existing) {
+            $wpdb->update($aslMemberTable, $member_data, array('memberid' => $user->ID));
+        } else {
+            $wpdb->insert($aslMemberTable, $member_data);
+        }
+        
+        // Dam bao user khong ton tai ben bang partner
+        $wpdb->delete($aslPartnerTable, array('partnerid' => $user->ID));
+    }
+    
+    if ($is_partner) {
+        // Prepare partner data
+        $so_dien_thoai  = get_field('so_dien_thoai', 'user_' . $user->ID);
+        $partner_code   = get_field('partner_code', 'user_' . $user->ID);
+        $ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $user->ID);
+        $mst            = get_field('field_688ef666d820a', 'user_' . $user->ID);
+        $nguoi_dai_dien_phap_luat = get_field('field_688ef675d820b', 'user_' . $user->ID);
+        $chuc_vu        = get_field('field_688ef6b4d820c', 'user_' . $user->ID);
+        $is_company     = get_field('is_company', 'user_' . $user->ID);
+        $dia_chi        = get_field('dia_chi', 'user_' . $user->ID);
+        $quoc_gia       = get_field('quoc_gia', 'user_' . $user->ID);
+        $city           = get_field('city', 'user_' . $user->ID);
+        $staffs         = get_field('staffs', 'user_' . $user->ID);
+        $vietnam_company = get_field('vietnam_company', 'user_' . $user->ID);
+        $languages      = get_field('languages', 'user_' . $user->ID);
+        $email_cc       = get_field('email_cc', 'user_' . $user->ID);
+        $email_bcc      = get_field('email_bcc', 'user_' . $user->ID);
+        $type_of_client = get_field('type_of_client', 'user_' . $user->ID);
+        $vip            = get_field('vip', 'user_' . $user->ID);
+        $worked         = get_field('worked', 'user_' . $user->ID);
+        $fdi            = get_field('fdi', 'user_' . $user->ID);
+        $fdi_countries  = get_field('fdi_countries', 'user_' . $user->ID);
+        $detail_client_type = get_field('detail_client_type', 'user_' . $user->ID);
+        $source         = get_field('source', 'user_' . $user->ID);
+        
+        $role_partner__in  = in_array('partner', $user->roles) ? 1 : 0;
+        $role_partner__out = in_array('foreign_partner', $user->roles) ? 1 : 0;
+        
+        $languages_str = is_array($languages) ? implode(", ", $languages) : ($languages ?: '');
+        $detail_client_type_str = is_array($detail_client_type) ? implode(", ", $detail_client_type) : ($detail_client_type ?: '');
+        $fdi_countries_str = is_array($fdi_countries) ? implode(", ", $fdi_countries) : ($fdi_countries ?: '');
+        $staffs_str = is_array($staffs) ? implode("|", $staffs) : ($staffs ?: '');
+        
+        $tinh_trang = $worked ? "Đã chốt" : "Tiềm năng";
+        
+        $partner_data = array(
+            'partnerid'     => $user->ID,
+            'name'          => $user->display_name ?: $user->user_email,
+            'partner_code'  => $partner_code ?: '',
+            'companyName'   => $ten_cong_ty ?: '',
+            'mst'           => $mst ?: '',
+            'nguoi_dai_dien_phap_luat' => $nguoi_dai_dien_phap_luat ?: '',
+            'chuc_vu'       => $chuc_vu ?: '',
+            'country'       => $quoc_gia ?: '',
+            'address'       => $dia_chi ?: '',
+            'city'          => $city ?: '',
+            'is_company'    => $is_company ? 1 : 0,
+            'staffs'        => $staffs_str,
+            'vn_company'    => $vietnam_company ? 1 : 0,
+            'languages'     => $languages_str,
+            'email_cc'      => $email_cc ?: '',
+            'email_bcc'     => $email_bcc ?: '',
+            'type_of_client'=> $type_of_client ?: '',
+            'vip'           => $vip ?: '',
+            'status'        => $tinh_trang,
+            'fdi'           => $fdi ? 1 : 0,
+            'fdi_from'      => $fdi_countries_str,
+            'client_type'   => $detail_client_type_str,
+            'source'        => $source ?: '',
+            'phone'         => $so_dien_thoai ?: '',
+            'email'         => $user->user_email,
+            'role_partner__in' => $role_partner__in,
+            'role_partner__out'=> $role_partner__out,
+            'date'          => $user->user_registered ?: current_time('mysql', 1)
+        );
+        
+        $existing = $wpdb->get_row($wpdb->prepare(
+            "SELECT partnerid FROM {$aslPartnerTable} WHERE partnerid = %d",
+            $user->ID
+        ));
+        
+        if ($existing) {
+            $wpdb->update($aslPartnerTable, $partner_data, array('partnerid' => $user->ID));
+        } else {
+            $wpdb->insert($aslPartnerTable, $partner_data);
+        }
+        
+        // Dam bao user khong ton tai ben bang member
+        $wpdb->delete($aslMemberTable, array('memberid' => $user->ID));
+    }
+    
+    // Neu khong thuoc bat ky nhom nao, dam bao xoa khoi ca hai bang
+    if (!$is_member && !$is_partner) {
+        $wpdb->delete($aslMemberTable, array('memberid' => $user->ID));
+        $wpdb->delete($aslPartnerTable, array('partnerid' => $user->ID));
+    }
+}
+
+/**
+ * Tu dong xoa thong tin user khoi cac bang custom khi xoa user khoi WordPress
+ */
+function asl_delete_user_from_custom_tables($user_id) {
+    global $wpdb;
+    $aslMemberTable = 'wp_aslmember';
+    $aslPartnerTable = 'wp_aslpartner';
+    $wpdb->delete($aslMemberTable, array('memberid' => $user_id));
+    $wpdb->delete($aslPartnerTable, array('partnerid' => $user_id));
+}
+
+// Dang ky hooks dong bo hoa dong thoi
+add_action('user_register', 'asl_sync_user_to_custom_tables', 20, 1);
+add_action('profile_update', 'asl_sync_user_to_custom_tables', 20, 1);
+add_action('delete_user', 'asl_delete_user_from_custom_tables', 20, 1);
+
+// Hook ACF ho tro khi cap nhat cac truong custom metabox
+add_action('acf/save_post', 'asl_sync_user_acf_fields_to_custom_tables', 20, 1);
+function asl_sync_user_acf_fields_to_custom_tables($post_id) {
+    if (is_string($post_id) && strpos($post_id, 'user_') === 0) {
+        $user_id = intval(substr($post_id, 5));
+        if ($user_id > 0) {
+            asl_sync_user_to_custom_tables($user_id);
+        }
+    }
+}
+
+/**
+ * Tu dong dong bo hoa thong tin customer vao bang wp_aslcustomer
+ * khi them moi hoac chinh sua post type customer (trong wp-admin hoac frontend)
+ */
+function asl_sync_customer_to_custom_table($post_id, $force = false) {
+    global $wpdb;
+    
+    // Tranh viec lap vo han hoac chay nhieu lan trong cung mot request
+    static $synced_customers = [];
+    if (!$force && isset($synced_customers[$post_id])) {
+        return;
+    }
+    $synced_customers[$post_id] = true;
+    
+    $post = get_post($post_id);
+    if (!$post || $post->post_type !== 'customer') {
+        return;
+    }
+    
+    $aslTable = 'wp_aslcustomer';
+    
+    // Chi dong bo khi post o trang thai dang (publish). Neu khong, xoa khoi bang custom
+    if ($post->post_status !== 'publish') {
+        $wpdb->delete($aslTable, array('customerid' => $post_id));
+        return;
+    }
+    
+    // Lay thong tin tu custom fields (ho tro ca field name va field key cho chac chan)
+    $companyName = get_field('ten_cong_ty', $post_id) ?: get_field('field_600d31f4060eb', $post_id);
+    $country     = get_field('quoc_gia', $post_id) ?: get_field('field_6037200ec98cc', $post_id);
+    $phone       = get_field('so_dien_thoai', $post_id) ?: get_field('field_600d3211060ec', $post_id);
+    $email       = get_field('email', $post_id) ?: get_field('field_600d3235060ed', $post_id);
+    
+    $customer_data = array(
+        'customerid'  => $post_id,
+        'name'        => $post->post_title,
+        'companyName' => $companyName ?: '',
+        'country'     => $country ?: '',
+        'phone'       => $phone ?: '',
+        'email'       => $email ?: '',
+        'date'        => $post->post_date ?: current_time('mysql', 1)
+    );
+    
+    $existing = $wpdb->get_row($wpdb->prepare(
+        "SELECT customerid FROM {$aslTable} WHERE customerid = %d",
+        $post_id
+    ));
+    
+    if ($existing) {
+        $wpdb->update($aslTable, $customer_data, array('customerid' => $post_id));
+    } else {
+        $wpdb->insert($aslTable, $customer_data);
+    }
+}
+
+/**
+ * Tu dong xoa thong tin customer khoi bang custom khi xoa post customer
+ */
+function asl_delete_customer_from_custom_table($post_id) {
+    $post = get_post($post_id);
+    if ($post && $post->post_type === 'customer') {
+        global $wpdb;
+        $aslTable = 'wp_aslcustomer';
+        $wpdb->delete($aslTable, array('customerid' => $post_id));
+    }
+}
+
+// Dang ky hooks cho customer
+add_action('save_post_customer', 'asl_sync_customer_to_custom_table', 20, 1);
+add_action('before_delete_post', 'asl_delete_customer_from_custom_table', 20, 1);
+
+// Hook ACF ho tro khi cap nhat cac truong custom fields cua customer
+add_action('acf/save_post', 'asl_sync_customer_acf_fields_to_custom_table', 20, 1);
+function asl_sync_customer_acf_fields_to_custom_table($post_id) {
+    if (is_numeric($post_id)) {
+        $post_id = intval($post_id);
+        $post = get_post($post_id);
+        if ($post && $post->post_type === 'customer') {
+            asl_sync_customer_to_custom_table($post_id);
+        }
+    }
+}
+
+// Auto-upgrade wp_asljob table to add trademark_color and service_category columns if they don't exist
+add_action('init', 'asl_upgrade_job_table_schema');
+function asl_upgrade_job_table_schema() {
+    if (get_option('wp_asljob_db_version_v3') !== '1.3') {
+        global $wpdb;
+        $columns = $wpdb->get_col("DESC wp_asljob");
+        if (!empty($columns)) {
+            if (!in_array('trademark_color', $columns)) {
+                $wpdb->query("ALTER TABLE wp_asljob ADD COLUMN trademark_color varchar(255) NULL;");
+            }
+            if (!in_array('service_category', $columns)) {
+                $wpdb->query("ALTER TABLE wp_asljob ADD COLUMN service_category text NULL;");
+            }
+            
+            // Populate existing trademark jobs color and category in wp_asljob table
+            $args = array(
+                'post_type' => 'job',
+                'posts_per_page' => -1,
+                'meta_query' => array(
+                    array(
+                        'key' => 'phan_loai',
+                        'value' => 'Nhãn hiệu'
+                    )
+                )
+            );
+            $jobs = get_posts($args);
+            foreach ($jobs as $job) {
+                $color = get_field('trademark_color', $job->ID);
+                $category = get_field('service_category', $job->ID);
+                if ($color || $category) {
+                    $wpdb->update(
+                        'wp_asljob',
+                        array(
+                            'trademark_color' => $color,
+                            'service_category' => $category
+                        ),
+                        array('jobid' => $job->ID)
+                    );
+                }
+            }
+            
+            update_option('wp_asljob_db_version_v3', '1.3');
+        }
     }
 }

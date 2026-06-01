@@ -331,6 +331,27 @@ add_action( 'acf/include_fields', function() {
 			'rows' => '',
 			'new_lines' => '',
 		),
+		array(
+			'key' => 'field_6a101cf4326c5',
+			'label' => 'Danh sách màu',
+			'name' => 'list_color',
+			'aria-label' => '',
+			'type' => 'textarea',
+			'instructions' => '',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array(
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
+			'default_value' => '',
+			'translations' => 'translate',
+			'maxlength' => '',
+			'rows' => '',
+			'placeholder' => '',
+			'new_lines' => '',
+		),
 	),
 	'location' => array(
 		array(
@@ -349,7 +370,7 @@ add_action( 'acf/include_fields', function() {
 	'hide_on_screen' => '',
 	'active' => true,
 	'description' => '',
-	'show_in_rest' => false,
+	'show_in_rest' => 0,
 ) );
 
 	acf_add_local_field_group( array(
@@ -1757,6 +1778,48 @@ add_action( 'acf/include_fields', function() {
 			),
 			'rows_per_page' => 20,
 		),
+		array(
+			'key' => 'field_6a1021b4f41fa',
+			'label' => 'Danh mục sản phẩm dịch vụ',
+			'name' => 'service_category',
+			'aria-label' => '',
+			'type' => 'text',
+			'instructions' => '',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array(
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
+			'default_value' => '',
+			'translations' => 'translate',
+			'maxlength' => '',
+			'placeholder' => '',
+			'prepend' => '',
+			'append' => '',
+		),
+		array(
+			'key' => 'field_6a10247280e68',
+			'label' => 'Màu sắc nhãn hiệu',
+			'name' => 'trademark_color',
+			'aria-label' => '',
+			'type' => 'text',
+			'instructions' => '',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array(
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
+			'default_value' => '',
+			'translations' => 'translate',
+			'maxlength' => '',
+			'placeholder' => '',
+			'prepend' => '',
+			'append' => '',
+		),
 	),
 	'location' => array(
 		array(
@@ -1780,7 +1843,7 @@ add_action( 'acf/include_fields', function() {
 	'hide_on_screen' => '',
 	'active' => true,
 	'description' => '',
-	'show_in_rest' => false,
+	'show_in_rest' => 0,
 ) );
 
 	acf_add_local_field_group( array(
