@@ -337,6 +337,7 @@ function add_new_job()
 
     $country        = implode(", ", $_POST['country']);
     $job_name       = $_POST['job_name'];
+    $invoice_number = isset($_POST['invoice_number']) ? trim($_POST['invoice_number']) : '';
     $partner_ref    = $_POST['partner_ref'];
     $our_ref        = $_POST['our_ref'];
     $danh_muc       = $_POST['danh_muc'];
@@ -459,6 +460,7 @@ function add_new_job()
             update_field('field_60a38cc126a5f', $link_onedrive, $inserted); # Link tài liệu
             update_field('field_60fceb18a736d', $mindful, $inserted); # Lưu ý công việc
             update_field('field_69070e5d8880e', $level, $inserted); # Độ khó
+            update_field('field_6a26e8cdd2346', $invoice_number, $inserted); # Số Invoice
             # if it's a simple job (has deadline), system will be updated history & status
             if ($new_deadline) {
                 update_field('field_600fde50f9be7', $new_deadline, $inserted); # deadline
@@ -666,7 +668,8 @@ function add_new_job()
                     'agency_hcm'        => $agency_hcm,
                     'level'             => $level,
                     'trademark_color'   => $trademark_color,
-                    'service_category'  => $service_category
+                    'service_category'  => $service_category,
+                    'invoice_number'    => $invoice_number
                 )
             );
             
@@ -1811,6 +1814,7 @@ function CreateDatabaseQlcv()
         `level` varchar(50) NULL,
         `trademark_color` varchar(255) NULL,
         `service_category` text NULL,
+        `invoice_number` varchar(255) NULL,
         PRIMARY KEY (`jobid`)
     ) {$charsetCollate};";
     dbDelta($createAslTable);
@@ -2617,52 +2621,6 @@ function asl_sync_customer_acf_fields_to_custom_table($post_id) {
         $post = get_post($post_id);
         if ($post && $post->post_type === 'customer') {
             asl_sync_customer_to_custom_table($post_id);
-        }
-    }
-}
-
-// Auto-upgrade wp_asljob table to add trademark_color and service_category columns if they don't exist
-add_action('init', 'asl_upgrade_job_table_schema');
-function asl_upgrade_job_table_schema() {
-    if (get_option('wp_asljob_db_version_v3') !== '1.3') {
-        global $wpdb;
-        $columns = $wpdb->get_col("DESC wp_asljob");
-        if (!empty($columns)) {
-            if (!in_array('trademark_color', $columns)) {
-                $wpdb->query("ALTER TABLE wp_asljob ADD COLUMN trademark_color varchar(255) NULL;");
-            }
-            if (!in_array('service_category', $columns)) {
-                $wpdb->query("ALTER TABLE wp_asljob ADD COLUMN service_category text NULL;");
-            }
-            
-            // Populate existing trademark jobs color and category in wp_asljob table
-            $args = array(
-                'post_type' => 'job',
-                'posts_per_page' => -1,
-                'meta_query' => array(
-                    array(
-                        'key' => 'phan_loai',
-                        'value' => 'Nhãn hiệu'
-                    )
-                )
-            );
-            $jobs = get_posts($args);
-            foreach ($jobs as $job) {
-                $color = get_field('trademark_color', $job->ID);
-                $category = get_field('service_category', $job->ID);
-                if ($color || $category) {
-                    $wpdb->update(
-                        'wp_asljob',
-                        array(
-                            'trademark_color' => $color,
-                            'service_category' => $category
-                        ),
-                        array('jobid' => $job->ID)
-                    );
-                }
-            }
-            
-            update_option('wp_asljob_db_version_v3', '1.3');
         }
     }
 }

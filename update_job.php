@@ -90,6 +90,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
             }
         }
         $service_category = isset($_POST['service_category']) ? $_POST['service_category'] : '';
+        $invoice_number = isset($_POST['invoice_number']) ? trim($_POST['invoice_number']) : '';
 
         # nếu jobname có thay đổi thì mới update
         if (($jobname != "") && ($current_post->post_title != $jobname)) {
@@ -122,6 +123,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         update_field('field_60a38cc126a5f', $link_onedrive, $postid); # Link tài liệu
         update_field('field_60fceb18a736d', $mindful, $postid); # Lưu ý công việc
         update_field('field_69070e5d8880e', $level, $postid); # Độ khó
+        update_field('field_6a26e8cdd2346', $invoice_number, $postid); # Số Invoice
         # partner
         update_field('field_602f7923c59bb', $partner, $postid); # save to partner_2 field
         update_field('field_609bf99f726ef', $foreign_partner, $postid); 
@@ -263,7 +265,8 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 'date'               => $current_date,
                 'level'              => $level,
                 'trademark_color'    => $trademark_color,
-                'service_category'   => $service_category
+                'service_category'   => $service_category,
+                'invoice_number'     => $invoice_number
             ),
             array('jobid' => $postid)
         );
@@ -539,6 +542,12 @@ $agency     = get_the_terms($postid, 'agency');
                                     <div class="mb-20">
                                         <label for=""><b><?php _e('Công việc', 'qlcv'); ?></b></label>
                                         <input type="text" value="<?php echo $content_post->post_title; ?>" name="jobname" class="form-control">
+                                    </div>
+
+                                    <div class="mb-20">
+                                        <label for=""><b><?php _e('Số Invoice', 'qlcv'); ?></b></label>
+                                        <?php $invoice_number = get_field('invoice_number', $postid); ?>
+                                        <input type="text" value="<?php echo esc_attr($invoice_number); ?>" name="invoice_number" class="form-control" placeholder="<?php _e('Số Invoice', 'qlcv'); ?>">
                                     </div>
 
                                     <div class="mb-20">

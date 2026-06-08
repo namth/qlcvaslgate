@@ -88,6 +88,10 @@ if (isset($_GET['type'])) {
                                             <div class="col-lg-6 col-12 mb-20"><input type="text" placeholder="<?php _e('VD: Nhãn hiệu 9OUTFIT', 'qlcv'); ?>" class="form-control" name="job_name"></div>
                                             <div class="col-lg-3"></div>
 
+                                            <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Số Invoice', 'qlcv'); ?></div>
+                                            <div class="col-lg-6 col-12 mb-20"><input type="text" placeholder="<?php _e('Số Invoice', 'qlcv'); ?>" class="form-control" name="invoice_number"></div>
+                                            <div class="col-lg-3"></div>
+
                                             <div class="col-lg-3 form_title lh45 text-left text-lg-right"><?php _e('Số REF của đối tác', 'qlcv'); ?></div>
                                             <div class="col-lg-6 col-12 mb-20"><input type="text" placeholder="<?php _e('Số REF của đối tác', 'qlcv'); ?>" class="form-control" name="partner_ref"></div>
                                             <div class="col-lg-3"></div>
