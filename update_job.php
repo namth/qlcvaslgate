@@ -377,6 +377,8 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         $ten_nhan_hieu = get_field('ten_nhan_hieu', $postid);
         $nhom = get_field('nhom', $postid);
         $so_luong_nhom = get_field('so_luong_nhom', $postid);
+        $ngay_nop_don = get_field('ngay_nop_don', $postid);
+        $formatted_ngay_nop_don = asl_format_date_to_dmy($ngay_nop_don);
         
         $wpdb->update(
             $aslJobDocument,
@@ -388,7 +390,10 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 'trademark_class'       => $nhom,
                 'trademark_totalclass'  => $so_luong_nhom,
                 'trademark_fillingid'   => $so_don,
-                'trademark_fillingdate' => $ngay_nop_don,
+                'trademark_fillingdate' => $formatted_ngay_nop_don,
+                'trademark_color'       => $trademark_color,
+                'service_category'      => $service_category,
+                'invoice_number'        => $invoice_number,
                 'partner_name'          => $partner_obj->display_name,
                 'partner_code'          => get_field('partner_code', 'user_' . $partner),
                 'partner_companyName'   => get_field('ten_cong_ty', 'user_' . $partner),

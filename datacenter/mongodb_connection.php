@@ -1021,6 +1021,11 @@ function export_mysql_job($paged) {
             $our_ref        = get_field('our_ref', $jobID);
             $so_don         = get_field('so_don', $jobID);
             $ngay_nop_don   = get_field('ngay_nop_don', $jobID);
+            $formatted_ngay_nop_don = asl_format_date_to_dmy($ngay_nop_don);
+            $trademark_color = get_field('trademark_color', $jobID);
+            $service_category = get_field('service_category', $jobID);
+            $invoice_number = get_field('invoice_number', $jobID);
+            
             $so_dien_thoai  = get_field('so_dien_thoai' , 'user_' . $partner_2['ID']);
             $dia_chi        = get_field('dia_chi' , 'user_' . $partner_2['ID']);
             $quoc_gia       = get_field('quoc_gia' , 'user_' . $partner_2['ID']);
@@ -1042,7 +1047,10 @@ function export_mysql_job($paged) {
                 'trademark_class' => $nhom,
                 'trademark_totalclass' => $so_luong_nhom,
                 'trademark_fillingid' => $so_don,
-                'trademark_fillingdate' => $ngay_nop_don,
+                'trademark_fillingdate' => $formatted_ngay_nop_don,
+                'trademark_color' => $trademark_color,
+                'service_category' => $service_category,
+                'invoice_number' => $invoice_number,
                 'partner_name' => $partner_2['display_name'] ?? '',
                 'partner_code' => $partner_code ?? '',
                 'partner_companyName' => $ten_cong_ty ?? '',
@@ -1096,7 +1104,10 @@ function export_mysql_job($paged) {
                 'contract_sign_date' => $contract_sign_date ?? NULL,
                 'agency_hn'     => $agency_hn ?? 0,
                 'agency_hcm'    => $agency_hcm ?? 0,
-                'level'         => $level ?? ''
+                'level'         => $level ?? '',
+                'trademark_color' => get_field('trademark_color', $jobID) ?: '',
+                'service_category' => get_field('service_category', $jobID) ?: '',
+                'invoice_number' => get_field('invoice_number', $jobID) ?: ''
             ];
 
             $sent = $wpdb->replace(
@@ -1478,6 +1489,10 @@ function export_mysql_job_document($paged) {
             $so_luong_nhom  = get_field('so_luong_nhom', $jobID);
             $so_don         = get_field('so_don', $jobID);
             $ngay_nop_don   = get_field('ngay_nop_don', $jobID);
+            $formatted_ngay_nop_don = asl_format_date_to_dmy($ngay_nop_don);
+            $trademark_color = get_field('trademark_color', $jobID);
+            $service_category = get_field('service_category', $jobID);
+            $invoice_number = get_field('invoice_number', $jobID);
 
             $so_dien_thoai  = get_field('so_dien_thoai' , 'user_' . $partner_2['ID']);
             $dia_chi        = get_field('dia_chi' , 'user_' . $partner_2['ID']);
@@ -1500,7 +1515,10 @@ function export_mysql_job_document($paged) {
                 'trademark_class' => $nhom,
                 'trademark_totalclass' => $so_luong_nhom,
                 'trademark_fillingid' => $so_don,
-                'trademark_fillingdate' => $ngay_nop_don,
+                'trademark_fillingdate' => $formatted_ngay_nop_don,
+                'trademark_color' => $trademark_color,
+                'service_category' => $service_category,
+                'invoice_number' => $invoice_number,
                 'partner_name' => $partner_2['display_name'] ?? '',
                 'partner_code' => $partner_code ?? '',
                 'partner_companyName' => $ten_cong_ty ?? '',

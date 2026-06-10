@@ -791,6 +791,7 @@ function add_new_job()
             $partner = get_user_by('ID', $data_partner);
             $so_don = get_field('so_don', $inserted);
             $ngay_nop_don = get_field('ngay_nop_don', $inserted);
+            $formatted_ngay_nop_don = asl_format_date_to_dmy($ngay_nop_don);
             
             $wpdb->insert(
                 $aslJobDocument,
@@ -803,7 +804,10 @@ function add_new_job()
                     'trademark_class'       => $brand_group,
                     'trademark_totalclass'  => $brand_number_group,
                     'trademark_fillingid'   => $so_don,
-                    'trademark_fillingdate' => $ngay_nop_don,
+                    'trademark_fillingdate' => $formatted_ngay_nop_don,
+                    'trademark_color'       => $trademark_color,
+                    'service_category'      => $service_category,
+                    'invoice_number'        => $invoice_number,
                     'partner_name'          => $partner->display_name,
                     'partner_code'          => get_field('partner_code', 'user_' . $data_partner),
                     'partner_companyName'   => get_field('ten_cong_ty', 'user_' . $data_partner),
@@ -1921,6 +1925,9 @@ function CreateDatabaseQlcv()
         `trademark_totalclass` varchar(255) NULL,
         `trademark_fillingid` varchar(255) NULL,
         `trademark_fillingdate` varchar(255) NULL,
+        `trademark_color` varchar(255) NULL,
+        `service_category` text NULL,
+        `invoice_number` varchar(255) NULL,
         `partner_name` varchar(255) NULL,
         `partner_code` varchar(20) NULL,
         `partner_companyName` varchar(255) NULL,
@@ -2623,4 +2630,42 @@ function asl_sync_customer_acf_fields_to_custom_table($post_id) {
             asl_sync_customer_to_custom_table($post_id);
         }
     }
+}
+
+/**
+ * Định dạng ngày từ YYYYmmdd hoặc các dạng khác sang dd/mm/YYYY
+ */
+function asl_format_date_to_dmy($date_str) {
+    if (empty($date_str)) {
+        return '';
+    }
+    // Clean string
+    $date_str = trim($date_str);
+    
+    // Nếu đã đúng định dạng dd/mm/YYYY
+    if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $date_str)) {
+        return $date_str;
+    }
+    
+    // Nếu ở dạng YYYYMMDD (8 chữ số)
+    if (preg_match('/^\d{8}$/', $date_str)) {
+        $year = substr($date_str, 0, 4);
+        $month = substr($date_str, 4, 2);
+        $day = substr($date_str, 6, 2);
+        return $day . '/' . $month . '/' . $year;
+    }
+    
+    // Nếu ở dạng YYYY-MM-DD
+    if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $date_str)) {
+        $parts = explode('-', $date_str);
+        return $parts[2] . '/' . $parts[1] . '/' . $parts[0];
+    }
+    
+    // Thử parse bằng strtotime
+    $timestamp = strtotime($date_str);
+    if ($timestamp) {
+        return date('d/m/Y', $timestamp);
+    }
+    
+    return $date_str;
 }
