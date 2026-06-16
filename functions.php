@@ -1012,6 +1012,9 @@ function sendmail_deadline_notification()
     
                 $user_arr = get_field('user');
                 $jobID = get_field('job');
+                if (!$jobID && get_post_type() == 'job') {
+                    $jobID = get_the_ID();
+                }
                 $our_ref = get_field('our_ref', $jobID);
                 $manager_arr = get_field('manager', $jobID);
                 $data_supervisor = get_field('supervisor', $jobID);
@@ -1019,7 +1022,19 @@ function sendmail_deadline_notification()
                 $email_admin = get_field('email_admin', 'option');
                 $to = $user_arr['user_email'];
                 if ($jobID) {
-                    $joblb = " cho " . get_the_title($jobID) . " (" . $our_ref . ")";
+                    if ($our_ref) {
+                        if (get_post_type() == 'job') {
+                            $joblb = " (" . $our_ref . ")";
+                        } else {
+                            $joblb = " cho " . get_the_title($jobID) . " (" . $our_ref . ")";
+                        }
+                    } else {
+                        if (get_post_type() == 'job') {
+                            $joblb = '';
+                        } else {
+                            $joblb = " cho " . get_the_title($jobID);
+                        }
+                    }
                 } else {
                     $joblb = '';
                 }
@@ -1052,7 +1067,7 @@ function sendmail_deadline_notification()
                         $sendFlag = true;
                     } else if (date('d/m/Y', $current_time) == date('d/m/Y', $end_time)) {
                         # send mail notification
-                        $email_title = __('Lưu ý công việc đến hạn ', 'qlcv');
+                        $email_title = __('Lưu ý công việc đến hạn ', 'qlcv') . ' ' . get_the_title() . $joblb;
                         $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
                         $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
                         $email_content .= "Lần nhắc thứ 3 đối với đầu việc: " . get_the_title() . "<br>";

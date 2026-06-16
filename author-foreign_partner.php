@@ -24,6 +24,13 @@
             <div class="row mbn-50">
                 <?php 
                     $current_user = wp_get_current_user();
+                    if (!in_array('administrator', $current_user->roles) && !in_array('contributor', $current_user->roles)) {
+                        if (in_array('partner', $current_user->roles) || in_array('foreign_partner', $current_user->roles)) {
+                            if ($current_user->ID != $this_user->ID) {
+                                wp_die(__('Bạn không có quyền truy cập trang này.', 'qlcv'));
+                            }
+                        }
+                    }
                     
                     //$this_user = wp_get_this_user();
 
@@ -190,26 +197,60 @@
                                         $paged = (get_query_var('paged')) ? absint(get_query_var('paged')) : 1;
 
                                         $args   = array(
-                                            'post_type'     => 'job',
-                                            'paged'         => $paged,
-                                            'posts_per_page'=> 50,
+                                             'post_type'     => 'job',
+                                             'paged'         => $paged,
+                                             'posts_per_page'=> 50,
+ 
+                                         );
+                                         $args['meta_query'] = array(
+                                             'relation' => 'AND',
+                                             array(
+                                                 'relation' => 'OR',
+                                                 array(
+                                                     'key'       => 'partner_2',
+                                                     'value'     => $this_user->ID,
+                                                     'compare'   => '=',
+                                                 ),
+                                                 array(
+                                                     'key'       => 'partner_1',
+                                                     'value'     => $this_user->ID,
+                                                     'compare'   => '=',
+                                                 ),
+                                             )
+                                         );
 
-                                        );
-                                        $args['meta_query'][] = array(
-                                            'relation' => 'OR',
-                                            array(
-                                                'key'       => 'partner_2',
-                                                'value'     => $this_user->ID,
-                                                'compare'   => '=',
-                                            ),
-                                            array(
-                                                'key'       => 'partner_1',
-                                                'value'     => $this_user->ID,
-                                                'compare'   => '=',
-                                            ),
-                                        );
-
-                                        $query = new WP_Query( $args );
+                                         if (!in_array('administrator', $current_user->roles) && !in_array('contributor', $current_user->roles)) {
+                                             $args['meta_query'][] = array(
+                                                 'relation' => 'OR',
+                                                 array(
+                                                     'key'       => 'member',
+                                                     'value'     => $current_user->ID,
+                                                     'compare'   => '=',
+                                                 ),
+                                                 array(
+                                                     'key'       => 'manager',
+                                                     'value'     => $current_user->ID,
+                                                     'compare'   => '=',
+                                                 ),
+                                                 array(
+                                                     'key'       => 'co_manager',
+                                                     'value'     => $current_user->ID,
+                                                     'compare'   => 'LIKE',
+                                                 ),
+                                                 array(
+                                                     'key'       => 'co_member',
+                                                     'value'     => $current_user->ID,
+                                                     'compare'   => 'LIKE',
+                                                 ),
+                                                 array(
+                                                     'key'       => 'supervisor',
+                                                     'value'     => $current_user->ID,
+                                                     'compare'   => 'LIKE',
+                                                 ),
+                                             );
+                                         }
+ 
+                                         $query = new WP_Query( $args );
                                     ?>
                                     <!--Todo List Start-->
                                     <ul class="todo-list">

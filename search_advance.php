@@ -289,7 +289,52 @@ get_sidebar();
                                 );
                             }
 
-                            if ($member) {
+                            if (!in_array('administrator', $current_user->roles) && !in_array('contributor', $current_user->roles)) {
+                                if (in_array('partner', $current_user->roles) || in_array('foreign_partner', $current_user->roles)) {
+                                    $args['meta_query'][] = array(
+                                        'relation' => 'OR',
+                                        array(
+                                            'key'       => 'partner_2',
+                                            'value'     => $current_user->ID,
+                                            'compare'   => '=',
+                                        ),
+                                        array(
+                                            'key'       => 'partner_1',
+                                            'value'     => $current_user->ID,
+                                            'compare'   => '=',
+                                        ),
+                                    );
+                                } else {
+                                    $args['meta_query'][] = array(
+                                        'relation' => 'OR',
+                                        array(
+                                            'key'       => 'member',
+                                            'value'     => $current_user->ID,
+                                            'compare'   => '=',
+                                        ),
+                                        array(
+                                            'key'       => 'manager',
+                                            'value'     => $current_user->ID,
+                                            'compare'   => '=',
+                                        ),
+                                        array(
+                                            'key'       => 'co_manager',
+                                            'value'     => $current_user->ID,
+                                            'compare'   => 'LIKE',
+                                        ),
+                                        array(
+                                            'key'       => 'co_member',
+                                            'value'     => $current_user->ID,
+                                            'compare'   => 'LIKE',
+                                        ),
+                                        array(
+                                            'key'       => 'supervisor',
+                                            'value'     => $current_user->ID,
+                                            'compare'   => 'LIKE',
+                                        ),
+                                    );
+                                }
+                            } else if ($member) {
                                 $args['meta_query'][] = array(
                                     'relation' => 'OR',
                                     array(
@@ -482,7 +527,72 @@ get_sidebar();
                                 $args['post__in'] = $post_ids;
                             }
 
-                            if ($member) {
+                            if (!in_array('administrator', $current_user->roles) && !in_array('contributor', $current_user->roles)) {
+                                $allowed_job_ids = get_posts(array(
+                                    'post_type' => 'job',
+                                    'posts_per_page' => -1,
+                                    'fields' => 'ids',
+                                    'meta_query' => array(
+                                        'relation' => 'OR',
+                                        array(
+                                            'key' => 'member',
+                                            'value' => $current_user->ID,
+                                            'compare' => '='
+                                        ),
+                                        array(
+                                            'key' => 'manager',
+                                            'value' => $current_user->ID,
+                                            'compare' => '='
+                                        ),
+                                        array(
+                                            'key' => 'co_manager',
+                                            'value' => $current_user->ID,
+                                            'compare' => 'LIKE'
+                                        ),
+                                        array(
+                                            'key' => 'co_member',
+                                            'value' => $current_user->ID,
+                                            'compare' => 'LIKE'
+                                        ),
+                                        array(
+                                            'key' => 'supervisor',
+                                            'value' => $current_user->ID,
+                                            'compare' => 'LIKE'
+                                        ),
+                                        array(
+                                            'key' => 'partner_2',
+                                            'value' => $current_user->ID,
+                                            'compare' => '='
+                                        ),
+                                        array(
+                                            'key' => 'partner_1',
+                                            'value' => $current_user->ID,
+                                            'compare' => '='
+                                        )
+                                    )
+                                ));
+                                if (empty($allowed_job_ids)) {
+                                    $allowed_job_ids = array(0);
+                                }
+                                $args['meta_query'][] = array(
+                                    'relation' => 'OR',
+                                    array(
+                                        'key' => 'user',
+                                        'value' => $current_user->ID,
+                                        'compare' => '='
+                                    ),
+                                    array(
+                                        'key' => 'manager',
+                                        'value' => $current_user->ID,
+                                        'compare' => '='
+                                    ),
+                                    array(
+                                        'key' => 'job',
+                                        'value' => $allowed_job_ids,
+                                        'compare' => 'IN'
+                                    )
+                                );
+                            } else if ($member) {
                                 $args['meta_query'] = array(
                                     array(
                                         'key'       => 'user',
@@ -653,6 +763,69 @@ get_sidebar();
                                 'number'    => 999,
                             );
 
+                            $include_user_ids = null;
+                            if (!in_array('administrator', $current_user->roles) && !in_array('contributor', $current_user->roles)) {
+                                if (in_array('partner', $current_user->roles) || in_array('foreign_partner', $current_user->roles)) {
+                                    $include_user_ids = array($current_user->ID);
+                                } else {
+                                    $member_jobs = get_posts(array(
+                                        'post_type' => 'job',
+                                        'posts_per_page' => -1,
+                                        'fields' => 'ids',
+                                        'meta_query' => array(
+                                            'relation' => 'OR',
+                                            array(
+                                                'key' => 'member',
+                                                'value' => $current_user->ID,
+                                                'compare' => '='
+                                            ),
+                                            array(
+                                                'key' => 'manager',
+                                                'value' => $current_user->ID,
+                                                'compare' => '='
+                                            ),
+                                            array(
+                                                'key' => 'co_manager',
+                                                'value' => $current_user->ID,
+                                                'compare' => 'LIKE'
+                                            ),
+                                            array(
+                                                'key' => 'co_member',
+                                                'value' => $current_user->ID,
+                                                'compare' => 'LIKE'
+                                            ),
+                                            array(
+                                                'key' => 'supervisor',
+                                                'value' => $current_user->ID,
+                                                'compare' => 'LIKE'
+                                            )
+                                        )
+                                    ));
+                                    $working_partner_ids = array();
+                                    if (!empty($member_jobs)) {
+                                        foreach ($member_jobs as $job_id) {
+                                            $p2 = get_field('partner_2', $job_id);
+                                            if ($p2 && isset($p2['ID'])) {
+                                                $working_partner_ids[] = $p2['ID'];
+                                            }
+                                            $p1 = get_field('partner_1', $job_id);
+                                            if ($p1 && isset($p1['ID'])) {
+                                                $working_partner_ids[] = $p1['ID'];
+                                            }
+                                        }
+                                    }
+                                    $working_partner_ids = array_unique($working_partner_ids);
+                                    if (empty($working_partner_ids)) {
+                                        $working_partner_ids = array(0);
+                                    }
+                                    $include_user_ids = $working_partner_ids;
+                                }
+                            }
+
+                            if ($include_user_ids !== null) {
+                                $args['include'] = $include_user_ids;
+                            }
+
                             if ($search) {
 
                                 $args['meta_query'] = array(
@@ -694,7 +867,7 @@ get_sidebar();
                                     ),
                                 );
 
-                                $q2 = new WP_User_Query(array(
+                                $q2_args = array(
                                     'search' => "*{$search}*",
                                     'search_columns' => array(
                                         'user_login',
@@ -702,7 +875,11 @@ get_sidebar();
                                         'user_email',
                                         'user_url',
                                     ),
-                                ));
+                                );
+                                if ($include_user_ids !== null) {
+                                    $q2_args['include'] = $include_user_ids;
+                                }
+                                $q2 = new WP_User_Query($q2_args);
 
                                 $users2 = $q2->get_results();
                             }

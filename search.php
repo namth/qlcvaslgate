@@ -31,6 +31,73 @@ $current_user = wp_get_current_user();
             's'              => $s,
         );
         
+        if (!in_array('administrator', $current_user->roles) && !in_array('contributor', $current_user->roles)) {
+            $allowed_job_ids = get_posts(array(
+                'post_type' => 'job',
+                'posts_per_page' => -1,
+                'fields' => 'ids',
+                'meta_query' => array(
+                    'relation' => 'OR',
+                    array(
+                        'key' => 'member',
+                        'value' => $current_user->ID,
+                        'compare' => '='
+                    ),
+                    array(
+                        'key' => 'manager',
+                        'value' => $current_user->ID,
+                        'compare' => '='
+                    ),
+                    array(
+                        'key' => 'co_manager',
+                        'value' => $current_user->ID,
+                        'compare' => 'LIKE'
+                    ),
+                    array(
+                        'key' => 'co_member',
+                        'value' => $current_user->ID,
+                        'compare' => 'LIKE'
+                    ),
+                    array(
+                        'key' => 'supervisor',
+                        'value' => $current_user->ID,
+                        'compare' => 'LIKE'
+                    ),
+                    array(
+                        'key' => 'partner_2',
+                        'value' => $current_user->ID,
+                        'compare' => '='
+                    ),
+                    array(
+                        'key' => 'partner_1',
+                        'value' => $current_user->ID,
+                        'compare' => '='
+                    )
+                )
+            ));
+            if (empty($allowed_job_ids)) {
+                $allowed_job_ids = array(0);
+            }
+            $args['meta_query'][] = array(
+                'relation' => 'OR',
+                array(
+                    'key' => 'user',
+                    'value' => $current_user->ID,
+                    'compare' => '='
+                ),
+                array(
+                    'key' => 'manager',
+                    'value' => $current_user->ID,
+                    'compare' => '='
+                ),
+                array(
+                    'key' => 'job',
+                    'value' => $allowed_job_ids,
+                    'compare' => 'IN'
+                )
+            );
+        }
+        
         // Polylang: Hiển thị tất cả ngôn ngữ thay vì chỉ ngôn ngữ hiện tại
         if (function_exists('pll_languages_list')) {
             $args['lang'] = '';  // Hiển thị tất cả ngôn ngữ
@@ -148,36 +215,52 @@ $current_user = wp_get_current_user();
             $args['post__in'] = $post_ids;
         }
 
-        if (!in_array('administrator', $current_user->roles)) {
-            $member = $current_user->ID; // Define $member as the current user's ID
-            $args['meta_query'][] = array(
-                'relation' => 'OR',
-                array(
-                    'key'       => 'member',
-                    'value'     => $member,
-                    'compare'   => '=',
-                ),
-                array(
-                    'key'       => 'manager',
-                    'value'     => $member,
-                    'compare'   => '=',
-                ),
-                array(
-                    'key'       => 'co_manager',
-                    'value'     => $member,
-                    'compare'   => 'LIKE',
-                ),
-                array(
-                    'key'       => 'co_member',
-                    'value'     => $member,
-                    'compare'   => 'LIKE',
-                ),
-                array(
-                    'key'       => 'supervisor',
-                    'value'     => $member,
-                    'compare'   => 'LIKE',
-                ),
-            );
+        if (!in_array('administrator', $current_user->roles) && !in_array('contributor', $current_user->roles)) {
+            if (in_array('partner', $current_user->roles) || in_array('foreign_partner', $current_user->roles)) {
+                $args['meta_query'][] = array(
+                    'relation' => 'OR',
+                    array(
+                        'key'       => 'partner_2',
+                        'value'     => $current_user->ID,
+                        'compare'   => '=',
+                    ),
+                    array(
+                        'key'       => 'partner_1',
+                        'value'     => $current_user->ID,
+                        'compare'   => '=',
+                    ),
+                );
+            } else {
+                $member = $current_user->ID; // Define $member as the current user's ID
+                $args['meta_query'][] = array(
+                    'relation' => 'OR',
+                    array(
+                        'key'       => 'member',
+                        'value'     => $member,
+                        'compare'   => '=',
+                    ),
+                    array(
+                        'key'       => 'manager',
+                        'value'     => $member,
+                        'compare'   => '=',
+                    ),
+                    array(
+                        'key'       => 'co_manager',
+                        'value'     => $member,
+                        'compare'   => 'LIKE',
+                    ),
+                    array(
+                        'key'       => 'co_member',
+                        'value'     => $member,
+                        'compare'   => 'LIKE',
+                    ),
+                    array(
+                        'key'       => 'supervisor',
+                        'value'     => $member,
+                        'compare'   => 'LIKE',
+                    ),
+                );
+            }
         }
 
         # cài đặt search theo phân quyền
@@ -267,10 +350,72 @@ $current_user = wp_get_current_user();
         }
         # end search job
 
+        $include_user_ids = null;
+        if (!in_array('administrator', $current_user->roles) && !in_array('contributor', $current_user->roles)) {
+            if (in_array('partner', $current_user->roles) || in_array('foreign_partner', $current_user->roles)) {
+                $include_user_ids = array($current_user->ID);
+            } else {
+                $member_jobs = get_posts(array(
+                    'post_type' => 'job',
+                    'posts_per_page' => -1,
+                    'fields' => 'ids',
+                    'meta_query' => array(
+                        'relation' => 'OR',
+                        array(
+                            'key' => 'member',
+                            'value' => $current_user->ID,
+                            'compare' => '='
+                        ),
+                        array(
+                            'key' => 'manager',
+                            'value' => $current_user->ID,
+                            'compare' => '='
+                        ),
+                        array(
+                            'key' => 'co_manager',
+                            'value' => $current_user->ID,
+                            'compare' => 'LIKE'
+                        ),
+                        array(
+                            'key' => 'co_member',
+                            'value' => $current_user->ID,
+                            'compare' => 'LIKE'
+                        ),
+                        array(
+                            'key' => 'supervisor',
+                            'value' => $current_user->ID,
+                            'compare' => 'LIKE'
+                        )
+                    )
+                ));
+                $working_partner_ids = array();
+                if (!empty($member_jobs)) {
+                    foreach ($member_jobs as $job_id) {
+                        $p2 = get_field('partner_2', $job_id);
+                        if ($p2 && isset($p2['ID'])) {
+                            $working_partner_ids[] = $p2['ID'];
+                        }
+                        $p1 = get_field('partner_1', $job_id);
+                        if ($p1 && isset($p1['ID'])) {
+                            $working_partner_ids[] = $p1['ID'];
+                        }
+                    }
+                }
+                $working_partner_ids = array_unique($working_partner_ids);
+                if (empty($working_partner_ids)) {
+                    $working_partner_ids = array(0);
+                }
+                $include_user_ids = $working_partner_ids;
+            }
+        }
+
         $count_args  = array(
             'search'    => $s,
             'number'    => 999999,
         );
+        if ($include_user_ids !== null) {
+            $count_args['include'] = $include_user_ids;
+        }
         $user_count_query = new WP_User_Query($count_args);
         $users = $user_count_query->get_results();
 
@@ -336,6 +481,9 @@ $current_user = wp_get_current_user();
                     ),
                 )
             );
+            if ($include_user_ids !== null) {
+                $count_args['include'] = $include_user_ids;
+            }
             $user_count_query = new WP_User_Query($count_args);
             $users = $user_count_query->get_results();
 

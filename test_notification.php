@@ -50,6 +50,9 @@ get_sidebar();
 
                         $user_arr = get_field('user');
                         $jobID = get_field('job');
+                        if (!$jobID && get_post_type() == 'job') {
+                            $jobID = get_the_ID();
+                        }
                         $our_ref = get_field('our_ref', $jobID);
                         $manager_arr = get_field('manager', $jobID);
                         $data_supervisor = get_field('supervisor', $jobID);
@@ -61,7 +64,19 @@ get_sidebar();
                         }
 
                         if ($jobID) {
-                            $joblb = " cho " . get_the_title($jobID) . " (" . $our_ref . ")";
+                            if ($our_ref) {
+                                if (get_post_type() == 'job') {
+                                    $joblb = " (" . $our_ref . ")";
+                                } else {
+                                    $joblb = " cho " . get_the_title($jobID) . " (" . $our_ref . ")";
+                                }
+                            } else {
+                                if (get_post_type() == 'job') {
+                                    $joblb = '';
+                                } else {
+                                    $joblb = " cho " . get_the_title($jobID);
+                                }
+                            }
                         } else {
                             $joblb = '';
                         }
