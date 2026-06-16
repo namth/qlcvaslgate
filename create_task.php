@@ -140,7 +140,11 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 $user_arr = get_user_by('ID', $member);
                 $to = $user_arr->user_email;
                 if ($to) {
+                    $our_ref = get_field('our_ref', $job);
                     $email_title = $noi_dung . ": " . $taskname;
+                    if ($our_ref) {
+                        $email_title .= " (" . $our_ref . ")";
+                    }
                     $email_content = $user_arr->display_name . ' ' . __('hãy kiểm tra để thực hiện nhiệm vụ mới.', 'qlcv');
                     $email_content .= "<br>". __('Link tới công việc:', 'qlcv') . get_the_permalink($inserted);
                     $email_content = auto_url($email_content);
