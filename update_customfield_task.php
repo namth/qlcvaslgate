@@ -23,6 +23,7 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
 
         $current_user = wp_get_current_user();
         $current_time = current_time('timestamp', 7);
+        $email_admin  = get_field('email_admin', 'option');
 
         # Lấy dữ liệu từ form
         $taskname = $_POST['taskname'];
@@ -40,30 +41,18 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
             $tmp_manager = get_user_by('ID', $post_manager);
             #update vào csdl
             update_field('field_600fded7b438f', $post_member, $postid);
-            $notif_item[]   = __('người thực hiện từ', 'qlcv') . ' <b>' . $tmp_user->display_name . '</b> '. __('sang', 'qlcv') . ' <b>' . $member['display_name'] . '</b>';
+            $notif_item[]   = __('người thực hiện từ', 'qlcv') . ' <b>' . $member['display_name'] . '</b> '. __('sang', 'qlcv') . ' <b>' . $tmp_user->display_name . '</b>';
             $update = true;
             $update_user = true;
 
+            $our_ref = get_field('our_ref', $job);
             $email_title = __("Thông báo về việc thay đổi nhân sự", 'qlcv');
+            if ($our_ref) {
+                $email_title .= " (" . $our_ref . ")";
+            }
 
             # set notification for old member & manager 
-            $content = $tmp_user->display_name . " " . __("không còn là người xử lý việc", 'qlcv') . " <b>" . get_the_title($postid) . "</b>. " . __("Xem chi tiết việc", 'qlcv') . " <b>" . get_the_title($job) . "</b>";
-            create_notification($postid, $content, $post_manager, $post_member);
-            # send email notif
-            $email_content = $content;
-            $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink($postid);
-            $email_content = auto_url($email_content);
-            $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
-
-            $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-            $headers[] = 'Cc: ' . $email_admin;
-            $headers[] = 'Cc: ' . $tmp_manager->user_email;
-            $headers[] = 'Cc: ' . $tmp_user->user_email;
-
-            $sent = wp_mail($to, $email_title, $email_content, $headers);
-
-            # set notification for new member & manager
-            $content = $member['display_name'] . " " . __("đã được giao là người xử lý việc", 'qlcv') . " <b>" . get_the_title($postid) . "</b>. " . __("Xem chi tiết việc", 'qlcv') . " <b>" . get_the_title($job) . "</b>";
+            $content = $member['display_name'] . " " . __("không còn là người xử lý việc", 'qlcv') . " <b>" . get_the_title($postid) . "</b>. " . __("Xem chi tiết việc", 'qlcv') . " <b>" . get_the_title($job) . "</b>";
             create_notification($postid, $content, $post_manager, $member['ID']);
             # send email notif
             $email_content = $content;
@@ -71,29 +60,95 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
             $email_content = auto_url($email_content);
             $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
+            $to = $member['user_email'];
+            $headers = array();
             $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-            $headers[] = 'Cc: ' . $email_admin;
-            $headers[] = 'Cc: ' . $tmp_manager->user_email;
-            $headers[] = 'Cc: ' . $member['user_email'];
+            if ($email_admin) {
+                $headers[] = 'Cc: ' . $email_admin;
+            }
+            if ($tmp_manager && $tmp_manager->user_email) {
+                $headers[] = 'Cc: ' . $tmp_manager->user_email;
+            }
+            if ($tmp_user && $tmp_user->user_email) {
+                $headers[] = 'Cc: ' . $tmp_user->user_email;
+            }
 
-            $sent = wp_mail($to, $email_title, $email_content, $headers);
+            if ($to) {
+                $sent = wp_mail($to, $email_title, $email_content, $headers);
+            }
+
+            # set notification for new member & manager
+            $content = $tmp_user->display_name . " " . __("đã được giao là người xử lý việc", 'qlcv') . " <b>" . get_the_title($postid) . "</b>. " . __("Xem chi tiết việc", 'qlcv') . " <b>" . get_the_title($job) . "</b>";
+            create_notification($postid, $content, $post_manager, $post_member);
+            # send email notif
+            $email_content = $content;
+            $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink($postid);
+            $email_content = auto_url($email_content);
+            $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
+
+            $to = $tmp_user->user_email;
+            $headers = array();
+            $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
+            if ($email_admin) {
+                $headers[] = 'Cc: ' . $email_admin;
+            }
+            if ($tmp_manager && $tmp_manager->user_email) {
+                $headers[] = 'Cc: ' . $tmp_manager->user_email;
+            }
+            if ($member['user_email']) {
+                $headers[] = 'Cc: ' . $member['user_email'];
+            }
+
+            if ($to) {
+                $sent = wp_mail($to, $email_title, $email_content, $headers);
+            }
 
         }
 
-        # nếu người thực hiện có thay đổi thì thông báo
+        # nếu người quản lý có thay đổi thì thông báo
         if ($manager['ID'] != $post_manager) {
             $tmp_user = get_user_by('ID', $post_member);
             $tmp_manager = get_user_by('ID', $post_manager);
             #update vào csdl
             update_field('field_60fd46973dd42', $post_manager, $postid);
-            $notif_item[]   = __('người quản lý từ', 'qlcv') . ' <b>' . $tmp_manager->display_name . '</b> '. __('sang', 'qlcv') . ' <b>' . $manager['display_name'] . '</b>';
+            $notif_item[]   = __('người quản lý từ', 'qlcv') . ' <b>' . $manager['display_name'] . '</b> '. __('sang', 'qlcv') . ' <b>' . $tmp_manager->display_name . '</b>';
             $update = true;
             $update_user = true;
 
+            $our_ref = get_field('our_ref', $job);
             $email_title = __("Thông báo về việc thay đổi nhân sự", 'qlcv');
+            if ($our_ref) {
+                $email_title .= " (" . $our_ref . ")";
+            }
 
             # set notification for old member & manager 
-            $content = $tmp_user->display_name . " " . __("không còn là người quản lý việc", 'qlcv') . "  <b>" . get_the_title($postid) . "</b>. " . __("Xem chi tiết việc", 'qlcv') . "  <b>" . get_the_title($job) . "</b>";
+            $content = $manager['display_name'] . " " . __("không còn là người quản lý việc", 'qlcv') . "  <b>" . get_the_title($postid) . "</b>. " . __("Xem chi tiết việc", 'qlcv') . "  <b>" . get_the_title($job) . "</b>";
+            create_notification($postid, $content, $post_manager, $manager['ID']);
+            # send email notif
+            $email_content = $content;
+            $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink($postid);
+            $email_content = auto_url($email_content);
+            $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
+
+            $to = $manager['user_email'];
+            $headers = array();
+            $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
+            if ($email_admin) {
+                $headers[] = 'Cc: ' . $email_admin;
+            }
+            if ($tmp_manager && $tmp_manager->user_email) {
+                $headers[] = 'Cc: ' . $tmp_manager->user_email;
+            }
+            if ($tmp_user && $tmp_user->user_email) {
+                $headers[] = 'Cc: ' . $tmp_user->user_email;
+            }
+
+            if ($to) {
+                $sent = wp_mail($to, $email_title, $email_content, $headers);
+            }
+
+            # set notification for new member & manager
+            $content = $tmp_manager->display_name . " " . __("đã được giao là người quản lý việc", 'qlcv') . "  <b>" . get_the_title($postid) . "</b>. ". __("Xem chi tiết việc", 'qlcv') . "  <b>" . get_the_title($job) . "</b>";
             create_notification($postid, $content, $post_manager, $post_member);
             # send email notif
             $email_content = $content;
@@ -101,28 +156,22 @@ if (isset($_GET['taskid'])  && ($_GET['taskid'] != "")) {
             $email_content = auto_url($email_content);
             $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
 
+            $to = $tmp_manager->user_email;
+            $headers = array();
             $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-            $headers[] = 'Cc: ' . $email_admin;
-            $headers[] = 'Cc: ' . $tmp_manager->user_email;
-            $headers[] = 'Cc: ' . $tmp_user->user_email;
+            if ($email_admin) {
+                $headers[] = 'Cc: ' . $email_admin;
+            }
+            if ($manager['user_email']) {
+                $headers[] = 'Cc: ' . $manager['user_email'];
+            }
+            if ($tmp_user && $tmp_user->user_email) {
+                $headers[] = 'Cc: ' . $tmp_user->user_email;
+            }
 
-            $sent = wp_mail($to, $email_title, $email_content, $headers);
-
-            # set notification for new member & manager
-            $content = $member['display_name'] . " " . __("đã được giao là người quản lý việc", 'qlcv') . "  <b>" . get_the_title($postid) . "</b>. ". __("Xem chi tiết việc", 'qlcv') . "  <b>" . get_the_title($job) . "</b>";
-            create_notification($postid, $content, $post_manager, $member['ID']);
-            # send email notif
-            $email_content = $content;
-            $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink($postid);
-            $email_content = auto_url($email_content);
-            $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
-
-            $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-            $headers[] = 'Cc: ' . $email_admin;
-            $headers[] = 'Cc: ' . $manager['user_email'];
-            $headers[] = 'Cc: ' . $tmp_user->user_email;
-
-            $sent = wp_mail($to, $email_title, $email_content, $headers);
+            if ($to) {
+                $sent = wp_mail($to, $email_title, $email_content, $headers);
+            }
 
         }
 
