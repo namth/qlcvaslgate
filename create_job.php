@@ -56,19 +56,7 @@ if (isset($_GET['type'])) {
                                                     <div id="select_partner_1" style="display: none;">
                                                         <select class="form-control select2-tags mb-20" name="partner_1">
                                                             <option value="">-- <?php _e('Chọn đối tác giới thiệu', 'qlcv'); ?> --</option>
-                                                            <?php
-                                                            $args   = array(
-                                                                'role'      => 'partner', /*subscriber, contributor, author*/
-                                                            );
-                                                            $query = get_users($args);
-
-                                                            if ($query) {
-                                                                foreach ($query as $user) {
-                                                                    $ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $user->ID);
-                                                                    echo "<option value='" . $user->ID . "'>" . $ten_cong_ty . " (" . $user->user_email . ")</option>";
-                                                                }
-                                                            }
-                                                            ?>
+                                                            <?php echo asl_get_partner_select_options_step0(); ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -269,20 +257,7 @@ if (isset($_GET['type'])) {
                                         <h4><?php _e('Chọn đối tác gửi việc từ trong danh sách', 'qlcv'); ?> <span class="text-danger">*</span></h4>
                                         <select class="form-control select2-tags mb-20" name="partner">
                                             <option value="">-- <?php _e('Chọn đối tác gửi việc', 'qlcv'); ?> --</option>
-                                            <?php
-                                            $args   = array(
-                                                'role'      => 'partner', /*subscriber, contributor, author*/
-                                            );
-                                            $query = get_users($args);
-
-                                            if ($query) {
-                                                foreach ($query as $user) {
-                                                    $ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $user->ID);
-                                                    $partner_code   = get_field('partner_code', 'user_' . $user->ID);
-                                                    echo "<option value='" . $user->ID . "'>" . $partner_code . " - " . $ten_cong_ty . " (" . $user->user_email . ")</option>";
-                                                }
-                                            }
-                                            ?>
+                                            <?php echo asl_get_partner_select_options_step1(); ?>
                                         </select>
                                     </div>
                                     <div class="col-12 mb-20">
@@ -299,20 +274,7 @@ if (isset($_GET['type'])) {
                                             <h4><?php _e('Chọn đối tác nhận việc từ trong danh sách', 'qlcv'); ?></h4>
                                             <select class="form-control select2-tags mb-20" name="foreign_partner">
                                                 <option value="">-- <?php _e('Chọn đối tác nhận việc', 'qlcv'); ?> --</option>
-                                                <?php
-                                                $args   = array(
-                                                    'role'      => 'foreign_partner', /*subscriber, contributor, author*/
-                                                );
-                                                $query = get_users($args);
-
-                                                if ($query) {
-                                                    foreach ($query as $user) {
-                                                        $ten_cong_ty    = get_field('ten_cong_ty', 'user_' . $user->ID);
-                                                        $partner_code   = get_field('partner_code', 'user_' . $user->ID);
-                                                        echo "<option value='" . $user->ID . "'>" . $partner_code . " - " . $ten_cong_ty . " (" . $user->user_email . ")</option>";
-                                                    }
-                                                }
-                                                ?>
+                                                <?php echo asl_get_foreign_partner_select_options(); ?>
                                             </select>
                                         </div>
                                         <div class="col-12 mb-20">
@@ -329,28 +291,7 @@ if (isset($_GET['type'])) {
                                         <h4><?php _e('Chọn khách hàng từ trong danh sách', 'qlcv'); ?> <span class="text-danger">*</span></h4>
                                         <select class="form-control select2-tags mb-20" name="customer">
                                             <option value="">-- <?php _e('Chọn khách hàng', 'qlcv'); ?> --</option>
-                                            <?php
-                                            $args   = array(
-                                                'post_type'     => 'customer',
-                                                'posts_per_page' => -1,
-                                            );
-                                            $query = new WP_Query($args);
-
-                                            if ($query->have_posts()) {
-                                                while ($query->have_posts()) {
-                                                    $query->the_post();
-
-                                                    $cty = get_field('ten_cong_ty');
-                                                    $email = get_field('email');
-
-                                                    echo "<option value='" . get_the_ID() . "'>" . $cty;
-                                                    if ($email) {
-                                                        echo " (" . $email . ")";
-                                                    }
-                                                    echo "</option>";
-                                                }
-                                            }
-                                            ?>
+                                            <?php echo asl_get_customer_select_options(); ?>
                                         </select>
                                     </div>
                                     <div class="col-12 mb-20">

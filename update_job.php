@@ -564,16 +564,7 @@ $agency     = get_the_terms($postid, 'agency');
                                             } else {
                                                 echo '<option value="">-- ' . __('Chọn đối tác gửi việc', 'qlcv') . ' --</option>';
                                             }
-                                            $args   = array(
-                                                'role'    => 'partner', /*subscriber, contributor, author*/
-                                            );
-                                            $query = get_users($args);
-
-                                            if ($query) {
-                                                foreach ($query as $user) {
-                                                    echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
-                                                }
-                                            }
+                                            echo asl_get_partner_options_simple();
                                             ?>
                                         </select>
                                     </div>
@@ -587,16 +578,7 @@ $agency     = get_the_terms($postid, 'agency');
                                             } else {
                                                 echo '<option value="">-- ' . __('Chọn đối tác nhận việc', 'qlcv') . ' --</option>';
                                             }
-                                            $args   = array(
-                                                'role'    => 'foreign_partner', /*subscriber, contributor, author*/
-                                            );
-                                            $query = get_users($args);
-
-                                            if ($query) {
-                                                foreach ($query as $user) {
-                                                    echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
-                                                }
-                                            }
+                                            echo asl_get_foreign_partner_options_simple();
                                             ?>
                                         </select>
                                     </div>

@@ -2684,3 +2684,182 @@ function asl_format_date_to_dmy($date_str) {
     
     return $date_str;
 }
+
+/**
+ * Get customer select options (cached via Transients)
+ */
+function asl_get_customer_select_options() {
+    $options = get_transient( 'asl_customer_options' );
+    if ( false === $options ) {
+        global $wpdb;
+        $customers = $wpdb->get_results("
+            SELECT p.ID, p.post_title, 
+                   m_cty.meta_value as ten_cong_ty, 
+                   m_email.meta_value as email
+            FROM {$wpdb->posts} p
+            LEFT JOIN {$wpdb->postmeta} m_cty ON (p.ID = m_cty.post_id AND m_cty.meta_key = 'ten_cong_ty')
+            LEFT JOIN {$wpdb->postmeta} m_email ON (p.ID = m_email.post_id AND m_email.meta_key = 'email')
+            WHERE p.post_type = 'customer' AND p.post_status = 'publish'
+            ORDER BY p.post_title ASC
+        ");
+
+        $options = '';
+        if ( $customers ) {
+            foreach ( $customers as $customer ) {
+                $cty = !empty($customer->ten_cong_ty) ? $customer->ten_cong_ty : $customer->post_title;
+                $email = $customer->email;
+                $options .= "<option value='" . $customer->ID . "'>" . esc_html($cty);
+                if ( $email ) {
+                    $options .= " (" . esc_html($email) . ")";
+                }
+                $options .= "</option>";
+            }
+        }
+        set_transient( 'asl_customer_options', $options, DAY_IN_SECONDS );
+    }
+    return $options;
+}
+
+/**
+ * Get partner select options for Step 0 (cached via Transients)
+ */
+function asl_get_partner_select_options_step0() {
+    $options = get_transient( 'asl_partner_options_step0' );
+    if ( false === $options ) {
+        $users = get_users( array( 'role' => 'partner' ) );
+        $options = '';
+        if ( $users ) {
+            $user_ids = wp_list_pluck( $users, 'ID' );
+            update_meta_cache( 'user', $user_ids );
+            foreach ( $users as $user ) {
+                $ten_cong_ty = get_field( 'ten_cong_ty', 'user_' . $user->ID );
+                if ( empty( $ten_cong_ty ) ) {
+                    $ten_cong_ty = $user->display_name;
+                }
+                $options .= "<option value='" . $user->ID . "'>" . esc_html($ten_cong_ty) . " (" . esc_html($user->user_email) . ")</option>";
+            }
+        }
+        set_transient( 'asl_partner_options_step0', $options, DAY_IN_SECONDS );
+    }
+    return $options;
+}
+
+/**
+ * Get partner select options for Step 1 (cached via Transients)
+ */
+function asl_get_partner_select_options_step1() {
+    $options = get_transient( 'asl_partner_options_step1' );
+    if ( false === $options ) {
+        $users = get_users( array( 'role' => 'partner' ) );
+        $options = '';
+        if ( $users ) {
+            $user_ids = wp_list_pluck( $users, 'ID' );
+            update_meta_cache( 'user', $user_ids );
+            foreach ( $users as $user ) {
+                $ten_cong_ty = get_field( 'ten_cong_ty', 'user_' . $user->ID );
+                if ( empty( $ten_cong_ty ) ) {
+                    $ten_cong_ty = $user->display_name;
+                }
+                $partner_code = get_field( 'partner_code', 'user_' . $user->ID );
+                $label = !empty( $partner_code ) ? $partner_code . " - " . $ten_cong_ty : $ten_cong_ty;
+                $options .= "<option value='" . $user->ID . "'>" . esc_html($label) . " (" . esc_html($user->user_email) . ")</option>";
+            }
+        }
+        set_transient( 'asl_partner_options_step1', $options, DAY_IN_SECONDS );
+    }
+    return $options;
+}
+
+/**
+ * Get foreign partner select options (cached via Transients)
+ */
+function asl_get_foreign_partner_select_options() {
+    $options = get_transient( 'asl_foreign_partner_options' );
+    if ( false === $options ) {
+        $users = get_users( array( 'role' => 'foreign_partner' ) );
+        $options = '';
+        if ( $users ) {
+            $user_ids = wp_list_pluck( $users, 'ID' );
+            update_meta_cache( 'user', $user_ids );
+            foreach ( $users as $user ) {
+                $ten_cong_ty = get_field( 'ten_cong_ty', 'user_' . $user->ID );
+                if ( empty( $ten_cong_ty ) ) {
+                    $ten_cong_ty = $user->display_name;
+                }
+                $partner_code = get_field( 'partner_code', 'user_' . $user->ID );
+                $label = !empty( $partner_code ) ? $partner_code . " - " . $ten_cong_ty : $ten_cong_ty;
+                $options .= "<option value='" . $user->ID . "'>" . esc_html($label) . " (" . esc_html($user->user_email) . ")</option>";
+            }
+        }
+        set_transient( 'asl_foreign_partner_options', $options, DAY_IN_SECONDS );
+    }
+    return $options;
+}
+
+/**
+ * Get simple partner select options (cached via Transients)
+ */
+function asl_get_partner_options_simple() {
+    $options = get_transient( 'asl_partner_options_simple' );
+    if ( false === $options ) {
+        $users = get_users( array( 'role' => 'partner' ) );
+        $options = '';
+        if ( $users ) {
+            foreach ( $users as $user ) {
+                $options .= "<option value='" . $user->ID . "'>" . esc_html($user->display_name) . " (" . esc_html($user->user_email) . ")</option>";
+            }
+        }
+        set_transient( 'asl_partner_options_simple', $options, DAY_IN_SECONDS );
+    }
+    return $options;
+}
+
+/**
+ * Get simple foreign partner select options (cached via Transients)
+ */
+function asl_get_foreign_partner_options_simple() {
+    $options = get_transient( 'asl_foreign_partner_options_simple' );
+    if ( false === $options ) {
+        $users = get_users( array( 'role' => 'foreign_partner' ) );
+        $options = '';
+        if ( $users ) {
+            foreach ( $users as $user ) {
+                $options .= "<option value='" . $user->ID . "'>" . esc_html($user->display_name) . " (" . esc_html($user->user_email) . ")</option>";
+            }
+        }
+        set_transient( 'asl_foreign_partner_options_simple', $options, DAY_IN_SECONDS );
+    }
+    return $options;
+}
+
+/**
+ * Clear customer select options cache
+ */
+function asl_clear_customer_options_cache( $post_id ) {
+    if ( is_numeric( $post_id ) ) {
+        $post = get_post( intval( $post_id ) );
+        if ( $post && $post->post_type === 'customer' ) {
+            delete_transient( 'asl_customer_options' );
+        }
+    }
+}
+add_action( 'save_post_customer', 'asl_clear_customer_options_cache', 30 );
+add_action( 'acf/save_post', 'asl_clear_customer_options_cache', 30 );
+add_action( 'before_delete_post', 'asl_clear_customer_options_cache', 30 );
+
+/**
+ * Clear partner select options cache
+ */
+function asl_clear_partner_options_cache( $user_id ) {
+    if ( is_numeric( $user_id ) || ( is_string( $user_id ) && strpos( $user_id, 'user_' ) === 0 ) ) {
+        delete_transient( 'asl_partner_options_step0' );
+        delete_transient( 'asl_partner_options_step1' );
+        delete_transient( 'asl_foreign_partner_options' );
+        delete_transient( 'asl_partner_options_simple' );
+        delete_transient( 'asl_foreign_partner_options_simple' );
+    }
+}
+add_action( 'profile_update', 'asl_clear_partner_options_cache' );
+add_action( 'user_register', 'asl_clear_partner_options_cache' );
+add_action( 'delete_user', 'asl_clear_partner_options_cache' );
+add_action( 'acf/save_post', 'asl_clear_partner_options_cache', 30 );
