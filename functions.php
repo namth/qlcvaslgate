@@ -2715,7 +2715,7 @@ function asl_get_customer_select_options() {
                 $options .= "</option>";
             }
         }
-        set_transient( 'asl_customer_options', $options, DAY_IN_SECONDS );
+        set_transient( 'asl_customer_options', $options, 0 );
     }
     return $options;
 }
@@ -2739,7 +2739,7 @@ function asl_get_partner_select_options_step0() {
                 $options .= "<option value='" . $user->ID . "'>" . esc_html($ten_cong_ty) . " (" . esc_html($user->user_email) . ")</option>";
             }
         }
-        set_transient( 'asl_partner_options_step0', $options, DAY_IN_SECONDS );
+        set_transient( 'asl_partner_options_step0', $options, 0 );
     }
     return $options;
 }
@@ -2765,7 +2765,7 @@ function asl_get_partner_select_options_step1() {
                 $options .= "<option value='" . $user->ID . "'>" . esc_html($label) . " (" . esc_html($user->user_email) . ")</option>";
             }
         }
-        set_transient( 'asl_partner_options_step1', $options, DAY_IN_SECONDS );
+        set_transient( 'asl_partner_options_step1', $options, 0 );
     }
     return $options;
 }
@@ -2791,7 +2791,7 @@ function asl_get_foreign_partner_select_options() {
                 $options .= "<option value='" . $user->ID . "'>" . esc_html($label) . " (" . esc_html($user->user_email) . ")</option>";
             }
         }
-        set_transient( 'asl_foreign_partner_options', $options, DAY_IN_SECONDS );
+        set_transient( 'asl_foreign_partner_options', $options, 0 );
     }
     return $options;
 }
@@ -2809,7 +2809,7 @@ function asl_get_partner_options_simple() {
                 $options .= "<option value='" . $user->ID . "'>" . esc_html($user->display_name) . " (" . esc_html($user->user_email) . ")</option>";
             }
         }
-        set_transient( 'asl_partner_options_simple', $options, DAY_IN_SECONDS );
+        set_transient( 'asl_partner_options_simple', $options, 0 );
     }
     return $options;
 }
@@ -2827,19 +2827,20 @@ function asl_get_foreign_partner_options_simple() {
                 $options .= "<option value='" . $user->ID . "'>" . esc_html($user->display_name) . " (" . esc_html($user->user_email) . ")</option>";
             }
         }
-        set_transient( 'asl_foreign_partner_options_simple', $options, DAY_IN_SECONDS );
+        set_transient( 'asl_foreign_partner_options_simple', $options, 0 );
     }
     return $options;
 }
 
 /**
- * Clear customer select options cache
+ * Clear customer select options cache and proactively warm up
  */
 function asl_clear_customer_options_cache( $post_id ) {
     if ( is_numeric( $post_id ) ) {
         $post = get_post( intval( $post_id ) );
         if ( $post && $post->post_type === 'customer' ) {
             delete_transient( 'asl_customer_options' );
+            asl_get_customer_select_options();
         }
     }
 }
@@ -2848,7 +2849,7 @@ add_action( 'acf/save_post', 'asl_clear_customer_options_cache', 30 );
 add_action( 'before_delete_post', 'asl_clear_customer_options_cache', 30 );
 
 /**
- * Clear partner select options cache
+ * Clear partner select options cache and proactively warm up
  */
 function asl_clear_partner_options_cache( $user_id ) {
     if ( is_numeric( $user_id ) || ( is_string( $user_id ) && strpos( $user_id, 'user_' ) === 0 ) ) {
@@ -2857,6 +2858,12 @@ function asl_clear_partner_options_cache( $user_id ) {
         delete_transient( 'asl_foreign_partner_options' );
         delete_transient( 'asl_partner_options_simple' );
         delete_transient( 'asl_foreign_partner_options_simple' );
+
+        asl_get_partner_select_options_step0();
+        asl_get_partner_select_options_step1();
+        asl_get_foreign_partner_select_options();
+        asl_get_partner_options_simple();
+        asl_get_foreign_partner_options_simple();
     }
 }
 add_action( 'profile_update', 'asl_clear_partner_options_cache' );
