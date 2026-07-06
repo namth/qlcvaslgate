@@ -352,27 +352,7 @@ function add_new_job()
     $brand_name     = $_POST['brand_name'];
     $brand_group    = $_POST['brand_group'];
     $brand_number_group = $_POST['brand_number_group'];
-    $trademark_color = isset($_POST['trademark_color']) ? $_POST['trademark_color'] : '';
-    if ($trademark_color === 'custom' && !empty($_POST['trademark_color_custom'])) {
-        $custom_color = trim($_POST['trademark_color_custom']);
-        if (!empty($custom_color)) {
-            $first_char = mb_substr($custom_color, 0, 1, 'UTF-8');
-            $rest = mb_substr($custom_color, 1, null, 'UTF-8');
-            $trademark_color = mb_strtoupper($first_char, 'UTF-8') . $rest;
-
-            // Add to list_color option list if not already there
-            $list_color_text = get_field('list_color', 'option');
-            $colors = [];
-            if (!empty($list_color_text)) {
-                $colors = array_filter(array_map('trim', explode("\n", $list_color_text)));
-            }
-            if (!in_array($trademark_color, $colors)) {
-                $colors[] = $trademark_color;
-                $new_list_color_text = implode("\n", $colors);
-                update_field('field_6a101cf4326c5', $new_list_color_text, 'option');
-            }
-        }
-    }
+    $trademark_color = isset($_POST['trademark_color']) ? trim($_POST['trademark_color']) : '';
     $service_category = isset($_POST['service_category']) ? $_POST['service_category'] : '';
     # kiểu dáng
     $kdang_pic      = $_POST['kdang_pic'];
@@ -2685,14 +2665,23 @@ function asl_format_date_to_dmy($date_str) {
     return $date_str;
 }
 
+
+
 /**
- * Get customer select options (cached via Transients)
+ * AJAX Select2 search for Customer and Partner dropdowns
  */
-function asl_get_customer_select_options() {
-    $options = get_transient( 'asl_customer_options' );
-    if ( false === $options ) {
-        global $wpdb;
-        $customers = $wpdb->get_results("
+function asl_search_select2() {
+    global $wpdb;
+    
+    $type = isset($_GET['type']) ? sanitize_text_field($_GET['type']) : '';
+    $search = isset($_GET['q']) ? sanitize_text_field($_GET['q']) : '';
+    $step = isset($_GET['step']) ? intval($_GET['step']) : 0;
+    
+    $results = array();
+    
+    if ($type === 'customer') {
+        $like = '%' . $wpdb->esc_like($search) . '%';
+        $query = $wpdb->prepare("
             SELECT p.ID, p.post_title, 
                    m_cty.meta_value as ten_cong_ty, 
                    m_email.meta_value as email
@@ -2700,173 +2689,107 @@ function asl_get_customer_select_options() {
             LEFT JOIN {$wpdb->postmeta} m_cty ON (p.ID = m_cty.post_id AND m_cty.meta_key = 'ten_cong_ty')
             LEFT JOIN {$wpdb->postmeta} m_email ON (p.ID = m_email.post_id AND m_email.meta_key = 'email')
             WHERE p.post_type = 'customer' AND p.post_status = 'publish'
+              AND (p.post_title LIKE %s OR m_cty.meta_value LIKE %s OR m_email.meta_value LIKE %s)
             ORDER BY p.post_title ASC
-        ");
-
-        $options = '';
-        if ( $customers ) {
-            foreach ( $customers as $customer ) {
-                $cty = !empty($customer->ten_cong_ty) ? $customer->ten_cong_ty : $customer->post_title;
-                $email = $customer->email;
-                $options .= "<option value='" . $customer->ID . "'>" . esc_html($cty);
-                if ( $email ) {
-                    $options .= " (" . esc_html($email) . ")";
+            LIMIT 30
+        ", $like, $like, $like);
+        
+        $customers = $wpdb->get_results($query);
+        if ($customers) {
+            foreach ($customers as $cust) {
+                $cty = !empty($cust->ten_cong_ty) ? $cust->ten_cong_ty : $cust->post_title;
+                $label = $cty;
+                if ($cust->email) {
+                    $label .= " (" . $cust->email . ")";
                 }
-                $options .= "</option>";
+                $results[] = array(
+                    'id' => $cust->ID,
+                    'text' => $label
+                );
             }
         }
-        set_transient( 'asl_customer_options', $options, 0 );
-    }
-    return $options;
-}
-
-/**
- * Get partner select options for Step 0 (cached via Transients)
- */
-function asl_get_partner_select_options_step0() {
-    $options = get_transient( 'asl_partner_options_step0' );
-    if ( false === $options ) {
-        $users = get_users( array( 'role' => 'partner' ) );
-        $options = '';
-        if ( $users ) {
-            $user_ids = wp_list_pluck( $users, 'ID' );
-            update_meta_cache( 'user', $user_ids );
-            foreach ( $users as $user ) {
-                $ten_cong_ty = get_field( 'ten_cong_ty', 'user_' . $user->ID );
-                if ( empty( $ten_cong_ty ) ) {
-                    $ten_cong_ty = $user->display_name;
+    } elseif ($type === 'partner' || $type === 'foreign_partner') {
+        $role = ($type === 'partner') ? 'partner' : 'foreign_partner';
+        $cap_key = $wpdb->prefix . 'capabilities';
+        $like = '%' . $wpdb->esc_like($search) . '%';
+        $role_like = '%"' . $role . '"%';
+        
+        $query = $wpdb->prepare("
+            SELECT u.ID, u.user_email, u.display_name,
+                   m_cty.meta_value as ten_cong_ty, 
+                   m_code.meta_value as partner_code
+            FROM {$wpdb->users} u
+            JOIN {$wpdb->usermeta} m_cap ON (u.ID = m_cap.user_id AND m_cap.meta_key = %s)
+            LEFT JOIN {$wpdb->usermeta} m_cty ON (u.ID = m_cty.user_id AND m_cty.meta_key = 'ten_cong_ty')
+            LEFT JOIN {$wpdb->usermeta} m_code ON (u.ID = m_code.user_id AND m_code.meta_key = 'partner_code')
+            WHERE m_cap.meta_value LIKE %s
+              AND (u.display_name LIKE %s OR u.user_email LIKE %s OR m_cty.meta_value LIKE %s OR m_code.meta_value LIKE %s)
+            ORDER BY u.display_name ASC
+            LIMIT 30
+        ", $cap_key, $role_like, $like, $like, $like, $like);
+        
+        $users = $wpdb->get_results($query);
+        if ($users) {
+            foreach ($users as $user) {
+                $ten_cong_ty = !empty($user->ten_cong_ty) ? $user->ten_cong_ty : $user->display_name;
+                
+                if ($type === 'partner' && $step === 0) {
+                    $label = $ten_cong_ty . " (" . $user->user_email . ")";
+                } else {
+                    $label = !empty($user->partner_code) ? $user->partner_code . " - " . $ten_cong_ty : $ten_cong_ty;
+                    $label .= " (" . $user->user_email . ")";
                 }
-                $options .= "<option value='" . $user->ID . "'>" . esc_html($ten_cong_ty) . " (" . esc_html($user->user_email) . ")</option>";
+                
+                $results[] = array(
+                    'id' => $user->ID,
+                    'text' => $label
+                );
             }
         }
-        set_transient( 'asl_partner_options_step0', $options, 0 );
-    }
-    return $options;
-}
-
-/**
- * Get partner select options for Step 1 (cached via Transients)
- */
-function asl_get_partner_select_options_step1() {
-    $options = get_transient( 'asl_partner_options_step1' );
-    if ( false === $options ) {
-        $users = get_users( array( 'role' => 'partner' ) );
-        $options = '';
-        if ( $users ) {
-            $user_ids = wp_list_pluck( $users, 'ID' );
-            update_meta_cache( 'user', $user_ids );
-            foreach ( $users as $user ) {
-                $ten_cong_ty = get_field( 'ten_cong_ty', 'user_' . $user->ID );
-                if ( empty( $ten_cong_ty ) ) {
-                    $ten_cong_ty = $user->display_name;
-                }
-                $partner_code = get_field( 'partner_code', 'user_' . $user->ID );
-                $label = !empty( $partner_code ) ? $partner_code . " - " . $ten_cong_ty : $ten_cong_ty;
-                $options .= "<option value='" . $user->ID . "'>" . esc_html($label) . " (" . esc_html($user->user_email) . ")</option>";
+    } elseif ($type === 'staff') {
+        $role = isset($_GET['role']) ? sanitize_text_field($_GET['role']) : '';
+        $roles = !empty($role) ? explode(',', $role) : array('administrator', 'editor', 'contributor', 'member');
+        
+        $cap_key = $wpdb->prefix . 'capabilities';
+        $like = '%' . $wpdb->esc_like($search) . '%';
+        
+        $role_conds = array();
+        foreach ($roles as $r) {
+            $role_conds[] = "m_cap.meta_value LIKE " . $wpdb->prepare("%s", '%"' . $r . '"%');
+        }
+        $role_sql = "(" . implode(" OR ", $role_conds) . ")";
+        
+        $query = $wpdb->prepare("
+            SELECT u.ID, u.user_email, u.display_name
+            FROM {$wpdb->users} u
+            JOIN {$wpdb->usermeta} m_cap ON (u.ID = m_cap.user_id AND m_cap.meta_key = %s)
+            WHERE {$role_sql}
+              AND (u.display_name LIKE %s OR u.user_email LIKE %s)
+            ORDER BY u.display_name ASC
+            LIMIT 30
+        ", $cap_key, $like, $like);
+        
+        $users = $wpdb->get_results($query);
+        if ($users) {
+            foreach ($users as $user) {
+                $results[] = array(
+                    'id' => $user->ID,
+                    'text' => $user->display_name . " (" . $user->user_email . ")"
+                );
             }
         }
-        set_transient( 'asl_partner_options_step1', $options, 0 );
     }
-    return $options;
+    
+    wp_send_json(array('results' => $results));
 }
+add_action( 'wp_ajax_asl_search_select2', 'asl_search_select2' );
 
 /**
- * Get foreign partner select options (cached via Transients)
+ * Clear post tags transient cache when tag is modified
  */
-function asl_get_foreign_partner_select_options() {
-    $options = get_transient( 'asl_foreign_partner_options' );
-    if ( false === $options ) {
-        $users = get_users( array( 'role' => 'foreign_partner' ) );
-        $options = '';
-        if ( $users ) {
-            $user_ids = wp_list_pluck( $users, 'ID' );
-            update_meta_cache( 'user', $user_ids );
-            foreach ( $users as $user ) {
-                $ten_cong_ty = get_field( 'ten_cong_ty', 'user_' . $user->ID );
-                if ( empty( $ten_cong_ty ) ) {
-                    $ten_cong_ty = $user->display_name;
-                }
-                $partner_code = get_field( 'partner_code', 'user_' . $user->ID );
-                $label = !empty( $partner_code ) ? $partner_code . " - " . $ten_cong_ty : $ten_cong_ty;
-                $options .= "<option value='" . $user->ID . "'>" . esc_html($label) . " (" . esc_html($user->user_email) . ")</option>";
-            }
-        }
-        set_transient( 'asl_foreign_partner_options', $options, 0 );
-    }
-    return $options;
+function asl_clear_tags_transient() {
+    delete_transient('asl_nguon_dau_viec_tags');
 }
-
-/**
- * Get simple partner select options (cached via Transients)
- */
-function asl_get_partner_options_simple() {
-    $options = get_transient( 'asl_partner_options_simple' );
-    if ( false === $options ) {
-        $users = get_users( array( 'role' => 'partner' ) );
-        $options = '';
-        if ( $users ) {
-            foreach ( $users as $user ) {
-                $options .= "<option value='" . $user->ID . "'>" . esc_html($user->display_name) . " (" . esc_html($user->user_email) . ")</option>";
-            }
-        }
-        set_transient( 'asl_partner_options_simple', $options, 0 );
-    }
-    return $options;
-}
-
-/**
- * Get simple foreign partner select options (cached via Transients)
- */
-function asl_get_foreign_partner_options_simple() {
-    $options = get_transient( 'asl_foreign_partner_options_simple' );
-    if ( false === $options ) {
-        $users = get_users( array( 'role' => 'foreign_partner' ) );
-        $options = '';
-        if ( $users ) {
-            foreach ( $users as $user ) {
-                $options .= "<option value='" . $user->ID . "'>" . esc_html($user->display_name) . " (" . esc_html($user->user_email) . ")</option>";
-            }
-        }
-        set_transient( 'asl_foreign_partner_options_simple', $options, 0 );
-    }
-    return $options;
-}
-
-/**
- * Clear customer select options cache and proactively warm up
- */
-function asl_clear_customer_options_cache( $post_id ) {
-    if ( is_numeric( $post_id ) ) {
-        $post = get_post( intval( $post_id ) );
-        if ( $post && $post->post_type === 'customer' ) {
-            delete_transient( 'asl_customer_options' );
-            asl_get_customer_select_options();
-        }
-    }
-}
-add_action( 'save_post_customer', 'asl_clear_customer_options_cache', 30 );
-add_action( 'acf/save_post', 'asl_clear_customer_options_cache', 30 );
-add_action( 'before_delete_post', 'asl_clear_customer_options_cache', 30 );
-
-/**
- * Clear partner select options cache and proactively warm up
- */
-function asl_clear_partner_options_cache( $user_id ) {
-    if ( is_numeric( $user_id ) || ( is_string( $user_id ) && strpos( $user_id, 'user_' ) === 0 ) ) {
-        delete_transient( 'asl_partner_options_step0' );
-        delete_transient( 'asl_partner_options_step1' );
-        delete_transient( 'asl_foreign_partner_options' );
-        delete_transient( 'asl_partner_options_simple' );
-        delete_transient( 'asl_foreign_partner_options_simple' );
-
-        asl_get_partner_select_options_step0();
-        asl_get_partner_select_options_step1();
-        asl_get_foreign_partner_select_options();
-        asl_get_partner_options_simple();
-        asl_get_foreign_partner_options_simple();
-    }
-}
-add_action( 'profile_update', 'asl_clear_partner_options_cache' );
-add_action( 'user_register', 'asl_clear_partner_options_cache' );
-add_action( 'delete_user', 'asl_clear_partner_options_cache' );
-add_action( 'acf/save_post', 'asl_clear_partner_options_cache', 30 );
+add_action('created_post_tag', 'asl_clear_tags_transient');
+add_action('edited_post_tag', 'asl_clear_tags_transient');
+add_action('delete_post_tag', 'asl_clear_tags_transient');

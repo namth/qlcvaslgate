@@ -167,16 +167,16 @@ jQuery(document).ready(function ($) {
   // xử lý khi bấm hoàn thành form tạo đầu việc mới
   $(".finish_newjob").click(function () {
     // get data from previous steps on smart wizard
-    var $data_partner   = $('select[name="partner"]').val();
-    var $data_foreign_partner = $('select[name="foreign_partner"]').val();
-    var $data_customer  = $('select[name="customer"]').val();
+    var $data_partner   = $('[name="partner"]').val() || '';
+    var $data_foreign_partner = $('[name="foreign_partner"]').val() || '';
+    var $data_customer  = $('[name="customer"]').val() || '';
     var $data_job       = $("form#new_job")[0];
-    var $data_manager   = $('select[name="manager"]').val();
-    var $data_member    = $('select[name="member"]').val();
-    var $data_supervisor = $('select[name="supervisor"]').val();
-    var $data_co_manager = $('select[name="co_manager"]').val();
-    var $data_co_member = $('select[name="co_member"]').val();
-    var $data_agency    = $('select[name="agency"]').val();
+    var $data_manager   = $('[name="manager"]').val() || '';
+    var $data_member    = $('[name="member"]').val() || '';
+    var $data_supervisor = $('input[name="supervisor[]"]').map(function() { return this.value; }).get();
+    var $data_co_manager = $('input[name="co_manager[]"]').map(function() { return this.value; }).get();
+    var $data_co_member = $('input[name="co_member[]"]').map(function() { return this.value; }).get();
+    var $data_agency    = $('[name="agency"]').val() || '';
     var $currency       = $('form#finance input[name="currency"]:checked').val();
     var $total_value    = $('form#finance input[name="total_value"]').val();
     var $paid           = $('form#finance input[name="paid"]').val();

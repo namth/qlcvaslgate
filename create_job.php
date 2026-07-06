@@ -45,20 +45,27 @@ if (isset($_GET['type'])) {
                                             <div class="col-lg-6 col-12 mb-20">
                                                 <div class="form-group">
                                                     <?php
-                                                    $terms = get_terms(array(
-                                                        'taxonomy' => 'post_tag',
-                                                        'hide_empty' => false,
-                                                    ));
-                                                    foreach ($terms as $value) {
-                                                        echo '<label class="inline"><input type="radio" name="nguon_dau_viec" value="' . $value->name . '">' . $value->name . '</label>';
+                                                    $terms = get_transient('asl_nguon_dau_viec_tags');
+                                                    if (false === $terms) {
+                                                        $terms = get_terms(array(
+                                                            'taxonomy' => 'post_tag',
+                                                            'hide_empty' => false,
+                                                        ));
+                                                        set_transient('asl_nguon_dau_viec_tags', $terms, DAY_IN_SECONDS);
+                                                    }
+                                                    if (!is_wp_error($terms) && !empty($terms)) {
+                                                        foreach ($terms as $value) {
+                                                            echo '<label class="inline"><input type="radio" name="nguon_dau_viec" value="' . esc_attr($value->name) . '">' . esc_html($value->name) . '</label>';
+                                                        }
                                                     }
                                                     ?>
                                                     <div id="select_partner_1" style="display: none;">
-                                                        <select class="form-control select2-tags mb-20" name="partner_1">
-                                                            <option value="">-- <?php _e('Chọn đối tác giới thiệu', 'qlcv'); ?> --</option>
-                                                            <?php echo asl_get_partner_select_options_step0(); ?>
-                                                        </select>
-                                                    </div>
+                                                         <div class="asl-autocomplete-wrapper" style="position: relative;" data-type="partner" data-step="0">
+                                                             <input type="text" class="form-control asl-autocomplete-input mb-10" placeholder="-- <?php _e('Chọn đối tác giới thiệu (Gõ từ 3 ký tự)', 'qlcv'); ?> --" autocomplete="off" value="">
+                                                             <input type="hidden" name="partner_1" class="asl-autocomplete-value" value="">
+                                                             <div class="asl-autocomplete-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ccc; z-index: 9999; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+                                                         </div>
+                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-3"></div>
@@ -139,39 +146,9 @@ if (isset($_GET['type'])) {
                                                             <input type="text" placeholder="<?php _e('Tên nhãn hiệu', 'qlcv'); ?>" class="form-control mb-10" name="brand_name">
                                                             <input type="text" placeholder="<?php _e('Nhóm', 'qlcv'); ?>" class="form-control mb-10" name="brand_group">
                                                             <input type="text" placeholder="<?php _e('Số lượng nhóm', 'qlcv'); ?>" class="form-control mb-10" name="brand_number_group">
-                                                            <?php
-                                                            $list_color_text = get_field('list_color', 'option');
-                                                            $colors = [];
-                                                            if (!empty($list_color_text)) {
-                                                                $colors = array_filter(array_map('trim', explode("\n", $list_color_text)));
-                                                            }
-                                                            ?>
-                                                            <select name="trademark_color" id="trademark_color_select" class="form-control mb-10">
-                                                                <option value="">-- <?php _e('Chọn màu sắc', 'qlcv'); ?> --</option>
-                                                                <?php foreach ($colors as $color): ?>
-                                                                    <option value="<?php echo esc_attr($color); ?>"><?php echo esc_html($color); ?></option>
-                                                                <?php endforeach; ?>
-                                                                <option value="custom"><?php _e('Khác (Tự nhập)', 'qlcv'); ?></option>
-                                                            </select>
-                                                            <input type="text" name="trademark_color_custom" id="trademark_color_custom" placeholder="<?php _e('Nhập màu sắc mới', 'qlcv'); ?>" class="form-control mb-10" style="display: none;">
+                                                            <input type="text" placeholder="<?php _e('Màu sắc nhãn hiệu', 'qlcv'); ?>" class="form-control mb-10" name="trademark_color">
                                                             <input type="text" placeholder="<?php _e('Danh mục sản phẩm dịch vụ', 'qlcv'); ?>" class="form-control mb-10" name="service_category">
                                                             <input class="dropify" type="file" name="file_upload">
-                                                            <script>
-                                                                document.addEventListener('DOMContentLoaded', function() {
-                                                                    var select = document.getElementById('trademark_color_select');
-                                                                    var customInput = document.getElementById('trademark_color_custom');
-                                                                    if (select && customInput) {
-                                                                        select.addEventListener('change', function() {
-                                                                            if (this.value === 'custom') {
-                                                                                customInput.style.display = 'block';
-                                                                            } else {
-                                                                                customInput.style.display = 'none';
-                                                                                customInput.value = '';
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                });
-                                                            </script>
                                                         </div>
                                                         <div class="tab-pane fade <?php echo $class_kieu_dang; ?>" id="kieudang">
                                                             <input type="text" placeholder="<?php _e('Link tới bộ ảnh', 'qlcv'); ?>" class="form-control mb-10" name="kdang_pic">
@@ -192,10 +169,15 @@ if (isset($_GET['type'])) {
                                                             <select class="form-control select2-tags mb-20" name="other_job">
                                                                 <option value=""> -- <?php _e('Chọn phân loại công việc', 'qlcv'); ?> -- </option>
                                                                 <?php 
-                                                                    $list_other_jobs = get_term_children(10, 'group');
-                                                                    foreach ($list_other_jobs as $jobid) {
-                                                                        $term = get_term($jobid, 'group');
-                                                                        echo "<option value='" . $term->name . "'>" . $term->name . "</option>";
+                                                                    $list_other_jobs = get_terms(array(
+                                                                        'taxonomy'   => 'group',
+                                                                        'parent'     => 10,
+                                                                        'hide_empty' => false,
+                                                                    ));
+                                                                    if (!is_wp_error($list_other_jobs) && !empty($list_other_jobs)) {
+                                                                        foreach ($list_other_jobs as $term) {
+                                                                            echo "<option value='" . esc_attr($term->name) . "'>" . esc_html($term->name) . "</option>";
+                                                                        }
                                                                     }
                                                                 ?>
                                                             </select>
@@ -255,10 +237,11 @@ if (isset($_GET['type'])) {
                                 <div class="row mbn-20">
                                     <div class="col-12 mb-20">
                                         <h4><?php _e('Chọn đối tác gửi việc từ trong danh sách', 'qlcv'); ?> <span class="text-danger">*</span></h4>
-                                        <select class="form-control select2-tags mb-20" name="partner">
-                                            <option value="">-- <?php _e('Chọn đối tác gửi việc', 'qlcv'); ?> --</option>
-                                            <?php echo asl_get_partner_select_options_step1(); ?>
-                                        </select>
+                                        <div class="asl-autocomplete-wrapper" style="position: relative;" data-type="partner" data-step="1">
+                                             <input type="text" class="form-control asl-autocomplete-input mb-10" placeholder="-- <?php _e('Chọn đối tác gửi việc (Gõ từ 3 ký tự)', 'qlcv'); ?> --" autocomplete="off" value="">
+                                             <input type="hidden" name="partner" class="asl-autocomplete-value" value="">
+                                             <div class="asl-autocomplete-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ccc; z-index: 9999; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+                                         </div>
                                     </div>
                                     <div class="col-12 mb-20">
                                         <button class="button button-primary create_new_button" data-div="#create_partner"><span><i class="fa fa-user-plus"></i><?php _e('Tạo đối tác mới', 'qlcv'); ?></span></button>
@@ -272,10 +255,11 @@ if (isset($_GET['type'])) {
                                     <div class="foreign_partner">
                                         <div class="col-12 mb-20">
                                             <h4><?php _e('Chọn đối tác nhận việc từ trong danh sách', 'qlcv'); ?></h4>
-                                            <select class="form-control select2-tags mb-20" name="foreign_partner">
-                                                <option value="">-- <?php _e('Chọn đối tác nhận việc', 'qlcv'); ?> --</option>
-                                                <?php echo asl_get_foreign_partner_select_options(); ?>
-                                            </select>
+                                            <div class="asl-autocomplete-wrapper" style="position: relative;" data-type="foreign_partner">
+                                                 <input type="text" class="form-control asl-autocomplete-input mb-10" placeholder="-- <?php _e('Chọn đối tác nhận việc (Gõ từ 3 ký tự)', 'qlcv'); ?> --" autocomplete="off" value="">
+                                                 <input type="hidden" name="foreign_partner" class="asl-autocomplete-value" value="">
+                                                 <div class="asl-autocomplete-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ccc; z-index: 9999; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+                                             </div>
                                         </div>
                                         <div class="col-12 mb-20">
                                             <button class="button button-primary create_new_button" data-div="#create_foreign_partner"><span><i class="fa fa-user-plus"></i><?php _e('Tạo đối tác nước ngoài mới', 'qlcv'); ?></span></button>
@@ -289,10 +273,11 @@ if (isset($_GET['type'])) {
                                     </div>
                                     <div class="col-12 mb-20">
                                         <h4><?php _e('Chọn khách hàng từ trong danh sách', 'qlcv'); ?> <span class="text-danger">*</span></h4>
-                                        <select class="form-control select2-tags mb-20" name="customer">
-                                            <option value="">-- <?php _e('Chọn khách hàng', 'qlcv'); ?> --</option>
-                                            <?php echo asl_get_customer_select_options(); ?>
-                                        </select>
+                                        <div class="asl-autocomplete-wrapper" style="position: relative;" data-type="customer">
+                                             <input type="text" class="form-control asl-autocomplete-input mb-10" placeholder="-- <?php _e('Chọn khách hàng (Gõ từ 3 ký tự)', 'qlcv'); ?> --" autocomplete="off" value="">
+                                             <input type="hidden" name="customer" class="asl-autocomplete-value" value="">
+                                             <div class="asl-autocomplete-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ccc; z-index: 9999; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+                                         </div>
                                     </div>
                                     <div class="col-12 mb-20">
                                         <div id="customer_function">
@@ -370,87 +355,42 @@ if (isset($_GET['type'])) {
                                 <div class="row mbn-20">
                                     <div class="col-12 mb-20">
                                         <h4><?php _e('Chọn người quản lý (A)', 'qlcv'); ?></h4>
-                                        <select class="form-control select2-tags mb-20" name="manager">
-                                            <?php
-                                            $args   = array(
-                                                'role'      => 'contributor', /*subscriber, contributor, author*/
-                                            );
-                                            $query = get_users($args);
-
-                                            if ($query) {
-                                                foreach ($query as $user) {
-                                                    echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
-                                                }
-                                            }
-                                            ?>
-                                        </select>
+                                        <div class="asl-autocomplete-wrapper" style="position: relative;" data-type="staff" data-role="contributor">
+                                            <input type="text" class="form-control asl-autocomplete-input mb-10" placeholder="-- <?php _e('Chọn người quản lý (Gõ từ 3 ký tự)', 'qlcv'); ?> --" autocomplete="off" value="">
+                                            <input type="hidden" name="manager" class="asl-autocomplete-value" value="">
+                                            <div class="asl-autocomplete-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ccc; z-index: 9999; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+                                        </div>
 
                                         <!-- Chọn người được tham vấn (C), có thể chọn nhiều -->
                                         <h4 style="margin-top: 30px;"><?php _e('Chọn người được tham vấn (C)', 'qlcv'); ?></h4>
-                                        <select class="form-control select2-tags mb-20" multiple="" name="co_manager">
-                                            <?php
-                                            $args   = array(
-                                                'role'      => 'contributor', /*subscriber, contributor, author*/
-                                            );
-                                            $query = get_users($args);
-
-                                            if ($query) {
-                                                foreach ($query as $user) {
-                                                    echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
-                                                }
-                                            }
-                                            ?>
-                                        </select>
+                                        <div class="asl-autocomplete-wrapper" style="position: relative;" data-type="staff" data-role="contributor" data-multiple="true" data-name="co_manager[]">
+                                            <div class="asl-autocomplete-tags mb-5"></div>
+                                            <input type="text" class="form-control asl-autocomplete-input mb-10" placeholder="-- <?php _e('Chọn người được tham vấn (Gõ từ 3 ký tự)', 'qlcv'); ?> --" autocomplete="off" value="">
+                                            <div class="asl-autocomplete-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ccc; z-index: 9999; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+                                        </div>
 
                                         <h4 style="margin-top: 30px;"><?php _e('Chọn người thực hiện (R)', 'qlcv'); ?></h4>
-                                        <select class="form-control select2-tags mb-20" name="member">
-                                            <?php
-                                            $args   = array(
-                                                'role__in'      => array('member', 'contributor'), /*subscriber, contributor, author*/
-                                            );
-                                            $query = get_users($args);
-
-                                            if ($query) {
-                                                foreach ($query as $user) {
-                                                    echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
-                                                }
-                                            }
-                                            ?>
-                                        </select>
+                                        <div class="asl-autocomplete-wrapper" style="position: relative;" data-type="staff" data-role="member,contributor">
+                                            <input type="text" class="form-control asl-autocomplete-input mb-10" placeholder="-- <?php _e('Chọn người thực hiện (Gõ từ 3 ký tự)', 'qlcv'); ?> --" autocomplete="off" value="">
+                                            <input type="hidden" name="member" class="asl-autocomplete-value" value="">
+                                            <div class="asl-autocomplete-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ccc; z-index: 9999; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+                                        </div>
 
                                         <!-- Chọn người cùng thực hiện, có thể chọn nhiều -->
                                         <h4 style="margin-top: 30px;"><?php _e('Chọn người cùng thực hiện (R1)', 'qlcv'); ?></h4>
-                                        <select class="form-control select2-tags mb-20" multiple="" name="co_member">
-                                            <?php
-                                            $args   = array(
-                                                'role__in'      => array('member', 'contributor'), /*subscriber, contributor, author*/
-                                            );
-                                            $query = get_users($args);
-
-                                            if ($query) {
-                                                foreach ($query as $user) {
-                                                    echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
-                                                }
-                                            }
-                                            ?>
-                                        </select>
+                                        <div class="asl-autocomplete-wrapper" style="position: relative;" data-type="staff" data-role="member,contributor" data-multiple="true" data-name="co_member[]">
+                                            <div class="asl-autocomplete-tags mb-5"></div>
+                                            <input type="text" class="form-control asl-autocomplete-input mb-10" placeholder="-- <?php _e('Chọn người cùng thực hiện (Gõ từ 3 ký tự)', 'qlcv'); ?> --" autocomplete="off" value="">
+                                            <div class="asl-autocomplete-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ccc; z-index: 9999; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+                                        </div>
 
                                         <!-- Chọn người giám sát -->
                                         <h4 style="margin-top: 30px;"><?php _e('Chọn người giám sát (I)', 'qlcv'); ?></h4>
-                                        <select class="form-control select2-tags mb-20" multiple="" name="supervisor" >
-                                            <?php
-                                            $args   = array(
-                                                'role__in'      => array('administrator', 'editor', 'contributor'), /*subscriber, contributor, author*/
-                                            );
-                                            $query = get_users($args);
-
-                                            if ($query) {
-                                                foreach ($query as $user) {
-                                                    echo "<option value='" . $user->ID . "'>" . $user->display_name . " (" . $user->user_email . ")</option>";
-                                                }
-                                            }
-                                            ?>
-                                        </select>
+                                        <div class="asl-autocomplete-wrapper" style="position: relative;" data-type="staff" data-role="administrator,editor,contributor" data-multiple="true" data-name="supervisor[]">
+                                            <div class="asl-autocomplete-tags mb-5"></div>
+                                            <input type="text" class="form-control asl-autocomplete-input mb-10" placeholder="-- <?php _e('Chọn người giám sát (Gõ từ 3 ký tự)', 'qlcv'); ?> --" autocomplete="off" value="">
+                                            <div class="asl-autocomplete-suggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ccc; z-index: 9999; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+                                        </div>
 
                                         <?php
                                             $terms = get_terms(array(
