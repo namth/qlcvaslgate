@@ -61,6 +61,15 @@ if (
 
 $current_user = wp_get_current_user();
 
+$is_manager_or_admin = false;
+$manager_roles = array('administrator', 'contributor', 'law_manager', 'ip_manager');
+foreach ($manager_roles as $role) {
+    if (in_array($role, $current_user->roles)) {
+        $is_manager_or_admin = true;
+        break;
+    }
+}
+
 ?>
 
 <!-- Content Body Start -->
@@ -187,6 +196,7 @@ $current_user = wp_get_current_user();
                                     ?>
                                 </select>
                             </div>
+                            <?php if ($is_manager_or_admin) : ?>
                             <div class="col-md-4 mb-20">
                                 <select name="post_tag" id="" class="form-control select2-tags mb-20">
                                     <option value="">-- <?php _e('Nguồn việc', 'qlcv'); ?> --</option>
@@ -202,6 +212,7 @@ $current_user = wp_get_current_user();
                                     ?>
                                 </select>
                             </div>
+                            <?php endif; ?>
                             <?php
                             wp_nonce_field('post_nonce', 'post_nonce_field');
                             ?>
@@ -518,7 +529,9 @@ $current_user = wp_get_current_user();
                                     <th><?php _e('Đối tác', 'qlcv'); ?></th>
                                     <th><?php _e('Người thực hiện', 'qlcv'); ?></th>
                                     <th><?php _e('Người quản lý', 'qlcv'); ?></th>
-                                    <th><?php _e('Nguồn việc', 'qlcv'); ?></th>
+                                     <?php if ($is_manager_or_admin) : ?>
+                                     <th><?php _e('Nguồn việc', 'qlcv'); ?></th>
+                                     <?php endif; ?>
                                     <th><?php _e('Chi nhánh', 'qlcv'); ?></th>
                                     <th><?php _e('Giá trị', 'qlcv'); ?></th>
                                 </tr>
@@ -599,7 +612,9 @@ $current_user = wp_get_current_user();
                                             echo "<td><a href='" . get_author_posts_url($member['ID']) . "'>" . $member['display_name'] . "</a></td>";
                                         } else echo "<td>Chưa có</td>";
                                         echo "<td><a href='" . get_author_posts_url($manager['ID']) . "'>" . $manager['display_name'] . "</a></td>";
-                                        echo "<td>" . $tagname . "</td>";
+                                         if ($is_manager_or_admin) {
+                                             echo "<td>" . $tagname . "</td>";
+                                         }
                                         if (!is_wp_error($agency)) {
                                             echo "<td>" . $agency[0]->name . "</td>";
                                         } else echo "<td></td>";

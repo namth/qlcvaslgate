@@ -84,6 +84,14 @@ while (have_posts()) {
     the_post();
 
     $current_user = wp_get_current_user();
+    $is_manager_or_admin = false;
+    $manager_roles = array('administrator', 'contributor', 'law_manager', 'ip_manager');
+    foreach ($manager_roles as $role) {
+        if (in_array($role, $current_user->roles)) {
+            $is_manager_or_admin = true;
+            break;
+        }
+    }
     $partner = get_field('partner_2');
 
     # get all notification where the permalink match with destination in notif
@@ -232,7 +240,7 @@ while (have_posts()) {
                         <h3 class="mb-10"><?php the_title(); ?> </h3>
                         <!-- <span class="badge badge-primary"><?php echo $phan_loai; ?></span> -->
                         <?php
-                        if (in_array('administrator', $current_user->roles) || in_array('contributor', $current_user->roles)) {
+                        if ($is_manager_or_admin) {
                             $rand_color = $color[array_rand($color)];
                             echo "<span class='badge " . $rand_color . "'>" . $tagname . "</span> ";
                         }
