@@ -209,7 +209,7 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
         if($terms) {
             foreach ($terms as $group) {
                 # Determine if IP or Law type
-                $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu'];
+                $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu', 'thuc-thi-ban-quyen-phan-mem'];
                 if (in_array($group->slug, $list_ip)) {
                     $job_type_group = "IP";
                 } elseif($job_type_group == '') {

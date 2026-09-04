@@ -99,7 +99,7 @@ if (isset($_GET['type'])) {
                                                             <li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#nhanhieu" data-group="Nhãn hiệu"><?php _e('Nhãn hiệu', 'qlcv'); ?></a></li>
                                                             <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#kieudang" data-group="Kiểu dáng"><?php _e('Kiểu dáng', 'qlcv'); ?></a></li>
                                                             <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#sangche" data-group="Sáng chế"><?php _e('Sáng chế', 'qlcv'); ?></a></li>
-                                                            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#otherip" data-group="Bản quyền"><?php _e('Bản quyền', 'qlcv'); ?></a></li>
+                                                            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#banquyen" data-group="Bản quyền"><?php _e('Bản quyền', 'qlcv'); ?></a></li>
                                                             <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#otherip" data-group="Franchise"><?php _e('Franchise', 'qlcv'); ?></a></li>
                                                             <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#vieckhac" data-group="Việc luật"><?php _e('Việc luật', 'qlcv'); ?></a></li>
                                                         </ul>
@@ -109,31 +109,47 @@ if (isset($_GET['type'])) {
                                                     switch ($type) {
                                                         case 'Nhãn hiệu':
                                                             $class_nhan_hieu    = "active show";
-                                                            $class_kieu_dang = $class_sang_che = $class_otherip = "";
+                                                            $class_kieu_dang = $class_sang_che = $class_ban_quyen = $class_otherip = "";
                                                             break;
 
                                                         case 'Kiểu dáng':
-                                                            $class_nhan_hieu = $class_sang_che = $class_otherip = "";
+                                                            $class_nhan_hieu = $class_sang_che = $class_ban_quyen = $class_otherip = "";
                                                             $class_kieu_dang    = "active show";
                                                             break;
 
                                                         case 'Sáng chế':
-                                                            $class_nhan_hieu = $class_kieu_dang = $class_otherip = "";
+                                                            $class_nhan_hieu = $class_kieu_dang = $class_ban_quyen = $class_otherip = "";
                                                             $class_sang_che     = "active show";
                                                             break;
 
+                                                        case 'Bản quyền':
+                                                        case 'Thực thi bản quyền phần mềm':
+                                                            $class_nhan_hieu = $class_kieu_dang = $class_sang_che = $class_viec_khac = $class_otherip = "";
+                                                            $class_ban_quyen    = "active show";
+                                                            break;
+
                                                         case 'Việc luật':
-                                                            $class_nhan_hieu = $class_kieu_dang = $class_sang_che = $class_otherip = "";
+                                                            $class_nhan_hieu = $class_kieu_dang = $class_sang_che = $class_ban_quyen = $class_otherip = "";
                                                             $class_viec_khac    = "active show";
                                                             break;
 
                                                         default:
-                                                            $class_nhan_hieu = $class_kieu_dang = $class_sang_che = $class_viec_khac = "";
+                                                            $class_nhan_hieu = $class_kieu_dang = $class_sang_che = $class_ban_quyen = $class_viec_khac = "";
                                                             $class_otherip    = "active show";
                                                             break;
                                                     }
+
+                                                    $term_ban_quyen = get_term_by('name', 'Bản quyền', 'group');
+                                                    $code_ban_quyen = $term_ban_quyen ? get_field('groups_code', 'term_' . $term_ban_quyen->term_id) : '';
+
+                                                    $term_ban_quyen_pm = get_term_by('name', 'Thực thi bản quyền phần mềm', 'group');
+                                                    if (!$term_ban_quyen_pm) {
+                                                        $term_ban_quyen_pm = get_term_by('slug', 'thuc-thi-ban-quyen-phan-mem', 'group');
+                                                    }
+                                                    $code_ban_quyen_pm = $term_ban_quyen_pm ? get_field('groups_code', 'term_' . $term_ban_quyen_pm->term_id) : '';
                                                     ?>
                                                     <input type="hidden" name="danh_muc" value="<?php echo $type; ?>">
+                                                    <input type="hidden" name="groups_code" value="">
                                                     <div class="tab-content">
                                                         <div class="tab-pane fade <?php echo $class_nhan_hieu; ?>" id="nhanhieu">
                                                             <input type="text" placeholder="<?php _e('Tên nhãn hiệu', 'qlcv'); ?>" class="form-control mb-10" name="brand_name">
@@ -183,6 +199,21 @@ if (isset($_GET['type'])) {
                                                             <input type="text" placeholder="<?php _e('Số lượng yêu cầu bảo hộ', 'qlcv'); ?>" class="form-control mb-10" name="sche_request_1">
                                                             <input type="text" placeholder="<?php _e('Số lượng yêu cầu bảo hộ độc lập', 'qlcv'); ?>" class="form-control mb-10" name="sche_request_2">
                                                         </div>
+                                                        <div class="tab-pane fade <?php echo $class_ban_quyen; ?>" id="banquyen">
+                                                            <div class="adomx-checkbox-radio-group inline mb-15">
+                                                                <label class="adomx-radio-2 mr-20">
+                                                                    <input type="radio" name="copyright_type" value="Bản quyền" data-code="<?php echo esc_attr($code_ban_quyen); ?>" <?php checked($type != 'Thực thi bản quyền phần mềm'); ?>>
+                                                                    <i class="icon"></i> <?php _e('Bản quyền', 'qlcv'); ?>
+                                                                </label>
+                                                                <label class="adomx-radio-2">
+                                                                    <input type="radio" name="copyright_type" value="Thực thi bản quyền phần mềm" data-code="<?php echo esc_attr($code_ban_quyen_pm); ?>" <?php checked($type == 'Thực thi bản quyền phần mềm'); ?>>
+                                                                    <i class="icon"></i> <?php _e('Thực thi bản quyền phần mềm', 'qlcv'); ?>
+                                                                </label>
+                                                            </div>
+                                                            <span class="form-help-text"><?php _e('Nhập deadline cho công việc này', 'qlcv'); ?></span>
+                                                            <input type="text" class="form-control" value="" name="deadline" placeholder="<?php _e('Deadline: dd/mm/yyyy', 'qlcv'); ?>" data-mask="99/99/9999">
+                                                            <span class="form-help-text text-danger"><?php _e('Lưu ý: nếu là đầu việc lớn có nhiều nhiệm vụ con thì bỏ qua trường thông tin này.', 'qlcv'); ?></span>
+                                                        </div>
                                                         <div class="tab-pane fade <?php echo $class_otherip; ?>" id="otherip">
                                                             <span class="form-help-text"><?php _e('Nhập deadline cho công việc này', 'qlcv'); ?></span>
                                                             <input type="text" class="form-control" value="" name="deadline" placeholder="<?php _e('Deadline: dd/mm/yyyy', 'qlcv'); ?>" data-mask="99/99/9999">
@@ -204,6 +235,42 @@ if (isset($_GET['type'])) {
                                                             <span class="form-help-text text-danger"><?php _e('Lưu ý: nếu là đầu việc lớn có nhiều nhiệm vụ con thì bỏ qua trường thông tin này.', 'qlcv'); ?></span>
                                                         </div>
                                                     </div>
+                                                    <script>
+                                                        document.addEventListener('DOMContentLoaded', function() {
+                                                            var chooseGroupLinks = document.querySelectorAll('#choose_group li a');
+                                                            var inputDanhMuc = document.querySelector('input[name="danh_muc"]');
+                                                            var inputGroupsCode = document.querySelector('input[name="groups_code"]');
+                                                            var copyrightRadios = document.querySelectorAll('input[name="copyright_type"]');
+
+                                                            function updateCopyrightSelection() {
+                                                                var checkedRadio = document.querySelector('input[name="copyright_type"]:checked');
+                                                                if (checkedRadio && inputDanhMuc) {
+                                                                    inputDanhMuc.value = checkedRadio.value;
+                                                                    if (inputGroupsCode) {
+                                                                        inputGroupsCode.value = checkedRadio.getAttribute('data-code') || '';
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            chooseGroupLinks.forEach(function(link) {
+                                                                link.addEventListener('click', function() {
+                                                                    var group = this.getAttribute('data-group');
+                                                                    if (group === 'Bản quyền') {
+                                                                        updateCopyrightSelection();
+                                                                    } else {
+                                                                        if (inputDanhMuc) inputDanhMuc.value = group;
+                                                                        if (inputGroupsCode) inputGroupsCode.value = '';
+                                                                    }
+                                                                });
+                                                            });
+
+                                                            copyrightRadios.forEach(function(radio) {
+                                                                radio.addEventListener('change', function() {
+                                                                    updateCopyrightSelection();
+                                                                });
+                                                            });
+                                                        });
+                                                    </script>
                                                 </div>
                                             </div>
                                             <div class="col-lg-1"></div>

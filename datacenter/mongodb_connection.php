@@ -950,7 +950,7 @@ function export_mysql_job($paged) {
             ];
 
             $i = 0;
-            $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu'];
+            $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu', 'thuc-thi-ban-quyen-phan-mem'];
             $potential = "";
             
             if ($groups && !is_wp_error($groups)) {

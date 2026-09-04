@@ -249,7 +249,23 @@ jQuery(document).ready(function ($) {
   /* khi click vào chọn danh mục trong phần tạo job mới thì set giá trị cho hidden form ['danh_muc'] */
   $("#choose_group li a").click(function () {
     var danh_muc = $(this).data("group");
+    if (danh_muc === "Bản quyền") {
+      var checked_radio = $('input[name="copyright_type"]:checked');
+      if (checked_radio.length) {
+        danh_muc = checked_radio.val();
+        $('input[name="groups_code"]').val(checked_radio.data("code") || "");
+      }
+    } else {
+      $('input[name="groups_code"]').val("");
+    }
     $('input[name="danh_muc"]').val(danh_muc);
+  });
+
+  $(document).on("change", 'input[name="copyright_type"]', function () {
+    var val = $(this).val();
+    var code = $(this).data("code") || "";
+    $('input[name="danh_muc"]').val(val);
+    $('input[name="groups_code"]').val(code);
   });
 
   // when range change, ajax sent

@@ -1239,6 +1239,7 @@ add_action( 'acf/include_fields', function() {
 				'Nhãn hiệu' => 'Nhãn hiệu',
 				'Sáng chế' => 'Sáng chế',
 				'Kiểu dáng' => 'Kiểu dáng',
+				'Thực thi bản quyền phần mềm' => 'Thực thi bản quyền phần mềm',
 			),
 			'allow_null' => 1,
 			'other_choice' => 0,

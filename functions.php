@@ -13,6 +13,7 @@ function all_my_hooks(){
     require_once ($dir . '/datacenter/mongodb_connection.php');
     require_once ($dir . '/api_qlcv.php');
 }
+require_once( dirname( __FILE__ ) . '/admin_quick_permissions.php' );
 
 register_nav_menus(array('main-menu' => esc_html__('Main Menu', 'blankslate')));
 add_theme_support('title-tag');
@@ -382,8 +383,8 @@ function add_new_job()
     $sche_info      = $_POST['sche_info'];
     $sche_request_1 = $_POST['sche_request_1'];
     $sche_request_2 = $_POST['sche_request_2'];
-    # Việc luật
-    if (($_POST['deadline']) && ($danh_muc == "Việc luật")) {
+    # Deadline (nếu có)
+    if (!empty($_POST['deadline'])) {
         # xử lý chuỗi ngày tháng từ dạng DD/MM/YYYY sang YYYYMMDD để phù hợp với format của ACF custom field
         $deadline_arr   = explode('/', $_POST['deadline']);
         $temp_date      = array_reverse($deadline_arr);
@@ -429,15 +430,17 @@ function add_new_job()
             # tạo số ref cho công việc
             if (($our_ref == "")) {
                 $terms = get_term_by('name', $danh_muc, 'group');
-                $term_id    = $terms->term_id;
-                $groups_code = get_field('groups_code', 'term_' . $term_id);
-                $order_number = get_field('order_number', 'term_' . $term_id);
+                $term_id    = $terms ? $terms->term_id : 0;
+                $groups_code = !empty($_POST['groups_code']) ? trim($_POST['groups_code']) : ($term_id ? get_field('groups_code', 'term_' . $term_id) : '');
+                $order_number = $term_id ? get_field('order_number', 'term_' . $term_id) : 0;
                 $partner_code = get_field('partner_code', 'user_' . $data_partner);
 
                 $order_number++;
                 $our_ref = $groups_code . $order_number . $partner_code;
 
-                update_field('order_number', $order_number, 'term_' . $term_id);
+                if ($term_id) {
+                    update_field('order_number', $order_number, 'term_' . $term_id);
+                }
             }
             update_field('field_606fe68f81af2', $code, $inserted);
             update_field('field_600fe093bb385', $data_customer, $inserted); # customer
@@ -481,9 +484,14 @@ function add_new_job()
             update_field('field_60a231d395f2e', $paid, $inserted); # paid
             update_field('field_60a231d3961b0', $remaining, $inserted); # remaining
 
+            $group_terms = array($danh_muc);
+            if ($danh_muc == "Thực thi bản quyền phần mềm") {
+                $group_terms[] = "Bản quyền";
+            }
             if ($tiem_nang) {
-                wp_set_object_terms($inserted, array("Tiềm năng", $danh_muc), 'group');
-            } else wp_set_object_terms($inserted, $danh_muc, 'group');
+                $group_terms[] = "Tiềm năng";
+            }
+            wp_set_object_terms($inserted, $group_terms, 'group');
             
             #set danh mục khác nếu có
             if ($danhmuckhac && ($danh_muc == "Việc luật")) wp_set_object_terms($inserted, $danhmuckhac, 'group', true);
@@ -620,7 +628,7 @@ function add_new_job()
                     }
                     
                     # Determine if IP or Law type
-                    $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu'];
+                    $list_ip = ['ban-quyen', 'sang-che', 'kieu-dang', 'nhan-hieu', 'thuc-thi-ban-quyen-phan-mem'];
                     if (in_array($group->slug, $list_ip)) {
                         $job_type_group = "IP";
                     } elseif($job_type_group == '') {
