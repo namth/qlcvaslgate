@@ -1792,6 +1792,8 @@ function CreateDatabaseQlcv()
         `date` timestamp NOT NULL,
         `agency_hn` tinyint(4) NOT NULL,
         `agency_hcm` tinyint(4) NOT NULL,
+        `agency_dn` tinyint(4) NOT NULL,
+        `agency_usa` tinyint(4) NOT NULL,
         `group_trademark` tinyint(4) NOT NULL,
         `group_patent` tinyint(4) NOT NULL,
         `group_design` tinyint(4) NOT NULL,
@@ -2083,8 +2085,10 @@ function export_single_member_to_table($user_id) {
     $group_potential = in_array('tiem-nang', $work_group) ? 1 : 0;
 
     // Set agency flags
-    $agency_hn = in_array('ha-noi', $brand) ? 1 : 0;
+    $agency_hn = (in_array('ha-noi', $brand) || in_array('hanoi', $brand)) ? 1 : 0;
     $agency_hcm = in_array('ho-chi-minh', $brand) ? 1 : 0;
+    $agency_dn = (in_array('danang', $brand) || in_array('danang_en', $brand) || in_array('da-nang', $brand) || in_array('dn', $brand)) ? 1 : 0;
+    $agency_usa = (in_array('usa', $brand) || in_array('usa_en', $brand) || in_array('us', $brand) || in_array('my', $brand) || in_array('hoa-ky', $brand)) ? 1 : 0;
 
     // Set role flags
     $role_admin = in_array('administrator', $user->roles) ? 1 : 0;
@@ -2103,6 +2107,8 @@ function export_single_member_to_table($user_id) {
         'date'              => $user->user_registered,
         'agency_hn'         => $agency_hn,
         'agency_hcm'        => $agency_hcm,
+        'agency_dn'         => $agency_dn,
+        'agency_usa'        => $agency_usa,
         'group_trademark'   => $group_trademark,
         'group_patent'      => $group_patent,
         'group_design'      => $group_design,
@@ -2410,8 +2416,10 @@ function asl_sync_user_to_custom_tables($user_id) {
         $group_others    = in_array('viec-khac', $work_group) ? 1 : 0;
         $group_potential = in_array('tiem-nang', $work_group) ? 1 : 0;
         
-        $agency_hn  = in_array('ha-noi', $brand) ? 1 : 0;
+        $agency_hn  = (in_array('ha-noi', $brand) || in_array('hanoi', $brand)) ? 1 : 0;
         $agency_hcm = in_array('ho-chi-minh', $brand) ? 1 : 0;
+        $agency_dn  = (in_array('danang', $brand) || in_array('danang_en', $brand) || in_array('da-nang', $brand) || in_array('dn', $brand)) ? 1 : 0;
+        $agency_usa = (in_array('usa', $brand) || in_array('usa_en', $brand) || in_array('us', $brand) || in_array('my', $brand) || in_array('hoa-ky', $brand)) ? 1 : 0;
         
         $role_admin       = in_array('administrator', $user->roles) ? 1 : 0;
         $role_manager     = in_array('contributor', $user->roles) ? 1 : 0;
@@ -2428,6 +2436,8 @@ function asl_sync_user_to_custom_tables($user_id) {
             'date'              => $user->user_registered ?: current_time('mysql', 1),
             'agency_hn'         => $agency_hn,
             'agency_hcm'        => $agency_hcm,
+            'agency_dn'         => $agency_dn,
+            'agency_usa'        => $agency_usa,
             'group_trademark'   => $group_trademark,
             'group_patent'      => $group_patent,
             'group_design'      => $group_design,
@@ -2455,9 +2465,7 @@ function asl_sync_user_to_custom_tables($user_id) {
         
         // Dam bao user khong ton tai ben bang partner
         $wpdb->delete($aslPartnerTable, array('partnerid' => $user->ID));
-    }
-    
-    if ($is_partner) {
+    } elseif ($is_partner) {
         // Prepare partner data
         $so_dien_thoai  = get_field('so_dien_thoai', 'user_' . $user->ID);
         $partner_code   = get_field('partner_code', 'user_' . $user->ID);

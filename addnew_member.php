@@ -77,7 +77,7 @@ if (
         }
         
         # Get agency and work group information if exists
-        $agency_hn = $agency_hcm = 0;
+        $agency_hn = $agency_hcm = $agency_dn = $agency_usa = 0;
         $group_trademark = $group_patent = $group_design = $group_franchise = $group_copyright = $group_others = $group_potential = 0;
         
         # Get agency information if set
@@ -90,8 +90,10 @@ if (
             }
             
             if (is_array($brand)) {
-                $agency_hn = in_array('ha-noi', $brand) ? 1 : 0;
+                $agency_hn = (in_array('ha-noi', $brand) || in_array('hanoi', $brand)) ? 1 : 0;
                 $agency_hcm = in_array('ho-chi-minh', $brand) ? 1 : 0;
+                $agency_dn = (in_array('danang', $brand) || in_array('danang_en', $brand) || in_array('da-nang', $brand) || in_array('dn', $brand)) ? 1 : 0;
+                $agency_usa = (in_array('usa', $brand) || in_array('usa_en', $brand) || in_array('us', $brand) || in_array('my', $brand) || in_array('hoa-ky', $brand)) ? 1 : 0;
             }
         }
         
@@ -127,6 +129,8 @@ if (
                 'date'          => current_time('mysql', 1),
                 'agency_hn'     => $agency_hn,
                 'agency_hcm'    => $agency_hcm,
+                'agency_dn'     => $agency_dn,
+                'agency_usa'    => $agency_usa,
                 'group_trademark'   => $group_trademark,
                 'group_patent'      => $group_patent,
                 'group_design'      => $group_design,

@@ -83,8 +83,10 @@ if ( is_user_logged_in() ) {
             $group_potential = in_array('tiem-nang', $work_group) ? 1 : 0;
 
             # Set agency flags
-            $agency_hn = in_array('ha-noi', $brand) ? 1 : 0;
+            $agency_hn = (in_array('ha-noi', $brand) || in_array('hanoi', $brand)) ? 1 : 0;
             $agency_hcm = in_array('ho-chi-minh', $brand) ? 1 : 0;
+            $agency_dn = (in_array('danang', $brand) || in_array('danang_en', $brand) || in_array('da-nang', $brand) || in_array('dn', $brand)) ? 1 : 0;
+            $agency_usa = (in_array('usa', $brand) || in_array('usa_en', $brand) || in_array('us', $brand) || in_array('my', $brand) || in_array('hoa-ky', $brand)) ? 1 : 0;
 
             # Set role flags
             $theUser = new WP_User($new_partner);
@@ -94,31 +96,38 @@ if ( is_user_logged_in() ) {
             $role_law_manager = in_array('law_manager', $theUser->roles) ? 1 : 0;
             $role_ip_manager = in_array('ip_manager', $theUser->roles) ? 1 : 0;
 
-            # Update the member record in the database
-            $wpdb->update(
-                $aslTable,
-                array(
-                    'name' => $display_name,
-                    'address' => $address,
-                    'phone' => $phone_number,
-                    'email' => $this_user->user_email,
-                    'agency_hn' => $agency_hn,
-                    'agency_hcm' => $agency_hcm,
-                    'group_trademark' => $group_trademark,
-                    'group_patent' => $group_patent,
-                    'group_design' => $group_design,
-                    'group_franchise' => $group_franchise,
-                    'group_copyright' => $group_copyright,
-                    'group_others' => $group_others,
-                    'group_potential' => $group_potential,
-                    'role_admin' => $role_admin,
-                    'role_manager' => $role_manager,
-                    'role_member' => $role_member,
-                    'role_law_manager' => $role_law_manager,
-                    'role_ip_manager' => $role_ip_manager
-                ),
-                array('memberid' => $this_user->ID)
+            # Update the member record in the database (insert if not exists)
+            $member_data = array(
+                'name' => $display_name,
+                'address' => $address,
+                'phone' => $phone_number,
+                'email' => $this_user->user_email,
+                'agency_hn' => $agency_hn,
+                'agency_hcm' => $agency_hcm,
+                'agency_dn' => $agency_dn,
+                'agency_usa' => $agency_usa,
+                'group_trademark' => $group_trademark,
+                'group_patent' => $group_patent,
+                'group_design' => $group_design,
+                'group_franchise' => $group_franchise,
+                'group_copyright' => $group_copyright,
+                'group_others' => $group_others,
+                'group_potential' => $group_potential,
+                'role_admin' => $role_admin,
+                'role_manager' => $role_manager,
+                'role_member' => $role_member,
+                'role_law_manager' => $role_law_manager,
+                'role_ip_manager' => $role_ip_manager
             );
+
+            $existing_member = $wpdb->get_row($wpdb->prepare("SELECT memberid FROM {$aslTable} WHERE memberid = %d", $this_user->ID));
+            if ($existing_member) {
+                $wpdb->update($aslTable, $member_data, array('memberid' => $this_user->ID));
+            } else {
+                $member_data['memberid'] = $this_user->ID;
+                $member_data['date'] = $this_user->user_registered ?: current_time('mysql', 1);
+                $wpdb->insert($aslTable, $member_data);
+            }
                
             $thongbao = '<div class="alert alert-success" role="alert">
                             <i class="fa fa-check"></i> ' . __('Đã sửa thông tin thành công', 'qlcv') . '

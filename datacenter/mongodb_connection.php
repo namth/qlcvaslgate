@@ -574,7 +574,6 @@ function export_mysql_member($current_page) {
     $args   = array(
         'number'    => $users_per_page,
         'role__in'  => ['contributor', 'administrator', 'member', 'law_manager', 'ip_manager'],
-        'paged'     => $current_page,
         'offset'    => $offset,
     );
     $query = new WP_User_Query($args);
@@ -582,7 +581,6 @@ function export_mysql_member($current_page) {
 
     if (!empty($users)) {
         foreach ($users as $user) {
-            $roles = array();
             $so_dien_thoai  = get_field('so_dien_thoai', 'user_' . $user->ID);
             $dia_chi        = get_field('dia_chi' , 'user_' . $user->ID);
             $chi_nhanh      = get_field('chi_nhanh' , 'user_' . $user->ID);
@@ -590,51 +588,55 @@ function export_mysql_member($current_page) {
             $work_group = array();
             $brand = array();
 
-            foreach ($nhom_cong_viec as $id_cong_viec) {
-                $term = get_term($id_cong_viec);
-
-                $work_group[] = $term->slug;
+            if (!empty($nhom_cong_viec) && is_array($nhom_cong_viec)) {
+                foreach ($nhom_cong_viec as $id_cong_viec) {
+                    $term = get_term($id_cong_viec);
+                    if ($term && !is_wp_error($term)) {
+                        $work_group[] = $term->slug;
+                    }
+                }
             }
 
-            foreach ($chi_nhanh as $id_chi_nhanh) {
-                $term = get_term($id_chi_nhanh);
-
-                $brand[] = $term->slug;
+            if (!empty($chi_nhanh) && is_array($chi_nhanh)) {
+                foreach ($chi_nhanh as $id_chi_nhanh) {
+                    $term = get_term($id_chi_nhanh);
+                    if ($term && !is_wp_error($term)) {
+                        $brand[] = $term->slug;
+                    }
+                }
             }
 
-            if (is_array($work_group)) {
-                $group_trademark = in_array('nhan-hieu', $work_group)?1:0;
-                $group_patent = in_array('sang-che', $work_group)?1:0;
-                $group_design = in_array('kieu-dang', $work_group)?1:0;
-                $group_franchise = in_array('franchise', $work_group)?1:0;
-                $group_copyright = in_array('ban-quyen', $work_group)?1:0;
-                $group_others = in_array('viec-khac', $work_group)?1:0;
-                $group_potential = in_array('tiem-nang', $work_group)?1:0;
-            }
+            $group_trademark = in_array('nhan-hieu', $work_group) ? 1 : 0;
+            $group_patent    = in_array('sang-che', $work_group) ? 1 : 0;
+            $group_design    = in_array('kieu-dang', $work_group) ? 1 : 0;
+            $group_franchise = in_array('franchise', $work_group) ? 1 : 0;
+            $group_copyright = in_array('ban-quyen', $work_group) ? 1 : 0;
+            $group_others    = in_array('viec-khac', $work_group) ? 1 : 0;
+            $group_potential = in_array('tiem-nang', $work_group) ? 1 : 0;
 
-            if (is_array($brand)) {
-                $agency_hn = in_array('ha-noi', $brand)?1:0;
-                $agency_hcm = in_array('ho-chi-minh', $brand)?1:0;
-            }
+            $agency_hn  = (in_array('ha-noi', $brand) || in_array('hanoi', $brand)) ? 1 : 0;
+            $agency_hcm = in_array('ho-chi-minh', $brand) ? 1 : 0;
+            $agency_dn  = (in_array('danang', $brand) || in_array('danang_en', $brand) || in_array('da-nang', $brand) || in_array('dn', $brand)) ? 1 : 0;
+            $agency_usa = (in_array('usa', $brand) || in_array('usa_en', $brand) || in_array('us', $brand) || in_array('my', $brand) || in_array('hoa-ky', $brand)) ? 1 : 0;
 
-            # display user role name
-            if (!empty($user->roles) && is_array($user->roles)) {
-                $role_admin         = in_array('administrator', $user->roles)?1:0;
-                $role_manager       = in_array('contributor', $user->roles)?1:0;
-                $role_member        = in_array('member', $user->roles)?1:0;
-                $role_law_manager   = in_array('law_manager', $user->roles)?1:0;
-                $role_ip_manager    = in_array('ip_manager', $user->roles)?1:0;
-            }
+            $user_roles         = (!empty($user->roles) && is_array($user->roles)) ? $user->roles : array();
+            $role_admin         = in_array('administrator', $user_roles) ? 1 : 0;
+            $role_manager       = in_array('contributor', $user_roles) ? 1 : 0;
+            $role_member        = in_array('member', $user_roles) ? 1 : 0;
+            $role_law_manager   = in_array('law_manager', $user_roles) ? 1 : 0;
+            $role_ip_manager    = in_array('ip_manager', $user_roles) ? 1 : 0;
 
             $partner = [
-                'memberid'      => $user->ID,
-                'name'          => $user->display_name,
-                'address'       => $dia_chi,
-                'phone'         => $so_dien_thoai,
-                'email'         => $user->user_email,
-                'date'          => $user->user_registered,
-                'agency_hn'     => $agency_hn,
-                'agency_hcm'    => $agency_hcm,
+                'memberid'          => $user->ID,
+                'name'              => $user->display_name ?: $user->user_email,
+                'address'           => $dia_chi ?: '',
+                'phone'             => $so_dien_thoai ?: '',
+                'email'             => $user->user_email ?: '',
+                'date'              => $user->user_registered ?: current_time('mysql', 1),
+                'agency_hn'         => $agency_hn,
+                'agency_hcm'        => $agency_hcm,
+                'agency_dn'         => $agency_dn,
+                'agency_usa'        => $agency_usa,
                 'group_trademark'   => $group_trademark,
                 'group_patent'      => $group_patent,
                 'group_design'      => $group_design,
@@ -688,16 +690,22 @@ function export_member($current_page) {
             $work_group = array();
             $brand = array();
 
-            foreach ($nhom_cong_viec as $id_cong_viec) {
-                $term = get_term($id_cong_viec);
-
-                $work_group[] = $term->name;
+            if (!empty($nhom_cong_viec) && is_array($nhom_cong_viec)) {
+                foreach ($nhom_cong_viec as $id_cong_viec) {
+                    $term = get_term($id_cong_viec);
+                    if ($term && !is_wp_error($term)) {
+                        $work_group[] = $term->name;
+                    }
+                }
             }
 
-            foreach ($chi_nhanh as $id_chi_nhanh) {
-                $term = get_term($id_chi_nhanh);
-
-                $brand[] = $term->name;
+            if (!empty($chi_nhanh) && is_array($chi_nhanh)) {
+                foreach ($chi_nhanh as $id_chi_nhanh) {
+                    $term = get_term($id_chi_nhanh);
+                    if ($term && !is_wp_error($term)) {
+                        $brand[] = $term->name;
+                    }
+                }
             }
 
             # display user role name
