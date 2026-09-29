@@ -8,26 +8,12 @@ if (isset($_GET['role']) && ($_GET['role'] != '')) {
     $role = '';
 }
 
-// Xử lý xuất Excel cho Admin (phải chạy trước khi get_header() gửi bất kỳ output nào)
-if (isset($_GET['export_excel']) && $_GET['export_excel'] == '1') {
+// Xử lý xuất CSV (UTF-8 with BOM) cho Admin (phải chạy trước khi get_header() gửi bất kỳ output nào)
+if ((isset($_GET['export_csv']) && $_GET['export_csv'] == '1') || (isset($_GET['export_excel']) && $_GET['export_excel'] == '1')) {
     $current_user = wp_get_current_user();
     if (!is_user_logged_in() || (!current_user_can('manage_options') && !in_array('administrator', (array)$current_user->roles))) {
         wp_die(__('Bạn không có quyền xuất dữ liệu này.', 'qlcv'));
     }
-
-    require_once get_template_directory() . '/lib/PHPExcel.php';
-    require_once get_template_directory() . '/lib/PHPExcel/Writer/Excel2007.php';
-
-    @error_reporting(0);
-    @ini_set('display_errors', '0');
-
-    $objPHPExcel = new PHPExcel();
-    $objPHPExcel->getProperties()->setCreator("QLCV")
-        ->setLastModifiedBy("QLCV")
-        ->setTitle("Danh sách người dùng QLCV");
-
-    $objPHPExcel->setActiveSheetIndex(0);
-    $sheet = $objPHPExcel->getActiveSheet();
 
     $args = array(
         'role'   => $role,
@@ -89,28 +75,28 @@ if (isset($_GET['export_excel']) && $_GET['export_excel'] == '1') {
         $filename_prefix = 'danh_sach_tat_ca_nhan_su';
     }
 
-    $filename = $filename_prefix . '_' . date('Ymd_His') . '.xlsx';
+    $filename = $filename_prefix . '_' . date('Ymd_His') . '.csv';
 
-    // Đổ tiêu đề cột
-    $col = 'A';
-    $last_col = 'A';
-    foreach ($headers as $header_text) {
-        $sheet->setCellValue($col . '1', $header_text);
-        $sheet->getColumnDimension($col)->setAutoSize(true);
-        $last_col = $col;
-        $col++;
+    // Xóa toàn bộ output buffer trước khi gửi headers
+    while (ob_get_level()) {
+        ob_end_clean();
     }
 
-    // Format header
-    $header_range = 'A1:' . $last_col . '1';
-    $sheet->getStyle($header_range)->getFont()->setBold(true)->getColor()->setRGB('FFFFFF');
-    $sheet->getStyle($header_range)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setRGB('2B80FF');
-    $sheet->getStyle($header_range)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-    $sheet->getRowDimension(1)->setRowHeight(28);
+    header('Content-Type: text/csv; charset=UTF-8');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Pragma: no-cache');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 
-    $row_idx = 2;
+    $output = fopen('php://output', 'w');
+
+    // Ghi UTF-8 BOM để Excel / các trình đọc CSV nhận diện chuẩn UTF-8 tiếng Việt
+    fwrite($output, "\xEF\xBB\xBF");
+
+    // Ghi dòng tiêu đề
+    fputcsv($output, $headers);
+
     $stt = 1;
-
     if (!empty($users)) {
         foreach ($users as $user) {
             $so_dien_thoai  = get_field('so_dien_thoai', 'user_' . $user->ID);
@@ -162,74 +148,57 @@ if (isset($_GET['export_excel']) && $_GET['export_excel'] == '1') {
 
             if ($is_partner_view) {
                 $partner_type_str = $is_company ? __('Doanh nghiệp', 'qlcv') : __('Cá nhân', 'qlcv');
-                $sheet->setCellValueExplicit('A' . $row_idx, $stt, PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                $sheet->setCellValueExplicit('B' . $row_idx, $registered, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('C' . $row_idx, (string)$partner_code, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('D' . $row_idx, (string)$user->display_name, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('E' . $row_idx, (string)$ten_cong_ty, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('F' . $row_idx, $partner_type_str, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('G' . $row_idx, (string)$so_dien_thoai, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('H' . $row_idx, (string)$user->user_email, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('I' . $row_idx, (string)$dia_chi, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('J' . $row_idx, (string)$quoc_gia, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('K' . $row_idx, $roles_str, PHPExcel_Cell_DataType::TYPE_STRING);
+                $row = array(
+                    $stt,
+                    $registered,
+                    (string)$partner_code,
+                    (string)$user->display_name,
+                    (string)$ten_cong_ty,
+                    $partner_type_str,
+                    (string)$so_dien_thoai,
+                    (string)$user->user_email,
+                    (string)$dia_chi,
+                    (string)$quoc_gia,
+                    $roles_str
+                );
             } elseif (!empty($role)) {
-                $sheet->setCellValueExplicit('A' . $row_idx, $stt, PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                $sheet->setCellValueExplicit('B' . $row_idx, $registered, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('C' . $row_idx, (string)$user->display_name, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('D' . $row_idx, (string)$user->user_login, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('E' . $row_idx, (string)$so_dien_thoai, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('F' . $row_idx, (string)$user->user_email, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('G' . $row_idx, $branch_str, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('H' . $row_idx, $work_group_str, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('I' . $row_idx, (string)$dia_chi, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('J' . $row_idx, (string)$quoc_gia, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('K' . $row_idx, $roles_str, PHPExcel_Cell_DataType::TYPE_STRING);
+                $row = array(
+                    $stt,
+                    $registered,
+                    (string)$user->display_name,
+                    (string)$user->user_login,
+                    (string)$so_dien_thoai,
+                    (string)$user->user_email,
+                    $branch_str,
+                    $work_group_str,
+                    (string)$dia_chi,
+                    (string)$quoc_gia,
+                    $roles_str
+                );
             } else {
-                $sheet->setCellValueExplicit('A' . $row_idx, $stt, PHPExcel_Cell_DataType::TYPE_NUMERIC);
-                $sheet->setCellValueExplicit('B' . $row_idx, $registered, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('C' . $row_idx, (string)$user->display_name, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('D' . $row_idx, (string)$user->user_login, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('E' . $row_idx, (string)$partner_code, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('F' . $row_idx, (string)$ten_cong_ty, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('G' . $row_idx, (string)$so_dien_thoai, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('H' . $row_idx, (string)$user->user_email, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('I' . $row_idx, $branch_str, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('J' . $row_idx, $work_group_str, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('K' . $row_idx, (string)$dia_chi, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('L' . $row_idx, (string)$quoc_gia, PHPExcel_Cell_DataType::TYPE_STRING);
-                $sheet->setCellValueExplicit('M' . $row_idx, $roles_str, PHPExcel_Cell_DataType::TYPE_STRING);
+                $row = array(
+                    $stt,
+                    $registered,
+                    (string)$user->display_name,
+                    (string)$user->user_login,
+                    (string)$partner_code,
+                    (string)$ten_cong_ty,
+                    (string)$so_dien_thoai,
+                    (string)$user->user_email,
+                    $branch_str,
+                    $work_group_str,
+                    (string)$dia_chi,
+                    (string)$quoc_gia,
+                    $roles_str
+                );
             }
 
-            $row_idx++;
+            fputcsv($output, $row);
             $stt++;
         }
     }
 
-    // Border phong cách chuyên nghiệp
-    $style_borders = array(
-        'borders' => array(
-            'allborders' => array(
-                'style' => PHPExcel_Style_Border::BORDER_THIN,
-                'color' => array('rgb' => 'D0D5DD')
-            )
-        )
-    );
-    $data_range = 'A1:' . $last_col . max(1, ($row_idx - 1));
-    $sheet->getStyle($data_range)->applyFromArray($style_borders);
-
-    // Gửi header và tải file về máy client
-    if (ob_get_length()) {
-        ob_end_clean();
-    }
-    PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
-    PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="' . $filename . '"');
-    header('Cache-Control: max-age=0');
-
-    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-    $objWriter->save('php://output');
+    fclose($output);
     exit;
 }
 
@@ -341,11 +310,11 @@ $current_user = wp_get_current_user();
                         <?php 
                         $is_admin = current_user_can('manage_options') || in_array('administrator', (array)$current_user->roles);
                         if ($is_admin) : 
-                            $excel_export_url = add_query_arg('export_excel', '1');
-                            $excel_export_url = remove_query_arg('paged', $excel_export_url);
+                            $csv_export_url = add_query_arg('export_csv', '1');
+                            $csv_export_url = remove_query_arg('paged', $csv_export_url);
                         ?>
-                            <a href="<?php echo esc_url($excel_export_url); ?>" class="button button-success" style="margin-right: 10px;" title="<?php _e('Xuất danh sách ra file Excel', 'qlcv'); ?>">
-                                <span><i class="fa fa-file-excel-o"></i><?php _e('Xuất Excel', 'qlcv'); ?></span>
+                            <a href="<?php echo esc_url($csv_export_url); ?>" class="button button-success" style="margin-right: 10px;" title="<?php _e('Xuất danh sách ra file CSV (UTF-8 with BOM)', 'qlcv'); ?>">
+                                <span><i class="fa fa-file-excel-o"></i><?php _e('Xuất CSV', 'qlcv'); ?></span>
                             </a>
                         <?php endif; ?>
                         <a href="<?php echo get_bloginfo('url') . $_create_link; ?>" class="button button-primary"><span><i class="fa fa-plus"></i><?php _e('Tạo mới', 'qlcv'); ?></span></a>
