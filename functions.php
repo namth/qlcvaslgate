@@ -551,32 +551,71 @@ function add_new_job()
             $email_admin = get_field('email_admin', 'option');
             $user_arr = get_user_by('ID', $data_member);
             $manager_arr = get_user_by('ID', $data_manager);
-            $to = $user_arr->user_email;
+            $to = $user_arr ? $user_arr->user_email : '';
 
             $email_title = __("Công việc mới:", 'qlcv') . " <b>" . $job_name . "</b>";
-            $email_content = $user_arr->display_name . ' ' . __('hãy kiểm tra để thực hiện.', 'qlcv');
+            $email_content = ($user_arr ? $user_arr->display_name : '') . ' ' . __('hãy kiểm tra để thực hiện.', 'qlcv');
             $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink($inserted);
             $email_content = auto_url($email_content);
 
             $headers = [];
             $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-            $headers[] = 'Cc: ' . $email_admin;
-            $headers[] = 'Cc: ' . $manager_arr->user_email;
+            if ($email_admin) {
+                $headers[] = 'Cc: ' . $email_admin;
+            }
+            if ($manager_arr && !empty($manager_arr->user_email)) {
+                $headers[] = 'Cc: ' . $manager_arr->user_email;
+            }
             # send email to supervisor
             if ($data_supervisor) {
-                $supervisors = explode("|", $data_supervisor);
+                $supervisors = is_array($data_supervisor) ? $data_supervisor : explode("|", $data_supervisor);
                 if(!empty($supervisors)){
                     foreach ($supervisors as $supervisor) {
-                        $supervisor_obj = get_user_by('ID', $supervisor);
-                        $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+                        if ($supervisor) {
+                            $supervisor_obj = get_user_by('ID', $supervisor);
+                            if ($supervisor_obj && !empty($supervisor_obj->user_email)) {
+                                $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+                            }
+                        }
                     }
                 }
             }
+            # send email to co_manager
+            if ($data_co_manager) {
+                $co_managers = is_array($data_co_manager) ? $data_co_manager : explode("|", $data_co_manager);
+                if(!empty($co_managers)){
+                    foreach ($co_managers as $co_manager) {
+                        if ($co_manager) {
+                            $co_manager_obj = get_user_by('ID', $co_manager);
+                            if ($co_manager_obj && !empty($co_manager_obj->user_email)) {
+                                $headers[] = 'Cc: ' . $co_manager_obj->user_email;
+                            }
+                        }
+                    }
+                }
+            }
+            # send email to co_member
+            if ($data_co_member) {
+                $co_members = is_array($data_co_member) ? $data_co_member : explode("|", $data_co_member);
+                if(!empty($co_members)){
+                    foreach ($co_members as $co_member) {
+                        if ($co_member) {
+                            $co_member_obj = get_user_by('ID', $co_member);
+                            if ($co_member_obj && !empty($co_member_obj->user_email)) {
+                                $headers[] = 'Cc: ' . $co_member_obj->user_email;
+                            }
+                        }
+                    }
+                }
+            }
+            $headers = array_unique($headers);
 
-            $sent = wp_mail($to, $email_title, $email_content, $headers);
+            if ($to) {
+                $sent = wp_mail($to, $email_title, $email_content, $headers);
+            }
 
             # notification 
-            create_notification($inserted, $email_title, $manager_arr->ID, $user_arr->ID);
+            create_notification($inserted, $email_title, $manager_arr ? $manager_arr->ID : 0, $user_arr ? $user_arr->ID : 0);
             
             # Update MySQL tables for job data
             
@@ -1011,24 +1050,64 @@ function sendmail_deadline_notification()
             # nếu có trường deadline thì mới xử lý tiếp, không thì kết thúc.
             if ($deadline) {
                 $tmp = DateTime::createFromFormat('d/m/Y', $deadline);
+                if (!$tmp) {
+                    $tmp = DateTime::createFromFormat('Ymd', $deadline);
+                }
+                if (!$tmp) {
+                    $tmp = DateTime::createFromFormat('Y-m-d', $deadline);
+                }
+                if (!$tmp) {
+                    continue;
+                }
                 $end_time = strtotime($tmp->format('d-m-Y'));
+                if (!$end_time || !$start_time) {
+                    continue;
+                }
     
                 $half_time = ($end_time + $start_time) / 2;
                 $quater_time = ($end_time + $half_time) / 2;
     
                 $day_remaining = round(((($end_time - $current_time) / 24) / 60) / 60);
     
-                $user_arr = get_field('user');
-                $jobID = get_field('job');
-                if (!$jobID && get_post_type() == 'job') {
+                $is_job = (get_post_type() == 'job');
+                $user_arr = $is_job ? get_field('member') : get_field('user');
+                if (is_numeric($user_arr)) {
+                    $u_obj = get_user_by('ID', $user_arr);
+                    if ($u_obj) {
+                        $user_arr = [
+                            'ID'           => $u_obj->ID,
+                            'display_name' => $u_obj->display_name,
+                            'user_email'   => $u_obj->user_email,
+                        ];
+                    }
+                }
+                $user_name = (!empty($user_arr) && is_array($user_arr) && !empty($user_arr['display_name'])) ? $user_arr['display_name'] : '';
+
+                $jobID = $is_job ? get_the_ID() : get_field('job');
+                if (!$jobID && $is_job) {
                     $jobID = get_the_ID();
                 }
-                $our_ref = get_field('our_ref', $jobID);
-                $manager_arr = get_field('manager', $jobID);
-                $data_supervisor = get_field('supervisor', $jobID);
+                $our_ref = $jobID ? get_field('our_ref', $jobID) : '';
+                $manager_arr = $jobID ? get_field('manager', $jobID) : get_field('manager');
+                if (is_numeric($manager_arr)) {
+                    $m_obj = get_user_by('ID', $manager_arr);
+                    if ($m_obj) {
+                        $manager_arr = [
+                            'ID'           => $m_obj->ID,
+                            'display_name' => $m_obj->display_name,
+                            'user_email'   => $m_obj->user_email,
+                        ];
+                    }
+                }
+                $manager_name = (!empty($manager_arr) && is_array($manager_arr) && !empty($manager_arr['display_name'])) ? $manager_arr['display_name'] : '';
+
+                $task_supervisor = get_field('supervisor');
+                $data_supervisor = $task_supervisor ? $task_supervisor : ($jobID ? get_field('supervisor', $jobID) : '');
+                $data_co_manager = $jobID ? get_field('co_manager', $jobID) : get_field('co_manager');
+                $data_co_member  = $jobID ? get_field('co_member', $jobID) : get_field('co_member');
     
                 $email_admin = get_field('email_admin', 'option');
-                $to = $user_arr['user_email'];
+                $to = (!empty($user_arr) && is_array($user_arr) && !empty($user_arr['user_email'])) ? $user_arr['user_email'] : '';
                 if ($jobID) {
                     if ($our_ref) {
                         if (get_post_type() == 'job') {
@@ -1058,47 +1137,35 @@ function sendmail_deadline_notification()
                         $lan_nhac = (date('d/m/Y', $current_time) == date('d/m/Y', $quater_time)) ? '2' : '1';
     
                         $email_title = __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' ' . __('chưa trả lời.', 'qlcv');
-                        $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
-                        $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
+                        $email_content = 'Dear ' . $user_name . '<br>';
+                        $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_name . "<br>";
                         $email_content .= __("Lần nhắc thứ ", 'qlcv') . "" . $lan_nhac . " đối với đầu việc: " . get_the_title() . "<br>";
                         $email_content .= __('Thời hạn để xử lý công việc này là', 'qlcv') . ' ' . $deadline . '. ' . __('Như vậy, bạn còn', 'qlcv') . ' ' . $day_remaining . ' ' . __('ngày để trả lời.', 'qlcv');
                         $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink();
                         $email_content = auto_url($email_content);
                         $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
     
-                        // $headers = [];
-                        // $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-                        // $headers[] = 'Cc: ' . $email_admin;
-                        // $headers[] = 'Cc: ' . $manager_arr['user_email'];
-    
-                        // $sent = wp_mail($to, $email_title, $email_content, $headers);
                         $sendFlag = true;
                     } else if (date('d/m/Y', $current_time) == date('d/m/Y', $end_time)) {
                         # send mail notification
                         $email_title = __('Lưu ý công việc đến hạn ', 'qlcv') . ' ' . get_the_title() . $joblb;
-                        $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
-                        $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
+                        $email_content = 'Dear ' . $user_name . '<br>';
+                        $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_name . "<br>";
                         $email_content .= "Lần nhắc thứ 3 đối với đầu việc: " . get_the_title() . "<br>";
-                        $email_content .= __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' ' . __('đến hạn trả lời hôm nay và', 'qlcv') . ' ' . $user_arr['display_name'] . ' ' . __('chưa trả lời.', 'qlcv') . ' <br>';
-                        $email_content .= $user_arr['display_name'] . ' ' . __('cần trả lời ngay.', 'qlcv');
+                        $email_content .= __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' ' . __('đến hạn trả lời hôm nay và', 'qlcv') . ' ' . $user_name . ' ' . __('chưa trả lời.', 'qlcv') . ' <br>';
+                        $email_content .= $user_name . ' ' . __('cần trả lời ngay.', 'qlcv');
                         $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink();
                         $email_content = auto_url($email_content);
                         $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
     
-                        // $headers = [];
-                        // $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-                        // $headers[] = 'Cc: ' . $email_admin;
-                        // $headers[] = 'Cc: ' . $manager_arr['user_email'];
-    
-                        // $sent = wp_mail($to, $email_title, $email_content, $headers);
                         $sendFlag = true;
                     } else if ($day_remaining == '-1') {
                         # miss deadline
                         $email_title = __('Lưu ý công việc', 'qlcv') . ' ' . get_the_title() . $joblb . ' đã quá hạn trả lời.';
-                        $email_content = 'Dear ' . $user_arr['display_name'] . '<br>';
-                        $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_arr['display_name'] . "<br>";
+                        $email_content = 'Dear ' . $user_name . '<br>';
+                        $email_content .= __("Số REF:", 'qlcv') . " " . $our_ref . "; " . __("Người quản lý:", 'qlcv') . " " . $manager_name . "<br>";
                         $email_content .= __("Lần nhắc thứ 4 đối với đầu việc:", 'qlcv') . " " . get_the_title() . "<br>";
-                        $email_content .= $user_arr['display_name'] . ' ' . __('cần gửi báo cáo cho người quản lý về lý do chưa trả lời này.', 'qlcv');
+                        $email_content .= $user_name . ' ' . __('cần gửi báo cáo cho người quản lý về lý do chưa trả lời này.', 'qlcv');
                         $email_content .= "<br>" . __("Link tới công việc:", 'qlcv') . " " . get_the_permalink();
                         $email_content = auto_url($email_content);
                         $email_content .= "<br><br>" . __("Trân trọng, ", 'qlcv');
@@ -1110,31 +1177,66 @@ function sendmail_deadline_notification()
                         update_field('field_600fde92f9be9', 'Quá hạn');
                     }
                     
-                    # nếu cờ gửi email được bật, sẽ tiến hành gửi email cho admin, người chịu trách nhiệm, người quản lý, và người giám sát.
+                    # nếu cờ gửi email được bật, sẽ tiến hành gửi email cho admin, người chịu trách nhiệm, người quản lý, người cùng quản lý, người giám sát và người cùng thực hiện.
                     if ($sendFlag) {
                         $headers = [];
                         $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
                         if ($email_admin) {
                             $headers[] = 'Cc: ' . $email_admin;
                         }
-                        if ($manager_arr['user_email']) {
+                        if (!empty($manager_arr['user_email'])) {
                             $headers[] = 'Cc: ' . $manager_arr['user_email'];
                         }
                         # send email to supervisor
                         if ( $data_supervisor ) {
-                            $supervisors = explode("|", $data_supervisor);
+                            $supervisors = is_array($data_supervisor) ? $data_supervisor : explode("|", $data_supervisor);
                             if(!empty($supervisors)){
                                 foreach ($supervisors as $supervisor) {
-                                    $supervisor_obj = get_user_by('ID', $supervisor);
-                                    $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+                                    if ($supervisor) {
+                                        $supervisor_obj = get_user_by('ID', $supervisor);
+                                        if ($supervisor_obj && !empty($supervisor_obj->user_email)) {
+                                            $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+                                        }
+                                    }
                                 }
                             }
                         }
+                        # send email to co_manager
+                        if ( $data_co_manager ) {
+                            $co_managers = is_array($data_co_manager) ? $data_co_manager : explode("|", $data_co_manager);
+                            if(!empty($co_managers)){
+                                foreach ($co_managers as $co_manager_id) {
+                                    if ($co_manager_id) {
+                                        $co_manager_obj = get_user_by('ID', $co_manager_id);
+                                        if ($co_manager_obj && !empty($co_manager_obj->user_email)) {
+                                            $headers[] = 'Cc: ' . $co_manager_obj->user_email;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        # send email to co_member
+                        if ( $data_co_member ) {
+                            $co_members = is_array($data_co_member) ? $data_co_member : explode("|", $data_co_member);
+                            if(!empty($co_members)){
+                                foreach ($co_members as $co_member_id) {
+                                    if ($co_member_id) {
+                                        $co_member_obj = get_user_by('ID', $co_member_id);
+                                        if ($co_member_obj && !empty($co_member_obj->user_email)) {
+                                            $headers[] = 'Cc: ' . $co_member_obj->user_email;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        $headers = array_unique($headers);
                         $sent = wp_mail($to, $email_title, $email_content, $headers);
         
                         # push notification & save history
                         if ($sent) {
-                            create_notification(get_the_ID(), $email_title, $manager_arr['ID'], $user_arr['ID']);
+                            $m_id = (!empty($manager_arr) && is_array($manager_arr) && !empty($manager_arr['ID'])) ? $manager_arr['ID'] : 0;
+                            $u_id = (!empty($user_arr) && is_array($user_arr) && !empty($user_arr['ID'])) ? $user_arr['ID'] : 0;
+                            create_notification(get_the_ID(), $email_title, $m_id, $u_id);
                             $sent = 0;
                         }
                     }

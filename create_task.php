@@ -138,22 +138,64 @@ if (isset($_GET['jobid'])  && ($_GET['jobid'] != "")) {
                 # send email notification
                 $email_admin = get_field('email_admin', 'option');
                 $user_arr = get_user_by('ID', $member);
-                $to = $user_arr->user_email;
+                $to = $user_arr ? $user_arr->user_email : '';
                 if ($to) {
                     $our_ref = get_field('our_ref', $job);
                     $email_title = $noi_dung . ": " . $taskname;
                     if ($our_ref) {
                         $email_title .= " (" . $our_ref . ")";
                     }
-                    $email_content = $user_arr->display_name . ' ' . __('hãy kiểm tra để thực hiện nhiệm vụ mới.', 'qlcv');
+                    $email_content = ($user_arr ? $user_arr->display_name : '') . ' ' . __('hãy kiểm tra để thực hiện nhiệm vụ mới.', 'qlcv');
                     $email_content .= "<br>". __('Link tới công việc:', 'qlcv') . get_the_permalink($inserted);
                     $email_content = auto_url($email_content);
     
+                    $headers = [];
                     $headers[] = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>';
-                    $headers[] = 'Cc: ' . $email_admin;
-                    if ($manager_arr->user_email) {
+                    if ($email_admin) {
+                        $headers[] = 'Cc: ' . $email_admin;
+                    }
+                    if ($manager_arr && !empty($manager_arr->user_email)) {
                         $headers[] = 'Cc: ' . $manager_arr->user_email;
                     }
+                    # send email to supervisor
+                    if (!empty($_POST['supervisor'])) {
+                        $supervisors = is_array($_POST['supervisor']) ? $_POST['supervisor'] : explode("|", $_POST['supervisor']);
+                        foreach ($supervisors as $supervisor_id) {
+                            if ($supervisor_id) {
+                                $supervisor_obj = get_user_by('ID', $supervisor_id);
+                                if ($supervisor_obj && !empty($supervisor_obj->user_email)) {
+                                    $headers[] = 'Cc: ' . $supervisor_obj->user_email;
+                                }
+                            }
+                        }
+                    }
+                    # send email to co_manager of parent job
+                    $job_co_manager = get_field('co_manager', $job);
+                    if ($job_co_manager) {
+                        $co_managers = is_array($job_co_manager) ? $job_co_manager : explode("|", $job_co_manager);
+                        foreach ($co_managers as $co_manager_id) {
+                            if ($co_manager_id) {
+                                $co_manager_obj = get_user_by('ID', $co_manager_id);
+                                if ($co_manager_obj && !empty($co_manager_obj->user_email)) {
+                                    $headers[] = 'Cc: ' . $co_manager_obj->user_email;
+                                }
+                            }
+                        }
+                    }
+                    # send email to co_member of parent job
+                    $job_co_member = get_field('co_member', $job);
+                    if ($job_co_member) {
+                        $co_members = is_array($job_co_member) ? $job_co_member : explode("|", $job_co_member);
+                        foreach ($co_members as $co_member_id) {
+                            if ($co_member_id) {
+                                $co_member_obj = get_user_by('ID', $co_member_id);
+                                if ($co_member_obj && !empty($co_member_obj->user_email)) {
+                                    $headers[] = 'Cc: ' . $co_member_obj->user_email;
+                                }
+                            }
+                        }
+                    }
+                    $headers = array_unique($headers);
     
                     $sent = wp_mail($to, $email_title, $email_content, $headers);
                 }
